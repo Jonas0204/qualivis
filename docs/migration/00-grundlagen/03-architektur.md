@@ -109,7 +109,9 @@ e2e/ (@qualivis/e2e, Playwright, separat installierbar) · tools/ (Node-Skripte 
    Trennung; Ziel ist Modularität ohne Übertreibung.)
 4. `features/graph/layout/` ist frei von React (reine Klassen/Funktionen + DOM-freie Mathematik),
    damit es testbar ist und später in einen Worker könnte.
-5. Biome `noRestrictedImports` erzwingt 1 und 2 (Konfiguration in P01-S03).
+5. Regel 1 und 2 erzwingen TypeScript und pnpm: `core` hat `lib` ohne `dom` und kein React als
+   Abhängigkeit (pnpm legt nur deklarierte Pakete in `node_modules`), und `exports` in
+   `packages/core/package.json` gibt nur den Paket-Einstieg frei – tiefe Importe lösen nicht auf.
 
 ## 4. Datenfluss
 
@@ -138,8 +140,10 @@ Settings  ─► settingsAtom (persistiert) ─► GraphView startet Layout neu
   - `selectionAtom` – `NodeSelection[] | null` (wie im Altsystem)
   - `settingsAtom` – `atomWithStorage('qualivis.settings', defaultSettings, validierender Storage)`
   - `snackbarAtom` – aktuelle Meldung
-- `StateProvider` stellt einen Jotai-`Provider` mit eigenem `store` bereit. Tests erzeugen pro Test
-  `createStore()` und setzen Ausgangswerte mit `store.set(...)` → keine globalen Singletons im Test.
+- `StateProvider` stellt einen Jotai-`Provider` mit eigenem `store` bereit. Komponenten- und
+  Hook-Tests rendern über den `TestProvider` (eigener Store, Startwerte per `useHydrateAtoms`,
+  `06-teststrategie.md` §2, `anhang/A7`); reine Atom-Tests nutzen `createStore()` + `store.set(...)`
+  → keine globalen Singletons im Test.
 - Aktionen mit mehreren Schritten (z. B. Analyse starten) sind normale Funktionen, die den `store`
   bekommen (`runAnalysis(files, store)`), oder Schreib-Atome – beides testbar ohne React.
 - Graph-Laufzeitzustand (Positionen, Zoom, Ausblenden) lebt **lokal** in `GraphView`

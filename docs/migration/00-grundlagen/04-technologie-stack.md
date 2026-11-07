@@ -48,75 +48,28 @@ später z. B. per Renovate (ADR-014). Die App muss auf **Windows und macOS** ent
 **Bewusst nicht verwendet:** UI-Bibliotheken (MUI: 31 Pakete + Emotion), d3-zoom/-drag/-selection/
 -transition/-color (durch eigenen Code ersetzt, ADR-003), Router-Pakete, `@testing-library/jest-dom`
 (normale Assertions genügen), happy-dom (8 Sicherheitsmeldungen, 3 kritisch), Vitest-Browser-Modus
-(5 Meldungen, 3 kritisch), ESLint/Prettier (≈ 100 Pakete), Coverage-Werkzeuge (kein Zusatzpaket).
+(5 Meldungen, 3 kritisch), `react-test-renderer` (seit React 19 abgekündigt), Jest mit
+`jest-environment-jsdom`/`jest-junit` (zweiter Testrunner, 323 Pakete; Vitest hat einen
+JUnit-Reporter eingebaut), ESLint/Prettier (≈ 100 Pakete), Coverage-Werkzeuge (kein Zusatzpaket).
+Begründung zu den Testwerkzeugen: ADR-015.
 
-## 4. `pnpm-workspace.yaml` (Vorlage)
+## 4. `pnpm-workspace.yaml`
 
-```yaml
-packages:
-  - packages/*
-  - apps/*
-  # - e2e          (activated in P09-S01)
+Die Datei liegt seit M0 im Repo-Root ([`pnpm-workspace.yaml`](../../../pnpm-workspace.yaml)) und ist die
+**einzige** Stelle mit Versionsnummern (Catalog). Sie enthält Workspace-Pakete, `saveExact`, die
+Sicherheitseinstellungen, `allowBuilds`, die (noch auskommentierten) `patchedDependencies` und den
+Catalog mit allen Versionen aus §1–§3.
 
-# Exact versions when adding packages (pnpm add writes "1.2.3", not "^1.2.3")
-saveExact: true
-
-# Supply-chain hardening
-minimumReleaseAge: 4320          # 3 days: new versions are installable 3 days after release
-trustPolicy: no-downgrade        # refuse versions with weaker provenance than earlier ones
-blockExoticSubdeps: true         # no git/tarball transitive dependencies
-strictDepBuilds: true            # fail on install scripts that are not reviewed below
-allowBuilds:
-  core-js: false                 # postinstall banner (pulled in by escomplex via babel-runtime 6)
-  fsevents: false                # macOS file watcher; ships a prebuilt binary, no build needed
-
-patchedDependencies:
-  typhonjs-escomplex-commons@0.1.1: patches/typhonjs-escomplex-commons@0.1.1.patch
-  typhonjs-plugin-manager@0.2.0: patches/typhonjs-plugin-manager@0.2.0.patch
-
-catalog:
-  '@babel/parser': 7.29.12
-  '@babel/traverse': 7.29.12
-  '@babel/types': 7.29.11
-  '@types/babel__traverse': 7.28.0
-  typhonjs-escomplex-project: 0.1.0
-  jlouvain: 2.0.0
-  path-browserify: 1.0.1
-  webcola: 3.4.0
-  d3-force: 3.0.0
-  '@types/d3-force': 3.0.10
-  react: 19.3.1
-  react-dom: 19.3.1
-  '@types/react': 19.3.0
-  '@types/react-dom': 19.3.0
-  jotai: 3.0.1
-  '@codemirror/state': 6.7.6
-  '@codemirror/view': 6.43.15
-  '@codemirror/language': 6.13.1
-  '@codemirror/lang-javascript': 6.2.5
-  '@codemirror/search': 6.7.2
-  '@fontsource/roboto': 5.3.0
-  '@fontsource/material-icons': 5.3.0
-  vite: 8.3.5
-  '@vitejs/plugin-react': 6.1.2
-  vitest: 5.0.5
-  jsdom: 30.1.3
-  '@testing-library/react': 16.3.3
-  '@testing-library/dom': 10.4.2
-  '@testing-library/user-event': 14.6.8
-  '@biomejs/biome': 2.6.4
-  typescript: 7.0.2
-  '@types/node': 24.19.2
-  '@playwright/test': 1.64.1
-```
-
-### Erläuterungen zur Vorlage
+### Erläuterungen
 
 - **Catalog:** Die Versionen stehen **einmal** hier; die `package.json` der Pakete schreiben nur
   `"react": "catalog:"`. Ein Update (manuell oder Renovate) ändert nur diese Datei.
-- **Anführungszeichen** um Schlüssel wie `'@babel/parser'`: In YAML hat `@` am Anfang eines Werts eine
+- **Anführungszeichen** um Schlüssel wie `"@babel/parser"`: In YAML hat `@` am Anfang eines Werts eine
   reservierte Bedeutung, deshalb müssen Paketnamen mit Scope in Anführungszeichen stehen. Namen ohne
-  `@` (z. B. `react`) brauchen keine.
+  `@` (z. B. `react`) brauchen keine. Biome formatiert die Datei mit und setzt doppelte
+  Anführungszeichen.
+- **`patchedDependencies`** ist bis P03-S01 auskommentiert: pnpm lehnt Patches für Pakete ab, die
+  (noch) nicht installiert sind. P03-S01 aktiviert die Zeilen zusammen mit escomplex.
 - **Unbekannte Schlüssel** (geprüft im Spike): Weil `package.json` pnpm per `packageManager` auf eine
   Version festlegt, bricht pnpm 12 bei einem falsch geschriebenen oder unbekannten Schlüssel mit
   `ERR_PNPM_UNRECOGNIZED_WORKSPACE_SETTINGS` ab (z. B. bei `bogusSettingXyz`). Tippfehler fallen also
@@ -130,7 +83,7 @@ catalog:
   Entscheidung abwarten. Vite 8 (Rolldown) und Biome liefern Binärpakete über
   `optionalDependencies` ohne Install-Skript.
 - **macOS:** `fsevents` liegt als fertiges Binary im Paket; ob die Dateiüberwachung von `pnpm dev`
-  auf dem Mac funktioniert, wird in P01-S04 geprüft.
+  auf dem Mac funktioniert, wird in P04-S01 geprüft (erster `pnpm dev`).
 - **Nicht im Spike installiert** (beim ersten Install auf Auflösung achten): `@codemirror/search`,
   `@fontsource/*`, `jotai`, `path-browserify`, `@playwright/test` – alle ohne Abhängigkeiten bzw.
   aus demselben Projekt.
@@ -151,17 +104,17 @@ pnpm kann solche Korrekturen selbst anwenden (**ohne** patch-package): Die Patch
 Paket gehört. Bei jedem `pnpm install` wendet pnpm sie an; der Hash steht im Lockfile. Passt ein
 Patch nicht (z. B. nach einem Versionswechsel), bricht die Installation ab.
 
-Umstellung (P01-S03): Die alten Dateien haben Pfade wie `a/node_modules/typhonjs-plugin-manager/dist/…`;
+Umstellung (erledigt in M0): Die alten Dateien haben Pfade wie `a/node_modules/typhonjs-plugin-manager/dist/…`;
 pnpm erwartet Pfade relativ zum Paket (`a/dist/…`). Also in jeder Zeile `a/node_modules/<paket>/` →
 `a/` und `b/node_modules/<paket>/` → `b/`. Dateinamen: `patches/<paket>@<version>.patch`. Spätere
 Änderungen an einem Patch: `pnpm patch <paket>@<version>` (öffnet eine Kopie zum Bearbeiten), danach
-`pnpm patch-commit <pfad>` – beides führt wegen des Hooks der Nutzer aus.
+`pnpm patch-commit <pfad>` – beides nur nach Nachfrage (README R4).
 
 ## 6. Wichtige Befehle (Root, auf Windows und macOS gleich)
 
 | Befehl | Zweck |
 |---|---|
-| `pnpm install` | **nur der Nutzer** (Hook, siehe README R4) |
+| `pnpm install` | nur nach Nachfrage beim Nutzer (README R4) |
 | `pnpm dev` | Web-App starten (`apps/web`, `http://127.0.0.1:5173`) |
 | `pnpm build` | Produktions-Build der Web-App |
 | `pnpm preview` | gebaute App lokal ausliefern (`http://127.0.0.1:4173`) |

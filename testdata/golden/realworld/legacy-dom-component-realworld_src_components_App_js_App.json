@@ -1,0 +1,172 @@
+{
+  "view": "component",
+  "url": "/component-graph/graph?id=%2Frealworld%2Fsrc%2Fcomponents%2FApp.js%23App",
+  "container": [
+    158,
+    704
+  ],
+  "settings": null,
+  "hasClusterButton": false,
+  "nodes": [
+    {
+      "id": "App",
+      "label": null,
+      "type": "component",
+      "kind": "ClassComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 34.961549778946534,
+      "height": 34.961549778946534,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": 79.00000003595987,
+      "y": 277,
+      "dom": {
+        "mainR": 17.480774889473267,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "url(#diagonalHatch)",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "App",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "componentWillReceiveProps",
+      "label": null,
+      "type": "innerFunction",
+      "kind": "ClassComponent",
+      "special": true,
+      "returnsJSX": false,
+      "isUsingThis": true,
+      "extends": false,
+      "width": 29.854106607209232,
+      "height": 29.854106607209232,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [
+        {
+          "icon": "report",
+          "class": "warn",
+          "description": "Deprecated React lifecycle method\n          (see <a href=\"https://reactjs.org/docs/react-component.html#legacy-lifecycle-methods\" target=\"_blank\">\n          https://reactjs.org/docs/react-component.html#legacy-lifecycle-methods</a>)"
+        }
+      ],
+      "x": -21.000000011986618,
+      "y": 377,
+      "dom": {
+        "mainR": 14.927053303604616,
+        "mainClass": "circle-node innerFunction special",
+        "overlayClass": "circle-overlay innerFunction special",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "componentWillReceiveProps",
+        "iconTexts": [
+          "icon warn:report"
+        ],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "componentWillMount",
+      "label": null,
+      "type": "innerFunction",
+      "kind": "ClassComponent",
+      "special": true,
+      "returnsJSX": false,
+      "isUsingThis": true,
+      "extends": false,
+      "width": 31.915382432114615,
+      "height": 31.915382432114615,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [
+        {
+          "icon": "report",
+          "class": "warn",
+          "description": "Deprecated React lifecycle method\n          (see <a href=\"https://reactjs.org/docs/react-component.html#legacy-lifecycle-methods\" target=\"_blank\">\n          https://reactjs.org/docs/react-component.html#legacy-lifecycle-methods</a>)"
+        }
+      ],
+      "x": 78.99999998801339,
+      "y": 377,
+      "dom": {
+        "mainR": 15.957691216057308,
+        "mainClass": "circle-node innerFunction special",
+        "overlayClass": "circle-overlay innerFunction special",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "componentWillMount",
+        "iconTexts": [
+          "icon warn:report"
+        ],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "render",
+      "label": null,
+      "type": "innerFunction",
+      "kind": "ClassComponent",
+      "special": true,
+      "returnsJSX": true,
+      "isUsingThis": true,
+      "extends": false,
+      "width": 49.61447826143744,
+      "height": 49.61447826143744,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": 178.99999998801337,
+      "y": 377,
+      "dom": {
+        "mainR": 24.80723913071872,
+        "mainClass": "circle-node innerFunction special",
+        "overlayClass": "circle-overlay innerFunction special",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": 21.80723913071872,
+        "innerClass": "inner-circle innerFunction special",
+        "label": "render",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    }
+  ],
+  "links": [
+    {
+      "source": "App",
+      "target": "componentWillReceiveProps",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "App",
+      "target": "componentWillMount",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "App",
+      "target": "render",
+      "inherits": false,
+      "dash": null
+    }
+  ]
+}

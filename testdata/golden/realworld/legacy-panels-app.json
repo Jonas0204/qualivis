@@ -1,0 +1,1906 @@
+[
+  {
+    "id": "/realworld/src/components/App.js#App",
+    "panel": {
+      "header": "Code Quality App (aggregate)",
+      "metrics": [
+        {
+          "name": "Lines of Code",
+          "description": "The number of lines of code including comments.",
+          "value": "48",
+          "valueTitle": "48/200",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Lines of JSX Code",
+          "description": "The line count of root level JSX elements.",
+          "value": "21",
+          "valueTitle": "21/65",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Maximum JSX nesting",
+          "description": "JSX nesting is counted by the number of nested JSX children or JSX elements in JSX expressions starting with 1 for the top level.",
+          "value": "3",
+          "valueTitle": "3/8",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Cyclomatic Complexity",
+          "description": "The number of distinct paths through a block of code.",
+          "value": "7",
+          "valueTitle": "7/30",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Difficulty",
+          "description": "The difficulty to write or understand the program, e.g. when doing code review.",
+          "value": "5.659",
+          "valueTitle": "5.659/50",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Bugs",
+          "description": "An estimate for the number of errors in the implementation.",
+          "value": "0.191",
+          "valueTitle": "0.191/1",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Parameter Count",
+          "description": "The number of parameters, analysed statically from the function signature. (ignoring the arguments object)",
+          "value": "1",
+          "valueTitle": "1/20",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        }
+      ],
+      "icons": []
+    }
+  },
+  {
+    "id": "/realworld/src/components/Article/ArticleActions.js#ArticleActions",
+    "panel": {
+      "header": "Code Quality ArticleActions",
+      "metrics": [
+        {
+          "name": "Lines of Code",
+          "description": "The number of lines of code including comments.",
+          "value": "28",
+          "valueTitle": "28/200",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Lines of JSX Code",
+          "description": "The line count of root level JSX elements.",
+          "value": "15",
+          "valueTitle": "15/65",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Maximum JSX nesting",
+          "description": "JSX nesting is counted by the number of nested JSX children or JSX elements in JSX expressions starting with 1 for the top level.",
+          "value": "3",
+          "valueTitle": "3/8",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Cyclomatic Complexity",
+          "description": "The number of distinct paths through a block of code.",
+          "value": "2",
+          "valueTitle": "2/30",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Difficulty",
+          "description": "The difficulty to write or understand the program, e.g. when doing code review.",
+          "value": "5.6",
+          "valueTitle": "5.6/50",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Bugs",
+          "description": "An estimate for the number of errors in the implementation.",
+          "value": "0.038",
+          "valueTitle": "0.038/1",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Parameter Count",
+          "description": "The number of parameters, analysed statically from the function signature. (ignoring the arguments object)",
+          "value": "1",
+          "valueTitle": "1/20",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        }
+      ],
+      "icons": []
+    }
+  },
+  {
+    "id": "/realworld/src/components/Article/ArticleMeta.js#ArticleMeta",
+    "panel": {
+      "header": "Code Quality ArticleMeta",
+      "metrics": [
+        {
+          "name": "Lines of Code",
+          "description": "The number of lines of code including comments.",
+          "value": "21",
+          "valueTitle": "21/200",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Lines of JSX Code",
+          "description": "The line count of root level JSX elements.",
+          "value": "16",
+          "valueTitle": "16/65",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Maximum JSX nesting",
+          "description": "JSX nesting is counted by the number of nested JSX children or JSX elements in JSX expressions starting with 1 for the top level.",
+          "value": "4",
+          "valueTitle": "4/8",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Cyclomatic Complexity",
+          "description": "The number of distinct paths through a block of code.",
+          "value": "1",
+          "valueTitle": "1/30",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Difficulty",
+          "description": "The difficulty to write or understand the program, e.g. when doing code review.",
+          "value": "8.857",
+          "valueTitle": "8.857/50",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Bugs",
+          "description": "An estimate for the number of errors in the implementation.",
+          "value": "0.08",
+          "valueTitle": "0.08/1",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Parameter Count",
+          "description": "The number of parameters, analysed statically from the function signature. (ignoring the arguments object)",
+          "value": "1",
+          "valueTitle": "1/20",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        }
+      ],
+      "icons": []
+    }
+  },
+  {
+    "id": "/realworld/src/components/Article/Comment.js#Comment",
+    "panel": {
+      "header": "Code Quality Comment",
+      "metrics": [
+        {
+          "name": "Lines of Code",
+          "description": "The number of lines of code including comments.",
+          "value": "29",
+          "valueTitle": "29/200",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Lines of JSX Code",
+          "description": "The line count of root level JSX elements.",
+          "value": "22",
+          "valueTitle": "22/65",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Maximum JSX nesting",
+          "description": "JSX nesting is counted by the number of nested JSX children or JSX elements in JSX expressions starting with 1 for the top level.",
+          "value": "4",
+          "valueTitle": "4/8",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Cyclomatic Complexity",
+          "description": "The number of distinct paths through a block of code.",
+          "value": "2",
+          "valueTitle": "2/30",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Difficulty",
+          "description": "The difficulty to write or understand the program, e.g. when doing code review.",
+          "value": "11.429",
+          "valueTitle": "11.429/50",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Bugs",
+          "description": "An estimate for the number of errors in the implementation.",
+          "value": "0.135",
+          "valueTitle": "0.135/1",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Parameter Count",
+          "description": "The number of parameters, analysed statically from the function signature. (ignoring the arguments object)",
+          "value": "1",
+          "valueTitle": "1/20",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        }
+      ],
+      "icons": []
+    }
+  },
+  {
+    "id": "/realworld/src/components/Article/CommentContainer.js#CommentContainer",
+    "panel": {
+      "header": "Code Quality CommentContainer",
+      "metrics": [
+        {
+          "name": "Lines of Code",
+          "description": "The number of lines of code including comments.",
+          "value": "33",
+          "valueTitle": "33/200",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Lines of JSX Code",
+          "description": "The line count of root level JSX elements.",
+          "value": "24",
+          "valueTitle": "24/65",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Maximum JSX nesting",
+          "description": "JSX nesting is counted by the number of nested JSX children or JSX elements in JSX expressions starting with 1 for the top level.",
+          "value": "4",
+          "valueTitle": "4/8",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Cyclomatic Complexity",
+          "description": "The number of distinct paths through a block of code.",
+          "value": "2",
+          "valueTitle": "2/30",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Difficulty",
+          "description": "The difficulty to write or understand the program, e.g. when doing code review.",
+          "value": "6",
+          "valueTitle": "6/50",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Bugs",
+          "description": "An estimate for the number of errors in the implementation.",
+          "value": "0.045",
+          "valueTitle": "0.045/1",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Parameter Count",
+          "description": "The number of parameters, analysed statically from the function signature. (ignoring the arguments object)",
+          "value": "1",
+          "valueTitle": "1/20",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        }
+      ],
+      "icons": []
+    }
+  },
+  {
+    "id": "/realworld/src/components/Article/CommentInput.js#CommentInput",
+    "panel": {
+      "header": "Code Quality CommentInput (aggregate)",
+      "metrics": [
+        {
+          "name": "Lines of Code",
+          "description": "The number of lines of code including comments.",
+          "value": "46",
+          "valueTitle": "46/200",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Lines of JSX Code",
+          "description": "The line count of root level JSX elements.",
+          "value": "21",
+          "valueTitle": "21/65",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Maximum JSX nesting",
+          "description": "JSX nesting is counted by the number of nested JSX children or JSX elements in JSX expressions starting with 1 for the top level.",
+          "value": "4",
+          "valueTitle": "4/8",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Cyclomatic Complexity",
+          "description": "The number of distinct paths through a block of code.",
+          "value": "4",
+          "valueTitle": "4/30",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Difficulty",
+          "description": "The difficulty to write or understand the program, e.g. when doing code review.",
+          "value": "8.065",
+          "valueTitle": "8.065/50",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Bugs",
+          "description": "An estimate for the number of errors in the implementation.",
+          "value": "0.2",
+          "valueTitle": "0.2/1",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Parameter Count",
+          "description": "The number of parameters, analysed statically from the function signature. (ignoring the arguments object)",
+          "value": "2",
+          "valueTitle": "2/20",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        }
+      ],
+      "icons": []
+    }
+  },
+  {
+    "id": "/realworld/src/components/Article/CommentList.js#CommentList",
+    "panel": {
+      "header": "Code Quality CommentList",
+      "metrics": [
+        {
+          "name": "Lines of Code",
+          "description": "The number of lines of code including comments.",
+          "value": "17",
+          "valueTitle": "17/200",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Lines of JSX Code",
+          "description": "The line count of root level JSX elements.",
+          "value": "13",
+          "valueTitle": "13/65",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Maximum JSX nesting",
+          "description": "JSX nesting is counted by the number of nested JSX children or JSX elements in JSX expressions starting with 1 for the top level.",
+          "value": "3",
+          "valueTitle": "3/8",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Cyclomatic Complexity",
+          "description": "The number of distinct paths through a block of code.",
+          "value": "1",
+          "valueTitle": "1/30",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Difficulty",
+          "description": "The difficulty to write or understand the program, e.g. when doing code review.",
+          "value": "2",
+          "valueTitle": "2/50",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Bugs",
+          "description": "An estimate for the number of errors in the implementation.",
+          "value": "0.009",
+          "valueTitle": "0.009/1",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Parameter Count",
+          "description": "The number of parameters, analysed statically from the function signature. (ignoring the arguments object)",
+          "value": "1",
+          "valueTitle": "1/20",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        }
+      ],
+      "icons": []
+    }
+  },
+  {
+    "id": "/realworld/src/components/Article/DeleteButton.js#DeleteButton",
+    "panel": {
+      "header": "Code Quality DeleteButton",
+      "metrics": [
+        {
+          "name": "Lines of Code",
+          "description": "The number of lines of code including comments.",
+          "value": "15",
+          "valueTitle": "15/200",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Lines of JSX Code",
+          "description": "The line count of root level JSX elements.",
+          "value": "3",
+          "valueTitle": "3/65",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Maximum JSX nesting",
+          "description": "JSX nesting is counted by the number of nested JSX children or JSX elements in JSX expressions starting with 1 for the top level.",
+          "value": "2",
+          "valueTitle": "2/8",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Cyclomatic Complexity",
+          "description": "The number of distinct paths through a block of code.",
+          "value": "2",
+          "valueTitle": "2/30",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Difficulty",
+          "description": "The difficulty to write or understand the program, e.g. when doing code review.",
+          "value": "3.5",
+          "valueTitle": "3.5/50",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Bugs",
+          "description": "An estimate for the number of errors in the implementation.",
+          "value": "0.017",
+          "valueTitle": "0.017/1",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Parameter Count",
+          "description": "The number of parameters, analysed statically from the function signature. (ignoring the arguments object)",
+          "value": "1",
+          "valueTitle": "1/20",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        }
+      ],
+      "icons": []
+    }
+  },
+  {
+    "id": "/realworld/src/components/Article/index.js#Article",
+    "panel": {
+      "header": "Code Quality Article (aggregate)",
+      "metrics": [
+        {
+          "name": "Lines of Code",
+          "description": "The number of lines of code including comments.",
+          "value": "75",
+          "valueTitle": "75/200",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Lines of JSX Code",
+          "description": "The line count of root level JSX elements.",
+          "value": "51",
+          "valueTitle": "51/65",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Maximum JSX nesting",
+          "description": "JSX nesting is counted by the number of nested JSX children or JSX elements in JSX expressions starting with 1 for the top level.",
+          "value": "8",
+          "valueTitle": "8/8",
+          "barClass": "mat-progress-bar progress-bar mat-primary error"
+        },
+        {
+          "name": "Cyclomatic Complexity",
+          "description": "The number of distinct paths through a block of code.",
+          "value": "7",
+          "valueTitle": "7/30",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Difficulty",
+          "description": "The difficulty to write or understand the program, e.g. when doing code review.",
+          "value": "14.182",
+          "valueTitle": "14.182/50",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Bugs",
+          "description": "An estimate for the number of errors in the implementation.",
+          "value": "0.337",
+          "valueTitle": "0.337/1",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Parameter Count",
+          "description": "The number of parameters, analysed statically from the function signature. (ignoring the arguments object)",
+          "value": "1",
+          "valueTitle": "1/20",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        }
+      ],
+      "icons": [
+        {
+          "hostClass": "error ng-star-inserted",
+          "icon": "warning",
+          "description": "This component exceeds at least one metric threshold. A solution might be to split it into smaller components."
+        }
+      ]
+    }
+  },
+  {
+    "id": "/realworld/src/components/ArticleList.js#ArticleList",
+    "panel": {
+      "header": "Code Quality ArticleList",
+      "metrics": [
+        {
+          "name": "Lines of Code",
+          "description": "The number of lines of code including comments.",
+          "value": "32",
+          "valueTitle": "32/200",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Lines of JSX Code",
+          "description": "The line count of root level JSX elements.",
+          "value": "18",
+          "valueTitle": "18/65",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Maximum JSX nesting",
+          "description": "JSX nesting is counted by the number of nested JSX children or JSX elements in JSX expressions starting with 1 for the top level.",
+          "value": "3",
+          "valueTitle": "3/8",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Cyclomatic Complexity",
+          "description": "The number of distinct paths through a block of code.",
+          "value": "3",
+          "valueTitle": "3/30",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Difficulty",
+          "description": "The difficulty to write or understand the program, e.g. when doing code review.",
+          "value": "6.3",
+          "valueTitle": "6.3/50",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Bugs",
+          "description": "An estimate for the number of errors in the implementation.",
+          "value": "0.048",
+          "valueTitle": "0.048/1",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Parameter Count",
+          "description": "The number of parameters, analysed statically from the function signature. (ignoring the arguments object)",
+          "value": "1",
+          "valueTitle": "1/20",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        }
+      ],
+      "icons": []
+    }
+  },
+  {
+    "id": "/realworld/src/components/ArticlePreview.js#ArticlePreview",
+    "panel": {
+      "header": "Code Quality ArticlePreview",
+      "metrics": [
+        {
+          "name": "Lines of Code",
+          "description": "The number of lines of code including comments.",
+          "value": "57",
+          "valueTitle": "57/200",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Lines of JSX Code",
+          "description": "The line count of root level JSX elements.",
+          "value": "39",
+          "valueTitle": "39/65",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Maximum JSX nesting",
+          "description": "JSX nesting is counted by the number of nested JSX children or JSX elements in JSX expressions starting with 1 for the top level.",
+          "value": "6",
+          "valueTitle": "6/8",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Cyclomatic Complexity",
+          "description": "The number of distinct paths through a block of code.",
+          "value": "2",
+          "valueTitle": "2/30",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Difficulty",
+          "description": "The difficulty to write or understand the program, e.g. when doing code review.",
+          "value": "8.594",
+          "valueTitle": "8.594/50",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Bugs",
+          "description": "An estimate for the number of errors in the implementation.",
+          "value": "0.169",
+          "valueTitle": "0.169/1",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Parameter Count",
+          "description": "The number of parameters, analysed statically from the function signature. (ignoring the arguments object)",
+          "value": "1",
+          "valueTitle": "1/20",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        }
+      ],
+      "icons": []
+    }
+  },
+  {
+    "id": "/realworld/src/components/Editor.js#Editor",
+    "panel": {
+      "header": "Code Quality Editor (aggregate)",
+      "metrics": [
+        {
+          "name": "Lines of Code",
+          "description": "The number of lines of code including comments.",
+          "value": "144",
+          "valueTitle": "144/200",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Lines of JSX Code",
+          "description": "The line count of root level JSX elements.",
+          "value": "78",
+          "valueTitle": "78/65",
+          "barClass": "mat-progress-bar progress-bar mat-primary error"
+        },
+        {
+          "name": "Maximum JSX nesting",
+          "description": "JSX nesting is counted by the number of nested JSX children or JSX elements in JSX expressions starting with 1 for the top level.",
+          "value": "12",
+          "valueTitle": "12/8",
+          "barClass": "mat-progress-bar progress-bar mat-primary error"
+        },
+        {
+          "name": "Cyclomatic Complexity",
+          "description": "The number of distinct paths through a block of code.",
+          "value": "18",
+          "valueTitle": "18/30",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Difficulty",
+          "description": "The difficulty to write or understand the program, e.g. when doing code review.",
+          "value": "19.068",
+          "valueTitle": "19.068/50",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Bugs",
+          "description": "An estimate for the number of errors in the implementation.",
+          "value": "0.818",
+          "valueTitle": "0.818/1",
+          "barClass": "mat-progress-bar progress-bar mat-primary warn"
+        },
+        {
+          "name": "Parameter Count",
+          "description": "The number of parameters, analysed statically from the function signature. (ignoring the arguments object)",
+          "value": "7",
+          "valueTitle": "7/20",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        }
+      ],
+      "icons": [
+        {
+          "hostClass": "error ng-star-inserted",
+          "icon": "warning",
+          "description": "This component exceeds at least one metric threshold. A solution might be to split it into smaller components."
+        }
+      ]
+    }
+  },
+  {
+    "id": "/realworld/src/components/Header.js#LoggedOutView",
+    "panel": {
+      "header": "Code Quality LoggedOutView",
+      "metrics": [
+        {
+          "name": "Lines of Code",
+          "description": "The number of lines of code including comments.",
+          "value": "28",
+          "valueTitle": "28/200",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Lines of JSX Code",
+          "description": "The line count of root level JSX elements.",
+          "value": "21",
+          "valueTitle": "21/65",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Maximum JSX nesting",
+          "description": "JSX nesting is counted by the number of nested JSX children or JSX elements in JSX expressions starting with 1 for the top level.",
+          "value": "4",
+          "valueTitle": "4/8",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Cyclomatic Complexity",
+          "description": "The number of distinct paths through a block of code.",
+          "value": "2",
+          "valueTitle": "2/30",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Difficulty",
+          "description": "The difficulty to write or understand the program, e.g. when doing code review.",
+          "value": "2.889",
+          "valueTitle": "2.889/50",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Bugs",
+          "description": "An estimate for the number of errors in the implementation.",
+          "value": "0.022",
+          "valueTitle": "0.022/1",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Parameter Count",
+          "description": "The number of parameters, analysed statically from the function signature. (ignoring the arguments object)",
+          "value": "1",
+          "valueTitle": "1/20",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        }
+      ],
+      "icons": []
+    }
+  },
+  {
+    "id": "/realworld/src/components/Header.js#LoggedInView",
+    "panel": {
+      "header": "Code Quality LoggedInView",
+      "metrics": [
+        {
+          "name": "Lines of Code",
+          "description": "The number of lines of code including comments.",
+          "value": "38",
+          "valueTitle": "38/200",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Lines of JSX Code",
+          "description": "The line count of root level JSX elements.",
+          "value": "30",
+          "valueTitle": "30/65",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Maximum JSX nesting",
+          "description": "JSX nesting is counted by the number of nested JSX children or JSX elements in JSX expressions starting with 1 for the top level.",
+          "value": "4",
+          "valueTitle": "4/8",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Cyclomatic Complexity",
+          "description": "The number of distinct paths through a block of code.",
+          "value": "2",
+          "valueTitle": "2/30",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Difficulty",
+          "description": "The difficulty to write or understand the program, e.g. when doing code review.",
+          "value": "5.167",
+          "valueTitle": "5.167/50",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Bugs",
+          "description": "An estimate for the number of errors in the implementation.",
+          "value": "0.065",
+          "valueTitle": "0.065/1",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Parameter Count",
+          "description": "The number of parameters, analysed statically from the function signature. (ignoring the arguments object)",
+          "value": "1",
+          "valueTitle": "1/20",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        }
+      ],
+      "icons": []
+    }
+  },
+  {
+    "id": "/realworld/src/components/Header.js#Header",
+    "panel": {
+      "header": "Code Quality Header (aggregate)",
+      "metrics": [
+        {
+          "name": "Lines of Code",
+          "description": "The number of lines of code including comments.",
+          "value": "18",
+          "valueTitle": "18/200",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Lines of JSX Code",
+          "description": "The line count of root level JSX elements.",
+          "value": "12",
+          "valueTitle": "12/65",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Maximum JSX nesting",
+          "description": "JSX nesting is counted by the number of nested JSX children or JSX elements in JSX expressions starting with 1 for the top level.",
+          "value": "4",
+          "valueTitle": "4/8",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Cyclomatic Complexity",
+          "description": "The number of distinct paths through a block of code.",
+          "value": "1",
+          "valueTitle": "1/30",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Difficulty",
+          "description": "The difficulty to write or understand the program, e.g. when doing code review.",
+          "value": "2.667",
+          "valueTitle": "2.667/50",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Bugs",
+          "description": "An estimate for the number of errors in the implementation.",
+          "value": "0.03",
+          "valueTitle": "0.03/1",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Parameter Count",
+          "description": "The number of parameters, analysed statically from the function signature. (ignoring the arguments object)",
+          "value": "0",
+          "valueTitle": "0/20",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        }
+      ],
+      "icons": []
+    }
+  },
+  {
+    "id": "/realworld/src/components/Home/Banner.js#Banner",
+    "panel": {
+      "header": "Code Quality Banner",
+      "metrics": [
+        {
+          "name": "Lines of Code",
+          "description": "The number of lines of code including comments.",
+          "value": "15",
+          "valueTitle": "15/200",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Lines of JSX Code",
+          "description": "The line count of root level JSX elements.",
+          "value": "8",
+          "valueTitle": "8/65",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Maximum JSX nesting",
+          "description": "JSX nesting is counted by the number of nested JSX children or JSX elements in JSX expressions starting with 1 for the top level.",
+          "value": "4",
+          "valueTitle": "4/8",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Cyclomatic Complexity",
+          "description": "The number of distinct paths through a block of code.",
+          "value": "2",
+          "valueTitle": "2/30",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Difficulty",
+          "description": "The difficulty to write or understand the program, e.g. when doing code review.",
+          "value": "2",
+          "valueTitle": "2/50",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Bugs",
+          "description": "An estimate for the number of errors in the implementation.",
+          "value": "0.014",
+          "valueTitle": "0.014/1",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Parameter Count",
+          "description": "The number of parameters, analysed statically from the function signature. (ignoring the arguments object)",
+          "value": "2",
+          "valueTitle": "2/20",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        }
+      ],
+      "icons": []
+    }
+  },
+  {
+    "id": "/realworld/src/components/Home/MainView.js#YourFeedTab",
+    "panel": {
+      "header": "Code Quality YourFeedTab",
+      "metrics": [
+        {
+          "name": "Lines of Code",
+          "description": "The number of lines of code including comments.",
+          "value": "19",
+          "valueTitle": "19/200",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Lines of JSX Code",
+          "description": "The line count of root level JSX elements.",
+          "value": "7",
+          "valueTitle": "7/65",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Maximum JSX nesting",
+          "description": "JSX nesting is counted by the number of nested JSX children or JSX elements in JSX expressions starting with 1 for the top level.",
+          "value": "3",
+          "valueTitle": "3/8",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Cyclomatic Complexity",
+          "description": "The number of distinct paths through a block of code.",
+          "value": "3",
+          "valueTitle": "3/30",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Difficulty",
+          "description": "The difficulty to write or understand the program, e.g. when doing code review.",
+          "value": "4.727",
+          "valueTitle": "4.727/50",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Bugs",
+          "description": "An estimate for the number of errors in the implementation.",
+          "value": "0.033",
+          "valueTitle": "0.033/1",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Parameter Count",
+          "description": "The number of parameters, analysed statically from the function signature. (ignoring the arguments object)",
+          "value": "1",
+          "valueTitle": "1/20",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        }
+      ],
+      "icons": []
+    }
+  },
+  {
+    "id": "/realworld/src/components/Home/MainView.js#GlobalFeedTab",
+    "panel": {
+      "header": "Code Quality GlobalFeedTab",
+      "metrics": [
+        {
+          "name": "Lines of Code",
+          "description": "The number of lines of code including comments.",
+          "value": "16",
+          "valueTitle": "16/200",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Lines of JSX Code",
+          "description": "The line count of root level JSX elements.",
+          "value": "8",
+          "valueTitle": "8/65",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Maximum JSX nesting",
+          "description": "JSX nesting is counted by the number of nested JSX children or JSX elements in JSX expressions starting with 1 for the top level.",
+          "value": "3",
+          "valueTitle": "3/8",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Cyclomatic Complexity",
+          "description": "The number of distinct paths through a block of code.",
+          "value": "2",
+          "valueTitle": "2/30",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Difficulty",
+          "description": "The difficulty to write or understand the program, e.g. when doing code review.",
+          "value": "3.889",
+          "valueTitle": "3.889/50",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Bugs",
+          "description": "An estimate for the number of errors in the implementation.",
+          "value": "0.023",
+          "valueTitle": "0.023/1",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Parameter Count",
+          "description": "The number of parameters, analysed statically from the function signature. (ignoring the arguments object)",
+          "value": "1",
+          "valueTitle": "1/20",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        }
+      ],
+      "icons": []
+    }
+  },
+  {
+    "id": "/realworld/src/components/Home/MainView.js#TagFilterTab",
+    "panel": {
+      "header": "Code Quality TagFilterTab",
+      "metrics": [
+        {
+          "name": "Lines of Code",
+          "description": "The number of lines of code including comments.",
+          "value": "13",
+          "valueTitle": "13/200",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Lines of JSX Code",
+          "description": "The line count of root level JSX elements.",
+          "value": "5",
+          "valueTitle": "5/65",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Maximum JSX nesting",
+          "description": "JSX nesting is counted by the number of nested JSX children or JSX elements in JSX expressions starting with 1 for the top level.",
+          "value": "3",
+          "valueTitle": "3/8",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Cyclomatic Complexity",
+          "description": "The number of distinct paths through a block of code.",
+          "value": "2",
+          "valueTitle": "2/30",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Difficulty",
+          "description": "The difficulty to write or understand the program, e.g. when doing code review.",
+          "value": "2.571",
+          "valueTitle": "2.571/50",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Bugs",
+          "description": "An estimate for the number of errors in the implementation.",
+          "value": "0.017",
+          "valueTitle": "0.017/1",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Parameter Count",
+          "description": "The number of parameters, analysed statically from the function signature. (ignoring the arguments object)",
+          "value": "1",
+          "valueTitle": "1/20",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        }
+      ],
+      "icons": []
+    }
+  },
+  {
+    "id": "/realworld/src/components/Home/MainView.js#MainView",
+    "panel": {
+      "header": "Code Quality MainView",
+      "metrics": [
+        {
+          "name": "Lines of Code",
+          "description": "The number of lines of code including comments.",
+          "value": "27",
+          "valueTitle": "27/200",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Lines of JSX Code",
+          "description": "The line count of root level JSX elements.",
+          "value": "23",
+          "valueTitle": "23/65",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Maximum JSX nesting",
+          "description": "JSX nesting is counted by the number of nested JSX children or JSX elements in JSX expressions starting with 1 for the top level.",
+          "value": "4",
+          "valueTitle": "4/8",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Cyclomatic Complexity",
+          "description": "The number of distinct paths through a block of code.",
+          "value": "1",
+          "valueTitle": "1/30",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Difficulty",
+          "description": "The difficulty to write or understand the program, e.g. when doing code review.",
+          "value": "1.923",
+          "valueTitle": "1.923/50",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Bugs",
+          "description": "An estimate for the number of errors in the implementation.",
+          "value": "0.048",
+          "valueTitle": "0.048/1",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Parameter Count",
+          "description": "The number of parameters, analysed statically from the function signature. (ignoring the arguments object)",
+          "value": "1",
+          "valueTitle": "1/20",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        }
+      ],
+      "icons": []
+    }
+  },
+  {
+    "id": "/realworld/src/components/Home/Tags.js#Tags",
+    "panel": {
+      "header": "Code Quality Tags",
+      "metrics": [
+        {
+          "name": "Lines of Code",
+          "description": "The number of lines of code including comments.",
+          "value": "31",
+          "valueTitle": "31/200",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Lines of JSX Code",
+          "description": "The line count of root level JSX elements.",
+          "value": "21",
+          "valueTitle": "21/65",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Maximum JSX nesting",
+          "description": "JSX nesting is counted by the number of nested JSX children or JSX elements in JSX expressions starting with 1 for the top level.",
+          "value": "4",
+          "valueTitle": "4/8",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Cyclomatic Complexity",
+          "description": "The number of distinct paths through a block of code.",
+          "value": "2",
+          "valueTitle": "2/30",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Difficulty",
+          "description": "The difficulty to write or understand the program, e.g. when doing code review.",
+          "value": "6.4",
+          "valueTitle": "6.4/50",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Bugs",
+          "description": "An estimate for the number of errors in the implementation.",
+          "value": "0.022",
+          "valueTitle": "0.022/1",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Parameter Count",
+          "description": "The number of parameters, analysed statically from the function signature. (ignoring the arguments object)",
+          "value": "1",
+          "valueTitle": "1/20",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        }
+      ],
+      "icons": []
+    }
+  },
+  {
+    "id": "/realworld/src/components/Home/index.js#Home",
+    "panel": {
+      "header": "Code Quality Home (aggregate)",
+      "metrics": [
+        {
+          "name": "Lines of Code",
+          "description": "The number of lines of code including comments.",
+          "value": "42",
+          "valueTitle": "42/200",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Lines of JSX Code",
+          "description": "The line count of root level JSX elements.",
+          "value": "23",
+          "valueTitle": "23/65",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Maximum JSX nesting",
+          "description": "JSX nesting is counted by the number of nested JSX children or JSX elements in JSX expressions starting with 1 for the top level.",
+          "value": "7",
+          "valueTitle": "7/8",
+          "barClass": "mat-progress-bar progress-bar mat-primary warn"
+        },
+        {
+          "name": "Cyclomatic Complexity",
+          "description": "The number of distinct paths through a block of code.",
+          "value": "5",
+          "valueTitle": "5/30",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Difficulty",
+          "description": "The difficulty to write or understand the program, e.g. when doing code review.",
+          "value": "7.269",
+          "valueTitle": "7.269/50",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Bugs",
+          "description": "An estimate for the number of errors in the implementation.",
+          "value": "0.149",
+          "valueTitle": "0.149/1",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Parameter Count",
+          "description": "The number of parameters, analysed statically from the function signature. (ignoring the arguments object)",
+          "value": "0",
+          "valueTitle": "0/20",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        }
+      ],
+      "icons": [
+        {
+          "hostClass": "warn ng-star-inserted",
+          "icon": "warning",
+          "description": "This component almost exceeds at least one metric threshold. A solution might be to split it into smaller components."
+        }
+      ]
+    }
+  },
+  {
+    "id": "/realworld/src/components/ListErrors.js#ListErrors",
+    "panel": {
+      "header": "Code Quality ListErrors (aggregate)",
+      "metrics": [
+        {
+          "name": "Lines of Code",
+          "description": "The number of lines of code including comments.",
+          "value": "22",
+          "valueTitle": "22/200",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Lines of JSX Code",
+          "description": "The line count of root level JSX elements.",
+          "value": "11",
+          "valueTitle": "11/65",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Maximum JSX nesting",
+          "description": "JSX nesting is counted by the number of nested JSX children or JSX elements in JSX expressions starting with 1 for the top level.",
+          "value": "4",
+          "valueTitle": "4/8",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Cyclomatic Complexity",
+          "description": "The number of distinct paths through a block of code.",
+          "value": "3",
+          "valueTitle": "3/30",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Difficulty",
+          "description": "The difficulty to write or understand the program, e.g. when doing code review.",
+          "value": "8.889",
+          "valueTitle": "8.889/50",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Bugs",
+          "description": "An estimate for the number of errors in the implementation.",
+          "value": "0.045",
+          "valueTitle": "0.045/1",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Parameter Count",
+          "description": "The number of parameters, analysed statically from the function signature. (ignoring the arguments object)",
+          "value": "1",
+          "valueTitle": "1/20",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        }
+      ],
+      "icons": []
+    }
+  },
+  {
+    "id": "/realworld/src/components/ListPagination.js#ListPagination",
+    "panel": {
+      "header": "Code Quality ListPagination",
+      "metrics": [
+        {
+          "name": "Lines of Code",
+          "description": "The number of lines of code including comments.",
+          "value": "46",
+          "valueTitle": "46/200",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Lines of JSX Code",
+          "description": "The line count of root level JSX elements.",
+          "value": "25",
+          "valueTitle": "25/65",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Maximum JSX nesting",
+          "description": "JSX nesting is counted by the number of nested JSX children or JSX elements in JSX expressions starting with 1 for the top level.",
+          "value": "6",
+          "valueTitle": "6/8",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Cyclomatic Complexity",
+          "description": "The number of distinct paths through a block of code.",
+          "value": "3",
+          "valueTitle": "3/30",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Difficulty",
+          "description": "The difficulty to write or understand the program, e.g. when doing code review.",
+          "value": "10.733",
+          "valueTitle": "10.733/50",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Bugs",
+          "description": "An estimate for the number of errors in the implementation.",
+          "value": "0.076",
+          "valueTitle": "0.076/1",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Parameter Count",
+          "description": "The number of parameters, analysed statically from the function signature. (ignoring the arguments object)",
+          "value": "1",
+          "valueTitle": "1/20",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        }
+      ],
+      "icons": []
+    }
+  },
+  {
+    "id": "/realworld/src/components/Login.js#Login",
+    "panel": {
+      "header": "Code Quality Login (aggregate)",
+      "metrics": [
+        {
+          "name": "Lines of Code",
+          "description": "The number of lines of code including comments.",
+          "value": "71",
+          "valueTitle": "71/200",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Lines of JSX Code",
+          "description": "The line count of root level JSX elements.",
+          "value": "49",
+          "valueTitle": "49/65",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Maximum JSX nesting",
+          "description": "JSX nesting is counted by the number of nested JSX children or JSX elements in JSX expressions starting with 1 for the top level.",
+          "value": "8",
+          "valueTitle": "8/8",
+          "barClass": "mat-progress-bar progress-bar mat-primary error"
+        },
+        {
+          "name": "Cyclomatic Complexity",
+          "description": "The number of distinct paths through a block of code.",
+          "value": "7",
+          "valueTitle": "7/30",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Difficulty",
+          "description": "The difficulty to write or understand the program, e.g. when doing code review.",
+          "value": "7.636",
+          "valueTitle": "7.636/50",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Bugs",
+          "description": "An estimate for the number of errors in the implementation.",
+          "value": "0.221",
+          "valueTitle": "0.221/1",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Parameter Count",
+          "description": "The number of parameters, analysed statically from the function signature. (ignoring the arguments object)",
+          "value": "5",
+          "valueTitle": "5/20",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        }
+      ],
+      "icons": [
+        {
+          "hostClass": "error ng-star-inserted",
+          "icon": "warning",
+          "description": "This component exceeds at least one metric threshold. A solution might be to split it into smaller components."
+        }
+      ]
+    }
+  },
+  {
+    "id": "/realworld/src/components/Profile.js#EditProfileSettings",
+    "panel": {
+      "header": "Code Quality EditProfileSettings",
+      "metrics": [
+        {
+          "name": "Lines of Code",
+          "description": "The number of lines of code including comments.",
+          "value": "12",
+          "valueTitle": "12/200",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Lines of JSX Code",
+          "description": "The line count of root level JSX elements.",
+          "value": "5",
+          "valueTitle": "5/65",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Maximum JSX nesting",
+          "description": "JSX nesting is counted by the number of nested JSX children or JSX elements in JSX expressions starting with 1 for the top level.",
+          "value": "2",
+          "valueTitle": "2/8",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Cyclomatic Complexity",
+          "description": "The number of distinct paths through a block of code.",
+          "value": "2",
+          "valueTitle": "2/30",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Difficulty",
+          "description": "The difficulty to write or understand the program, e.g. when doing code review.",
+          "value": "1.5",
+          "valueTitle": "1.5/50",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Bugs",
+          "description": "An estimate for the number of errors in the implementation.",
+          "value": "0.011",
+          "valueTitle": "0.011/1",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Parameter Count",
+          "description": "The number of parameters, analysed statically from the function signature. (ignoring the arguments object)",
+          "value": "1",
+          "valueTitle": "1/20",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        }
+      ],
+      "icons": []
+    }
+  },
+  {
+    "id": "/realworld/src/components/Profile.js#FollowUserButton",
+    "panel": {
+      "header": "Code Quality FollowUserButton",
+      "metrics": [
+        {
+          "name": "Lines of Code",
+          "description": "The number of lines of code including comments.",
+          "value": "31",
+          "valueTitle": "31/200",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Lines of JSX Code",
+          "description": "The line count of root level JSX elements.",
+          "value": "7",
+          "valueTitle": "7/65",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Maximum JSX nesting",
+          "description": "JSX nesting is counted by the number of nested JSX children or JSX elements in JSX expressions starting with 1 for the top level.",
+          "value": "2",
+          "valueTitle": "2/8",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Cyclomatic Complexity",
+          "description": "The number of distinct paths through a block of code.",
+          "value": "4",
+          "valueTitle": "4/30",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Difficulty",
+          "description": "The difficulty to write or understand the program, e.g. when doing code review.",
+          "value": "8.333",
+          "valueTitle": "8.333/50",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Bugs",
+          "description": "An estimate for the number of errors in the implementation.",
+          "value": "0.07",
+          "valueTitle": "0.07/1",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Parameter Count",
+          "description": "The number of parameters, analysed statically from the function signature. (ignoring the arguments object)",
+          "value": "1",
+          "valueTitle": "1/20",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        }
+      ],
+      "icons": []
+    }
+  },
+  {
+    "id": "/realworld/src/components/Profile.js#Profile",
+    "panel": {
+      "header": "Code Quality Profile (aggregate)",
+      "metrics": [
+        {
+          "name": "Lines of Code",
+          "description": "The number of lines of code including comments.",
+          "value": "91",
+          "valueTitle": "91/200",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Lines of JSX Code",
+          "description": "The line count of root level JSX elements.",
+          "value": "61",
+          "valueTitle": "61/65",
+          "barClass": "mat-progress-bar progress-bar mat-primary warn"
+        },
+        {
+          "name": "Maximum JSX nesting",
+          "description": "JSX nesting is counted by the number of nested JSX children or JSX elements in JSX expressions starting with 1 for the top level.",
+          "value": "7",
+          "valueTitle": "7/8",
+          "barClass": "mat-progress-bar progress-bar mat-primary warn"
+        },
+        {
+          "name": "Cyclomatic Complexity",
+          "description": "The number of distinct paths through a block of code.",
+          "value": "6",
+          "valueTitle": "6/30",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Difficulty",
+          "description": "The difficulty to write or understand the program, e.g. when doing code review.",
+          "value": "14.333",
+          "valueTitle": "14.333/50",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Bugs",
+          "description": "An estimate for the number of errors in the implementation.",
+          "value": "0.341",
+          "valueTitle": "0.341/1",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Parameter Count",
+          "description": "The number of parameters, analysed statically from the function signature. (ignoring the arguments object)",
+          "value": "0",
+          "valueTitle": "0/20",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        }
+      ],
+      "icons": [
+        {
+          "hostClass": "warn ng-star-inserted",
+          "icon": "warning",
+          "description": "This component almost exceeds at least one metric threshold. A solution might be to split it into smaller components."
+        }
+      ]
+    }
+  },
+  {
+    "id": "/realworld/src/components/ProfileFavorites.js#ProfileFavorites",
+    "panel": {
+      "header": "Code Quality ProfileFavorites (aggregate)",
+      "metrics": [
+        {
+          "name": "Lines of Code",
+          "description": "The number of lines of code including comments.",
+          "value": "34",
+          "valueTitle": "34/200",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Lines of JSX Code",
+          "description": "The line count of root level JSX elements.",
+          "value": "17",
+          "valueTitle": "17/65",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Maximum JSX nesting",
+          "description": "JSX nesting is counted by the number of nested JSX children or JSX elements in JSX expressions starting with 1 for the top level.",
+          "value": "4",
+          "valueTitle": "4/8",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Cyclomatic Complexity",
+          "description": "The number of distinct paths through a block of code.",
+          "value": "4",
+          "valueTitle": "4/30",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Difficulty",
+          "description": "The difficulty to write or understand the program, e.g. when doing code review.",
+          "value": "8.625",
+          "valueTitle": "8.625/50",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Bugs",
+          "description": "An estimate for the number of errors in the implementation.",
+          "value": "0.161",
+          "valueTitle": "0.161/1",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Parameter Count",
+          "description": "The number of parameters, analysed statically from the function signature. (ignoring the arguments object)",
+          "value": "1",
+          "valueTitle": "1/20",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        }
+      ],
+      "icons": [
+        {
+          "hostClass": "warn ng-star-inserted",
+          "icon": "device_hub",
+          "description": "Component composition is recommended over inheritance. (see https://reactjs.org/docs/composition-vs-inheritance.html)"
+        }
+      ]
+    }
+  },
+  {
+    "id": "/realworld/src/components/Register.js#Register",
+    "panel": {
+      "header": "Code Quality Register (aggregate)",
+      "metrics": [
+        {
+          "name": "Lines of Code",
+          "description": "The number of lines of code including comments.",
+          "value": "83",
+          "valueTitle": "83/200",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Lines of JSX Code",
+          "description": "The line count of root level JSX elements.",
+          "value": "58",
+          "valueTitle": "58/65",
+          "barClass": "mat-progress-bar progress-bar mat-primary warn"
+        },
+        {
+          "name": "Maximum JSX nesting",
+          "description": "JSX nesting is counted by the number of nested JSX children or JSX elements in JSX expressions starting with 1 for the top level.",
+          "value": "8",
+          "valueTitle": "8/8",
+          "barClass": "mat-progress-bar progress-bar mat-primary error"
+        },
+        {
+          "name": "Cyclomatic Complexity",
+          "description": "The number of distinct paths through a block of code.",
+          "value": "8",
+          "valueTitle": "8/30",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Difficulty",
+          "description": "The difficulty to write or understand the program, e.g. when doing code review.",
+          "value": "8.947",
+          "valueTitle": "8.947/50",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Bugs",
+          "description": "An estimate for the number of errors in the implementation.",
+          "value": "0.317",
+          "valueTitle": "0.317/1",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Parameter Count",
+          "description": "The number of parameters, analysed statically from the function signature. (ignoring the arguments object)",
+          "value": "7",
+          "valueTitle": "7/20",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        }
+      ],
+      "icons": [
+        {
+          "hostClass": "error ng-star-inserted",
+          "icon": "warning",
+          "description": "This component exceeds at least one metric threshold. A solution might be to split it into smaller components."
+        }
+      ]
+    }
+  },
+  {
+    "id": "/realworld/src/components/Settings.js#SettingsForm",
+    "panel": {
+      "header": "Code Quality SettingsForm (aggregate)",
+      "metrics": [
+        {
+          "name": "Lines of Code",
+          "description": "The number of lines of code including comments.",
+          "value": "115",
+          "valueTitle": "115/200",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Lines of JSX Code",
+          "description": "The line count of root level JSX elements.",
+          "value": "58",
+          "valueTitle": "58/65",
+          "barClass": "mat-progress-bar progress-bar mat-primary warn"
+        },
+        {
+          "name": "Maximum JSX nesting",
+          "description": "JSX nesting is counted by the number of nested JSX children or JSX elements in JSX expressions starting with 1 for the top level.",
+          "value": "5",
+          "valueTitle": "5/8",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Cyclomatic Complexity",
+          "description": "The number of distinct paths through a block of code.",
+          "value": "12",
+          "valueTitle": "12/30",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Difficulty",
+          "description": "The difficulty to write or understand the program, e.g. when doing code review.",
+          "value": "21.156",
+          "valueTitle": "21.156/50",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Bugs",
+          "description": "An estimate for the number of errors in the implementation.",
+          "value": "0.549",
+          "valueTitle": "0.549/1",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Parameter Count",
+          "description": "The number of parameters, analysed statically from the function signature. (ignoring the arguments object)",
+          "value": "4",
+          "valueTitle": "4/20",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        }
+      ],
+      "icons": [
+        {
+          "hostClass": "warn ng-star-inserted",
+          "icon": "warning",
+          "description": "This component almost exceeds at least one metric threshold. A solution might be to split it into smaller components."
+        }
+      ]
+    }
+  },
+  {
+    "id": "/realworld/src/components/Settings.js#Settings",
+    "panel": {
+      "header": "Code Quality Settings (aggregate)",
+      "metrics": [
+        {
+          "name": "Lines of Code",
+          "description": "The number of lines of code including comments.",
+          "value": "31",
+          "valueTitle": "31/200",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Lines of JSX Code",
+          "description": "The line count of root level JSX elements.",
+          "value": "25",
+          "valueTitle": "25/65",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Maximum JSX nesting",
+          "description": "JSX nesting is counted by the number of nested JSX children or JSX elements in JSX expressions starting with 1 for the top level.",
+          "value": "6",
+          "valueTitle": "6/8",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Cyclomatic Complexity",
+          "description": "The number of distinct paths through a block of code.",
+          "value": "1",
+          "valueTitle": "1/30",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Difficulty",
+          "description": "The difficulty to write or understand the program, e.g. when doing code review.",
+          "value": "1.875",
+          "valueTitle": "1.875/50",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Bugs",
+          "description": "An estimate for the number of errors in the implementation.",
+          "value": "0.036",
+          "valueTitle": "0.036/1",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Parameter Count",
+          "description": "The number of parameters, analysed statically from the function signature. (ignoring the arguments object)",
+          "value": "0",
+          "valueTitle": "0/20",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        }
+      ],
+      "icons": []
+    }
+  }
+]

@@ -1,6 +1,6 @@
 # P03-S05 – Golden-Test G1, öffentliche API, Paket-README
 
-Meilenstein M1 · Abhängig von: P03-S04, P02-S03 · Umfang M
+Meilenstein M1 · Abhängig von: P03-S04 (Goldens liegen seit M0 in `testdata/golden/`) · Umfang M
 
 ## Ziel
 Der neue Kern reproduziert für `mini` und `realworld` Report, FileMap und App-Graph des Altsystems

@@ -1,0 +1,58 @@
+{
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true },
+  "files": {
+    "includes": ["**", "!legacy", "!testdata", "!.cache", "!**/dist", "!pnpm-lock.yaml", "!**/*.md"]
+  },
+  "formatter": { "indentStyle": "space", "indentWidth": 2, "lineWidth": 100 },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single",
+      "arrowParentheses": "asNeeded",
+      "trailingCommas": "es5",
+      "semicolons": "always"
+    }
+  },
+  "assist": { "actions": { "source": { "organizeImports": "on" } } },
+  "linter": {
+    "rules": {
+      "preset": "recommended",
+      "complexity": {
+        "noExcessiveCognitiveComplexity": {
+          "level": "error",
+          "options": { "maxAllowedComplexity": 15 }
+        }
+      },
+      "style": {
+        "useImportType": "error",
+        "noParameterAssign": "error",
+        "noDefaultExport": "error",
+        "useConsistentTypeDefinitions": { "level": "error", "options": { "style": "type" } }
+      },
+      "suspicious": { "noConsole": "error", "noExplicitAny": "error", "noDoubleEquals": "error" }
+    }
+  },
+  "overrides": [
+    {
+      "includes": [
+        "**/*.config.ts",
+        "**/vite.config.ts",
+        "**/vitest.config.ts",
+        "**/playwright.config.ts"
+      ],
+      "linter": { "rules": { "style": { "noDefaultExport": "off" } } }
+    },
+    {
+      "includes": ["tools/**", "**/*.test.ts", "**/*.test.tsx", "**/test/**"],
+      "linter": { "rules": { "suspicious": { "noConsole": "off" } } }
+    },
+    {
+      "includes": ["tools/legacy/capture.browser.js"],
+      "linter": {
+        "rules": {
+          "complexity": { "useOptionalChain": "off", "noExcessiveCognitiveComplexity": "off" }
+        }
+      }
+    }
+  ]
+}

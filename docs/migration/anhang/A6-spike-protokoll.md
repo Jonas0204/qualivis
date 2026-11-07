@@ -2,15 +2,15 @@
 
 Ziel: die riskantesten Annahmen des Plans **vor** der Umsetzung am echten Stack prüfen. Der Spike
 lief im Scratchpad außerhalb des Repos und wurde nicht übernommen. Die Installation hat der
-Nutzer selbst ausgeführt, weil ein Hook (`guard.js`) `pnpm install` für den Assistenten blockiert.
-Das gilt auch für die Umsetzung (siehe `README.md`, Regel R4).
+Nutzer selbst ausgeführt, weil ein Hook (`guard.js`) `pnpm install` damals für den Assistenten
+blockierte. Seit 08.11.2026 darf der Assistent nach Nachfrage installieren (`README.md`, Regel R4).
 
 ## Ergebnisse
 
 | # | Annahme | Ergebnis |
 |---|---|---|
-| V1 | Alter Build lässt sich ohne alte Abhängigkeiten starten | ✅ `git archive origin/gh-pages` + Node-Server (A1) unter `/component-graph/` |
-| V2 | Referenzdaten lassen sich automatisch aus dem alten Build gewinnen | ✅ synthetischer Drop + `onbeforeunload()` + `__data__` (A2), komplettes Skript verifiziert |
+| V1 | Alter Build lässt sich ohne alte Abhängigkeiten starten | ✅ `git archive origin/gh-pages` + Node-Server (heute `tools/legacy/serve-legacy.mjs`) unter `/component-graph/` |
+| V2 | Referenzdaten lassen sich automatisch aus dem alten Build gewinnen | ✅ synthetischer Drop + `onbeforeunload()` + `__data__` (heute `tools/legacy/capture.browser.js`), komplettes Skript verifiziert |
 | V3 | escomplex 0.1 + Babel **7.29.12** liefern dieselben Zahlen wie Babel 7.7/7.8 | ✅ **0 Abweichungen** (Report, FileMap, App-Graph) für `mini` (8 Dateien) und `realworld` (38 Dateien) |
 | V4 | Die beiden patch-package-Patches funktionieren als pnpm-Patches | ✅ Pfade `a/node_modules/<pkg>/` → `a/` umgeschrieben, `patchedDependencies` greift (Hash im Lockfile) |
 | V5 | Kern läuft im Vite-8-Browser-Bundle | ✅ nach `cjsDefault()` für `@babel/traverse` und `ESComplexProject`; Browser-Ergebnis = Legacy (0 Abweichungen) |
@@ -28,15 +28,19 @@ Das gilt auch für die Umsetzung (siehe `README.md`, Regel R4).
 | V17 | Analysezeit `mini` im Browser | 49 ms |
 | V18 | `Buffer`-Hack aus alter `index.html` | nicht nötig (`jsesc` prüft `typeof Buffer`) |
 | V19 | Formeln in `03-visuelle-regeln.md` (§2 Größe, §3 Icons, §5 Vorschau-Geometrie) | ✅ unabhängige Nachrechnung gegen die Legacy-Captures von `mini`: **100/100** Prüfungen exakt (AV + 4 KVs, Breiten ±1e-9, Icon-Reihenfolge, `cx/cy`, `hidden`) |
-| V20 | Biome-Konfiguration aus P01-S03 inkl. Overrides | ✅ gültig; `!legacy`/`!testdata` schließen die Root-Ordner aus, `packages/core/src/legacy` wird mit Override geprüft (nur noch 15× `useImportType`, automatisch behebbar) |
+| V20 | Biome-Konfiguration (heute `biome.json`) inkl. Overrides | ✅ gültig; `!legacy`/`!testdata` schließen die Root-Ordner aus, `packages/core/src/legacy` wird mit Override geprüft (nur noch 15× `useImportType`, automatisch behebbar) |
 | V21 | Vitest: Inline-Projekt (`tools`) + Pfad-Projekte, Filter `--project core test/golden` | ✅ 9 Tests (3 Projekte) bzw. 6 Golden-Tests |
 | V22 | Übernommener POSIX-Pfad aus Node | ⚠️ verletzt Komplexitätsgrenze (41/21/32) → **ersetzt** durch das Paket `path-browserify` (Nutzerentscheidung, ADR-005); keine kopierte Datei mehr |
 | V23 | pnpm-12-Schlüssel `saveExact`, `minimumReleaseAge: 4320` | ✅ erkannt; unbekannter Schlüssel → Abbruch `ERR_PNPM_UNRECOGNIZED_WORKSPACE_SETTINGS` (wegen `packageManager`-Pin) |
 | V24 | Biome `useConsistentTypeDefinitions` mit `style: "type"` | ✅ meldet `interface`, automatisch behebbar |
+| V25 | Testing Library ohne jsdom (reines Node) | ❌ wie erwartet: `render` → `document is not defined`, `screen` → „a global document has to be available“, `fireEvent` → „not an Element“ (ADR-015) |
+| V26 | React 19.3 `renderToStaticMarkup` in reinem Node | ✅ rendert SVG/HTML ohne `document`, ohne Warnungen; Effekte laufen nicht, Events gibt es nicht (nur statisch) |
+| V27 | Jotai-`TestProvider` (`anhang/A7`) | ⏸ nicht ausgeführt (Nutzerentscheidung); `useHydrateAtoms` ist in `jotai@3.0.1/utils` exportiert. Erste Ausführung in P04-S02 |
 
 Nachträgliche Entscheidungen (nach dem Spike, nicht mehr am Spike geprüft): Jotai statt eigenem
 Store, `path-browserify` statt Portierung, feste Versionen, Node 24 statt 26, `@playwright/test`
-1.64.1. Diese Punkte prüft der jeweils erste Umsetzungsschritt (P01-S04, P03-S03, P04-S02).
+1.64.1. Diese Punkte prüft der jeweils erste Umsetzungsschritt (P03-S03, P04-S02); Node 24 (24.22.2) und
+feste Versionen sind seit M0 (08.11.2026) bestätigt.
 
 ## Aufgelöste Versionen (mit `minimumReleaseAge: 10080`)
 

@@ -1,0 +1,428 @@
+{
+  "view": "app",
+  "url": "/component-graph/graph",
+  "container": [
+    158,
+    704
+  ],
+  "settings": null,
+  "hasClusterButton": false,
+  "nodes": [
+    {
+      "id": "/mini/src/App.js#App",
+      "label": "App",
+      "type": "component",
+      "kind": "ClassComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 54.68428945128219,
+      "height": 54.68428945128219,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": 49.60825864561459,
+      "y": 239.5,
+      "dom": {
+        "mainR": 20.342144725641095,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "url(#diagonalHatch)",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "App",
+        "iconTexts": [],
+        "previews": [
+          {
+            "cls": "function innerFunction special",
+            "title": "constructor",
+            "hidden": false,
+            "cx": 1.4905264811318997e-15,
+            "cy": -24.342144725641095
+          },
+          {
+            "cls": "function innerFunction special",
+            "title": "componentDidMount",
+            "hidden": false,
+            "cx": 6.903920813499592,
+            "cy": -23.34257670534647
+          },
+          {
+            "cls": "function innerFunction special",
+            "title": "componentWillMount",
+            "hidden": false,
+            "cx": 13.240846521382919,
+            "cy": -20.425963704100685
+          },
+          {
+            "cls": "function innerFunction jsx special",
+            "title": "render",
+            "hidden": false,
+            "cx": 18.49034736234708,
+            "cy": -15.831837046401183
+          },
+          {
+            "cls": "function innerFunction jsx",
+            "title": "renderTitle",
+            "hidden": false,
+            "cx": 22.221300013260212,
+            "cy": -9.937496443508204
+          },
+          {
+            "cls": "function innerFunction",
+            "title": "helper",
+            "hidden": false,
+            "cx": 24.127294254552982,
+            "cy": -3.227023674885456
+          },
+          {
+            "cls": "function innerFunction",
+            "title": "handleIncrement",
+            "hidden": false,
+            "cx": 24.051797380341405,
+            "cy": 3.748473371795365
+          },
+          {
+            "cls": "function innerFunction",
+            "title": "loadTodos",
+            "hidden": false,
+            "cx": 22.001009687431267,
+            "cy": 10.416121282781422
+          },
+          {
+            "cls": "function innerFunction",
+            "title": "computeTotal",
+            "hidden": false,
+            "cx": 18.143355266415323,
+            "cy": 16.228329227640653
+          },
+          {
+            "cls": "function innerFunction",
+            "title": "emptyMethod",
+            "hidden": false,
+            "cx": 12.795649914427013,
+            "cy": 20.707760697658273
+          }
+        ],
+        "dots": []
+      }
+    },
+    {
+      "id": "/mini/src/base/BaseWidget.js#BaseWidget",
+      "label": "BaseWidget",
+      "type": "component",
+      "kind": "ClassComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 29.13879513212096,
+      "height": 29.13879513212096,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": -145.07162777456347,
+      "y": 239.5,
+      "dom": {
+        "mainR": 7.569397566060481,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "url(#diagonalHatch)",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "BaseWidget",
+        "iconTexts": [],
+        "previews": [
+          {
+            "cls": "function innerFunction special",
+            "title": "shouldComponentUpdate",
+            "hidden": false,
+            "cx": 7.084212848669574e-16,
+            "cy": -11.56939756606048
+          },
+          {
+            "cls": "function innerFunction special",
+            "title": "render",
+            "hidden": false,
+            "cx": 6.580657728968985,
+            "cy": -9.515561144553006
+          }
+        ],
+        "dots": []
+      }
+    },
+    {
+      "id": "/mini/src/components/Counter.tsx#Counter",
+      "label": "Counter",
+      "type": "component",
+      "kind": "FunctionComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 38.20103697319962,
+      "height": 38.20103697319962,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": 4.090127417758561,
+      "y": 339.5,
+      "dom": {
+        "mainR": 12.10051848659981,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "Counter",
+        "iconTexts": [],
+        "previews": [
+          {
+            "cls": "function innerFunction jsx",
+            "title": "renderBadge#23",
+            "hidden": false,
+            "cx": 9.858724214613622e-16,
+            "cy": -16.10051848659981
+          },
+          {
+            "cls": "function innerFunction",
+            "title": "handleClick#11",
+            "hidden": false,
+            "cx": 6.78154719390547,
+            "cy": -14.602647472091324
+          },
+          {
+            "cls": "function innerFunction",
+            "title": "formatValue#16",
+            "hidden": false,
+            "cx": 12.301286206449996,
+            "cy": -10.387735711132878
+          }
+        ],
+        "dots": []
+      }
+    },
+    {
+      "id": "/mini/src/components/Footer.js#Footer",
+      "label": "Footer",
+      "type": "component",
+      "kind": "FunctionComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 24.092530088080643,
+      "height": 24.092530088080643,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": 88.32723672222707,
+      "y": 339.5,
+      "dom": {
+        "mainR": 5.046265044040322,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "Footer",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "/mini/src/components/Header.js#Header",
+      "label": "Header",
+      "type": "component",
+      "kind": "ClassComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": true,
+      "width": 34.18506017616129,
+      "height": 34.18506017616129,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [
+        {
+          "icon": "device_hub",
+          "class": "warn",
+          "description": "Component composition is recommended over inheritance.\n          (see <a href=\"https://reactjs.org/docs/composition-vs-inheritance.html\" target=\"_blank\">\n          https://reactjs.org/docs/composition-vs-inheritance.html</a>)"
+        }
+      ],
+      "x": -92.6539444635659,
+      "y": 339.5,
+      "dom": {
+        "mainR": 10.092530088080643,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "url(#diagonalHatch)",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "Header",
+        "iconTexts": [
+          "icon warn:device_hub"
+        ],
+        "previews": [
+          {
+            "cls": "function innerFunction jsx special",
+            "title": "render",
+            "hidden": false,
+            "cx": 8.629185932127864e-16,
+            "cy": -14.092530088080643
+          }
+        ],
+        "dots": []
+      }
+    },
+    {
+      "id": "/mini/src/components/TodoItem.js#TodoItem",
+      "label": "TodoItem",
+      "type": "component",
+      "kind": "FunctionComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 26.360774464742065,
+      "height": 26.360774464742065,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": 278.16663433646943,
+      "y": 539.5,
+      "dom": {
+        "mainR": 6.180387232371032,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "TodoItem",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "/mini/src/components/TodoList.jsx#TodoList",
+      "label": "TodoList",
+      "type": "component",
+      "kind": "FunctionComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 32.19456736586892,
+      "height": 32.19456736586892,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": 258.43646822998585,
+      "y": 439.5,
+      "dom": {
+        "mainR": 9.09728368293446,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "TodoList",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "/mini/src/components/TodoList.jsx#ConnectedTodoList",
+      "label": "ConnectedTodoList",
+      "type": "component",
+      "kind": null,
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 20,
+      "height": 20,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": 191.09684688607388,
+      "y": 339.5,
+      "dom": {
+        "mainR": 3,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "ConnectedTodoList",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    }
+  ],
+  "links": [
+    {
+      "source": "/mini/src/App.js#App",
+      "target": "/mini/src/components/Header.js#Header",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "/mini/src/App.js#App",
+      "target": "/mini/src/components/Counter.tsx#Counter",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "/mini/src/App.js#App",
+      "target": "/mini/src/components/TodoList.jsx#ConnectedTodoList",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "/mini/src/App.js#App",
+      "target": "/mini/src/components/Footer.js#Footer",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "/mini/src/base/BaseWidget.js#BaseWidget",
+      "target": "/mini/src/components/Header.js#Header",
+      "inherits": true,
+      "dash": "4 2"
+    },
+    {
+      "source": "/mini/src/components/TodoList.jsx#TodoList",
+      "target": "/mini/src/components/TodoItem.js#TodoItem",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "/mini/src/components/TodoList.jsx#ConnectedTodoList",
+      "target": "/mini/src/components/TodoList.jsx#TodoList",
+      "inherits": false,
+      "dash": null
+    }
+  ]
+}

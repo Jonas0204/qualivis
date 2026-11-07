@@ -1,0 +1,260 @@
+[
+  {
+    "id": "Profile",
+    "panel": {
+      "header": "Code Quality Profile (aggregate)",
+      "metrics": [
+        {
+          "name": "Lines of Code",
+          "description": "The number of lines of code including comments.",
+          "value": "91",
+          "valueTitle": "91/200",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Lines of JSX Code",
+          "description": "The line count of root level JSX elements.",
+          "value": "61",
+          "valueTitle": "61/65",
+          "barClass": "mat-progress-bar progress-bar mat-primary warn"
+        },
+        {
+          "name": "Maximum JSX nesting",
+          "description": "JSX nesting is counted by the number of nested JSX children or JSX elements in JSX expressions starting with 1 for the top level.",
+          "value": "7",
+          "valueTitle": "7/8",
+          "barClass": "mat-progress-bar progress-bar mat-primary warn"
+        },
+        {
+          "name": "Cyclomatic Complexity",
+          "description": "The number of distinct paths through a block of code.",
+          "value": "6",
+          "valueTitle": "6/30",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Difficulty",
+          "description": "The difficulty to write or understand the program, e.g. when doing code review.",
+          "value": "14.333",
+          "valueTitle": "14.333/50",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Bugs",
+          "description": "An estimate for the number of errors in the implementation.",
+          "value": "0.341",
+          "valueTitle": "0.341/1",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Parameter Count",
+          "description": "The number of parameters, analysed statically from the function signature. (ignoring the arguments object)",
+          "value": "0",
+          "valueTitle": "0/20",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        }
+      ],
+      "icons": [
+        {
+          "hostClass": "warn ng-star-inserted",
+          "icon": "warning",
+          "description": "This component almost exceeds at least one metric threshold. A solution might be to split it into smaller components."
+        }
+      ]
+    }
+  },
+  {
+    "id": "componentWillMount",
+    "panel": {
+      "header": "Code Quality componentWillMount",
+      "metrics": [
+        {
+          "name": "Lines of Code",
+          "description": "The number of lines of code including comments.",
+          "value": "6",
+          "valueTitle": "6/40",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Cyclomatic Complexity",
+          "description": "The number of distinct paths through a block of code.",
+          "value": "1",
+          "valueTitle": "1/8",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Difficulty",
+          "description": "The difficulty to write or understand the program, e.g. when doing code review.",
+          "value": "3.75",
+          "valueTitle": "3.75/15",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Bugs",
+          "description": "An estimate for the number of errors in the implementation.",
+          "value": "0.057",
+          "valueTitle": "0.057/0.4",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Parameter Count",
+          "description": "The number of parameters, analysed statically from the function signature. (ignoring the arguments object)",
+          "value": "0",
+          "valueTitle": "0/6",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        }
+      ],
+      "icons": [
+        {
+          "hostClass": "warn ng-star-inserted",
+          "icon": "report",
+          "description": "Deprecated React lifecycle method (see https://reactjs.org/docs/react-component.html#legacy-lifecycle-methods)"
+        }
+      ]
+    }
+  },
+  {
+    "id": "componentWillUnmount",
+    "panel": {
+      "header": "Code Quality componentWillUnmount",
+      "metrics": [
+        {
+          "name": "Lines of Code",
+          "description": "The number of lines of code including comments.",
+          "value": "3",
+          "valueTitle": "3/40",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Cyclomatic Complexity",
+          "description": "The number of distinct paths through a block of code.",
+          "value": "1",
+          "valueTitle": "1/8",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Difficulty",
+          "description": "The difficulty to write or understand the program, e.g. when doing code review.",
+          "value": "1.5",
+          "valueTitle": "1.5/15",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Bugs",
+          "description": "An estimate for the number of errors in the implementation.",
+          "value": "0.005",
+          "valueTitle": "0.005/0.4",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Parameter Count",
+          "description": "The number of parameters, analysed statically from the function signature. (ignoring the arguments object)",
+          "value": "0",
+          "valueTitle": "0/6",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        }
+      ],
+      "icons": []
+    }
+  },
+  {
+    "id": "renderTabs",
+    "panel": {
+      "header": "Code Quality renderTabs",
+      "metrics": [
+        {
+          "name": "Lines of Code",
+          "description": "The number of lines of code including comments.",
+          "value": "21",
+          "valueTitle": "21/40",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Cyclomatic Complexity",
+          "description": "The number of distinct paths through a block of code.",
+          "value": "1",
+          "valueTitle": "1/8",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Difficulty",
+          "description": "The difficulty to write or understand the program, e.g. when doing code review.",
+          "value": "3.889",
+          "valueTitle": "3.889/15",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Bugs",
+          "description": "An estimate for the number of errors in the implementation.",
+          "value": "0.034",
+          "valueTitle": "0.034/0.4",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Parameter Count",
+          "description": "The number of parameters, analysed statically from the function signature. (ignoring the arguments object)",
+          "value": "0",
+          "valueTitle": "0/6",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        }
+      ],
+      "icons": [
+        {
+          "hostClass": "warn ng-star-inserted",
+          "icon": "content_cut",
+          "description": "Functions returning JSX should be components (except for the render function in class components)"
+        }
+      ]
+    }
+  },
+  {
+    "id": "render",
+    "panel": {
+      "header": "Code Quality render",
+      "metrics": [
+        {
+          "name": "Lines of Code",
+          "description": "The number of lines of code including comments.",
+          "value": "56",
+          "valueTitle": "56/60",
+          "barClass": "mat-progress-bar progress-bar mat-primary warn"
+        },
+        {
+          "name": "Cyclomatic Complexity",
+          "description": "The number of distinct paths through a block of code.",
+          "value": "3",
+          "valueTitle": "3/12",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Difficulty",
+          "description": "The difficulty to write or understand the program, e.g. when doing code review.",
+          "value": "10.909",
+          "valueTitle": "10.909/22.5",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Bugs",
+          "description": "An estimate for the number of errors in the implementation.",
+          "value": "0.162",
+          "valueTitle": "0.162/0.6",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Parameter Count",
+          "description": "The number of parameters, analysed statically from the function signature. (ignoring the arguments object)",
+          "value": "0",
+          "valueTitle": "0/1",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        }
+      ],
+      "icons": [
+        {
+          "hostClass": "warn ng-star-inserted",
+          "icon": "warning",
+          "description": "This function almost exceeds at least one metric threshold. A solution might be to split it into smaller functions."
+        }
+      ]
+    }
+  }
+]

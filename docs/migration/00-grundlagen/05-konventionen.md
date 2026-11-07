@@ -83,7 +83,14 @@ Ordner der Altcode-Kopie (`packages/core/src/legacy/`) behalten die **alten Date
 - **Keine** `Co-Authored-By`-Zeilen, keine Hinweise auf Claude, keine Session-Links.
 - Autor/Committer und Push-Regeln stehen in der **lokalen** `CLAUDE.md` im Repo-Root (nicht
   versioniert, siehe `.gitignore`). Ist sie nicht vorhanden: vor dem Commit den Nutzer fragen.
-- Ein Schritt = ein Commit (Ausnahme: sehr große Schritte nach Absprache).
+- Ein Schritt = ein Commit (Ausnahme: sehr große Schritte nach Absprache). Vor dem Commit prüft
+  der Nutzer die uncommitteten Änderungen in seiner IDE (README R3).
+- Branches: ein Branch pro Phase (`rewrite/pNN-<name>`) mit Abzweig von `rewrite/react`; am Ende der
+  Phase ein Pull Request nach `rewrite/react`, den der Nutzer per Merge-Commit übernimmt (Details:
+  README, „Branches und Pull Requests“). Review-Korrekturen als neue Commits, nie `--amend` oder
+  Force-Push.
+- PR-Titel `Pnn: <Phasentitel>`; Beschreibung mit erledigten Schritten, Prüfergebnissen,
+  Abweichungen und offenen Punkten; ohne Claude-/KI-Hinweise.
 
 ## 9. Schritt-Karten (Aufbau)
 

@@ -2,14 +2,15 @@
 
 Golden-Daten sind JSON-Dateien, die der **alte gh-pages-Build** für ein Testprojekt erzeugt.
 Die neue Implementierung muss dieselben Werte liefern. Konzept und Testebenen:
-`00-grundlagen/06-teststrategie.md`. Werkzeuge: `anhang/A1`, `A2`, `A5`.
+`00-grundlagen/06-teststrategie.md`. Werkzeuge: `tools/legacy/` (Server, Capture-Skript), `tools/golden/diff-json.mjs`,
+Golden-Test: `anhang/A5`.
 
 ## 1. Ablage
 
 ```
 testdata/
 ├─ fixtures/
-│  ├─ mini/            eigenes Testprojekt (alle wichtigen Erkennungsfälle), Inhalt: anhang/A3
+│  ├─ mini/            eigenes Testprojekt (alle wichtigen Erkennungsfälle), siehe testdata/README.md
 │  └─ realworld/       gothinkster/react-redux-realworld-example-app, Commit ee72eba (MIT), nur src/
 └─ golden/
    ├─ README.md        Herkunft: Legacy-Commit, Build-Commit, Datum, Einstellungen, Browser
@@ -28,16 +29,16 @@ z. B. `mini_src_App_js_App`.
 ```
 
 Golden-Dateien werden **nie von Hand** und **nie zum Grünmachen eines Tests** geändert. Neu
-erfassen nur nach dem Verfahren in P02-S03 bzw. automatisiert (P09-S02) und mit Freigabe des
+erfassen nur nach dem Verfahren in `tools/legacy/README.md` bzw. automatisiert (P09-S02) und mit Freigabe des
 Nutzers.
 
 ## 2. Erfassungsprinzip (im Spike erprobt)
 
 1. Legacy-Build aus `origin/gh-pages` nach `.cache/legacy-build/` entpacken, lokal unter
-   `http://127.0.0.1:4300/component-graph/` ausliefern (Server: `anhang/A1`). Der Server liefert
+   `http://127.0.0.1:4300/component-graph/` ausliefern (Server: `tools/legacy/serve-legacy.mjs`). Der Server liefert
    auch die Fixtures (`/fixtures/<name>/manifest.json` + Dateien) und nimmt Ergebnisse per
    `POST /capture/<name>/<datei>` entgegen.
-2. Im Browser (DevTools-Konsole oder Claude-Browser-Fenster) das Skript aus `anhang/A2` ausführen.
+2. Im Browser (DevTools-Konsole oder Claude-Browser-Fenster) das Skript `tools/legacy/capture.browser.js` ausführen.
    Es baut aus den Fixture-Dateien `File`-Objekte mit `webkitRelativePath = '/<name>/<pfad>'`
    und löst ein synthetisches `drop`-Ereignis auf dem Element `[appdroptarget]` aus. Die alte App
    analysiert das wie einen echten Drop.

@@ -1,0 +1,172 @@
+{
+  "view": "component",
+  "url": "/component-graph/graph?id=%2Frealworld%2Fsrc%2Fcomponents%2FHome%2Findex.js%23Home",
+  "container": [
+    158,
+    704
+  ],
+  "settings": null,
+  "hasClusterButton": false,
+  "nodes": [
+    {
+      "id": "Home",
+      "label": null,
+      "type": "component",
+      "kind": "ClassComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 32.703535245865034,
+      "height": 32.703535245865034,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [
+        {
+          "icon": "warning",
+          "class": "warn",
+          "description": "This component almost exceeds at least one metric threshold. A solution might be to split it into smaller components."
+        }
+      ],
+      "x": 78.99999984633571,
+      "y": 277,
+      "dom": {
+        "mainR": 16.351767622932517,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "url(#diagonalHatch)",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "Home",
+        "iconTexts": [
+          "icon warn:warning"
+        ],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "componentWillMount",
+      "label": null,
+      "type": "innerFunction",
+      "kind": "ClassComponent",
+      "special": true,
+      "returnsJSX": false,
+      "isUsingThis": true,
+      "extends": false,
+      "width": 31.915382432114615,
+      "height": 31.915382432114615,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [
+        {
+          "icon": "report",
+          "class": "warn",
+          "description": "Deprecated React lifecycle method\n          (see <a href=\"https://reactjs.org/docs/react-component.html#legacy-lifecycle-methods\" target=\"_blank\">\n          https://reactjs.org/docs/react-component.html#legacy-lifecycle-methods</a>)"
+        }
+      ],
+      "x": 79.00000005122143,
+      "y": 377,
+      "dom": {
+        "mainR": 15.957691216057308,
+        "mainClass": "circle-node innerFunction special",
+        "overlayClass": "circle-overlay innerFunction special",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "componentWillMount",
+        "iconTexts": [
+          "icon warn:report"
+        ],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "componentWillUnmount",
+      "label": null,
+      "type": "innerFunction",
+      "kind": "ClassComponent",
+      "special": true,
+      "returnsJSX": false,
+      "isUsingThis": true,
+      "extends": false,
+      "width": 19.544100476116796,
+      "height": 19.544100476116796,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": -20.999999948778555,
+      "y": 377,
+      "dom": {
+        "mainR": 9.772050238058398,
+        "mainClass": "circle-node innerFunction special",
+        "overlayClass": "circle-overlay innerFunction special",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "componentWillUnmount",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "render",
+      "label": null,
+      "type": "innerFunction",
+      "kind": "ClassComponent",
+      "special": true,
+      "returnsJSX": true,
+      "isUsingThis": true,
+      "extends": false,
+      "width": 47.873073648171925,
+      "height": 47.873073648171925,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": 179.00000005122143,
+      "y": 377,
+      "dom": {
+        "mainR": 23.936536824085962,
+        "mainClass": "circle-node innerFunction special",
+        "overlayClass": "circle-overlay innerFunction special",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": 20.936536824085962,
+        "innerClass": "inner-circle innerFunction special",
+        "label": "render",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    }
+  ],
+  "links": [
+    {
+      "source": "Home",
+      "target": "componentWillMount",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "Home",
+      "target": "componentWillUnmount",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "Home",
+      "target": "render",
+      "inherits": false,
+      "dash": null
+    }
+  ]
+}

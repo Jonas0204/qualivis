@@ -4,8 +4,8 @@ Dieses Dokument beschreibt **jedes für Nutzer sichtbare Verhalten** der alten A
 Abnahmegrundlage für die Meilensteine M1–M4. Maßstab ist immer das **Verhalten des
 gh-pages-Builds** (Stand Commit `a071f27`, Build-Commit `5f0155e`), nicht das Paper.
 
-> Pfadangaben: Nach Schritt P01-S02 liegt der alte Code unter `legacy/angular/`. Vorher fehlt
-> dieses Präfix (z. B. `src/app/...`).
+> Pfadangaben: Der alte Code liegt seit M0 unter `legacy/angular/` (z. B.
+> `legacy/angular/src/app/...`).
 
 Abkürzungen: **AV** = App-Ansicht (Graph aller Komponenten), **KV** = Komponenten-Ansicht
 (Drill-down, Graph der inneren Funktionen einer Komponente).

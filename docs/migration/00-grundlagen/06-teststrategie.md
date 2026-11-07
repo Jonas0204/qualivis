@@ -33,7 +33,7 @@ Funktion aufgerufen wurde, oder spiegeln den Code nur wider.
 |---|---|---|---|
 | Unit | Vitest (node) | `packages/core/src/**/*.test.ts`, `apps/web/src/{lib,state}/**/*.test.ts` | ja |
 | Golden G1/G2 | Vitest (node) | `packages/core/test/golden/` | ja |
-| Komponenten | Vitest (jsdom) + Testing Library + user-event | `apps/web/src/**/*.test.tsx` | ja |
+| Komponenten | Vitest (jsdom) + Testing Library + user-event + `TestProvider` (Jotai) | `apps/web/src/**/*.test.tsx` | ja |
 | Snapshot | Vitest `toMatchInlineSnapshot`/`toMatchSnapshot` | bei reinen Anzeige-Bausteinen | ja |
 | E2E | Playwright (Systembrowser) | `e2e/tests/` | nein, eigener Befehl `pnpm e2e` |
 | Sichtvergleich G5 | Playwright-Screenshots + HTML-Bericht | `e2e/visual/` | nein, manuell |
@@ -47,10 +47,54 @@ für Komponententests lädt** (`environment: 'jsdom'` im Web-Projekt): eine in J
 nachgebaute DOM-Implementierung. Der Kern braucht kein DOM und testet in der normalen
 Node-Umgebung (`environment: 'node'`, schneller).
 
-Alternativen und warum nicht: Vitest-Browser-Modus (echter Browser, braucht Playwright als Treiber,
-5 Sicherheitsmeldungen seit 2025, davon 3 kritisch) und happy-dom (schneller, aber 8 Meldungen, davon
-3 kritisch). Echte Browser-Prüfungen erledigt später Playwright in E2E-Tests (P09), getrennt
-installierbar.
+**Geht es ohne jsdom?** Am 07.11.2026 geprüft (ADR-015): nein, jedenfalls nicht für Klick-Tests.
+- Testing Library stellt selbst kein DOM bereit, sondern arbeitet auf einem vorhandenen. In
+  reinem Node scheitert `render` mit `document is not defined`, und `screen` und `fireEvent`
+  scheitern genauso (im Spike nachgestellt).
+- Ein Jotai-`TestProvider` (unten) setzt nur den **Zustand**, kein DOM.
+- Ohne DOM rendern nur `react-dom/server` (statisches HTML ohne Effekte und Events, in Node
+  geprüft) und `react-test-renderer`. Letzteres ist seit React 19 abgekündigt und ungepflegt und
+  kennt keine echten Events.
+- `jest-environment-jsdom` ist jsdom plus Jest-Umgebung (85 statt 27 Pakete). `jest-junit` ist
+  nur ein Reporter; Vitest hat `--reporter=junit` eingebaut.
+- Vitest-Browser-Modus: echter Browser, aber 5 Sicherheitsmeldungen, davon 4 im Jahr 2026 und
+  3 kritisch. happy-dom: 8 Meldungen, davon 3 kritisch.
+
+Echte Browser-Prüfungen erledigt später Playwright in E2E-Tests (P09), getrennt installierbar.
+
+### Zustand im Test: `TestProvider` (Jotai)
+
+Komponenten lesen geteilten Zustand aus Jotai-Atomen. Damit jeder Test mit einem bekannten,
+isolierten Zustand startet, laufen alle Komponenten- und Hook-Tests über die Testhilfen aus
+`apps/web/src/test/`. Sie werden in P04-S02 eingeführt; die Vorlage steht in
+`anhang/A7-test-provider.md`.
+
+- `TestProvider` = `StateProvider` (eigener Jotai-Store) + `useHydrateAtoms`, das die Startwerte vor dem
+  ersten Rendern setzt (Muster aus der Jotai-Testanleitung).
+- `initial(atom, value)` erzeugt einen Startwert; TypeScript prüft, dass der Wert zum Atom passt.
+- `renderWithState(ui, { initialValues, store })` → `{ store, user, …render }`;
+  `renderHookWithState(hook, { initialValues, store })` → `{ store, …renderHook }`.
+
+```tsx
+const { store, user, getByRole } = renderWithState(<SomeComponent />, {
+  initialValues: [initial(someAtom, someValue)],
+});
+await user.click(getByRole('button', { name: 'Save' }));
+expect(store.get(someAtom)).toEqual(expectedValue);
+```
+
+Regeln:
+1. Jeder Test hat seinen eigenen Store (Standard von `renderWithState`). Nie den globalen
+   Jotai-Default-Store benutzen und nie Atome zwischen Tests „aufräumen“.
+2. Startwerte gehören in `initialValues`, nicht in ein `store.set` nach dem Rendern, sonst rendert
+   die Komponente zuerst mit dem Standardwert. `act(() => store.set(…))` nur, um eine Änderung
+   **während** des Tests zu simulieren.
+3. Geprüft wird, was der Nutzer sieht (Rollen, Texte, Attribute), und mit `store.get(…)` der
+   gespeicherte Zustand, nicht interne Funktionsaufrufe.
+4. Reine Atom-Logik (abgeleitete Atome, Schreib-Atome, `runAnalysis(files, store)`) braucht kein
+   React: `const store = createStore(); store.set(…); expect(store.get(…))…`.
+5. `atomWithStorage` schreibt beim Hydrieren in `localStorage`. Deshalb leert `src/test/setup.ts` ab
+   P07-S01 nach jedem Test auch `localStorage`.
 
 ## 3. Das Golden-Konzept
 
@@ -94,7 +138,7 @@ dramatisch sind (Nutzerentscheidung), gilt:
 1. Goldens liegen versioniert in `testdata/golden/` und werden **nie** von Hand bearbeitet.
 2. Ein Test, der gegen ein Golden fehlschlägt, wird **nie** durch Anpassen des Goldens grün
    gemacht. Stattdessen: Diff ansehen (`tools/golden/diff-json.mjs`), Ursache finden, Code
-   korrigieren. Ist die Abweichung gewollt (ADR), werden Goldens nach P02-S03 neu erfasst und
+   korrigieren. Ist die Abweichung gewollt (ADR), werden Goldens nach dem Verfahren in `tools/legacy/README.md` neu erfasst und
    der Nutzer stimmt zu.
 3. Neue Fixtures: zuerst Legacy-Capture, dann Test. Fixtures enthalten nur Quelltext (keine
    `package.json`-Abhängigkeiten installieren, nichts ausführen).
@@ -121,7 +165,7 @@ Review begründet, nie blind aktualisiert (`-u` nur nach Prüfung).
 
 ## 6. Testdaten
 
-- `testdata/fixtures/mini` (eigene Fälle, `anhang/A3`), `testdata/fixtures/realworld` (MIT,
+- `testdata/fixtures/mini` (eigene Fälle, `testdata/README.md`), `testdata/fixtures/realworld` (MIT,
   echtes Projekt aus dem Paper).
 - Ab P08-S03: `testdata/fixtures/features/` mit je einer Datei pro Erkennungsfall (z. B.
   `react-lazy-identifier.js`, `export-default-call.js`), jeweils mit Legacy-Capture.

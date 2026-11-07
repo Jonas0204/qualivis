@@ -1,0 +1,104 @@
+[
+  {
+    "id": "ListPagination#11",
+    "panel": {
+      "header": "Code Quality ListPagination",
+      "metrics": [
+        {
+          "name": "Lines of Code",
+          "description": "The number of lines of code including comments.",
+          "value": "46",
+          "valueTitle": "46/200",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Lines of JSX Code",
+          "description": "The line count of root level JSX elements.",
+          "value": "25",
+          "valueTitle": "25/65",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Maximum JSX nesting",
+          "description": "JSX nesting is counted by the number of nested JSX children or JSX elements in JSX expressions starting with 1 for the top level.",
+          "value": "6",
+          "valueTitle": "6/8",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Cyclomatic Complexity",
+          "description": "The number of distinct paths through a block of code.",
+          "value": "3",
+          "valueTitle": "3/30",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Difficulty",
+          "description": "The difficulty to write or understand the program, e.g. when doing code review.",
+          "value": "10.733",
+          "valueTitle": "10.733/50",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Bugs",
+          "description": "An estimate for the number of errors in the implementation.",
+          "value": "0.076",
+          "valueTitle": "0.076/1",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Parameter Count",
+          "description": "The number of parameters, analysed statically from the function signature. (ignoring the arguments object)",
+          "value": "1",
+          "valueTitle": "1/20",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        }
+      ],
+      "icons": []
+    }
+  },
+  {
+    "id": "setPage#21",
+    "panel": {
+      "header": "Code Quality setPage",
+      "metrics": [
+        {
+          "name": "Lines of Code",
+          "description": "The number of lines of code including comments.",
+          "value": "7",
+          "valueTitle": "7/40",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Cyclomatic Complexity",
+          "description": "The number of distinct paths through a block of code.",
+          "value": "2",
+          "valueTitle": "2/8",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Difficulty",
+          "description": "The difficulty to write or understand the program, e.g. when doing code review.",
+          "value": "4.286",
+          "valueTitle": "4.286/15",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Halstead Bugs",
+          "description": "An estimate for the number of errors in the implementation.",
+          "value": "0.031",
+          "valueTitle": "0.031/0.4",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        },
+        {
+          "name": "Parameter Count",
+          "description": "The number of parameters, analysed statically from the function signature. (ignoring the arguments object)",
+          "value": "1",
+          "valueTitle": "1/6",
+          "barClass": "mat-progress-bar progress-bar mat-primary"
+        }
+      ],
+      "icons": []
+    }
+  }
+]
