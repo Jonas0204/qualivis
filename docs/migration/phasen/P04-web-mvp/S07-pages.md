@@ -8,7 +8,7 @@ Nach jedem Merge in `rewrite/react` baut GitHub Actions die neue App und veröff
 mehr ausgeliefert. Der Branch selbst bleibt unverändert, denn er ist die Quelle der Goldens.
 
 ## Kontext
-- ADR-016, O3
+- ADR-016
 - Architektur §7: `base: './'`, Deep-Link `?id=` per `history.pushState` ohne Router. Der Pfad
   ändert sich nie, deshalb braucht Pages keinen 404-Fallback.
 - `tools/legacy/extract-legacy-build.mjs` liest den alten Build fest aus Commit `5f0155e`, nicht aus

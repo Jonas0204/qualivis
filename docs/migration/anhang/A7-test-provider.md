@@ -9,8 +9,7 @@ Startwerten, ohne den globalen Jotai-Standard-Store. Muster: Jotai-Testanleitung
 > **Stand der Verifikation:** Diese Vorlage ist nur **geschrieben, nicht ausgeführt** (Nutzerentscheidung
 > 07.11.2026: ohne Spike weiter). Sie wird in **P04-S02** zum ersten Mal ausgeführt (Tests, `tsc`,
 > Biome). Bereits geprüft: `useHydrateAtoms` ist in `jotai@3.0.1` unter `jotai/utils` exportiert.
-> Außerdem sind React 19.3, Testing Library 16.3 und user-event 14.6 in jsdom 30.1.3 im Spike gelaufen
-> (A6, V15).
+> Außerdem sind React 19.3, Testing Library 16.3 und user-event 14.6 in jsdom 30.1.3 im Spike gelaufen.
 
 ## Dateien
 

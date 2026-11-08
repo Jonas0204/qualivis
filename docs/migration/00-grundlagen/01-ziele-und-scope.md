@@ -12,7 +12,7 @@ Die Angular-9-App „Component Graph“ (Tarner, van den Bongard, Beck, VISSOFT 
 - **pnpm 12** mit gehärteter Lieferkette, Vite 8, Vitest 5, TypeScript 7, Biome 2.6, feste Versionen.
 - Entwicklung auf **Windows und macOS** (Node 24).
 - Das Repository ist **öffentlich** (GitHub-Fork), hat keine Lizenz und wird nicht als Paket
-  veröffentlicht. CI ab P03-S00, die neue App ab M1 auf GitHub Pages (O2–O4, O14, ADR-016).
+  veröffentlicht. CI ab P03-S00, die neue App ab M1 auf GitHub Pages (O2, O14, ADR-016).
 
 ## 2. Was gleich bleiben muss
 

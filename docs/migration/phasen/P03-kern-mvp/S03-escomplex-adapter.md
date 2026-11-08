@@ -9,7 +9,6 @@ escomplex läuft betriebssystemunabhängig genau wie im alten Browser-Build: üb
 ## Kontext
 - ADR-005 (warum ein POSIX-Pfad-Modul nötig ist und wo es gebraucht wird)
 - `anhang/A4-posix-path-und-interop.md` (Code: Typdeklaration, Test, Adapter)
-- `anhang/A6` V6 (Windows-`path` verfälscht projektweite Metriken)
 
 ## Dateien
 `packages/core/src/types/path-browserify.d.ts` (aus S01), `packages/core/src/analysis/pathModule.test.ts`,

@@ -7,7 +7,7 @@ Meilenstein M1 · Abhängig von: P03-S05 · Umfang M
 `strict: true` (noch `noImplicitAny: false`). G1 bleibt nach **jeder** Datei grün.
 
 ## Kontext
-- Spike: 47 Fehler unter diesen Einstellungen (`anhang/A6` V12). Verteilung u. a. `traverse.ts`
+- Spike: 47 Fehler unter diesen Einstellungen. Verteilung u. a. `traverse.ts`
   (≈ 12), `traverseHelper.ts` (≈ 8), `traverseClassComponent.ts`, `generateAppGraph.ts`, `findReport.ts`.
 - Leitplanke der Phase (README P03).
 

@@ -8,15 +8,16 @@ vergleicht. Ein Sichtvergleichsbericht unterstützt die menschliche Abnahme (G5)
 
 ## S00 – Phase verfeinern (S)
 
-## S01 – Paket `e2e` mit Playwright und Systembrowser (S)
+## S01 – Paket `e2e` mit Playwright und Microsoft Edge (S)
 - `e2e/package.json` (`@qualivis/e2e`, privat, `devDependencies: { "@playwright/test": "catalog:" }` → 1.64.1),
   in `pnpm-workspace.yaml` die Zeile `- e2e` aktivieren. Vor der Installation dem Nutzer nennen:
   Paket, Version, 2 Pakete, Meldungshistorie (CVE-2025-59288, behoben 1.55.1), keine
   Browser-Downloads (ADR-008).
-- Installation durch den Nutzer mit `PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1`: macOS/bash
+- Installation nach Nachfrage mit `PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1`: macOS/bash
   `PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 pnpm install`, Windows/PowerShell
   `$env:PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1; pnpm install`.
-- `playwright.config.ts`: `use: { channel: process.env.QV_BROWSER_CHANNEL ?? (process.platform === 'darwin' ? 'chrome' : 'msedge'), viewport: { width: 1280, height: 800 } }`,
+- Voraussetzung: Microsoft Edge ist installiert.
+- `playwright.config.ts`: `use: { channel: process.env.QV_BROWSER_CHANNEL ?? 'msedge', viewport: { width: 1280, height: 800 } }`,
   `webServer: { command: 'pnpm --filter @qualivis/web preview', url: 'http://127.0.0.1:4173' }`,
   zweites `webServer` für `pnpm legacy:serve` (Port 4300) nur für Paritäts-Projekte.
 - Root-Skript `e2e`: `pnpm --filter @qualivis/e2e exec playwright test`. **Nie** `playwright install`.

@@ -7,9 +7,13 @@ framework-freiem Analyse-Kern umzuschreiben (Windows und macOS, Node 24, pnpm 12
 Er ist so geschrieben, dass **leichtere Modelle** ihn Schritt für Schritt umsetzen können: Jede
 Schritt-Karte nennt Kontext, Dateien, konkrete Schritte, prüfbare Kriterien und Fallstricke.
 
-Stand: 07.11.2026. Die riskantesten Annahmen wurden vorab in einem Wegwerf-Spike am echten Stack
-geprüft (`anhang/A6-spike-protokoll.md`): Der übernommene Kern liefert mit Babel 7.29 und
-escomplex 0.1 für zwei Testprojekte dieselben Ergebnisse wie der alte Build (0 Abweichungen).
+Die riskantesten Annahmen wurden vorab in einem Wegwerf-Spike am echten Stack geprüft: Der
+übernommene Kern liefert mit Babel 7.29 und escomplex 0.1 für zwei Testprojekte dieselben
+Ergebnisse wie der alte Build (0 Abweichungen).
+
+**Pflege:** Umgesetzte Schritt-Karten, ADRs und Vorlagen werden vor dem PR ihrer Phase entfernt
+(nach Zustimmung, Skill `phase-abschliessen`). Sie bleiben in der Git-Historie. Am Ende bleiben die
+Grundlagen und `STATUS.md`.
 
 > **Einstieg für Agenten:** [`AGENTS.md`](../../AGENTS.md) im Repo-Root (Leseweg, Kurzregeln,
 > Abkürzungen, Befehle). Abläufe liegen als Skills in `.claude/skills/`.
@@ -23,20 +27,18 @@ escomplex 0.1 für zwei Testprojekte dieselben Ergebnisse wie der alte Build (0 
 | [01-ziele-und-scope.md](00-grundlagen/01-ziele-und-scope.md) | Ziele, Nicht-Ziele, MVP-Meilensteine, Definition of Done |
 | [02-qualitaetskriterien.md](00-grundlagen/02-qualitaetskriterien.md) | Kriterien aus der Bachelorarbeit (ISO/IEC 25010, Metriken, React-Smells) |
 | [03-architektur.md](00-grundlagen/03-architektur.md) | Pakete, Ordner, Abhängigkeitsregeln, Datenfluss, State, Rendering |
-| [04-technologie-stack.md](00-grundlagen/04-technologie-stack.md) | Versionen, `pnpm-workspace.yaml`, Patches, Befehle |
+| [04-technologie-stack.md](00-grundlagen/04-technologie-stack.md) | Werkzeuge, Pakete und ihr Zweck, Regeln für Abhängigkeiten, Patches |
 | [05-konventionen.md](00-grundlagen/05-konventionen.md) | Code-Stil, TypeScript, React, CSS, Commits, Aufbau der Schritt-Karten |
 | [06-teststrategie.md](00-grundlagen/06-teststrategie.md) | Testebenen, Golden-Konzept G1–G6 („God-Test“) |
-| [07-entscheidungen.md](00-grundlagen/07-entscheidungen.md) | ADR-001 bis ADR-017 |
-| [08-risiken-und-offene-punkte.md](00-grundlagen/08-risiken-und-offene-punkte.md) | Nutzerentscheidungen O1–O14, Risiken RI1–RI13 |
+| [07-entscheidungen.md](00-grundlagen/07-entscheidungen.md) | offene Architekturentscheidungen (ADRs) |
+| [08-risiken-und-offene-punkte.md](00-grundlagen/08-risiken-und-offene-punkte.md) | Nutzerentscheidungen ohne ADR (O2, O5, O14), Risiken RI1–RI13 |
 | **01-referenz-altsystem/** | |
 | [01-funktionsinventar.md](01-referenz-altsystem/01-funktionsinventar.md) | Jedes sichtbare Verhalten des Altsystems (Abnahmegrundlage) |
 | [02-analyse-kern.md](01-referenz-altsystem/02-analyse-kern.md) | Analyse-Pipeline, Dateien, Datenstrukturen, Eigenheiten K1–K11 |
 | [03-visuelle-regeln.md](01-referenz-altsystem/03-visuelle-regeln.md) | Formeln und Regeln des Graphen, Eigenheiten V1–V7 |
 | [04-stil-referenz.md](01-referenz-altsystem/04-stil-referenz.md) | Gemessene Farben, Schriften, Maße |
-| [05-golden-daten.md](01-referenz-altsystem/05-golden-daten.md) | Referenzdaten: Ablage, Erfassung, Plausibilitätswerte |
 | **phasen/** | |
-| [P01-fundament](phasen/P01-fundament/README.md) | **erledigt:** Repo-Umbau, Workspace, Tooling (M0) |
-| [P02-golden-infrastruktur](phasen/P02-golden-infrastruktur/README.md) | **erledigt:** Altsystem lokal, Fixtures, Goldens (M0) |
+| P01, P02 | **erledigt** (M0): Repo-Umbau, Workspace, Golden-Infrastruktur; Karten entfernt |
 | [P03-kern-mvp](phasen/P03-kern-mvp/README.md) | CI, `@qualivis/core` mit Golden G1 (M1) |
 | [P04-web-mvp](phasen/P04-web-mvp/README.md) | Erstes sichtbares Produkt, GitHub Pages (M1) |
 | [P05-graph-paritaet](phasen/P05-graph-paritaet/README.md) | Graph wie im Original (M2) |
@@ -47,10 +49,8 @@ escomplex 0.1 für zwei Testprojekte dieselben Ergebnisse wie der alte Build (0 
 | [P10-core-paket-cli](phasen/P10-core-paket-cli/README.md) | Paket-Build (privat), CLI, Eigenprüfung (M7) |
 | [P11-abschluss](phasen/P11-abschluss/README.md) | Doku, Babel 8 (M8) |
 | **anhang/** | |
-| A1–A3 | entfernt: Legacy-Server, Capture-Skript und Fixture `mini` liegen seit M0 in `tools/legacy/` und `testdata/` |
 | [A4-posix-path-und-interop.md](anhang/A4-posix-path-und-interop.md) | POSIX-Pfad, CJS-Interop, escomplex-Adapter (erprobt) |
 | [A5-golden-test-und-diff.md](anhang/A5-golden-test-und-diff.md) | Golden-Test G1 mit Toleranz (erprobt); Diff-Werkzeug liegt in `tools/golden/` |
-| [A6-spike-protokoll.md](anhang/A6-spike-protokoll.md) | Was vorab verifiziert wurde, Ergebnisse, Fallstricke |
 | [A7-test-provider.md](anhang/A7-test-provider.md) | Jotai-Testhilfen `TestProvider`, `initial`, `renderWithState` (Vorlage, Prüfung in P04-S02) |
 
 ## So wird der Plan benutzt
@@ -89,8 +89,8 @@ Ablauf:
 2. **Pro Schritt:** umsetzen, uncommittet zur Review melden. Auf Anweisung des Nutzers: ein Commit
    pro Schritt (Identität aus der lokalen `CLAUDE.md`). Pushen nur nach Nachfrage, z. B. damit der
    Nutzer den Zwischenstand unterwegs sieht.
-3. **Phase fertig** (Meilenstein-Abnahme, falls die Phase eine hat): nach Nachfrage pushen und einen
-   PR mit Ziel `rewrite/react` anlegen. Titel `Pnn: <Phasentitel>`. Beschreibung: erledigte Schritte,
+3. **Phase fertig** (Meilenstein-Abnahme, falls die Phase eine hat): umgesetzte Teile der Doku
+   entfernen (nach Zustimmung), dann nach Nachfrage pushen und einen PR mit Ziel `rewrite/react` anlegen. Titel `Pnn: <Phasentitel>`. Beschreibung: erledigte Schritte,
    Prüfergebnisse (`pnpm check`, ggf. G1/G2), Abweichungen, offene Punkte. **Keine** Hinweise auf
    Claude/KI. Gibt es eine CI (ab P03-S00), nennt der Assistent einmal den Stand der Checks. Den
    Link zum PR trägt der erste Schritt der nächsten Phase in `STATUS.md` (Tabelle „Phasen“) ein.

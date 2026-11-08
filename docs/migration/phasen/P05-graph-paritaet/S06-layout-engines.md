@@ -7,7 +7,7 @@ WebCola („Vertical flow layout“) ist Standard; ohne d3-Adapter angebunden, a
 `requestAnimationFrame`, mit Drag-Unterstützung. Das Kraft-Layout bleibt als Alternative.
 
 ## Kontext
-- §9.1, §9.2, §9.4, §11; `anhang/A6` V8 (Deep-Import erprobt)
+- §9.1, §9.2, §9.4, §11; Deep-Import `webcola/dist/src/layout` im Spike erprobt
 - WebCola-API: `Layout` (`dist/src/layout`): `size, nodes, links, constraints, avoidOverlaps,
   flowLayout, symmetricDiffLinkLengths, start(a, b, c, d?, keepRunning?, centerGraph?)`, `on(type, fn)`,
   geschützt `trigger(e)`, `kick()`, `tick(): boolean`, `resume()`, `stop()`, statisch

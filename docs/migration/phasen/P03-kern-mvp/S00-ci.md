@@ -7,7 +7,7 @@ Jeder Pull Request nach `rewrite/react` und jeder Push auf `rewrite/react` führ
 Ubuntu, Windows und macOS aus. Der Nutzer sieht das Ergebnis direkt im PR, auch unterwegs.
 
 ## Kontext
-- ADR-016 (CI und Pages), O4
+- ADR-016 (CI und Pages)
 - `package.json` (Skripte, `packageManager`), `.node-version`
 - Das Repo ist öffentlich: GitHub-gehostete Standard-Runner sind dort kostenlos, auch Windows und
   macOS.

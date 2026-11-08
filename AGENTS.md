@@ -26,7 +26,7 @@ sind Golden-Daten aus dem alten Build.
 |---|---|
 | Code in `packages/` oder `apps/` schreibt | `docs/migration/00-grundlagen/05-konventionen.md` §1–§7 |
 | Tests schreibt | `docs/migration/00-grundlagen/06-teststrategie.md` §1–§2 |
-| Goldens oder Parität berührt | `06-teststrategie.md` §3, `01-referenz-altsystem/05-golden-daten.md` |
+| Goldens oder Parität berührt | `06-teststrategie.md` §3, `testdata/golden/README.md` |
 | Ordner, Pakete oder Importe zwischen Paketen anlegt | `00-grundlagen/03-architektur.md` §2–§3 |
 | Zustand (Jotai) anfasst | `03-architektur.md` §5, `anhang/A7-test-provider.md` |
 
@@ -34,7 +34,7 @@ Richtwert: Die Punkte 1–5 sind zusammen etwa 3.000–5.000 Wörter. Mehr zu le
 Genauigkeit.
 
 **Nicht lesen:** `pnpm-lock.yaml`, `legacy/angular/yarn.lock`, `legacy/angular/**` außer den Zeilen,
-die die Karte nennt, `docs/migration/anhang/A6-spike-protokoll.md` (Historie, nur bei Verweis).
+die die Karte nennt.
 `testdata/golden/**` sind große JSON-Dateien: nie ganz lesen, gezielt suchen oder mit
 `tools/golden/diff-json.mjs` vergleichen.
 
@@ -55,6 +55,9 @@ die die Karte nennt, `docs/migration/anhang/A6-spike-protokoll.md` (Historie, nu
   Session-Links in Dateien, Commits oder PRs.
 - Commit-Identität, Push- und PR-Regeln: lokale `CLAUDE.md` im Repo-Root (nicht versioniert).
   Fehlt sie: vor jedem Commit fragen.
+- Das Repo beschreibt nur, was für alle gilt. Rechner- oder sitzungsspezifisches (lokale Pfade,
+  installierte Versionen, Abweichungen auf einem Rechner, Arbeit per Fernzugriff) gehört in die
+  lokale `CLAUDE.md`.
 - Workflow-Dateien (`.github/workflows/`) nur ändern, wenn die Karte es verlangt, und erst nach
   Nachfrage.
 - Fertig ist ein Schritt nach der Definition of Done (`00-grundlagen/01-ziele-und-scope.md` §5):
@@ -70,14 +73,13 @@ Alle Plan-Dateien liegen unter `docs/migration/`.
 | Analyse-Kern §n, Eigenheiten K1–K11 | `01-referenz-altsystem/02-analyse-kern.md` |
 | `§n` ohne Dateiname (P05, P07-S03), Eigenheiten V1–V7 | `01-referenz-altsystem/03-visuelle-regeln.md` |
 | Stil-Referenz §n | `01-referenz-altsystem/04-stil-referenz.md` |
-| Golden-Daten, Plausibilitätswerte | `01-referenz-altsystem/05-golden-daten.md` |
 | Architektur §n, Konventionen §n, Teststrategie §n | `00-grundlagen/03-architektur.md`, `05-konventionen.md`, `06-teststrategie.md` |
 | G1–G6 (Golden-Stufen) | `00-grundlagen/06-teststrategie.md` §3 |
 | M0–M8 (Meilensteine) | `00-grundlagen/01-ziele-und-scope.md` §4 |
 | ADR-nnn, ADR-011 A1–A10 (Korrekturen) | `00-grundlagen/07-entscheidungen.md` |
-| O1–O14 (Nutzerentscheidungen), RI1–RI13 (Risiken) | `00-grundlagen/08-risiken-und-offene-punkte.md` |
+| O2, O5, O14 (Nutzerentscheidungen ohne ADR), RI1–RI13 (Risiken) | `00-grundlagen/08-risiken-und-offene-punkte.md` |
 | R1–R10 (Regeln) | `README.md`, Abschnitt „Regeln für die Umsetzung“ |
-| A4, A5, A7 (Vorlagen), A6 V1–V27 / F1–F6 (Spike) | `anhang/` |
+| A4, A5, A7 (Vorlagen) | `anhang/` |
 | Goldens `legacy-*.json` | `testdata/golden/<fixture>/` (Fixtures `mini`, `realworld`) |
 
 **Altcode-Pfade** (nach „Altcode“ oder „Altsystem“, meist unter „Kontext“) sind in den Karten
@@ -121,3 +123,11 @@ gekürzt. Die Zeilenangaben gelten unverändert, denn die Dateien wurden nur ver
   Nur auf ausdrücklichen Wunsch des Nutzers.
 
 Ohne Skill-Unterstützung die jeweilige `.claude/skills/<name>/SKILL.md` lesen und befolgen.
+
+## Pflege der Doku
+
+- Regeln ändern: README R1–R10 und die Kurzfassung oben gemeinsam anpassen.
+- Neue Kurzverweise in Karten nur, wenn sie in der Abkürzungstabelle stehen.
+- Umgesetztes (Karten, ADRs, Vorlagen, Code-Snippets) wird vor dem PR der Phase entfernt, nach
+  Zustimmung des Nutzers (Skill `phase-abschliessen`). Es bleibt in der Git-Historie; IDs werden
+  nicht neu vergeben. Am Ende bleiben die Grundlagen und `STATUS.md`.

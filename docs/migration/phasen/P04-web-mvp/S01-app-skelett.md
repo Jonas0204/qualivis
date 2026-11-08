@@ -140,7 +140,7 @@ apps/web/src/test/setup.ts
 ## Fallstricke
 - `@fontsource/material-icons` exportiert die Schrift unter dem Namen „Material Icons“ – prüfen
   (DevTools → Computed → font-family des Icons).
-- Typecheck von `apps/web` prüft auch den Kern (Workspace-Quelltext, `anhang/A6` F4). Fehler im
+- Typecheck von `apps/web` prüft auch den Kern (Workspace-Quelltext). Fehler im
   Kern zuerst dort beheben.
 - `import.meta.resolve('path-browserify')` in `vite.config.ts` braucht Node ≥ 20.6 (erfüllt). Löst der
   Alias nicht auf: prüfen, dass `path-browserify` in `apps/web/package.json` steht.

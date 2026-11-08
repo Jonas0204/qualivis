@@ -1,8 +1,9 @@
 # Status der Umsetzung
 
 Legende: ☐ offen · ◐ in Arbeit · ☑ erledigt · ⊘ übersprungen (mit Begründung)
-Pflege: Nach jedem Schritt Zeile aktualisieren (Datum, Kurznotiz, Abweichungen). Meilensteine mit
-Datum der Bestätigung durch den Nutzer.
+Pflege: Nach jedem Schritt Zeile aktualisieren (Datum, Kurznotiz). Meilensteine mit Datum der
+Bestätigung durch den Nutzer. Vor dem PR einer Phase werden ihre Zeilen zu einer zusammengefasst
+(Skill `phase-abschliessen`).
 
 | Meilenstein | Status | Bestätigt am |
 |---|---|---|
@@ -22,9 +23,7 @@ Ablauf: README, „Branches und Pull Requests“. Ziel aller PRs: `rewrite/react
 
 | Phase | Branch | PR | Status |
 |---|---|---|---|
-| Plan | `rewrite/react` (direkt, vor Einführung der PRs) | – | ☑ |
-| P01 Fundament + P02 Golden-Infrastruktur | `rewrite/m0-fundament` (beide zusammen) | [#1](https://github.com/Jonas0204/qualivis/pull/1) | ☑ |
-| Docs: Agenten-Einstieg, Karten für CI und Pages | direkt auf `rewrite/react` (ohne PR, auf Wunsch des Nutzers) | – | ☑ |
+| P01 Fundament + P02 Golden-Infrastruktur | `rewrite/m0-fundament` | [#1](https://github.com/Jonas0204/qualivis/pull/1) | ☑ |
 | P03 Kern-MVP | `rewrite/p03-kern-mvp` | | ☐ |
 | P04 Web-MVP | `rewrite/p04-web-mvp` | | ☐ |
 | P05 Graph-Parität | `rewrite/p05-graph-paritaet` | | ☐ |
@@ -39,13 +38,7 @@ Ablauf: README, „Branches und Pull Requests“. Ziel aller PRs: `rewrite/react
 
 | Schritt | Titel | Status | Datum | Notiz |
 |---|---|---|---|---|
-| P01-S01 | Arbeitsstand sichern, Branch | ☑ | 07.11.2026 | Branch `rewrite/react`, Plan committet, lokale `CLAUDE.md` angelegt |
-| P01-S02 | Angular nach `legacy/angular/` | ☑ | 08.11.2026 | `git mv`; `.editorconfig` und alte `.gitignore` zusätzlich 1:1 kopiert; Karte entfernt |
-| P01-S03 | Workspace-Grundgerüst | ☑ | 08.11.2026 | `patchedDependencies` bis P03-S01 auskommentiert; Biome ohne `*.md`; Karte entfernt |
-| P01-S04 | Installation, Checks grün | ☑ | 08.11.2026 | `pnpm install` (41 Pakete), `pnpm check` grün (3 Testdateien, 12 Tests); Karte entfernt |
-| P02-S01 | Legacy-Build lokal | ☑ | 08.11.2026 | `tar` mit relativen Pfaden (GNU-tar unter Git Bash); Server-Tests mit `QV_*`; Karte entfernt |
-| P02-S02 | Fixtures `mini`, `realworld` | ☑ | 08.11.2026 | `mini` = A3 (8/8 identisch), `realworld` = Commit `ee72eba` (38/38 identisch); Karte entfernt |
-| P02-S03 | Goldens erfassen, Diff-Werkzeug | ☑ | 08.11.2026 | `mini` 13 Dateien (byteidentisch zum Spike), `realworld` 45 Dateien; Plausibilitätswerte stimmen; Karte entfernt |
+| P01, P02 | M0: Fundament, Golden-Infrastruktur | ☑ | 08.11.2026 | Commit `5647a06`, PR #1 |
 | P03-S00 | CI für Pull Requests | ☐ | | |
 | P03-S01 | Kern: Skelett, Modell | ☐ | | |
 | P03-S02 | Kern: Altcode 1:1 | ☐ | | |
@@ -90,36 +83,10 @@ Ablauf: README, „Branches und Pull Requests“. Ziel aller PRs: `rewrite/react
 | P10-S00…S03 | Kern-Paket & CLI (vor Beginn verfeinern) | ☐ | | |
 | P11-S00…S02 | Abschluss (vor Beginn verfeinern) | ☐ | | |
 
-## Aufgelöste Versionen
-
-| Paket | Version | Seit Schritt |
-|---|---|---|
-| Node.js | 24.22.2 (lokal, Windows) | M0 |
-| pnpm | 12.16.1 | M0 |
-| `@biomejs/biome` | 2.6.4 | M0 |
-| `typescript` | 7.0.2 | M0 |
-| `vitest` | 5.0.5 | M0 |
-| `@types/node` | 24.19.2 | M0 |
-
 ## Abweichungen und Notizen
 
-(Hier jede Abweichung vom Plan mit Begründung und Verweis auf ADR bzw. Nutzerentscheidung eintragen.)
+Hier jede Abweichung vom Plan mit Begründung und Verweis (ADR bzw. Nutzerentscheidung) eintragen,
+solange sie für kommende Schritte wichtig ist. Vor dem PR der Phase wandert sie in die betroffenen
+Karten oder Grundlagen oder wird gestrichen; Erledigtes steht in der Git-Historie.
 
-- 07.11.2026 – Planrevision nach Review: Halstead-Toleranz, Qualitätskriterien gekürzt, Features dürfen
-  Features nutzen (ohne Zyklen), Jotai (ADR-013), `type` statt `interface`, feste Versionen und
-  3 Tage Mindestalter (ADR-014), Node 24 + macOS, `path-browserify` (ADR-005), O1–O10 entschieden,
-  Korrekturen A8–A10.
-- 07.11.2026 – Zweite Revision: jsdom bleibt, dazu Jotai-`TestProvider` (ADR-015, `anhang/A7`,
-  Prüfung in P04-S02); Review in der IDE vor jedem Commit, Branch + PR pro Phase nach `rewrite/react`
-  (O11, O12).
-- 08.11.2026 – M0 (P01 + P02) auf Wunsch des Nutzers in einem Zug umgesetzt, ein Commit, PR nach
-  `rewrite/react`. Die umgesetzten Schritt-Karten (P01-S01–S04, P02-S01–S03) und die Anhänge A1–A3 sind
-  entfernt (Inhalt steht jetzt in `tools/`, `testdata/` und den Konfigurationsdateien). Abweichungen:
-  siehe `phasen/P01-fundament/README.md` und `phasen/P02-golden-infrastruktur/README.md`.
-  Installationen darf der Assistent seit heute nach Nachfrage selbst ausführen (README R4).
-- 08.11.2026 – Plan aus Sicht von Agenten überarbeitet: `AGENTS.md` im Root als einziger Einstieg,
-  Skills `schritt-umsetzen` und `phase-abschliessen` (O13, ADR-017). Das Repo ist ein öffentlicher
-  Fork (O2, O14). CI als Karte P03-S00, GitHub Pages für die neue App ab M1 als Karte P04-S07 (O3,
-  O4, ADR-016); `legacy:extract` liest jetzt fest Commit `5f0155e`. Risiken heißen jetzt RI1–RI13,
-  damit sie nicht mit den Regeln R1–R10 verwechselt werden. Quellenangabe in
-  `02-qualitaetskriterien.md` verallgemeinert, Kurzverweis in P07-S03 ergänzt.
+- (derzeit keine)

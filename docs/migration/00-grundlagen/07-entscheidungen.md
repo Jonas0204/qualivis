@@ -1,8 +1,10 @@
 # Architekturentscheidungen (ADRs)
 
-Format je Eintrag: Kontext · Entscheidung · Folgen. Status: *angenommen* (mit dem Nutzer
-abgestimmt am 07.11.2026), sofern nicht anders angegeben. Neue Entscheidungen werden hier
-angehängt (ADR-013 …), nie bestehende umgeschrieben; Änderungen als neuer Eintrag „ersetzt ADR-x“.
+Format je Eintrag: Kontext · Entscheidung · Folgen. Alle Einträge sind mit dem Nutzer abgestimmt.
+Hier stehen nur Entscheidungen, die noch umgesetzt werden oder für kommende Schritte gelten.
+Umgesetzte ADRs werden entfernt, sobald ihre Regeln in Konfiguration oder Grundlagen stehen (Git-Historie);
+ihre IDs werden nicht neu vergeben. Neue Entscheidungen werden angehängt, Änderungen als neuer
+Eintrag „ändert ADR-x“.
 
 ---
 
@@ -71,13 +73,6 @@ Drop in beliebiger Reihenfolge. Reihenfolge beeinflusst Layout und Cluster.
 auf Strings). Der Legacy-Capture füttert dieselbe Reihenfolge.
 **Folgen:** Gleiche Eingabe → gleiches Ergebnis, unabhängig von Browser und Betriebssystem.
 
-### ADR-007 Biome statt ESLint + Prettier
-**Kontext:** ESLint + typescript-eslint ≈ 100 Pakete; typescript-eslint unterstützt TypeScript 7
-nicht (nur < 6.1).
-**Entscheidung:** Biome 2.6 (ein Binärprogramm, keine npm-Abhängigkeiten, 767 Regeln u. a. aus
-ESLint, typescript-eslint, jsx-a11y, react, react-hooks; Formatierer ≈ 97 % Prettier-kompatibel).
-**Folgen:** Weniger typbasierte Regeln → `tsc --strict` deckt das ab.
-
 ### ADR-008 Playwright nur in eigenem Paket, nur mit Systembrowser
 **Kontext:** Playwright hatte eine Meldung (Browser-Download ohne Zertifikatsprüfung, behoben
 1.55.1); das Risiko liegt im Browser-Download.
@@ -85,6 +80,7 @@ ESLint, typescript-eslint, jsx-a11y, react, react-hooks; Formatierer ≈ 97 % Pr
 (Standard: Windows `msedge`, macOS `chrome`; überschreibbar per `QV_BROWSER_CHANNEL`);
 Umgebungsvariable `PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1`; nie `playwright install`.
 **Folgen:** Kern und App sind ohne Playwright installier- und testbar.
+**Status:** Standardbrowser geändert durch ADR-018 (08.11.2026); sonst gültig.
 
 ### ADR-009 Keine UI-Bibliothek, Schriften lokal
 **Kontext:** Das Aussehen von Angular Material soll erhalten bleiben; MUI bringt 31 Pakete + Emotion.
@@ -135,14 +131,6 @@ Atome je Thema in `apps/web/src/state/`, `atomWithStorage` für Einstellungen.
 **Folgen:** +1 Paket; weniger eigener Code; Tests mit eigenem Jotai-`store` pro Test. Bei Fragen zur
 API gilt die Dokumentation der **installierten** Version (v3).
 
-### ADR-014 Feste Versionen, 3 Tage Mindestalter
-**Kontext:** Reproduzierbare Builds und kontrollierte Updates (später z. B. Renovate);
-Schutz vor frisch kompromittierten Paketen.
-**Entscheidung (Nutzer, 07.11.2026):** Alle Versionen im Catalog fest (`1.2.3`), `saveExact: true`;
-`minimumReleaseAge: 4320` (3 Tage); keine `minimumReleaseAgeExclude`-Einträge.
-**Folgen:** Updates sind bewusste Änderungen an `pnpm-workspace.yaml`; neue Versionen erst ab 3 Tagen
-nach Veröffentlichung.
-
 ### ADR-015 Komponententests: jsdom + Testing Library + Jotai-`TestProvider`
 **Kontext:** Frage des Nutzers: Macht ein Jotai-`TestProvider` (Provider + `useHydrateAtoms`) jsdom
 überflüssig? Geprüft am 07.11.2026 (Spike, npm-Registry, deps.dev, GitHub Advisories, react.dev):
@@ -165,9 +153,8 @@ user-event. Alle Komponenten- und Hook-Tests rendern zusätzlich über den `Test
 nicht im Spike ausgeführt (Nutzerentscheidung) und wird in P04-S02 zuerst geprüft. Die Grenzen von
 jsdom bleiben (`06-teststrategie.md` §4).
 
-### ADR-016 CI mit GitHub Actions und GitHub Pages für die neue App (ersetzt O3, O4)
-**Kontext:** Am 07.11.2026 entschieden: vorerst kein Deployment, keine CI (O3, O4). Am 08.11.2026
-festgestellt: Das Repo ist ein öffentlicher GitHub-Fork. GitHub Pages ist aktiv und liefert aus dem
+### ADR-016 CI mit GitHub Actions und GitHub Pages für die neue App
+**Kontext:** Ursprünglich waren weder Deployment noch CI geplant. Am 08.11.2026 festgestellt: Das Repo ist ein öffentlicher GitHub-Fork. GitHub Pages ist aktiv und liefert aus dem
 Branch `gh-pages` den alten Build aus, der dort nicht lädt (`<base href="/component-graph/">`, die
 Skripte liegen aber unter `/qualivis/`). In öffentlichen Repos sind die Standard-Runner (auch Windows
 und macOS) und Pages kostenlos. Der Nutzer prüft PRs oft unterwegs.
@@ -185,19 +172,9 @@ Nutzers (Schritt 0 der Karten). Pages-Quelle und Environment-Freigabe stellt der
 ein. Wird das Repo privat (O14), sind die Actions-Minuten begrenzt und Pages braucht ein Bezahl-Abo;
 dann beide Karten neu bewerten.
 
-### ADR-017 Einstieg für Agenten: `AGENTS.md` und Skills
-**Kontext:** Agenten (Claude Code, GitHub Copilot in VS Code, Codex u. a.) beginnen jede Sitzung ohne
-Vorwissen. Der Plan hat rund 37.000 Wörter (grob 90.000 Tokens). Bisher galt pro Sitzung: README und
-vier Grundlagen-Dokumente lesen (≈ 5.300 Wörter), dann die Karte. Alles zu lesen kostet Kontext und
-Genauigkeit, auch bei großen Kontextfenstern. Die Karten verweisen kurz (`§4`, „Funktionsinventar
-U3“, gekürzte Altcode-Pfade). Die lokale `CLAUDE.md` ist nicht versioniert und nur für Claude Code
-gedacht.
-**Entscheidung (Nutzer, 08.11.2026):** `AGENTS.md` im Repo-Root ist die einzige Pflicht-Einstiegsdatei:
-Leseweg, Kurzregeln, Abkürzungen mit Dateipfaden, Befehle. Abläufe liegen als Skills in
-`.claude/skills/` (`schritt-umsetzen`, `phase-abschliessen`); diesen Ordner lesen Claude Code und
-GitHub Copilot in VS Code. Die lokale `CLAUDE.md` importiert `@AGENTS.md`, weil Claude Code eine
-`AGENTS.md` nicht liest, sobald eine `CLAUDE.md` existiert.
-**Folgen:** Pflichtlektüre pro Schritt ≈ 3.000–5.000 Wörter. Die Regeln stehen ausführlich weiter im
-Plan-README (R1–R10), `AGENTS.md` enthält nur die Kurzfassung; Regeländerungen in beiden Dateien
-nachziehen. Neue Kurzverweise in Karten nur, wenn sie in der Abkürzungstabelle von `AGENTS.md`
-stehen. `phase-abschliessen` startet nur auf Wunsch des Nutzers.
+### ADR-018 E2E-Browser: Microsoft Edge (ändert ADR-008)
+**Kontext:** ADR-008 nannte als Standard Windows `msedge` und macOS `chrome`.
+**Entscheidung (Nutzer, 08.11.2026):** Playwright nutzt im ganzen Projekt das installierte Microsoft
+Edge (`channel: 'msedge'`), ohne Browser-Download. Weicht ein einzelner Rechner ab, setzt das seine
+lokale Umgebung über `QV_BROWSER_CHANNEL` (z. B. `chrome`), nicht das Repo.
+**Folgen:** Eine Konfiguration für alle Systeme; Edge muss installiert sein.

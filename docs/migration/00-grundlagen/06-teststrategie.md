@@ -106,11 +106,14 @@ Altsystem prüft.
 | Ebene | Prüft | Quelle (Altsystem) | Vergleich | Ab |
 |---|---|---|---|---|
 | **G1 Analyse** | escomplex-Report, FileMap (Komponenten, Graphen, Reports je Knoten), App-Graph inkl. Reihenfolge | `localStorage` nach `onbeforeunload()` | Struktur und Ganzzahlen exakt; Halstead-Fließkommazahlen mit Toleranz (siehe unten) | P03 |
-| **G2 Darstellungsregeln** | je Knoten: `width`, `warn`, `error`, `icons`, `cluster`, Vorschaukreise (Klasse, sichtbar, `cx/cy`), „...“, Kantenliste (`inherits`) – für AV und jede KV | D3-Daten am SVG (`__data__`) | `width/cx/cy` ±1e-9, Rest exakt, Icon-Texte normalisiert | P05 |
-| **G3 Layout** (optional) | WebCola-Positionen relativ zum Schwerpunkt | `__data__.x/y` + `container` | ±0,5 px bei gleicher Containergröße | P05 |
+| **G2 Darstellungsregeln** | je Knoten: `width`, `warn`, `error`, `icons`, `cluster`, Vorschaukreise (Klasse, sichtbar, `cx/cy`), „...“, Kantenliste (`inherits`) – für AV und jede KV | D3-Daten am SVG (`__data__`) | `width/cx/cy` ±1e-9, Rest exakt, Icon-Texte normalisiert (HTML-Tags entfernt, Leerraum zu einem Leerzeichen, getrimmt) | P05 |
+| **G3 Layout** (optional) | WebCola-Positionen relativ zum Schwerpunkt | `__data__.x/y` + `container` | ±0,5 px nach Abzug des Schwerpunkts, nur WebCola, gleiche Containergröße | P05 |
 | **G4 Panels** | Code-Quality-Panel je Knoten: Überschrift, Metrikzeilen (Name, Beschreibung, Wert, `Wert/Schwelle`, Farbe), Icon-Hinweise | DOM des Panels | Texte exakt, Farbe als `ok/warn/error` | P06 |
 | **G5 Sichtvergleich** | Gesamteindruck (Farben, Abstände, Schrift) | Screenshots Alt/Neu nebeneinander | Mensch (Nutzer) | P09 |
 | **G6 Eigenprüfung** | Neuer Code hält die Qualitätsgrenzen; Altsystem und neuer Kern analysieren den **neuen** Quelltext identisch | eigene CLI + Legacy-Capture des neuen Codes | exakt / Grenzwerte | P10 |
+
+Ablage, Dateiformat und Herkunft der Goldens: `testdata/golden/README.md`; Erfassung:
+`tools/legacy/README.md`.
 
 Wichtig zu G6: Der alte Babel 7.7/7.8 kennt eventuell neuere TypeScript-Syntax nicht
 (z. B. `satisfies`, `accessor`). Scheitert der Legacy-Capture am neuen Code, wird G6 auf den

@@ -1,49 +1,39 @@
-# Technologie-Stack (verifiziert im Spike, Stand 07.11.2026)
+# Technologie-Stack
 
-Alle Versionen sind **fest gepinnt** (keine `^`/`~`-Bereiche). Aktualisierungen erfolgen bewusst,
-später z. B. per Renovate (ADR-014). Die App muss auf **Windows und macOS** entwickelt werden können.
+Die **einzige** Stelle mit Versionsnummern ist der Catalog in
+[`pnpm-workspace.yaml`](../../../pnpm-workspace.yaml); Node und pnpm stehen in `.node-version` und
+`packageManager`. Alle Versionen sind fest gepinnt, Updates sind bewusste Änderungen dort. Entwickelt
+wird auf **Windows und macOS**; alle Befehle sind auf beiden gleich.
 
-## 1. Laufzeit und Werkzeuge
+## 1. Werkzeuge
 
-| Werkzeug | Version | Hinweis |
+| Werkzeug | Hinweis |
+|---|---|
+| Node.js 24 (LTS) | `.node-version` = `24`, `engines.node` = `>=24` |
+| pnpm 12 | per `packageManager` gepinnt; npm und yarn werden nicht benutzt |
+| TypeScript 7 (nativer Compiler) | nur `tsc --noEmit` zur Prüfung; Vite transpiliert selbst |
+| Vite 8 (Rolldown) | Dev-Server nur auf `127.0.0.1` (Sicherheitsmeldungen betreffen den Dev-Server) |
+| Vitest 5 | Testrunner; Umgebungen `node` (core) und `jsdom` (web), siehe `06-teststrategie.md` §2 |
+| Biome 2.6 | ersetzt ESLint und Prettier; `linter.rules.preset: "recommended"`; prüft kein Markdown |
+| Playwright (nur `e2e/`, ab P09) | installiertes Microsoft Edge (`msedge`), **kein** Browser-Download (ADR-008, ADR-018) |
+
+## 2. Pakete und ihr Zweck
+
+| Paket | Workspace | Zweck |
 |---|---|---|
-| Node.js | 24 (LTS) | `.node-version` = `24`; `engines.node` = `>=24`. (Der Spike lief unter Node 26 auf Windows; Node 24 auf dem Mac erfüllt alle Anforderungen von Vite 8, Vitest 5, TypeScript 7.) |
-| pnpm | 12.16.1 | `packageManager: "pnpm@12.16.1"`; npm/yarn werden nicht benutzt |
-| TypeScript | 7.0.2 (nativer Compiler) | nur `tsc --noEmit` zur Prüfung; Vite transpiliert selbst |
-| Vite | 8.3.5 (Rolldown) | Dev-Server nur `127.0.0.1` (Sicherheitsmeldungen betreffen den Dev-Server) |
-| Vitest | 5.0.5 | Testrunner; Umgebungen `node` (core) und `jsdom` (web), siehe `06-teststrategie.md` §2 |
-| Biome | 2.6.4 | ersetzt ESLint + Prettier; `linter.rules.preset: "recommended"` |
-| Playwright | 1.64.1 (nur `e2e/`, ab P09) | Systembrowser (Windows `msedge`, macOS `chrome`), **kein** Browser-Download |
+| `@babel/parser`, `@babel/traverse`, `@babel/types` | core | AST lesen und durchlaufen (Babel 7, ADR-004) |
+| `typhonjs-escomplex-project` | core | Metriken (+ 2 pnpm-Patches, §4) |
+| `jlouvain` | core | Louvain-Cluster |
+| `path-browserify` | core, web | Nodes `path.posix` als Paket, für escomplex in Node **und** Browser (ADR-005) |
+| `webcola` | web | geschichtetes Layout (nur `dist/src/layout`) |
+| `d3-force` | web | Kraft-Layout |
+| `react`, `react-dom` | web | UI |
+| `jotai` | web | Zustandsverwaltung (ADR-013) |
+| `@codemirror/state`, `/view`, `/language`, `/lang-javascript`, `/search` | web | Quelltext-Anzeige mit Suche (Strg/Cmd+F) |
+| `@fontsource/roboto`, `@fontsource/material-icons` | web | Schrift und Icons lokal (ADR-009) |
 
-## 2. Laufzeit-Abhängigkeiten
-
-| Paket | Version | Paket im Workspace | Zweck |
-|---|---|---|---|
-| `@babel/parser` | 7.29.12 | core | AST |
-| `@babel/traverse` | 7.29.12 | core | AST-Traversierung |
-| `@babel/types` | 7.29.11 | core | AST-Prüfungen |
-| `typhonjs-escomplex-project` | 0.1.0 | core | Metriken (+ 2 pnpm-Patches, §5) |
-| `jlouvain` | 2.0.0 | core | Louvain-Cluster |
-| `path-browserify` | 1.0.1 | core, web | Nodes `path.posix` als Paket – für escomplex in Node **und** Browser (ADR-005) |
-| `webcola` | 3.4.0 | web | geschichtetes Layout (nur `dist/src/layout`) |
-| `d3-force` | 3.0.0 | web | Kraft-Layout |
-| `react`, `react-dom` | 19.3.1 | web | UI |
-| `jotai` | 3.0.1 | web | Zustandsverwaltung (ADR-013) |
-| `@codemirror/state` | 6.7.6 | web | Quelltext-Anzeige |
-| `@codemirror/view` | 6.43.15 | web | 〃 |
-| `@codemirror/language` | 6.13.1 | web | 〃 |
-| `@codemirror/lang-javascript` | 6.2.5 | web | 〃 |
-| `@codemirror/search` | 6.7.2 | web | Suche (Strg/Cmd+F) |
-| `@fontsource/roboto` | 5.3.0 | web | Schrift lokal |
-| `@fontsource/material-icons` | 5.3.0 | web | Icons lokal |
-
-## 3. Entwicklungs-Abhängigkeiten
-
-`typescript 7.0.2`, `@biomejs/biome 2.6.4`, `vitest 5.0.5`, `jsdom 30.1.3`,
-`@vitejs/plugin-react 6.1.2`, `vite 8.3.5`, `@testing-library/react 16.3.3`,
-`@testing-library/dom 10.4.2`, `@testing-library/user-event 14.6.8`, `@types/react 19.3.0`,
-`@types/react-dom 19.3.0`, `@types/babel__traverse 7.28.0`, `@types/d3-force 3.0.10`,
-`@types/node 24.19.2`. Nur in `e2e/`: `@playwright/test 1.64.1`.
+Die Entwicklungs-Abhängigkeiten (TypeScript, Biome, Vite, Vitest, jsdom, Testing Library, Typen,
+Playwright) stehen ebenfalls im Catalog.
 
 **Bewusst nicht verwendet:** UI-Bibliotheken (MUI: 31 Pakete + Emotion), d3-zoom/-drag/-selection/
 -transition/-color (durch eigenen Code ersetzt, ADR-003), Router-Pakete, `@testing-library/jest-dom`
@@ -53,75 +43,33 @@ später z. B. per Renovate (ADR-014). Die App muss auf **Windows und macOS** ent
 JUnit-Reporter eingebaut), ESLint/Prettier (≈ 100 Pakete), Coverage-Werkzeuge (kein Zusatzpaket).
 Begründung zu den Testwerkzeugen: ADR-015.
 
-## 4. `pnpm-workspace.yaml`
+## 3. Regeln für Abhängigkeiten
 
-Die Datei liegt seit M0 im Repo-Root ([`pnpm-workspace.yaml`](../../../pnpm-workspace.yaml)) und ist die
-**einzige** Stelle mit Versionsnummern (Catalog). Sie enthält Workspace-Pakete, `saveExact`, die
-Sicherheitseinstellungen, `allowBuilds`, die (noch auskommentierten) `patchedDependencies` und den
-Catalog mit allen Versionen aus §1–§3.
+- **Catalog:** Die `package.json` der Pakete schreiben nur `"react": "catalog:"`. Ein Update ändert
+  nur `pnpm-workspace.yaml`.
+- **Mindestalter:** Neue Versionen müssen mindestens 3 Tage alt sein (`minimumReleaseAge: 4320`).
+  Bietet pnpm an, eine zu junge Version auszunehmen (`minimumReleaseAgeExclude`): **ablehnen** und
+  eine ältere Version des Hauptpakets wählen. Ausnahmen mischen Versionen (im Spike: zwei
+  parse5-Versionen, kaputtes jsdom).
+- **Install-Skripte:** `strictDepBuilds` bricht ab, wenn ein Paket ein Install-Skript hat, das nicht
+  in `allowBuilds` steht. Dann stoppen, dem Nutzer Paket und Skript nennen, Entscheidung abwarten.
+- **Tippfehler:** Bei unbekannten Schlüsseln in `pnpm-workspace.yaml` bricht pnpm mit
+  `ERR_PNPM_UNRECOGNIZED_WORKSPACE_SETTINGS` ab.
+- **Erster Install:** `@codemirror/search`, `@fontsource/*`, `jotai`, `path-browserify` und
+  `@playwright/test` waren im Spike nicht installiert; beim ersten Install auf die Auflösung achten.
 
-### Erläuterungen
+## 4. Patches
 
-- **Catalog:** Die Versionen stehen **einmal** hier; die `package.json` der Pakete schreiben nur
-  `"react": "catalog:"`. Ein Update (manuell oder Renovate) ändert nur diese Datei.
-- **Anführungszeichen** um Schlüssel wie `"@babel/parser"`: In YAML hat `@` am Anfang eines Werts eine
-  reservierte Bedeutung, deshalb müssen Paketnamen mit Scope in Anführungszeichen stehen. Namen ohne
-  `@` (z. B. `react`) brauchen keine. Biome formatiert die Datei mit und setzt doppelte
-  Anführungszeichen.
-- **`patchedDependencies`** ist bis P03-S01 auskommentiert: pnpm lehnt Patches für Pakete ab, die
-  (noch) nicht installiert sind. P03-S01 aktiviert die Zeilen zusammen mit escomplex.
-- **Unbekannte Schlüssel** (geprüft im Spike): Weil `package.json` pnpm per `packageManager` auf eine
-  Version festlegt, bricht pnpm 12 bei einem falsch geschriebenen oder unbekannten Schlüssel mit
-  `ERR_PNPM_UNRECOGNIZED_WORKSPACE_SETTINGS` ab (z. B. bei `bogusSettingXyz`). Tippfehler fallen also
-  sofort auf. `saveExact` und `minimumReleaseAge: 4320` wurden im Spike als gültig erkannt.
-- **`minimumReleaseAge` und feste Versionen:** Alle Versionen oben waren am 07.11.2026 älter als
-  3 Tage. Wer später eine Version anhebt, wählt eine, die mindestens 3 Tage alt ist. Bietet pnpm an,
-  eine zu junge Version auszunehmen (`minimumReleaseAgeExclude`): **ablehnen** – im Spike führte das
-  zu zwei gemischten parse5-Versionen und einem kaputten jsdom (`anhang/A6`, F1).
-- **`strictDepBuilds`/`allowBuilds`:** Pakete mit Install-Skript werden nur gebaut, wenn sie hier
-  erlaubt sind. Meldet pnpm ein weiteres Paket: stoppen, dem Nutzer Paket und Skript nennen,
-  Entscheidung abwarten. Vite 8 (Rolldown) und Biome liefern Binärpakete über
-  `optionalDependencies` ohne Install-Skript.
-- **macOS:** `fsevents` liegt als fertiges Binary im Paket; ob die Dateiüberwachung von `pnpm dev`
-  auf dem Mac funktioniert, wird in P04-S01 geprüft (erster `pnpm dev`).
-- **Nicht im Spike installiert** (beim ersten Install auf Auflösung achten): `@codemirror/search`,
-  `@fontsource/*`, `jotai`, `path-browserify`, `@playwright/test` – alle ohne Abhängigkeiten bzw.
-  aus demselben Projekt.
-
-## 5. Patches – was das ist und warum
-
-Zwei der alten escomplex-Pakete haben Fehler, die das Altsystem mit **patch-package** direkt in
-`node_modules` korrigiert hat (`legacy/angular/patches/*.patch`). Ohne diese Korrekturen stürzt die
-Analyse bei bestimmten Code-Konstrukten ab bzw. lässt sich nicht bündeln:
+Zwei alte escomplex-Pakete haben Fehler, die das Altsystem mit patch-package korrigiert hat. pnpm
+wendet dieselben Korrekturen selbst an: Die Dateien liegen in `patches/`, `patchedDependencies` in
+`pnpm-workspace.yaml` ordnet sie den Paketen zu, der Hash steht im Lockfile. Passt ein Patch nach
+einem Versionswechsel nicht mehr, bricht die Installation ab. `patchedDependencies` ist bis P03-S01
+auskommentiert, weil pnpm Patches für nicht installierte Pakete ablehnt.
 
 | Paket | Problem | Korrektur |
 |---|---|---|
 | `typhonjs-escomplex-commons@0.1.1` (`utils/ast/astSyntax.js`) | Bei Zuweisungen mit einem AST-Knotentyp, den escomplex nicht kennt (neuere Syntax), wird eine nicht existierende Funktion aufgerufen → Absturz | Zwei Abfragen `if (typeof this[node.right.type] === 'function')` |
 | `typhonjs-plugin-manager@0.2.0` (`dist/PluginManager.js`) | Lädt Plugins per dynamischem `require(pfad)`; das bricht Bundler im Browser | Vier `require(...)`-Aufrufe auskommentiert (werden nicht gebraucht) |
 
-pnpm kann solche Korrekturen selbst anwenden (**ohne** patch-package): Die Patch-Dateien liegen in
-`patches/`, und `patchedDependencies` in `pnpm-workspace.yaml` sagt pnpm, welche Datei zu welchem
-Paket gehört. Bei jedem `pnpm install` wendet pnpm sie an; der Hash steht im Lockfile. Passt ein
-Patch nicht (z. B. nach einem Versionswechsel), bricht die Installation ab.
-
-Umstellung (erledigt in M0): Die alten Dateien haben Pfade wie `a/node_modules/typhonjs-plugin-manager/dist/…`;
-pnpm erwartet Pfade relativ zum Paket (`a/dist/…`). Also in jeder Zeile `a/node_modules/<paket>/` →
-`a/` und `b/node_modules/<paket>/` → `b/`. Dateinamen: `patches/<paket>@<version>.patch`. Spätere
-Änderungen an einem Patch: `pnpm patch <paket>@<version>` (öffnet eine Kopie zum Bearbeiten), danach
-`pnpm patch-commit <pfad>` – beides nur nach Nachfrage (README R4).
-
-## 6. Wichtige Befehle (Root, auf Windows und macOS gleich)
-
-| Befehl | Zweck |
-|---|---|
-| `pnpm install` | nur nach Nachfrage beim Nutzer (README R4) |
-| `pnpm dev` | Web-App starten (`apps/web`, `http://127.0.0.1:5173`) |
-| `pnpm build` | Produktions-Build der Web-App |
-| `pnpm preview` | gebaute App lokal ausliefern (`http://127.0.0.1:4173`) |
-| `pnpm lint` / `pnpm format` | `biome check .` / `biome check --write .` |
-| `pnpm typecheck` | `pnpm -r --if-present run typecheck` |
-| `pnpm test` | `vitest run` (alle Projekte) |
-| `pnpm test:parity` | nur Golden-Tests |
-| `pnpm check` | `pnpm lint && pnpm typecheck && pnpm test` |
-| `pnpm legacy:extract` / `pnpm legacy:serve` | Altsystem lokal bereitstellen |
-| `pnpm audit --prod` | Sicherheitsmeldungen der Laufzeit-Abhängigkeiten |
+Einen Patch ändern: `pnpm patch <paket>@<version>` (öffnet eine Kopie zum Bearbeiten), danach
+`pnpm patch-commit <pfad>`. Beides nur nach Nachfrage (README R4).

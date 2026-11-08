@@ -47,8 +47,7 @@ einzeln abhaken. Nichts abschwächen, um grün zu werden.
 ## 6. Status und Bericht
 
 - `STATUS.md`: Zeile des Schritts auf ☑ (◐, wenn nur teilweise erledigt), Datum, Kurznotiz.
-  Abweichungen zusätzlich unter „Abweichungen und Notizen“, neue Versionen unter „Aufgelöste
-  Versionen“.
+  Abweichungen zusätzlich unter „Abweichungen und Notizen“.
 - Bericht an den Nutzer: was getan wurde, Prüfergebnisse (bei Fehlern mit Ausgabe), Abweichungen,
   offene Punkte, `git status` in Kurzform, Commit-Vorschlag aus der Karte (Format
   `05-konventionen.md` §8, Body mit `Plan: Pnn-Syy`).

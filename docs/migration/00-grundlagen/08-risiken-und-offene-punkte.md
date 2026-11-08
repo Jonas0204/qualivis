@@ -1,25 +1,16 @@
 # Risiken und Entscheidungen des Nutzers
 
-## 1. Entscheidungen des Nutzers (ab 07.11.2026)
+## 1. Entscheidungen des Nutzers ohne eigene ADR
+
+Alle anderen Entscheidungen stehen als ADR in `07-entscheidungen.md`. IDs werden nicht neu vergeben.
 
 | ID | Frage | Entscheidung | Folgen im Plan |
 |---|---|---|---|
-| O1 | Name der App | **Qualivis**; „Component Graph“ nur dort, wo es fachlich passt (Graph-Ansicht) | ADR-012, ADR-011 A10 |
 | O2 | Lizenz / Veröffentlichung | **keine Lizenz**, keine npm-Veröffentlichung. Das Repo selbst ist öffentlich (GitHub-Fork, O14) | alle Pakete `"private": true`; Veröffentlichungs-Schritt in P10 entfällt; keine personenbezogenen Daten im Repo (RI13) |
-| O3 | Deployment | 07.11.: vorerst keins. **Geändert 08.11.2026:** ab M1 die **neue** App nach jedem Merge in `rewrite/react` auf GitHub Pages; die alte Seite wird nicht mehr ausgeliefert, der Branch `gh-pages` bleibt | ADR-016, P04-S07 |
-| O4 | CI | 07.11.: vorerst keine. **Geändert 08.11.2026:** CI für PRs als eigene Karte (Ubuntu, Windows, macOS); Dependabot vorerst nicht | ADR-016, P03-S00; `pnpm quality:self` kommt in P10-S03 dazu |
 | O5 | `legacy/angular/` | **bleibt im Repo** | Altsystem-Schritt in P11 entfällt |
-| O6 | UI-Eigenheiten V1 (keine Icons, wenn Größen nicht nach Metrik) und Q5 (keine Icons bei Auswahl über den Dateibaum) | **korrigieren** | ADR-011 A8, A9 |
-| O7 | Zustandsverwaltung | **Jotai** 3.0.1 | ADR-013 |
-| O8 | Pfad-Modul für escomplex | **`path-browserify`** in Node und Browser (statt kopiertem Code) | ADR-005 |
-| O9 | Versionen | **fest gepinnt**, `minimumReleaseAge` **3 Tage** | ADR-014 |
-| O10 | Plattformen | **Windows und macOS**, Node **24** | `04-technologie-stack.md`, alle Befehle plattformneutral |
-| O11 | Ohne jsdom testen (Jotai-`TestProvider`)? | **jsdom + Testing Library bleiben**, dazu `TestProvider` (Provider + `useHydrateAtoms`) | ADR-015, `06-teststrategie.md` §2, `anhang/A7`, P04-S02 |
-| O12 | Review- und Merge-Ablauf | Änderungen bleiben **uncommittet** im Arbeitsverzeichnis, bis der Nutzer sie in der IDE geprüft hat. Danach Commit, Push und PR auf seine Anweisung bzw. nach Nachfrage. **Ein Branch und ein PR pro Phase** mit Ziel `rewrite/react`; gemergt wird vom Nutzer | `README.md` (R3, „Branches und Pull Requests“), `05-konventionen.md` §8 |
-| O13 | Einstieg für Agenten (Claude Code, Copilot u. a.), ohne alles zu lesen | **`AGENTS.md`** im Root als einzige Einstiegsdatei, dazu die Skills `schritt-umsetzen` und `phase-abschliessen` in `.claude/skills/`; die lokale `CLAUDE.md` importiert `@AGENTS.md` | ADR-017 |
 | O14 | Repo privat machen? | **offen.** Das Repo ist ein Fork und lässt sich so nicht privat stellen. Möglich: Settings → Danger Zone → „Leave fork network“, danach als eigenständiges Repo privat stellen (Issues, PRs und Kommentare gehen dabei verloren, die Commits bleiben). Folgen von privat: begrenzte Actions-Minuten (Windows und macOS zählen mehrfach), Pages nur mit Bezahl-Abo und trotzdem öffentlich | bis zur Entscheidung: als öffentlich behandeln (RI13) |
 
-Neue offene Fragen werden hier mit nächster freier ID ergänzt.
+Neue offene Fragen bekommen die nächste freie ID (O16 …).
 
 ## 2. Risiken
 

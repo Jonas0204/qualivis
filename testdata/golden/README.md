@@ -1,7 +1,7 @@
 # Golden reference data
 
 Output of the **legacy** Angular build for the fixtures in `../fixtures/`. The new implementation
-must reproduce it (comparison rules: `docs/migration/01-referenz-altsystem/05-golden-daten.md` §4).
+must reproduce it (comparison rules: `docs/migration/00-grundlagen/06-teststrategie.md` §3).
 
 **Never edit these files by hand** and never change them to make a test pass. Re-capture only with
 the procedure below and with the owner's approval.
