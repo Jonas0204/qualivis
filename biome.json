@@ -51,6 +51,29 @@
       "linter": { "rules": { "suspicious": { "noConsole": "off" } } }
     },
     {
+      "includes": ["packages/core/src/legacy/**"],
+      "formatter": { "enabled": false },
+      "linter": {
+        "rules": {
+          "complexity": {
+            "noExcessiveCognitiveComplexity": "off",
+            "useOptionalChain": "off",
+            "useMathMinMax": "off"
+          },
+          "style": { "useTemplate": "off", "noParameterAssign": "off", "useImportType": "error" },
+          "suspicious": {
+            "noExplicitAny": "off",
+            "noImplicitAnyLet": "off",
+            "useIterableCallbackReturn": "off",
+            "noConsole": "off",
+            "noTsIgnore": "off",
+            "noDoubleEquals": "off"
+          },
+          "correctness": { "noUnusedFunctionParameters": "off", "noUnusedVariables": "off" }
+        }
+      }
+    },
+    {
       "includes": ["tools/legacy/capture.browser.js"],
       "linter": {
         "rules": {

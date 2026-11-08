@@ -41,7 +41,7 @@ Ablauf: README, „Branches und Pull Requests“. Ziel aller PRs: `rewrite/react
 | P01, P02 | M0: Fundament, Golden-Infrastruktur | ☑ | 08.11.2026 | Commit `5647a06`, PR #1 |
 | P03-S00 | CI für Pull Requests | ☑ | 08.11.2026 | nur Linux; Lauf erst im PR der Phase sichtbar |
 | P03-S01 | Kern: Skelett, Modell | ☑ | 08.11.2026 | Patches aktiv (2 Hashes im Lockfile); Biome: `noDefaultExport` aus für `core/src/types/` (Fremdmodul-Deklarationen) |
-| P03-S02 | Kern: Altcode 1:1 | ☐ | | |
+| P03-S02 | Kern: Altcode 1:1 | ☑ | 08.11.2026 | 10 Dateien, Diff nur Zeile 1 und Importe (Biome: `import type`, Sortierung); keine weiteren Regeln abgeschaltet |
 | P03-S03 | Kern: escomplex-Adapter | ☐ | | |
 | P03-S04 | Kern: `analyzeProject` | ☐ | | |
 | P03-S05 | Kern: Golden G1, API | ☐ | | |
