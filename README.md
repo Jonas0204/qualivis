@@ -1,27 +1,36 @@
-# ComponentGraph
+# Qualivis
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.18.
+Visual analysis of the structure and code quality of component-based web applications (React),
+based on *Visually Analyzing the Structure and Code Quality of Component-based Web Applications*
+(Tarner, van den Bongard, Beck, VISSOFT 2021). Qualivis is the React rewrite of the original
+Angular app "Component Graph".
 
-## Development server
+> Work in progress. The plan and its status live in [docs/migration](docs/migration/README.md).
+> The original Angular app is kept for reference in [legacy/angular](legacy/angular/LEGACY.md).
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## Requirements
 
-## Code scaffolding
+- Node.js 24 (`.node-version`)
+- pnpm 12 (pinned via `packageManager`; npm and yarn are not used)
+- Windows or macOS
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Commands
 
-## Build
+| Command | Purpose |
+|---|---|
+| `pnpm install` | install dependencies (exact versions, 3-day minimum release age) |
+| `pnpm check` | lint (Biome), type check (TypeScript), tests (Vitest) |
+| `pnpm format` | format and fix with Biome |
+| `pnpm dev` | start the app (from P04 on) |
+| `pnpm legacy:extract` | extract the legacy production build (`origin/gh-pages`) to `.cache/` |
+| `pnpm legacy:serve` | serve the legacy build locally for golden captures ([tools/legacy](tools/legacy/README.md)) |
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+## Repository layout
 
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+| Path | Content |
+|---|---|
+| `docs/migration/` | migration plan, decisions (ADRs), status |
+| `legacy/angular/` | original Angular app, read-only reference |
+| `testdata/` | fixtures and golden reference data ([testdata/README.md](testdata/README.md)) |
+| `tools/` | development tools (legacy server, golden capture, JSON diff) |
+| `patches/` | pnpm patches for the legacy analysis libraries |

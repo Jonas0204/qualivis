@@ -1,0 +1,82 @@
+{
+  "view": "component",
+  "url": "/component-graph/graph?id=%2Frealworld%2Fsrc%2Fcomponents%2FArticle%2FArticleActions.js%23ArticleActions",
+  "container": [
+    158,
+    704
+  ],
+  "settings": null,
+  "hasClusterButton": false,
+  "nodes": [
+    {
+      "id": "ArticleActions#12",
+      "label": "ArticleActions",
+      "type": "component",
+      "kind": "FunctionComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 26.702324712498182,
+      "height": 26.702324712498182,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": 79.02090103046659,
+      "y": 302,
+      "dom": {
+        "mainR": 13.351162356249091,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "ArticleActions",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "del#14",
+      "label": "del",
+      "type": "innerFunction",
+      "kind": "FunctionComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 19.544100476116796,
+      "height": 19.544100476116796,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": 78.97909896953341,
+      "y": 402,
+      "dom": {
+        "mainR": 9.772050238058398,
+        "mainClass": "circle-node innerFunction",
+        "overlayClass": "circle-overlay innerFunction",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "del",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    }
+  ],
+  "links": [
+    {
+      "source": "ArticleActions#12",
+      "target": "del#14",
+      "inherits": false,
+      "dash": null
+    }
+  ]
+}

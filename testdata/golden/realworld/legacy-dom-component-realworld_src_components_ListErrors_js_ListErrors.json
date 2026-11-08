@@ -1,0 +1,82 @@
+{
+  "view": "component",
+  "url": "/component-graph/graph?id=%2Frealworld%2Fsrc%2Fcomponents%2FListErrors.js%23ListErrors",
+  "container": [
+    158,
+    704
+  ],
+  "settings": null,
+  "hasClusterButton": false,
+  "nodes": [
+    {
+      "id": "ListErrors",
+      "label": null,
+      "type": "component",
+      "kind": "ClassComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 23.66908109081279,
+      "height": 23.66908109081279,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": 79.02090103046659,
+      "y": 302,
+      "dom": {
+        "mainR": 11.834540545406394,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "url(#diagonalHatch)",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "ListErrors",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "render",
+      "label": null,
+      "type": "innerFunction",
+      "kind": "ClassComponent",
+      "special": true,
+      "returnsJSX": true,
+      "isUsingThis": true,
+      "extends": false,
+      "width": 41.20258154914023,
+      "height": 41.20258154914023,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": 78.97909896953341,
+      "y": 402,
+      "dom": {
+        "mainR": 20.601290774570113,
+        "mainClass": "circle-node innerFunction special",
+        "overlayClass": "circle-overlay innerFunction special",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": 17.601290774570113,
+        "innerClass": "inner-circle innerFunction special",
+        "label": "render",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    }
+  ],
+  "links": [
+    {
+      "source": "ListErrors",
+      "target": "render",
+      "inherits": false,
+      "dash": null
+    }
+  ]
+}

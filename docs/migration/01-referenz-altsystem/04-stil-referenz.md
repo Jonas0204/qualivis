@@ -2,7 +2,8 @@
 
 Alle Werte stammen aus dem kompilierten gh-pages-Build (CSS-Strings im Bundle und `styles.css`)
 bzw. aus `getComputedStyle` im laufenden Build (Fenster 1024 × 768). Sie sind die Vorgabe für
-`apps/web/src/styles/tokens.css`. Bei Zweifel: Legacy-Build lokal starten (P02-S01) und messen.
+`apps/web/src/styles/tokens.css`. Bei Zweifel: Legacy-Build lokal starten (`pnpm legacy:extract`, `pnpm legacy:serve`,
+`tools/legacy/README.md`) und messen.
 
 ## 1. Farben (Design-Tokens)
 

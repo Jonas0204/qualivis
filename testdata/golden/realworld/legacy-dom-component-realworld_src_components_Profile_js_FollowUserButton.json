@@ -1,0 +1,82 @@
+{
+  "view": "component",
+  "url": "/component-graph/graph?id=%2Frealworld%2Fsrc%2Fcomponents%2FProfile.js%23FollowUserButton",
+  "container": [
+    158,
+    704
+  ],
+  "settings": null,
+  "hasClusterButton": false,
+  "nodes": [
+    {
+      "id": "FollowUserButton#26",
+      "label": "FollowUserButton",
+      "type": "component",
+      "kind": "FunctionComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 28.096414677602564,
+      "height": 28.096414677602564,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": 79.02090103046659,
+      "y": 302,
+      "dom": {
+        "mainR": 14.048207338801282,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "FollowUserButton",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "handleClick#38",
+      "label": "handleClick",
+      "type": "innerFunction",
+      "kind": "FunctionComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 31.915382432114615,
+      "height": 31.915382432114615,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": 78.97909896953341,
+      "y": 402,
+      "dom": {
+        "mainR": 15.957691216057308,
+        "mainClass": "circle-node innerFunction",
+        "overlayClass": "circle-overlay innerFunction",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "handleClick",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    }
+  ],
+  "links": [
+    {
+      "source": "FollowUserButton#26",
+      "target": "handleClick#38",
+      "inherits": false,
+      "dash": null
+    }
+  ]
+}

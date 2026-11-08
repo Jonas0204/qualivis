@@ -1,0 +1,82 @@
+{
+  "view": "component",
+  "url": "/component-graph/graph?id=%2Frealworld%2Fsrc%2Fcomponents%2FListPagination.js%23ListPagination",
+  "container": [
+    158,
+    704
+  ],
+  "settings": null,
+  "hasClusterButton": false,
+  "nodes": [
+    {
+      "id": "ListPagination#11",
+      "label": "ListPagination",
+      "type": "component",
+      "kind": "FunctionComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 34.225434710991614,
+      "height": 34.225434710991614,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": 79.02090103046659,
+      "y": 302,
+      "dom": {
+        "mainR": 17.112717355495807,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "ListPagination",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "setPage#21",
+      "label": "setPage",
+      "type": "innerFunction",
+      "kind": "FunctionComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 29.854106607209232,
+      "height": 29.854106607209232,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": 78.97909896953341,
+      "y": 402,
+      "dom": {
+        "mainR": 14.927053303604616,
+        "mainClass": "circle-node innerFunction",
+        "overlayClass": "circle-overlay innerFunction",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "setPage",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    }
+  ],
+  "links": [
+    {
+      "source": "ListPagination#11",
+      "target": "setPage#21",
+      "inherits": false,
+      "dash": null
+    }
+  ]
+}

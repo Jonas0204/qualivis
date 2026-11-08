@@ -14,6 +14,8 @@
 | O8 | Pfad-Modul für escomplex | **`path-browserify`** in Node und Browser (statt kopiertem Code) | ADR-005 |
 | O9 | Versionen | **fest gepinnt**, `minimumReleaseAge` **3 Tage** | ADR-014 |
 | O10 | Plattformen | **Windows und macOS**, Node **24** | `04-technologie-stack.md`, alle Befehle plattformneutral |
+| O11 | Ohne jsdom testen (Jotai-`TestProvider`)? | **jsdom + Testing Library bleiben**, dazu `TestProvider` (Provider + `useHydrateAtoms`) | ADR-015, `06-teststrategie.md` §2, `anhang/A7`, P04-S02 |
+| O12 | Review- und Merge-Ablauf | Änderungen bleiben **uncommittet** im Arbeitsverzeichnis, bis der Nutzer sie in der IDE geprüft hat. Danach Commit, Push und PR auf seine Anweisung bzw. nach Nachfrage. **Ein Branch und ein PR pro Phase** mit Ziel `rewrite/react`; gemergt wird vom Nutzer | `README.md` (R3, „Branches und Pull Requests“), `05-konventionen.md` §8 |
 
 Neue offene Fragen werden hier mit nächster freier ID ergänzt.
 
@@ -30,6 +32,6 @@ Neue offene Fragen werden hier mit nächster freier ID ergänzt.
 | R7 | Leichtere Modelle „verbessern“ Altcode und brechen G1 | mittel | hoch | Regel R5 im README; G1 in `pnpm check` |
 | R8 | TypeScript 7 / Werkzeuge haben Kinderkrankheiten | gering | mittel | im Spike verifiziert; bei Problemen TS 6.0 als Rückfall (ADR) |
 | R9 | `localStorage`-Limit (≈ 5 MB) bei großen Projekten | mittel | gering | `try/catch`, Meldung; später IndexedDB (eigene ADR) |
-| R10 | Hook blockiert Installationen für den Assistenten | sicher | gering | Nutzer führt `pnpm install` aus (README R4) |
-| R11 | Unterschiede Windows/macOS (Pfade, Dateiüberwachung, Browser-Kanal) | mittel | gering | `path-browserify`, `.gitattributes eol=lf`, plattformneutrale Befehle; P01-S04 prüft `pnpm dev` auf dem Mac |
+| R10 | Installationen ohne Rückfrage | gering | mittel | Installationen nur nach Nachfrage mit Befehl, Paketen und Zweck (README R4); Hook des Nutzers prüft zusätzlich |
+| R11 | Unterschiede Windows/macOS (Pfade, Dateiüberwachung, Browser-Kanal) | mittel | gering | `path-browserify`, `.gitattributes eol=lf`, plattformneutrale Befehle, `tar` mit relativen Pfaden (M0); P04-S01 prüft `pnpm dev` auf dem Mac |
 | R12 | Jotai 3 ist neu (09/2026); Beispiele im Netz meist v2 | mittel | gering | nur Grund-API nutzen (`atom`, `useAtom*`, `atomWithStorage`, `createStore`, `Provider`); Doku der installierten Version |

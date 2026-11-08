@@ -1,0 +1,1705 @@
+{
+  "view": "app",
+  "url": "/component-graph/graph",
+  "container": [
+    158,
+    704
+  ],
+  "settings": null,
+  "hasClusterButton": false,
+  "nodes": [
+    {
+      "id": "/realworld/src/components/App.js#App",
+      "label": "App",
+      "type": "component",
+      "kind": "ClassComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 48.961549778946534,
+      "height": 48.961549778946534,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": 148.31935835492826,
+      "y": 27.935437417076855,
+      "dom": {
+        "mainR": 17.480774889473267,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "url(#diagonalHatch)",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "App",
+        "iconTexts": [],
+        "previews": [
+          {
+            "cls": "function innerFunction special",
+            "title": "componentWillReceiveProps",
+            "hidden": false,
+            "cx": 1.3153181105799137e-15,
+            "cy": -21.480774889473267
+          },
+          {
+            "cls": "function innerFunction special",
+            "title": "componentWillMount",
+            "hidden": false,
+            "cx": 6.8767642428339535,
+            "cy": -20.350277722937975
+          },
+          {
+            "cls": "function innerFunction jsx special",
+            "title": "render",
+            "hidden": false,
+            "cx": 13.029703341420918,
+            "cy": -17.077778564168987
+          }
+        ],
+        "dots": []
+      }
+    },
+    {
+      "id": "/realworld/src/components/Article/ArticleActions.js#ArticleActions",
+      "label": "ArticleActions",
+      "type": "component",
+      "kind": "FunctionComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 40.70232471249818,
+      "height": 40.70232471249818,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": 175.46895851472107,
+      "y": 671.4854618662598,
+      "dom": {
+        "mainR": 13.351162356249091,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "ArticleActions",
+        "iconTexts": [],
+        "previews": [
+          {
+            "cls": "function innerFunction",
+            "title": "del#14",
+            "hidden": false,
+            "cx": 1.0624522720533248e-15,
+            "cy": -17.35116235624909
+          }
+        ],
+        "dots": []
+      }
+    },
+    {
+      "id": "/realworld/src/components/Article/ArticleMeta.js#ArticleMeta",
+      "label": "ArticleMeta",
+      "type": "component",
+      "kind": "FunctionComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 37.12489154112443,
+      "height": 37.12489154112443,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": 212.37737180160943,
+      "y": 562.4988436905026,
+      "dom": {
+        "mainR": 11.562445770562213,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "ArticleMeta",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "/realworld/src/components/Article/Comment.js#Comment",
+      "label": "Comment",
+      "type": "component",
+      "kind": "FunctionComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 41.17496892263898,
+      "height": 41.17496892263898,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": 560.2845213867387,
+      "y": 731.0907135696198,
+      "dom": {
+        "mainR": 13.587484461319491,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "Comment",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "/realworld/src/components/Article/CommentContainer.js#CommentContainer",
+      "label": "CommentContainer",
+      "type": "component",
+      "kind": "FunctionComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 42.98858567652461,
+      "height": 42.98858567652461,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": 390.05062366373267,
+      "y": 531.0907135696198,
+      "dom": {
+        "mainR": 14.494292838262304,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "CommentContainer",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "/realworld/src/components/Article/CommentInput.js#CommentInput",
+      "label": "CommentInput",
+      "type": "component",
+      "kind": "ClassComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 48.225434710991614,
+      "height": 48.225434710991614,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": 372.29526269236175,
+      "y": 632.2007055002391,
+      "dom": {
+        "mainR": 17.112717355495807,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "url(#diagonalHatch)",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "CommentInput",
+        "iconTexts": [],
+        "previews": [
+          {
+            "cls": "function innerFunction special",
+            "title": "constructor",
+            "hidden": false,
+            "cx": 1.2927810865355356e-15,
+            "cy": -21.112717355495807
+          },
+          {
+            "cls": "function innerFunction jsx special",
+            "title": "render",
+            "hidden": false,
+            "cx": 6.87245388423081,
+            "cy": -19.962870829171205
+          },
+          {
+            "cls": "function innerFunction",
+            "title": "setBody",
+            "hidden": false,
+            "cx": 12.996328881807624,
+            "cy": -16.638577755593982
+          },
+          {
+            "cls": "function innerFunction",
+            "title": "createComment",
+            "hidden": false,
+            "cx": 17.704584717900367,
+            "cy": -11.501935232809421
+          }
+        ],
+        "dots": []
+      }
+    },
+    {
+      "id": "/realworld/src/components/Article/CommentList.js#CommentList",
+      "label": "CommentList",
+      "type": "component",
+      "kind": "FunctionComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 34.80628379144039,
+      "height": 34.80628379144039,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": 500.6900244909823,
+      "y": 631.0907135696198,
+      "dom": {
+        "mainR": 10.403141895720196,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "CommentList",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "/realworld/src/components/Article/DeleteButton.js#DeleteButton",
+      "label": "DeleteButton",
+      "type": "component",
+      "kind": "FunctionComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 33.544100476116796,
+      "height": 33.544100476116796,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": 577.2964107266548,
+      "y": 831.0907135696198,
+      "dom": {
+        "mainR": 9.772050238058398,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "DeleteButton",
+        "iconTexts": [],
+        "previews": [
+          {
+            "cls": "function innerFunction",
+            "title": "del#12",
+            "hidden": false,
+            "cx": 8.43294862086738e-16,
+            "cy": -13.772050238058398
+          }
+        ],
+        "dots": []
+      }
+    },
+    {
+      "id": "/realworld/src/components/Article/index.js#Article",
+      "label": "Article",
+      "type": "component",
+      "kind": "ClassComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 57.70193722368317,
+      "height": 57.70193722368317,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [
+        {
+          "icon": "warning",
+          "class": "error",
+          "description": "This component exceeds at least one metric threshold. A solution might be to split it into smaller components."
+        }
+      ],
+      "x": 261.1991003279385,
+      "y": 406.3044499806956,
+      "dom": {
+        "mainR": 21.850968611841584,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "url(#diagonalHatch)",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "Article",
+        "iconTexts": [
+          "icon error:warning"
+        ],
+        "previews": [
+          {
+            "cls": "function innerFunction special",
+            "title": "componentWillMount",
+            "hidden": false,
+            "cx": 1.5829152982675245e-15,
+            "cy": -25.850968611841584
+          },
+          {
+            "cls": "function innerFunction special",
+            "title": "componentWillUnmount",
+            "hidden": false,
+            "cx": 6.914769135529618,
+            "cy": -24.909005318814835
+          },
+          {
+            "cls": "function innerFunction jsx special",
+            "title": "render",
+            "hidden": false,
+            "cx": 13.32561450686886,
+            "cy": -22.151762371981714
+          }
+        ],
+        "dots": []
+      }
+    },
+    {
+      "id": "/realworld/src/components/ArticleList.js#ArticleList",
+      "label": "ArticleList",
+      "type": "component",
+      "kind": "FunctionComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 42.54598585844434,
+      "height": 42.54598585844434,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": -222.497239148399,
+      "y": 415.96103045527104,
+      "dom": {
+        "mainR": 14.27299292922217,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "ArticleList",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "/realworld/src/components/ArticlePreview.js#ArticlePreview",
+      "label": "ArticlePreview",
+      "type": "component",
+      "kind": "FunctionComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 52.09846559899868,
+      "height": 52.09846559899868,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": -301.28982989197647,
+      "y": 537.2082233839869,
+      "dom": {
+        "mainR": 19.04923279949934,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "ArticlePreview",
+        "iconTexts": [],
+        "previews": [
+          {
+            "cls": "function innerFunction",
+            "title": "handleClick#27",
+            "hidden": false,
+            "cx": 1.4113584585354527e-15,
+            "cy": -23.04923279949934
+          }
+        ],
+        "dots": []
+      }
+    },
+    {
+      "id": "/realworld/src/components/Editor.js#Editor",
+      "label": "Editor",
+      "type": "component",
+      "kind": "ClassComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 74.55518052848385,
+      "height": 74.55518052848385,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [
+        {
+          "icon": "warning",
+          "class": "error",
+          "description": "This component exceeds at least one metric threshold. A solution might be to split it into smaller components."
+        }
+      ],
+      "x": 341.54361301316385,
+      "y": 127.93543741707686,
+      "dom": {
+        "mainR": 30.277590264241923,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "url(#diagonalHatch)",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "Editor",
+        "iconTexts": [
+          "icon error:warning"
+        ],
+        "previews": [
+          {
+            "cls": "function innerFunction special",
+            "title": "constructor",
+            "hidden": false,
+            "cx": 2.0988970599794174e-15,
+            "cy": -34.27759026424192
+          },
+          {
+            "cls": "function innerFunction special",
+            "title": "componentWillReceiveProps",
+            "hidden": false,
+            "cx": 6.951446932604291,
+            "cy": -33.56531811060993
+          },
+          {
+            "cls": "function innerFunction special",
+            "title": "componentWillMount",
+            "hidden": false,
+            "cx": 13.613998290031008,
+            "cy": -31.458103008323395
+          },
+          {
+            "cls": "function innerFunction special",
+            "title": "componentWillUnmount",
+            "hidden": false,
+            "cx": 19.710764724606932,
+            "cy": -28.043518828678465
+          },
+          {
+            "cls": "function innerFunction jsx special",
+            "title": "render",
+            "hidden": false,
+            "cx": 24.988370376181432,
+            "cy": -23.463472468201097
+          },
+          {
+            "cls": "function innerFunction",
+            "title": "watchForEnter",
+            "hidden": false,
+            "cx": 29.227482933790462,
+            "cy": -17.90830633192988
+          },
+          {
+            "cls": "function innerFunction",
+            "title": "removeTagHandler",
+            "hidden": false,
+            "cx": 32.25192887953966,
+            "cy": -11.608887882668524
+          },
+          {
+            "cls": "function innerFunction",
+            "title": "submitForm",
+            "hidden": false,
+            "cx": 33.9360150937718,
+            "cy": -4.827015007076835
+          }
+        ],
+        "dots": []
+      }
+    },
+    {
+      "id": "/realworld/src/components/Header.js#LoggedOutView",
+      "label": "LoggedOutView",
+      "type": "component",
+      "kind": "FunctionComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 40.70232471249818,
+      "height": 40.70232471249818,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": 168.07955349795373,
+      "y": 227.93543741707688,
+      "dom": {
+        "mainR": 13.351162356249091,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "LoggedOutView",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "/realworld/src/components/Header.js#LoggedInView",
+      "label": "LoggedInView",
+      "type": "component",
+      "kind": "FunctionComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 45.107266900175006,
+      "height": 45.107266900175006,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": 80.01642215947179,
+      "y": 227.93543741707688,
+      "dom": {
+        "mainR": 15.553633450087503,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "LoggedInView",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "/realworld/src/components/Header.js#Header",
+      "label": "Header",
+      "type": "component",
+      "kind": "ClassComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 35.409489393833255,
+      "height": 35.409489393833255,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": 94.43280460713589,
+      "y": 127.93543741707686,
+      "dom": {
+        "mainR": 10.704744696916627,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "url(#diagonalHatch)",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "Header",
+        "iconTexts": [],
+        "previews": [
+          {
+            "cls": "function innerFunction jsx special",
+            "title": "render",
+            "hidden": false,
+            "cx": 9.004059262678982e-16,
+            "cy": -14.704744696916627
+          }
+        ],
+        "dots": []
+      }
+    },
+    {
+      "id": "/realworld/src/components/Home/Banner.js#Banner",
+      "label": "Banner",
+      "type": "component",
+      "kind": "FunctionComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 33.544100476116796,
+      "height": 33.544100476116796,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": -259.9017809734656,
+      "y": 227.93543741707688,
+      "dom": {
+        "mainR": 9.772050238058398,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "Banner",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "/realworld/src/components/Home/MainView.js#YourFeedTab",
+      "label": "YourFeedTab",
+      "type": "component",
+      "kind": "FunctionComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 35.99615936929358,
+      "height": 35.99615936929358,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": -377.988499464733,
+      "y": 366.45668509902566,
+      "dom": {
+        "mainR": 10.99807968464679,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "YourFeedTab",
+        "iconTexts": [],
+        "previews": [
+          {
+            "cls": "function innerFunction",
+            "title": "clickHandler#9",
+            "hidden": false,
+            "cx": 9.183675139579818e-16,
+            "cy": -14.99807968464679
+          }
+        ],
+        "dots": []
+      }
+    },
+    {
+      "id": "/realworld/src/components/Home/MainView.js#GlobalFeedTab",
+      "label": "GlobalFeedTab",
+      "type": "component",
+      "kind": "FunctionComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 34.18506017616129,
+      "height": 34.18506017616129,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": -511.511878340489,
+      "y": 357.82687566211257,
+      "dom": {
+        "mainR": 10.092530088080643,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "GlobalFeedTab",
+        "iconTexts": [],
+        "previews": [
+          {
+            "cls": "function innerFunction",
+            "title": "clickHandler#28",
+            "hidden": false,
+            "cx": 8.629185932127864e-16,
+            "cy": -14.092530088080643
+          }
+        ],
+        "dots": []
+      }
+    },
+    {
+      "id": "/realworld/src/components/Home/MainView.js#TagFilterTab",
+      "label": "TagFilterTab",
+      "type": "component",
+      "kind": "FunctionComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 32.19456736586892,
+      "height": 32.19456736586892,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": -449.4842980922374,
+      "y": 357.82687566211257,
+      "dom": {
+        "mainR": 9.09728368293446,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "TagFilterTab",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "/realworld/src/components/Home/MainView.js#MainView",
+      "label": "MainView",
+      "type": "component",
+      "kind": "FunctionComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 40.22116233420989,
+      "height": 40.22116233420989,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": -362.21017394759775,
+      "y": 257.82687566211257,
+      "dom": {
+        "mainR": 13.110581167104947,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "MainView",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "/realworld/src/components/Home/Tags.js#Tags",
+      "label": "Tags",
+      "type": "component",
+      "kind": "FunctionComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 42.09641467760257,
+      "height": 42.09641467760257,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": -174.1509825201068,
+      "y": 227.93543741707688,
+      "dom": {
+        "mainR": 14.048207338801284,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "Tags",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "/realworld/src/components/Home/index.js#Home",
+      "label": "Home",
+      "type": "component",
+      "kind": "ClassComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 46.703535245865034,
+      "height": 46.703535245865034,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [
+        {
+          "icon": "warning",
+          "class": "warn",
+          "description": "This component almost exceeds at least one metric threshold. A solution might be to split it into smaller components."
+        }
+      ],
+      "x": -175.31995907239659,
+      "y": 127.93543741707686,
+      "dom": {
+        "mainR": 16.351767622932517,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "url(#diagonalHatch)",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "Home",
+        "iconTexts": [
+          "icon warn:warning"
+        ],
+        "previews": [
+          {
+            "cls": "function innerFunction special",
+            "title": "componentWillMount",
+            "hidden": false,
+            "cx": 1.2461863538207523e-15,
+            "cy": -20.351767622932517
+          },
+          {
+            "cls": "function innerFunction special",
+            "title": "componentWillUnmount",
+            "hidden": false,
+            "cx": 6.862795187467141,
+            "cy": -19.159762200839605
+          },
+          {
+            "cls": "function innerFunction jsx special",
+            "title": "render",
+            "hidden": false,
+            "cx": 12.921680933185725,
+            "cy": -15.723377729953217
+          }
+        ],
+        "dots": []
+      }
+    },
+    {
+      "id": "/realworld/src/components/ListErrors.js#ListErrors",
+      "label": "ListErrors",
+      "type": "component",
+      "kind": "ClassComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 37.66908109081279,
+      "height": 37.66908109081279,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": 339.74057229377144,
+      "y": 227.93543741707688,
+      "dom": {
+        "mainR": 11.834540545406394,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "url(#diagonalHatch)",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "ListErrors",
+        "iconTexts": [],
+        "previews": [
+          {
+            "cls": "function innerFunction jsx special",
+            "title": "render",
+            "hidden": false,
+            "cx": 9.695859697450462e-16,
+            "cy": -15.834540545406394
+          }
+        ],
+        "dots": []
+      }
+    },
+    {
+      "id": "/realworld/src/components/ListPagination.js#ListPagination",
+      "label": "ListPagination",
+      "type": "component",
+      "kind": "FunctionComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 48.225434710991614,
+      "height": 48.225434710991614,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": -203.4542949328352,
+      "y": 558.2931576209564,
+      "dom": {
+        "mainR": 17.112717355495807,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "ListPagination",
+        "iconTexts": [],
+        "previews": [
+          {
+            "cls": "function innerFunction",
+            "title": "setPage#21",
+            "hidden": false,
+            "cx": 1.2927810865355356e-15,
+            "cy": -21.112717355495807
+          }
+        ],
+        "dots": []
+      }
+    },
+    {
+      "id": "/realworld/src/components/Login.js#Login",
+      "label": "Login",
+      "type": "component",
+      "kind": "ClassComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 56.52058505622813,
+      "height": 56.52058505622813,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [
+        {
+          "icon": "warning",
+          "class": "error",
+          "description": "This component exceeds at least one metric threshold. A solution might be to split it into smaller components."
+        }
+      ],
+      "x": 276.0057292208079,
+      "y": 127.93543741707686,
+      "dom": {
+        "mainR": 21.260292528114064,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "url(#diagonalHatch)",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "Login",
+        "iconTexts": [
+          "icon error:warning"
+        ],
+        "previews": [
+          {
+            "cls": "function innerFunction special",
+            "title": "constructor",
+            "hidden": false,
+            "cx": 1.5467468195040346e-15,
+            "cy": -25.260292528114064
+          },
+          {
+            "cls": "function innerFunction special",
+            "title": "componentWillUnmount",
+            "hidden": false,
+            "cx": 6.910752011570388,
+            "cy": -24.29658176041377
+          },
+          {
+            "cls": "function innerFunction jsx special",
+            "title": "render",
+            "hidden": false,
+            "cx": 13.294196897220163,
+            "cy": -21.478982924334126
+          },
+          {
+            "cls": "function innerFunction",
+            "title": "changeEmail",
+            "hidden": false,
+            "cx": 18.663262342606544,
+            "cy": -17.022485639204977
+          },
+          {
+            "cls": "function innerFunction",
+            "title": "changePassword",
+            "hidden": false,
+            "cx": 22.608275642914457,
+            "cy": -11.267131447706475
+          },
+          {
+            "cls": "function innerFunction",
+            "title": "submitForm",
+            "hidden": false,
+            "cx": 24.828222723030045,
+            "cy": -4.652067822109832
+          }
+        ],
+        "dots": []
+      }
+    },
+    {
+      "id": "/realworld/src/components/Profile.js#EditProfileSettings",
+      "label": "EditProfileSettings",
+      "type": "component",
+      "kind": "FunctionComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 31.480774889473267,
+      "height": 31.480774889473267,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": -31.94307350832413,
+      "y": 391.42058181495827,
+      "dom": {
+        "mainR": 8.740387444736633,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "EditProfileSettings",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "/realworld/src/components/Profile.js#FollowUserButton",
+      "label": "FollowUserButton",
+      "type": "component",
+      "kind": "FunctionComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 42.09641467760257,
+      "height": 42.09641467760257,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": -90.36479515392212,
+      "y": 320.38889763376244,
+      "dom": {
+        "mainR": 14.048207338801284,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "FollowUserButton",
+        "iconTexts": [],
+        "previews": [
+          {
+            "cls": "function innerFunction",
+            "title": "handleClick#38",
+            "hidden": false,
+            "cx": 1.105133967390538e-15,
+            "cy": -18.048207338801284
+          }
+        ],
+        "dots": []
+      }
+    },
+    {
+      "id": "/realworld/src/components/Profile.js#Profile",
+      "label": "Profile",
+      "type": "component",
+      "kind": "ClassComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 62.13830046250071,
+      "height": 62.13830046250071,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [
+        {
+          "icon": "warning",
+          "class": "warn",
+          "description": "This component almost exceeds at least one metric threshold. A solution might be to split it into smaller components."
+        }
+      ],
+      "x": -32.79003835409217,
+      "y": 220.3888976337624,
+      "dom": {
+        "mainR": 24.069150231250354,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "url(#diagonalHatch)",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "Profile",
+        "iconTexts": [
+          "icon warn:warning"
+        ],
+        "previews": [
+          {
+            "cls": "function innerFunction special",
+            "title": "componentWillMount",
+            "hidden": false,
+            "cx": 1.7187397492743468e-15,
+            "cy": -28.069150231250354
+          },
+          {
+            "cls": "function innerFunction special",
+            "title": "componentWillUnmount",
+            "hidden": false,
+            "cx": 6.927667454587033,
+            "cy": -27.200820177765916
+          },
+          {
+            "cls": "function innerFunction jsx special",
+            "title": "render",
+            "hidden": false,
+            "cx": 13.426714747765217,
+            "cy": -24.6495542715613
+          },
+          {
+            "cls": "function innerFunction jsx",
+            "title": "renderTabs",
+            "hidden": false,
+            "cx": 19.095040780128944,
+            "cy": -20.573201314081246
+          }
+        ],
+        "dots": []
+      }
+    },
+    {
+      "id": "/realworld/src/components/ProfileFavorites.js#ProfileFavorites",
+      "label": "ProfileFavorites",
+      "type": "component",
+      "kind": "ClassComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": true,
+      "width": 43.42452872043851,
+      "height": 43.42452872043851,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [
+        {
+          "icon": "device_hub",
+          "class": "warn",
+          "description": "Component composition is recommended over inheritance.\n          (see <a href=\"https://reactjs.org/docs/composition-vs-inheritance.html\" target=\"_blank\">\n          https://reactjs.org/docs/composition-vs-inheritance.html</a>)"
+        }
+      ],
+      "x": 71.43200680140929,
+      "y": 320.38889763376244,
+      "dom": {
+        "mainR": 14.712264360219255,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "url(#diagonalHatch)",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "ProfileFavorites",
+        "iconTexts": [
+          "icon warn:device_hub"
+        ],
+        "previews": [
+          {
+            "cls": "function innerFunction special",
+            "title": "componentWillMount",
+            "hidden": false,
+            "cx": 1.1457957326770803e-15,
+            "cy": -18.712264360219255
+          },
+          {
+            "cls": "function innerFunction special",
+            "title": "componentWillUnmount",
+            "hidden": false,
+            "cx": 6.837874657319854,
+            "cy": -17.418160283379947
+          },
+          {
+            "cls": "function innerFunction jsx",
+            "title": "renderTabs",
+            "hidden": false,
+            "cx": 12.7299608947448,
+            "cy": -13.71484353191825
+          }
+        ],
+        "dots": []
+      }
+    },
+    {
+      "id": "/realworld/src/components/Register.js#Register",
+      "label": "Register",
+      "type": "component",
+      "kind": "ClassComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 59.97366250648702,
+      "height": 59.97366250648702,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [
+        {
+          "icon": "warning",
+          "class": "error",
+          "description": "This component exceeds at least one metric threshold. A solution might be to split it into smaller components."
+        }
+      ],
+      "x": 217.75860443945032,
+      "y": 127.93543741707686,
+      "dom": {
+        "mainR": 22.98683125324351,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "url(#diagonalHatch)",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "Register",
+        "iconTexts": [
+          "icon error:warning"
+        ],
+        "previews": [
+          {
+            "cls": "function innerFunction special",
+            "title": "constructor",
+            "hidden": false,
+            "cx": 1.6524668256707209e-15,
+            "cy": -26.98683125324351
+          },
+          {
+            "cls": "function innerFunction special",
+            "title": "componentWillUnmount",
+            "hidden": false,
+            "cx": 6.921769162780254,
+            "cy": -26.084059744376926
+          },
+          {
+            "cls": "function innerFunction jsx special",
+            "title": "render",
+            "hidden": false,
+            "cx": 13.380440162425234,
+            "cy": -23.436144780035782
+          },
+          {
+            "cls": "function innerFunction",
+            "title": "changeEmail",
+            "hidden": false,
+            "cx": 18.9438982308907,
+            "cy": -19.220244038739384
+          },
+          {
+            "cls": "function innerFunction",
+            "title": "changePassword",
+            "hidden": false,
+            "cx": 23.239922458811378,
+            "cy": -13.718420652519558
+          },
+          {
+            "cls": "function innerFunction",
+            "title": "changeUsername",
+            "hidden": false,
+            "cx": 25.981089084725753,
+            "cy": -7.298771887282469
+          },
+          {
+            "cls": "function innerFunction",
+            "title": "submitForm",
+            "hidden": false,
+            "cx": 26.98400146545557,
+            "cy": -0.3908017442798374
+          }
+        ],
+        "dots": []
+      }
+    },
+    {
+      "id": "/realworld/src/components/Settings.js#SettingsForm",
+      "label": "SettingsForm",
+      "type": "component",
+      "kind": "ClassComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 68.11516379806011,
+      "height": 68.11516379806011,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [
+        {
+          "icon": "warning",
+          "class": "warn",
+          "description": "This component almost exceeds at least one metric threshold. A solution might be to split it into smaller components."
+        }
+      ],
+      "x": 514.5393773633626,
+      "y": 227.93543741707688,
+      "dom": {
+        "mainR": 27.057581899030055,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "url(#diagonalHatch)",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "SettingsForm",
+        "iconTexts": [
+          "icon warn:warning"
+        ],
+        "previews": [
+          {
+            "cls": "function innerFunction special",
+            "title": "constructor",
+            "hidden": false,
+            "cx": 1.9017284130951965e-15,
+            "cy": -31.057581899030055
+          },
+          {
+            "cls": "function innerFunction special",
+            "title": "componentWillMount",
+            "hidden": false,
+            "cx": 6.940884083889932,
+            "cy": -30.27205842933319
+          },
+          {
+            "cls": "function innerFunction special",
+            "title": "componentWillReceiveProps",
+            "hidden": false,
+            "cx": 13.530663734339656,
+            "cy": -27.955223703687025
+          },
+          {
+            "cls": "function innerFunction jsx special",
+            "title": "render",
+            "hidden": false,
+            "cx": 19.435995126167416,
+            "cy": -24.224274743953757
+          },
+          {
+            "cls": "function innerFunction",
+            "title": "updateState",
+            "hidden": false,
+            "cx": 24.35815723082056,
+            "cy": -19.26794150223587
+          },
+          {
+            "cls": "function innerFunction",
+            "title": "submitForm",
+            "hidden": false,
+            "cx": 28.04816261151616,
+            "cy": -13.33693996135943
+          }
+        ],
+        "dots": []
+      }
+    },
+    {
+      "id": "/realworld/src/components/Settings.js#Settings",
+      "label": "Settings",
+      "type": "component",
+      "kind": "ClassComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 42.09641467760257,
+      "height": 42.09641467760257,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": 419.37652804437977,
+      "y": 127.93543741707686,
+      "dom": {
+        "mainR": 14.048207338801284,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "url(#diagonalHatch)",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "Settings",
+        "iconTexts": [],
+        "previews": [
+          {
+            "cls": "function innerFunction jsx special",
+            "title": "render",
+            "hidden": false,
+            "cx": 1.105133967390538e-15,
+            "cy": -18.048207338801284
+          }
+        ],
+        "dots": []
+      }
+    }
+  ],
+  "links": [
+    {
+      "source": "/realworld/src/components/App.js#App",
+      "target": "/realworld/src/components/Header.js#Header",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "/realworld/src/components/App.js#App",
+      "target": "/realworld/src/components/Home/index.js#Home",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "/realworld/src/components/App.js#App",
+      "target": "/realworld/src/components/Login.js#Login",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "/realworld/src/components/App.js#App",
+      "target": "/realworld/src/components/Register.js#Register",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "/realworld/src/components/App.js#App",
+      "target": "/realworld/src/components/Editor.js#Editor",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "/realworld/src/components/App.js#App",
+      "target": "/realworld/src/components/Article/index.js#Article",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "/realworld/src/components/App.js#App",
+      "target": "/realworld/src/components/Settings.js#Settings",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "/realworld/src/components/App.js#App",
+      "target": "/realworld/src/components/ProfileFavorites.js#ProfileFavorites",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "/realworld/src/components/App.js#App",
+      "target": "/realworld/src/components/Profile.js#Profile",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "/realworld/src/components/Article/ArticleMeta.js#ArticleMeta",
+      "target": "/realworld/src/components/Article/ArticleActions.js#ArticleActions",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "/realworld/src/components/Article/Comment.js#Comment",
+      "target": "/realworld/src/components/Article/DeleteButton.js#DeleteButton",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "/realworld/src/components/Article/CommentContainer.js#CommentContainer",
+      "target": "/realworld/src/components/Article/CommentInput.js#CommentInput",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "/realworld/src/components/Article/CommentContainer.js#CommentContainer",
+      "target": "/realworld/src/components/Article/CommentList.js#CommentList",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "/realworld/src/components/Article/CommentList.js#CommentList",
+      "target": "/realworld/src/components/Article/Comment.js#Comment",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "/realworld/src/components/Article/index.js#Article",
+      "target": "/realworld/src/components/Article/ArticleMeta.js#ArticleMeta",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "/realworld/src/components/Article/index.js#Article",
+      "target": "/realworld/src/components/Article/CommentContainer.js#CommentContainer",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "/realworld/src/components/ArticleList.js#ArticleList",
+      "target": "/realworld/src/components/ArticlePreview.js#ArticlePreview",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "/realworld/src/components/ArticleList.js#ArticleList",
+      "target": "/realworld/src/components/ListPagination.js#ListPagination",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "/realworld/src/components/Editor.js#Editor",
+      "target": "/realworld/src/components/ListErrors.js#ListErrors",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "/realworld/src/components/Header.js#Header",
+      "target": "/realworld/src/components/Header.js#LoggedOutView",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "/realworld/src/components/Header.js#Header",
+      "target": "/realworld/src/components/Header.js#LoggedInView",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "/realworld/src/components/Home/MainView.js#MainView",
+      "target": "/realworld/src/components/Home/MainView.js#YourFeedTab",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "/realworld/src/components/Home/MainView.js#MainView",
+      "target": "/realworld/src/components/Home/MainView.js#GlobalFeedTab",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "/realworld/src/components/Home/MainView.js#MainView",
+      "target": "/realworld/src/components/Home/MainView.js#TagFilterTab",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "/realworld/src/components/Home/MainView.js#MainView",
+      "target": "/realworld/src/components/ArticleList.js#ArticleList",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "/realworld/src/components/Home/index.js#Home",
+      "target": "/realworld/src/components/Home/Banner.js#Banner",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "/realworld/src/components/Home/index.js#Home",
+      "target": "/realworld/src/components/Home/MainView.js#MainView",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "/realworld/src/components/Home/index.js#Home",
+      "target": "/realworld/src/components/Home/Tags.js#Tags",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "/realworld/src/components/Login.js#Login",
+      "target": "/realworld/src/components/ListErrors.js#ListErrors",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "/realworld/src/components/Profile.js#Profile",
+      "target": "/realworld/src/components/Profile.js#EditProfileSettings",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "/realworld/src/components/Profile.js#Profile",
+      "target": "/realworld/src/components/Profile.js#FollowUserButton",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "/realworld/src/components/Profile.js#Profile",
+      "target": "/realworld/src/components/ArticleList.js#ArticleList",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "/realworld/src/components/Profile.js#Profile",
+      "target": "/realworld/src/components/ProfileFavorites.js#ProfileFavorites",
+      "inherits": true,
+      "dash": "4 2"
+    },
+    {
+      "source": "/realworld/src/components/Register.js#Register",
+      "target": "/realworld/src/components/ListErrors.js#ListErrors",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "/realworld/src/components/Settings.js#Settings",
+      "target": "/realworld/src/components/ListErrors.js#ListErrors",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "/realworld/src/components/Settings.js#Settings",
+      "target": "/realworld/src/components/Settings.js#SettingsForm",
+      "inherits": false,
+      "dash": null
+    }
+  ]
+}

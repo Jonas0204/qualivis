@@ -1,0 +1,455 @@
+{
+  "view": "component",
+  "url": "/component-graph/graph?id=%2Fmini%2Fsrc%2FApp.js%23App",
+  "container": [
+    158,
+    704
+  ],
+  "settings": null,
+  "hasClusterButton": true,
+  "nodes": [
+    {
+      "id": "App",
+      "label": null,
+      "type": "component",
+      "kind": "ClassComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 40.68428945128219,
+      "height": 40.68428945128219,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": 57.427318583283146,
+      "y": 171.47209321397193,
+      "dom": {
+        "mainR": 20.342144725641095,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "url(#diagonalHatch)",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "App",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "constructor",
+      "label": null,
+      "type": "innerFunction",
+      "kind": "ClassComponent",
+      "special": true,
+      "returnsJSX": false,
+      "isUsingThis": true,
+      "extends": false,
+      "width": 31.915382432114615,
+      "height": 31.915382432114615,
+      "warn": false,
+      "error": false,
+      "cluster": 0,
+      "icons": [],
+      "x": -83.84375959996525,
+      "y": 271.47209321397196,
+      "dom": {
+        "mainR": 15.957691216057308,
+        "mainClass": "circle-node innerFunction special",
+        "overlayClass": "circle-overlay innerFunction special",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "constructor",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "helper",
+      "label": null,
+      "type": "innerFunction",
+      "kind": "ClassComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": false,
+      "extends": false,
+      "width": 19.544100476116796,
+      "height": 19.544100476116796,
+      "warn": false,
+      "error": false,
+      "cluster": 1,
+      "icons": [
+        {
+          "icon": "content_cut",
+          "class": "warn",
+          "description": "This function has no this reference and should be extracted into a helper function."
+        }
+      ],
+      "x": -68.39223057209009,
+      "y": 502.4719404842,
+      "dom": {
+        "mainR": 9.772050238058398,
+        "mainClass": "circle-node innerFunction",
+        "overlayClass": "circle-overlay innerFunction",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "helper",
+        "iconTexts": [
+          "icon warn:content_cut"
+        ],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "componentDidMount",
+      "label": null,
+      "type": "innerFunction",
+      "kind": "ClassComponent",
+      "special": true,
+      "returnsJSX": false,
+      "isUsingThis": true,
+      "extends": false,
+      "width": 19.544100476116796,
+      "height": 19.544100476116796,
+      "warn": false,
+      "error": false,
+      "cluster": 2,
+      "icons": [],
+      "x": 16.15624040003475,
+      "y": 312.2197228495217,
+      "dom": {
+        "mainR": 9.772050238058398,
+        "mainClass": "circle-node innerFunction special",
+        "overlayClass": "circle-overlay innerFunction special",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "componentDidMount",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "componentWillMount",
+      "label": null,
+      "type": "innerFunction",
+      "kind": "ClassComponent",
+      "special": true,
+      "returnsJSX": false,
+      "isUsingThis": true,
+      "extends": false,
+      "width": 19.544100476116796,
+      "height": 19.544100476116796,
+      "warn": false,
+      "error": false,
+      "cluster": 3,
+      "icons": [
+        {
+          "icon": "report",
+          "class": "warn",
+          "description": "Deprecated React lifecycle method\n          (see <a href=\"https://reactjs.org/docs/react-component.html#legacy-lifecycle-methods\" target=\"_blank\">\n          https://reactjs.org/docs/react-component.html#legacy-lifecycle-methods</a>)"
+        }
+      ],
+      "x": 116.15624040003475,
+      "y": 271.47209321397196,
+      "dom": {
+        "mainR": 9.772050238058398,
+        "mainClass": "circle-node innerFunction special",
+        "overlayClass": "circle-overlay innerFunction special",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "componentWillMount",
+        "iconTexts": [
+          "icon warn:report"
+        ],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "handleIncrement",
+      "label": null,
+      "type": "innerFunction",
+      "kind": "ClassComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": true,
+      "extends": false,
+      "width": 29.854106607209232,
+      "height": 29.854106607209232,
+      "warn": false,
+      "error": false,
+      "cluster": 0,
+      "icons": [],
+      "x": 71.36276189478289,
+      "y": 371.47209321397196,
+      "dom": {
+        "mainR": 14.927053303604616,
+        "mainClass": "circle-node innerFunction",
+        "overlayClass": "circle-overlay innerFunction",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "handleIncrement",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "loadTodos",
+      "label": null,
+      "type": "innerFunction",
+      "kind": "ClassComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": true,
+      "extends": false,
+      "width": 22.56758334191025,
+      "height": 22.56758334191025,
+      "warn": false,
+      "error": false,
+      "cluster": 2,
+      "icons": [],
+      "x": -49.932340104173505,
+      "y": 412.2197228495217,
+      "dom": {
+        "mainR": 11.283791670955125,
+        "mainClass": "circle-node innerFunction",
+        "overlayClass": "circle-overlay innerFunction",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "loadTodos",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "computeTotal",
+      "label": null,
+      "type": "innerFunction",
+      "kind": "ClassComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": false,
+      "extends": false,
+      "width": 29.854106607209232,
+      "height": 29.854106607209232,
+      "warn": false,
+      "error": false,
+      "cluster": 4,
+      "icons": [
+        {
+          "icon": "warning",
+          "class": "error",
+          "description": "This function exceeds at least one metric threshold. A solution might be to split it into smaller functions."
+        },
+        {
+          "icon": "content_cut",
+          "class": "warn",
+          "description": "This function has no this reference and should be extracted into a helper function."
+        }
+      ],
+      "x": -68.39223057209009,
+      "y": 467.77283694253697,
+      "dom": {
+        "mainR": 14.927053303604616,
+        "mainClass": "circle-node innerFunction",
+        "overlayClass": "circle-overlay innerFunction",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "computeTotal",
+        "iconTexts": [
+          "icon error:warning",
+          "icon warn:content_cut"
+        ],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "emptyMethod",
+      "label": null,
+      "type": "innerFunction",
+      "kind": "ClassComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": false,
+      "extends": false,
+      "width": 11.283791670955125,
+      "height": 11.283791670955125,
+      "warn": false,
+      "error": false,
+      "cluster": 5,
+      "icons": [
+        {
+          "icon": "delete",
+          "class": "warn",
+          "description": "Empty functions should be removed"
+        }
+      ],
+      "x": -68.39223057209009,
+      "y": 527.8858865577361,
+      "dom": {
+        "mainR": 5.641895835477563,
+        "mainClass": "circle-node innerFunction",
+        "overlayClass": "circle-overlay innerFunction",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "emptyMethod",
+        "iconTexts": [
+          "icon warn:delete"
+        ],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "renderTitle",
+      "label": null,
+      "type": "innerFunction",
+      "kind": "ClassComponent",
+      "special": false,
+      "returnsJSX": true,
+      "isUsingThis": true,
+      "extends": false,
+      "width": 19.544100476116796,
+      "height": 19.544100476116796,
+      "warn": false,
+      "error": false,
+      "cluster": 6,
+      "icons": [
+        {
+          "icon": "content_cut",
+          "class": "warn",
+          "description": "Functions returning JSX should be components (except for the render function in class components)"
+        }
+      ],
+      "x": 288.5172980259684,
+      "y": 371.47209321397196,
+      "dom": {
+        "mainR": 9.772050238058398,
+        "mainClass": "circle-node innerFunction",
+        "overlayClass": "circle-overlay innerFunction",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": 6.772050238058398,
+        "innerClass": "inner-circle innerFunction",
+        "label": "renderTitle",
+        "iconTexts": [
+          "icon warn:content_cut"
+        ],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "render",
+      "label": null,
+      "type": "innerFunction",
+      "kind": "ClassComponent",
+      "special": true,
+      "returnsJSX": true,
+      "isUsingThis": true,
+      "extends": false,
+      "width": 33.218583234445866,
+      "height": 33.218583234445866,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": 216.15624040003473,
+      "y": 271.47209321397196,
+      "dom": {
+        "mainR": 16.609291617222933,
+        "mainClass": "circle-node innerFunction special",
+        "overlayClass": "circle-overlay innerFunction special",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": 13.609291617222933,
+        "innerClass": "inner-circle innerFunction special",
+        "label": "render",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    }
+  ],
+  "links": [
+    {
+      "source": "App",
+      "target": "constructor",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "constructor",
+      "target": "handleIncrement",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "App",
+      "target": "componentDidMount",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "componentDidMount",
+      "target": "loadTodos",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "App",
+      "target": "componentWillMount",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "App",
+      "target": "render",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "render",
+      "target": "renderTitle",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "render",
+      "target": "handleIncrement",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "render",
+      "target": "handleIncrement",
+      "inherits": false,
+      "dash": null
+    }
+  ]
+}

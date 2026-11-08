@@ -1,0 +1,193 @@
+{
+  "view": "component",
+  "url": "/component-graph/graph?id=%2Frealworld%2Fsrc%2Fcomponents%2FArticle%2FCommentInput.js%23CommentInput",
+  "container": [
+    158,
+    704
+  ],
+  "settings": null,
+  "hasClusterButton": false,
+  "nodes": [
+    {
+      "id": "CommentInput",
+      "label": null,
+      "type": "component",
+      "kind": "ClassComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 34.225434710991614,
+      "height": 34.225434710991614,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": 28.96503774269526,
+      "y": 232,
+      "dom": {
+        "mainR": 17.112717355495807,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "url(#diagonalHatch)",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "CommentInput",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "constructor",
+      "label": null,
+      "type": "innerFunction",
+      "kind": "ClassComponent",
+      "special": true,
+      "returnsJSX": false,
+      "isUsingThis": true,
+      "extends": false,
+      "width": 47.873073648171925,
+      "height": 47.873073648171925,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": -38.591912018947504,
+      "y": 332,
+      "dom": {
+        "mainR": 23.936536824085962,
+        "mainClass": "circle-node innerFunction special",
+        "overlayClass": "circle-overlay innerFunction special",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "constructor",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "setBody",
+      "label": null,
+      "type": "innerFunction",
+      "kind": "ClassComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": true,
+      "extends": false,
+      "width": 19.544100476116796,
+      "height": 19.544100476116796,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": 78.29646813984593,
+      "y": 432,
+      "dom": {
+        "mainR": 9.772050238058398,
+        "mainClass": "circle-node innerFunction",
+        "overlayClass": "circle-overlay innerFunction",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "setBody",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "createComment",
+      "label": null,
+      "type": "innerFunction",
+      "kind": "ClassComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": true,
+      "extends": false,
+      "width": 29.854106607209232,
+      "height": 29.854106607209232,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": 202.69670371258093,
+      "y": 432,
+      "dom": {
+        "mainR": 14.927053303604616,
+        "mainClass": "circle-node innerFunction",
+        "overlayClass": "circle-overlay innerFunction",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "createComment",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "render",
+      "label": null,
+      "type": "innerFunction",
+      "kind": "ClassComponent",
+      "special": true,
+      "returnsJSX": true,
+      "isUsingThis": true,
+      "extends": false,
+      "width": 46.06588659617807,
+      "height": 46.06588659617807,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": 123.63370242382544,
+      "y": 332,
+      "dom": {
+        "mainR": 23.032943298089034,
+        "mainClass": "circle-node innerFunction special",
+        "overlayClass": "circle-overlay innerFunction special",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": 20.032943298089034,
+        "innerClass": "inner-circle innerFunction special",
+        "label": "render",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    }
+  ],
+  "links": [
+    {
+      "source": "CommentInput",
+      "target": "constructor",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "CommentInput",
+      "target": "render",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "render",
+      "target": "createComment",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "render",
+      "target": "setBody",
+      "inherits": false,
+      "dash": null
+    }
+  ]
+}

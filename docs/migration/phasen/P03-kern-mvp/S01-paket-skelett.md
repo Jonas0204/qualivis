@@ -142,8 +142,11 @@ packages/core/src/model/model.test.ts
    - `warningThreshold === 0.8`, `sizeConstant === 16000`.
    - `reactMethods[0] === 'constructor'`, letztes Element `'render'`, Länge 16.
    - `defaultSettings` entspricht der Tabelle im Funktionsinventar §7 (+ `text: true`, `fullScreen: false`).
-9. Nutzer bitten: `pnpm install` (neue Abhängigkeiten). Danach in der Ausgabe prüfen, dass beide
-   Patches angewendet wurden (`pnpm-lock.yaml` → Abschnitt `patchedDependencies` mit 2 Hashes).
+9. In `pnpm-workspace.yaml` den Block `patchedDependencies` einkommentieren (bis hierher
+   auskommentiert, weil pnpm Patches für nicht installierte Pakete ablehnt).
+10. Nach Nachfrage beim Nutzer `pnpm install` ausführen (neue Abhängigkeiten, README R4). Danach in
+   der Ausgabe prüfen, dass beide Patches angewendet wurden (`pnpm-lock.yaml` → Abschnitt
+   `patchedDependencies` mit 2 Hashes).
 
 ## Akzeptanzkriterien
 - [ ] `pnpm --filter @qualivis/core typecheck` grün.

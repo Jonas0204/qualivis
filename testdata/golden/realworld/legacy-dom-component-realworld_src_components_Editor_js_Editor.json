@@ -1,0 +1,381 @@
+{
+  "view": "component",
+  "url": "/component-graph/graph?id=%2Frealworld%2Fsrc%2Fcomponents%2FEditor.js%23Editor",
+  "container": [
+    158,
+    704
+  ],
+  "settings": null,
+  "hasClusterButton": false,
+  "nodes": [
+    {
+      "id": "Editor",
+      "label": null,
+      "type": "component",
+      "kind": "ClassComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 60.555180528483845,
+      "height": 60.555180528483845,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [
+        {
+          "icon": "warning",
+          "class": "error",
+          "description": "This component exceeds at least one metric threshold. A solution might be to split it into smaller components."
+        }
+      ],
+      "x": -7.197416838462696,
+      "y": 209.01341311032115,
+      "dom": {
+        "mainR": 30.277590264241923,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "url(#diagonalHatch)",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "Editor",
+        "iconTexts": [
+          "icon error:warning"
+        ],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "constructor",
+      "label": null,
+      "type": "innerFunction",
+      "kind": "ClassComponent",
+      "special": true,
+      "returnsJSX": false,
+      "isUsingThis": true,
+      "extends": false,
+      "width": 69.55796338302048,
+      "height": 69.55796338302048,
+      "warn": true,
+      "error": false,
+      "cluster": null,
+      "icons": [
+        {
+          "icon": "warning",
+          "class": "warn",
+          "description": "This function almost exceeds at least one metric threshold. A solution might be to split it into smaller functions."
+        }
+      ],
+      "x": -197.0125756911137,
+      "y": 309.0134131103211,
+      "dom": {
+        "mainR": 34.77898169151024,
+        "mainClass": "circle-node innerFunction special",
+        "overlayClass": "circle-overlay innerFunction special",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "constructor",
+        "iconTexts": [
+          "icon warn:warning"
+        ],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "watchForEnter",
+      "label": null,
+      "type": "innerFunction",
+      "kind": "ClassComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": true,
+      "extends": false,
+      "width": 27.63953195770684,
+      "height": 27.63953195770684,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": 242.31369781918045,
+      "y": 462.967601179419,
+      "dom": {
+        "mainR": 13.81976597885342,
+        "mainClass": "circle-node innerFunction",
+        "overlayClass": "circle-overlay innerFunction",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "watchForEnter",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "removeTagHandler",
+      "label": null,
+      "type": "innerFunction",
+      "kind": "ClassComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": true,
+      "extends": false,
+      "width": 19.544100476116796,
+      "height": 19.544100476116796,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": 322.80921783499565,
+      "y": 448.2466546088749,
+      "dom": {
+        "mainR": 9.772050238058398,
+        "mainClass": "circle-node innerFunction",
+        "overlayClass": "circle-overlay innerFunction",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "removeTagHandler",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "submitForm",
+      "label": null,
+      "type": "innerFunction",
+      "kind": "ClassComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": true,
+      "extends": false,
+      "width": 45.1351666838205,
+      "height": 45.1351666838205,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": 138.1373796398552,
+      "y": 463.47202405122545,
+      "dom": {
+        "mainR": 22.56758334191025,
+        "mainClass": "circle-node innerFunction",
+        "overlayClass": "circle-overlay innerFunction",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "submitForm",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "componentWillReceiveProps",
+      "label": null,
+      "type": "innerFunction",
+      "kind": "ClassComponent",
+      "special": true,
+      "returnsJSX": false,
+      "isUsingThis": true,
+      "extends": false,
+      "width": 33.851375012865375,
+      "height": 33.851375012865375,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [
+        {
+          "icon": "report",
+          "class": "warn",
+          "description": "Deprecated React lifecycle method\n          (see <a href=\"https://reactjs.org/docs/react-component.html#legacy-lifecycle-methods\" target=\"_blank\">\n          https://reactjs.org/docs/react-component.html#legacy-lifecycle-methods</a>)"
+        }
+      ],
+      "x": 2.987424308886299,
+      "y": 309.0134131103211,
+      "dom": {
+        "mainR": 16.925687506432688,
+        "mainClass": "circle-node innerFunction special",
+        "overlayClass": "circle-overlay innerFunction special",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "componentWillReceiveProps",
+        "iconTexts": [
+          "icon warn:report"
+        ],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "componentWillMount",
+      "label": null,
+      "type": "innerFunction",
+      "kind": "ClassComponent",
+      "special": true,
+      "returnsJSX": false,
+      "isUsingThis": true,
+      "extends": false,
+      "width": 27.63953195770684,
+      "height": 27.63953195770684,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [
+        {
+          "icon": "report",
+          "class": "warn",
+          "description": "Deprecated React lifecycle method\n          (see <a href=\"https://reactjs.org/docs/react-component.html#legacy-lifecycle-methods\" target=\"_blank\">\n          https://reactjs.org/docs/react-component.html#legacy-lifecycle-methods</a>)"
+        }
+      ],
+      "x": 102.9874243088863,
+      "y": 309.0134131103211,
+      "dom": {
+        "mainR": 13.81976597885342,
+        "mainClass": "circle-node innerFunction special",
+        "overlayClass": "circle-overlay innerFunction special",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "componentWillMount",
+        "iconTexts": [
+          "icon warn:report"
+        ],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "componentWillUnmount",
+      "label": null,
+      "type": "innerFunction",
+      "kind": "ClassComponent",
+      "special": true,
+      "returnsJSX": false,
+      "isUsingThis": true,
+      "extends": false,
+      "width": 19.544100476116796,
+      "height": 19.544100476116796,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": -97.0125756911137,
+      "y": 309.0134131103211,
+      "dom": {
+        "mainR": 9.772050238058398,
+        "mainClass": "circle-node innerFunction special",
+        "overlayClass": "circle-overlay innerFunction special",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "componentWillUnmount",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "render",
+      "label": null,
+      "type": "innerFunction",
+      "kind": "ClassComponent",
+      "special": true,
+      "returnsJSX": true,
+      "isUsingThis": true,
+      "extends": false,
+      "width": 83.4288689716309,
+      "height": 83.4288689716309,
+      "warn": false,
+      "error": true,
+      "cluster": null,
+      "icons": [
+        {
+          "icon": "warning",
+          "class": "error",
+          "description": "This function exceeds at least one metric threshold. A solution might be to split it into smaller functions."
+        }
+      ],
+      "x": 202.9874243088863,
+      "y": 348.2466546088749,
+      "dom": {
+        "mainR": 41.71443448581545,
+        "mainClass": "circle-node innerFunction special",
+        "overlayClass": "circle-overlay innerFunction special",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": 38.71443448581545,
+        "innerClass": "inner-circle innerFunction special",
+        "label": "render",
+        "iconTexts": [
+          "icon error:warning"
+        ],
+        "previews": [],
+        "dots": []
+      }
+    }
+  ],
+  "links": [
+    {
+      "source": "Editor",
+      "target": "constructor",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "Editor",
+      "target": "componentWillReceiveProps",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "Editor",
+      "target": "componentWillMount",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "Editor",
+      "target": "componentWillUnmount",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "Editor",
+      "target": "render",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "render",
+      "target": "watchForEnter",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "render",
+      "target": "removeTagHandler",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "render",
+      "target": "submitForm",
+      "inherits": false,
+      "dash": null
+    }
+  ]
+}

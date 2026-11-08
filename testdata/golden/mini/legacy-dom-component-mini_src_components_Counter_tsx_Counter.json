@@ -1,0 +1,164 @@
+{
+  "view": "component",
+  "url": "/component-graph/graph?id=%2Fmini%2Fsrc%2Fcomponents%2FCounter.tsx%23Counter",
+  "container": [
+    158,
+    704
+  ],
+  "settings": null,
+  "hasClusterButton": true,
+  "nodes": [
+    {
+      "id": "Counter#8",
+      "label": "Counter",
+      "type": "component",
+      "kind": "FunctionComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 24.201036973199617,
+      "height": 24.201036973199617,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": 79.0041482966296,
+      "y": 277,
+      "dom": {
+        "mainR": 12.100518486599809,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "Counter",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "handleClick#11",
+      "label": "handleClick",
+      "type": "innerFunction",
+      "kind": "FunctionComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 22.56758334191025,
+      "height": 22.56758334191025,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": -12.995842651783214,
+      "y": 377,
+      "dom": {
+        "mainR": 11.283791670955125,
+        "mainClass": "circle-node innerFunction",
+        "overlayClass": "circle-overlay innerFunction",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "handleClick",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "formatValue#16",
+      "label": "formatValue",
+      "type": "innerFunction",
+      "kind": "FunctionComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 27.63953195770684,
+      "height": 27.63953195770684,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": 78.99135737414967,
+      "y": 377,
+      "dom": {
+        "mainR": 13.81976597885342,
+        "mainClass": "circle-node innerFunction",
+        "overlayClass": "circle-overlay innerFunction",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "formatValue",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "renderBadge#23",
+      "label": "renderBadge",
+      "type": "innerFunction",
+      "kind": "FunctionComponent",
+      "special": false,
+      "returnsJSX": true,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 11.283791670955125,
+      "height": 11.283791670955125,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [
+        {
+          "icon": "content_cut",
+          "class": "warn",
+          "description": "Functions returning JSX should be components (except for the render function in class components)"
+        }
+      ],
+      "x": 171.00033698100395,
+      "y": 377,
+      "dom": {
+        "mainR": 5.641895835477563,
+        "mainClass": "circle-node innerFunction",
+        "overlayClass": "circle-overlay innerFunction",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": 2.6418958354775626,
+        "innerClass": "inner-circle innerFunction",
+        "label": "renderBadge",
+        "iconTexts": [
+          "icon warn:content_cut"
+        ],
+        "previews": [],
+        "dots": []
+      }
+    }
+  ],
+  "links": [
+    {
+      "source": "Counter#8",
+      "target": "handleClick#11",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "Counter#8",
+      "target": "formatValue#16",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "Counter#8",
+      "target": "renderBadge#23",
+      "inherits": false,
+      "dash": null
+    }
+  ]
+}

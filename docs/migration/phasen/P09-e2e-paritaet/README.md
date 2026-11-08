@@ -23,15 +23,15 @@ vergleicht. Ein Sichtvergleichsbericht unterstützt die menschliche Abnahme (G5)
 
 ## S02 – Automatisierte Legacy-Erfassung (M)
 - `e2e/capture/capture-legacy.spec.ts` (eigenes Projekt `capture`, nicht im normalen Lauf): öffnet den
-  Legacy-Build, setzt den Ausgangszustand (A2, Schritt 2), lädt `tools/legacy/capture.browser.js` per
+  Legacy-Build, setzt den Ausgangszustand (`tools/legacy/README.md`, Schritt 2), lädt `tools/legacy/capture.browser.js` per
   `page.addScriptTag`, ruft `qvCapture(fixture)` für alle Fixtures auf.
 - Ergebnis muss **identisch** zu den manuell erfassten Goldens sein (`git diff testdata/golden` leer);
   sonst Ursache klären, nicht überschreiben.
 
 ## S03 – Paritätstest DOM-Semantik (M)
 - Die neue App bekommt dieselbe Ladefunktion: `e2e/support/loadFixture.ts` erzeugt einen synthetischen
-  Drop (wie A2) bzw. nutzt `setInputFiles` auf dem versteckten Input (Ordner-Upload).
-- Ein Extraktor liest aus der **neuen** App dieselbe Struktur wie `snapshot()` in A2 – über
+  Drop (wie `capture.browser.js`) bzw. nutzt `setInputFiles` auf dem versteckten Input (Ordner-Upload).
+- Ein Extraktor liest aus der **neuen** App dieselbe Struktur wie `snapshot()` in `tools/legacy/capture.browser.js` – über
   `data-*`-Attribute statt `__data__` (z. B. `data-node-id`, `data-width`, `data-warn`), die `GraphNode`
   **nur** setzt, wenn `import.meta.env.MODE !== 'production'` oder ein Testflag aktiv ist.
 - Vergleich mit `legacy-dom-*.json` nach den G2-Regeln (Positionen ausgenommen); Panels nach G4.

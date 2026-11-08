@@ -1,0 +1,4 @@
+* text=auto eol=lf
+*.png binary
+# Fixtures and golden data must stay byte-identical (line numbers feed into metrics)
+testdata/** -text

@@ -1,0 +1,299 @@
+{
+  "view": "component",
+  "url": "/component-graph/graph?id=%2Frealworld%2Fsrc%2Fcomponents%2FSettings.js%23SettingsForm",
+  "container": [
+    158,
+    704
+  ],
+  "settings": null,
+  "hasClusterButton": false,
+  "nodes": [
+    {
+      "id": "SettingsForm",
+      "label": null,
+      "type": "component",
+      "kind": "ClassComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 54.1151637980601,
+      "height": 54.1151637980601,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [
+        {
+          "icon": "warning",
+          "class": "warn",
+          "description": "This component almost exceeds at least one metric threshold. A solution might be to split it into smaller components."
+        }
+      ],
+      "x": 16.61207926506064,
+      "y": 235.5527036326021,
+      "dom": {
+        "mainR": 27.05758189903005,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "url(#diagonalHatch)",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "SettingsForm",
+        "iconTexts": [
+          "icon warn:warning"
+        ],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "constructor",
+      "label": null,
+      "type": "innerFunction",
+      "kind": "ClassComponent",
+      "special": true,
+      "returnsJSX": false,
+      "isUsingThis": true,
+      "extends": false,
+      "width": 59.708213214418464,
+      "height": 59.708213214418464,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": -125.5899307393825,
+      "y": 335.55270363260206,
+      "dom": {
+        "mainR": 29.854106607209232,
+        "mainClass": "circle-node innerFunction special",
+        "overlayClass": "circle-overlay innerFunction special",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "constructor",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "updateState",
+      "label": null,
+      "type": "innerFunction",
+      "kind": "ClassComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": true,
+      "extends": false,
+      "width": 25.2313252202016,
+      "height": 25.2313252202016,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": 160.7986780541426,
+      "y": 450.68377820438775,
+      "dom": {
+        "mainR": 12.6156626101008,
+        "mainClass": "circle-node innerFunction",
+        "overlayClass": "circle-overlay innerFunction",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "updateState",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "submitForm",
+      "label": null,
+      "type": "innerFunction",
+      "kind": "ClassComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": true,
+      "extends": false,
+      "width": 35.682482323055424,
+      "height": 35.682482323055424,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": 272.0135322766601,
+      "y": 435.55270363260206,
+      "dom": {
+        "mainR": 17.841241161527712,
+        "mainClass": "circle-node innerFunction",
+        "overlayClass": "circle-overlay innerFunction",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "submitForm",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "componentWillMount",
+      "label": null,
+      "type": "innerFunction",
+      "kind": "ClassComponent",
+      "special": true,
+      "returnsJSX": false,
+      "isUsingThis": true,
+      "extends": false,
+      "width": 35.682482323055424,
+      "height": 35.682482323055424,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [
+        {
+          "icon": "report",
+          "class": "warn",
+          "description": "Deprecated React lifecycle method\n          (see <a href=\"https://reactjs.org/docs/react-component.html#legacy-lifecycle-methods\" target=\"_blank\">\n          https://reactjs.org/docs/react-component.html#legacy-lifecycle-methods</a>)"
+        }
+      ],
+      "x": 74.41006926061752,
+      "y": 335.55270363260206,
+      "dom": {
+        "mainR": 17.841241161527712,
+        "mainClass": "circle-node innerFunction special",
+        "overlayClass": "circle-overlay innerFunction special",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "componentWillMount",
+        "iconTexts": [
+          "icon warn:report"
+        ],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "componentWillReceiveProps",
+      "label": null,
+      "type": "innerFunction",
+      "kind": "ClassComponent",
+      "special": true,
+      "returnsJSX": false,
+      "isUsingThis": true,
+      "extends": false,
+      "width": 35.682482323055424,
+      "height": 35.682482323055424,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [
+        {
+          "icon": "report",
+          "class": "warn",
+          "description": "Deprecated React lifecycle method\n          (see <a href=\"https://reactjs.org/docs/react-component.html#legacy-lifecycle-methods\" target=\"_blank\">\n          https://reactjs.org/docs/react-component.html#legacy-lifecycle-methods</a>)"
+        }
+      ],
+      "x": -25.589930739382485,
+      "y": 335.55270363260206,
+      "dom": {
+        "mainR": 17.841241161527712,
+        "mainClass": "circle-node innerFunction special",
+        "overlayClass": "circle-overlay innerFunction special",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "componentWillReceiveProps",
+        "iconTexts": [
+          "icon warn:report"
+        ],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "render",
+      "label": null,
+      "type": "innerFunction",
+      "kind": "ClassComponent",
+      "special": true,
+      "returnsJSX": true,
+      "isUsingThis": true,
+      "extends": false,
+      "width": 72.54463075632825,
+      "height": 72.54463075632825,
+      "warn": false,
+      "error": true,
+      "cluster": null,
+      "icons": [
+        {
+          "icon": "warning",
+          "class": "error",
+          "description": "This function exceeds at least one metric threshold. A solution might be to split it into smaller functions."
+        }
+      ],
+      "x": 180.34550262228404,
+      "y": 335.55270363260206,
+      "dom": {
+        "mainR": 36.27231537816412,
+        "mainClass": "circle-node innerFunction special",
+        "overlayClass": "circle-overlay innerFunction special",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": 33.27231537816412,
+        "innerClass": "inner-circle innerFunction special",
+        "label": "render",
+        "iconTexts": [
+          "icon error:warning"
+        ],
+        "previews": [],
+        "dots": []
+      }
+    }
+  ],
+  "links": [
+    {
+      "source": "SettingsForm",
+      "target": "constructor",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "SettingsForm",
+      "target": "componentWillMount",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "SettingsForm",
+      "target": "componentWillReceiveProps",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "SettingsForm",
+      "target": "render",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "render",
+      "target": "submitForm",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "render",
+      "target": "updateState",
+      "inherits": false,
+      "dash": null
+    }
+  ]
+}

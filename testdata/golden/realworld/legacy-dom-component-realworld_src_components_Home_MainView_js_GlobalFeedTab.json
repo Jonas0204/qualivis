@@ -1,0 +1,82 @@
+{
+  "view": "component",
+  "url": "/component-graph/graph?id=%2Frealworld%2Fsrc%2Fcomponents%2FHome%2FMainView.js%23GlobalFeedTab",
+  "container": [
+    158,
+    704
+  ],
+  "settings": null,
+  "hasClusterButton": false,
+  "nodes": [
+    {
+      "id": "GlobalFeedTab#27",
+      "label": "GlobalFeedTab",
+      "type": "component",
+      "kind": "FunctionComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 20.185060176161283,
+      "height": 20.185060176161283,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": 79.02090103046659,
+      "y": 302,
+      "dom": {
+        "mainR": 10.092530088080641,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "GlobalFeedTab",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "clickHandler#28",
+      "label": "clickHandler",
+      "type": "innerFunction",
+      "kind": "FunctionComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 22.56758334191025,
+      "height": 22.56758334191025,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": 78.97909896953341,
+      "y": 402,
+      "dom": {
+        "mainR": 11.283791670955125,
+        "mainClass": "circle-node innerFunction",
+        "overlayClass": "circle-overlay innerFunction",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "clickHandler",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    }
+  ],
+  "links": [
+    {
+      "source": "GlobalFeedTab#27",
+      "target": "clickHandler#28",
+      "inherits": false,
+      "dash": null
+    }
+  ]
+}

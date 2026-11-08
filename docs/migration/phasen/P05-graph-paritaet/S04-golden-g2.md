@@ -8,7 +8,7 @@ Breite, warn/error, Icons, Cluster, Vorschaukreise, „...“, Kantenliste.
 
 ## Kontext
 - `00-grundlagen/06-teststrategie.md` §3 (G2-Vergleichsregeln)
-- Goldens: `legacy-dom-app.json`, `legacy-dom-component-*.json` (Format siehe `anhang/A2`)
+- Goldens: `legacy-dom-app.json`, `legacy-dom-component-*.json` (Format: `snapshot()` in `tools/legacy/capture.browser.js`)
 
 ## Dateien
 `packages/core/src/rules/viewModel.ts` (+ Test), `packages/core/test/golden/rules.golden.test.ts`.

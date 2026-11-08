@@ -1,0 +1,320 @@
+{
+  "view": "component",
+  "url": "/component-graph/graph?id=%2Frealworld%2Fsrc%2Fcomponents%2FRegister.js%23Register",
+  "container": [
+    158,
+    704
+  ],
+  "settings": null,
+  "hasClusterButton": false,
+  "nodes": [
+    {
+      "id": "Register",
+      "label": null,
+      "type": "component",
+      "kind": "ClassComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": null,
+      "extends": false,
+      "width": 45.97366250648702,
+      "height": 45.97366250648702,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [
+        {
+          "icon": "warning",
+          "class": "error",
+          "description": "This component exceeds at least one metric threshold. A solution might be to split it into smaller components."
+        }
+      ],
+      "x": -14.138642828221961,
+      "y": 194.03023409508492,
+      "dom": {
+        "mainR": 22.98683125324351,
+        "mainClass": "circle-node component",
+        "overlayClass": "circle-overlay component",
+        "overlayFill": "url(#diagonalHatch)",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "Register",
+        "iconTexts": [
+          "icon error:warning"
+        ],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "constructor",
+      "label": null,
+      "type": "innerFunction",
+      "kind": "ClassComponent",
+      "special": true,
+      "returnsJSX": false,
+      "isUsingThis": true,
+      "extends": false,
+      "width": 35.682482323055424,
+      "height": 35.682482323055424,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": -122.57301415795722,
+      "y": 294.03023409508495,
+      "dom": {
+        "mainR": 17.841241161527712,
+        "mainClass": "circle-node innerFunction special",
+        "overlayClass": "circle-overlay innerFunction special",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "constructor",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "changeEmail",
+      "label": null,
+      "type": "innerFunction",
+      "kind": "ClassComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": true,
+      "extends": false,
+      "width": 11.283791670955125,
+      "height": 11.283791670955125,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": 46.61675003901721,
+      "y": 415.47664662247763,
+      "dom": {
+        "mainR": 5.641895835477563,
+        "mainClass": "circle-node innerFunction",
+        "overlayClass": "circle-overlay innerFunction",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "changeEmail",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "changePassword",
+      "label": null,
+      "type": "innerFunction",
+      "kind": "ClassComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": true,
+      "extends": false,
+      "width": 11.283791670955125,
+      "height": 11.283791670955125,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": 206.94069423461636,
+      "y": 415.47664662247763,
+      "dom": {
+        "mainR": 5.641895835477563,
+        "mainClass": "circle-node innerFunction",
+        "overlayClass": "circle-overlay innerFunction",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "changePassword",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "changeUsername",
+      "label": null,
+      "type": "innerFunction",
+      "kind": "ClassComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": true,
+      "extends": false,
+      "width": 11.283791670955125,
+      "height": 11.283791670955125,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": 124.18486948651072,
+      "y": 472.0027112248346,
+      "dom": {
+        "mainR": 5.641895835477563,
+        "mainClass": "circle-node innerFunction",
+        "overlayClass": "circle-overlay innerFunction",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "changeUsername",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "submitForm",
+      "label": null,
+      "type": "innerFunction",
+      "kind": "ClassComponent",
+      "special": false,
+      "returnsJSX": false,
+      "isUsingThis": true,
+      "extends": false,
+      "width": 22.56758334191025,
+      "height": 22.56758334191025,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": 275.78486481979263,
+      "y": 415.47664662247763,
+      "dom": {
+        "mainR": 11.283791670955125,
+        "mainClass": "circle-node innerFunction",
+        "overlayClass": "circle-overlay innerFunction",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "submitForm",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "componentWillUnmount",
+      "label": null,
+      "type": "innerFunction",
+      "kind": "ClassComponent",
+      "special": true,
+      "returnsJSX": false,
+      "isUsingThis": true,
+      "extends": false,
+      "width": 19.544100476116796,
+      "height": 19.544100476116796,
+      "warn": false,
+      "error": false,
+      "cluster": null,
+      "icons": [],
+      "x": -22.573014157957214,
+      "y": 294.03023409508495,
+      "dom": {
+        "mainR": 9.772050238058398,
+        "mainClass": "circle-node innerFunction special",
+        "overlayClass": "circle-overlay innerFunction special",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": null,
+        "innerClass": null,
+        "label": "componentWillUnmount",
+        "iconTexts": [],
+        "previews": [],
+        "dots": []
+      }
+    },
+    {
+      "id": "render",
+      "label": null,
+      "type": "innerFunction",
+      "kind": "ClassComponent",
+      "special": true,
+      "returnsJSX": true,
+      "isUsingThis": true,
+      "extends": false,
+      "width": 74.84820637019111,
+      "height": 74.84820637019111,
+      "warn": false,
+      "error": true,
+      "cluster": null,
+      "icons": [
+        {
+          "icon": "warning",
+          "class": "error",
+          "description": "This function exceeds at least one metric threshold. A solution might be to split it into smaller functions."
+        }
+      ],
+      "x": 137.75749256419942,
+      "y": 315.47664662247763,
+      "dom": {
+        "mainR": 37.424103185095554,
+        "mainClass": "circle-node innerFunction special",
+        "overlayClass": "circle-overlay innerFunction special",
+        "overlayFill": "transparent",
+        "overlayStrokeWidth": "1",
+        "innerR": 34.424103185095554,
+        "innerClass": "inner-circle innerFunction special",
+        "label": "render",
+        "iconTexts": [
+          "icon error:warning"
+        ],
+        "previews": [],
+        "dots": []
+      }
+    }
+  ],
+  "links": [
+    {
+      "source": "Register",
+      "target": "constructor",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "Register",
+      "target": "componentWillUnmount",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "Register",
+      "target": "render",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "render",
+      "target": "submitForm",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "render",
+      "target": "changeUsername",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "render",
+      "target": "changeEmail",
+      "inherits": false,
+      "dash": null
+    },
+    {
+      "source": "render",
+      "target": "changePassword",
+      "inherits": false,
+      "dash": null
+    }
+  ]
+}

@@ -9,7 +9,7 @@ ausgewählten Elements – textgleich zum Altsystem (Golden G4).
 ## Kontext
 - Funktionsinventar Q1–Q5; Stil-Referenz §1 (Balkenfarben), §2, §3
 - Altcode: `components/code-quality/*`, `quality-metric/*`, `icon-description/*`
-- Goldens: `legacy-panels-app.json`, `legacy-panels-component-*.json` (Format `anhang/A2`)
+- Goldens: `legacy-panels-app.json`, `legacy-panels-component-*.json` (Format: `readPanel()` in `tools/legacy/capture.browser.js`)
 
 ## Dateien
 `packages/core/src/rules/metricRows.ts` (+ Test), `apps/web/src/features/code-quality/CodeQualityPanel.tsx`,

@@ -28,7 +28,9 @@ Vollbild-Wechsel → nur „Zoom to fit“).
    dem nächsten Frame; jede andere Änderung → Graph neu aufbauen und Layout neu starten
    (`firstSimulation` zurücksetzen → `autoZoom` greift erneut).
 2. Fehlende Wirkungen nachziehen (falls in P05 nur mit Konstanten gearbeitet wurde).
-3. Je Zeile der Tabelle ein Verhaltenstest (jsdom, Fake-Engine).
+3. Je Zeile der Tabelle ein Verhaltenstest (jsdom, Fake-Engine; Einstellung per
+   `initial(settingsAtom, { ...defaultSettings, <schalter>: … })`, Änderung während des Tests per
+   `act(() => store.set(settingsAtom, …))`).
 
 ## Akzeptanzkriterien
 - [ ] Alle Zeilen der Tabelle getestet und im Browser nachvollzogen.

@@ -6,7 +6,7 @@ Datum der Bestätigung durch den Nutzer.
 
 | Meilenstein | Status | Bestätigt am |
 |---|---|---|
-| M0 Fundament | ☐ | |
+| M0 Fundament | ☑ (08.11.2026) | mit dem Merge des PR |
 | M1 Erstes Produkt | ☐ | |
 | M2 Graph-Parität | ☐ | |
 | M3 Analyse-UI | ☐ | |
@@ -16,17 +16,35 @@ Datum der Bestätigung durch den Nutzer.
 | M7 Kern als Paket + CLI | ☐ | |
 | M8 Abschluss | ☐ | |
 
+## Phasen (Branch und Pull Request)
+
+Ablauf: README, „Branches und Pull Requests“. Ziel aller PRs: `rewrite/react`.
+
+| Phase | Branch | PR | Status |
+|---|---|---|---|
+| Plan | `rewrite/react` (direkt, vor Einführung der PRs) | – | ☑ |
+| P01 Fundament + P02 Golden-Infrastruktur | `rewrite/m0-fundament` (beide zusammen) | (Link nach dem Anlegen) | ☑ |
+| P03 Kern-MVP | `rewrite/p03-kern-mvp` | | ☐ |
+| P04 Web-MVP | `rewrite/p04-web-mvp` | | ☐ |
+| P05 Graph-Parität | `rewrite/p05-graph-paritaet` | | ☐ |
+| P06 Panels, Navigation | `rewrite/p06-panels-navigation` | | ☐ |
+| P07 Einstellungen, Persistenz | `rewrite/p07-einstellungen-persistenz` | | ☐ |
+| P08 Härtung | `rewrite/p08-haertung` | | ☐ |
+| P09 E2E-Parität | `rewrite/p09-e2e-paritaet` | | ☐ |
+| P10 Kern-Paket, CLI | `rewrite/p10-core-paket-cli` | | ☐ |
+| P11 Abschluss | `rewrite/p11-abschluss` | | ☐ |
+
 ## Schritte
 
 | Schritt | Titel | Status | Datum | Notiz |
 |---|---|---|---|---|
 | P01-S01 | Arbeitsstand sichern, Branch | ☑ | 07.11.2026 | Branch `rewrite/react`, Plan committet, lokale `CLAUDE.md` angelegt |
-| P01-S02 | Angular nach `legacy/angular/` | ☐ | | |
-| P01-S03 | Workspace-Grundgerüst | ☐ | | |
-| P01-S04 | Installation, Checks grün | ☐ | | |
-| P02-S01 | Legacy-Build lokal | ☐ | | |
-| P02-S02 | Fixtures `mini`, `realworld` | ☐ | | |
-| P02-S03 | Goldens erfassen, Diff-Werkzeug | ☐ | | |
+| P01-S02 | Angular nach `legacy/angular/` | ☑ | 08.11.2026 | `git mv`; `.editorconfig` und alte `.gitignore` zusätzlich 1:1 kopiert; Karte entfernt |
+| P01-S03 | Workspace-Grundgerüst | ☑ | 08.11.2026 | `patchedDependencies` bis P03-S01 auskommentiert; Biome ohne `*.md`; Karte entfernt |
+| P01-S04 | Installation, Checks grün | ☑ | 08.11.2026 | `pnpm install` (41 Pakete), `pnpm check` grün (3 Testdateien, 12 Tests); Karte entfernt |
+| P02-S01 | Legacy-Build lokal | ☑ | 08.11.2026 | `tar` mit relativen Pfaden (GNU-tar unter Git Bash); Server-Tests mit `QV_*`; Karte entfernt |
+| P02-S02 | Fixtures `mini`, `realworld` | ☑ | 08.11.2026 | `mini` = A3 (8/8 identisch), `realworld` = Commit `ee72eba` (38/38 identisch); Karte entfernt |
+| P02-S03 | Goldens erfassen, Diff-Werkzeug | ☑ | 08.11.2026 | `mini` 13 Dateien (byteidentisch zum Spike), `realworld` 45 Dateien; Plausibilitätswerte stimmen; Karte entfernt |
 | P03-S01 | Kern: Skelett, Modell | ☐ | | |
 | P03-S02 | Kern: Altcode 1:1 | ☐ | | |
 | P03-S03 | Kern: escomplex-Adapter | ☐ | | |
@@ -73,7 +91,12 @@ Datum der Bestätigung durch den Nutzer.
 
 | Paket | Version | Seit Schritt |
 |---|---|---|
-| | | |
+| Node.js | 24.22.2 (lokal, Windows) | M0 |
+| pnpm | 12.16.1 | M0 |
+| `@biomejs/biome` | 2.6.4 | M0 |
+| `typescript` | 7.0.2 | M0 |
+| `vitest` | 5.0.5 | M0 |
+| `@types/node` | 24.19.2 | M0 |
 
 ## Abweichungen und Notizen
 
@@ -83,3 +106,11 @@ Datum der Bestätigung durch den Nutzer.
   Features nutzen (ohne Zyklen), Jotai (ADR-013), `type` statt `interface`, feste Versionen und
   3 Tage Mindestalter (ADR-014), Node 24 + macOS, `path-browserify` (ADR-005), O1–O10 entschieden,
   Korrekturen A8–A10.
+- 07.11.2026 – Zweite Revision: jsdom bleibt, dazu Jotai-`TestProvider` (ADR-015, `anhang/A7`,
+  Prüfung in P04-S02); Review in der IDE vor jedem Commit, Branch + PR pro Phase nach `rewrite/react`
+  (O11, O12).
+- 08.11.2026 – M0 (P01 + P02) auf Wunsch des Nutzers in einem Zug umgesetzt, ein Commit, PR nach
+  `rewrite/react`. Die umgesetzten Schritt-Karten (P01-S01–S04, P02-S01–S03) und die Anhänge A1–A3 sind
+  entfernt (Inhalt steht jetzt in `tools/`, `testdata/` und den Konfigurationsdateien). Abweichungen:
+  siehe `phasen/P01-fundament/README.md` und `phasen/P02-golden-infrastruktur/README.md`.
+  Installationen darf der Assistent seit heute nach Nachfrage selbst ausführen (README R4).

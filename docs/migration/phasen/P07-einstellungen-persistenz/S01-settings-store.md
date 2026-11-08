@@ -10,8 +10,9 @@ Einstellungen liegen in einem Atom, starten mit den Altsystem-Standardwerten, we
 - Funktionsinventar §7; Altcode `services/settings.service.ts`; ADR-010, ADR-013; Architektur §5, §8
 
 ## Dateien
-`apps/web/src/lib/storage.ts` (+ Test), `apps/web/src/state/settingsAtoms.ts` (+ Test); alle Stellen,
-die bisher `defaultSettings` oder das vorläufige Vollbild-Atom direkt nutzen.
+`apps/web/src/lib/storage.ts` (+ Test), `apps/web/src/state/settingsAtoms.ts` (+ Test),
+`apps/web/src/test/setup.ts`; alle Stellen, die bisher `defaultSettings` oder das vorläufige
+Vollbild-Atom direkt nutzen.
 
 ## Schritte
 1. `storage.ts`: `readJson<T>(key, validate)`, `writeJson(key, value): boolean`, `remove(key)` – alle
@@ -29,9 +30,12 @@ die bisher `defaultSettings` oder das vorläufige Vollbild-Atom direkt nutzen.
    - Schreib-Atom `updateSettingsAtom` (Teilwerte zusammenführen, wie `settings.service.ts:34-38`).
 3. Alle Verwender (`GraphView`, `GraphActions`, Vollbild) auf `settingsAtom` umstellen; das vorläufige
    Vollbild-Atom aus P05-S11 entfällt (`settings.fullScreen`).
-4. Tests: Standardwerte ohne Speicher; Zusammenführung mit gespeicherten Teilwerten; ungültige Werte
+4. `apps/web/src/test/setup.ts`: im vorhandenen `afterEach` zusätzlich `localStorage.clear()`
+   (`atomWithStorage` schreibt auch beim Hydrieren durch den `TestProvider`, `anhang/A7`).
+5. Tests: Standardwerte ohne Speicher; Zusammenführung mit gespeicherten Teilwerten; ungültige Werte
    (String statt Boolean, unbekannter Schlüssel, kaputtes JSON) werden ignoriert; Änderung wird
-   gespeichert; `localStorage` wirft → kein Absturz.
+   gespeichert; `localStorage` wirft → kein Absturz. Komponenten mit Einstellungen starten im Test
+   mit `initial(settingsAtom, { ...defaultSettings, … })` statt mit vorbefülltem `localStorage`.
 
 ## Akzeptanzkriterien
 - [ ] Einstellung „Vollbild“ überlebt ein Neuladen.

@@ -142,3 +142,25 @@ Schutz vor frisch kompromittierten Paketen.
 `minimumReleaseAge: 4320` (3 Tage); keine `minimumReleaseAgeExclude`-Einträge.
 **Folgen:** Updates sind bewusste Änderungen an `pnpm-workspace.yaml`; neue Versionen erst ab 3 Tagen
 nach Veröffentlichung.
+
+### ADR-015 Komponententests: jsdom + Testing Library + Jotai-`TestProvider`
+**Kontext:** Frage des Nutzers: Macht ein Jotai-`TestProvider` (Provider + `useHydrateAtoms`) jsdom
+überflüssig? Geprüft am 07.11.2026 (Spike, npm-Registry, deps.dev, GitHub Advisories, react.dev):
+- Der `TestProvider` setzt nur den Zustand. Rendern, Klicken und Tippen brauchen weiter ein DOM.
+  Testing Library bringt keins mit: In reinem Node meldet `render` `document is not defined`,
+  `screen` und `fireEvent` scheitern genauso.
+- Ohne DOM rendern nur `react-dom/server` (statisches HTML ohne Effekte und Events, in Node geprüft)
+  und `react-test-renderer`. Letzteres ist seit React 19 abgekündigt, wird nicht gepflegt und kennt
+  keine echten Events; Refs gehen nur mit Mocks.
+- `jest-environment-jsdom` 30.5.2 ist jsdom plus Jest-Umgebung (85 statt 27 transitive Pakete) und
+  braucht Jest als zweiten Runner (323 Pakete). `jest-junit` ist nur ein Reporter.
+- Vitest-Browser-Modus: Tests im echten Browser, aber `@vitest/browser` hatte 5 Meldungen (4 davon
+  2026, 3 kritisch) und bringt ≈ 24 Pakete mit. „Nur Node + E2E“ verzichtet auf Klick-Tests auf
+  Komponentenebene.
+**Entscheidung (Nutzer, 07.11.2026):** Komponententests bleiben bei Vitest + jsdom + Testing Library +
+user-event. Alle Komponenten- und Hook-Tests rendern zusätzlich über den `TestProvider`
+(`StateProvider` + `useHydrateAtoms`) mit eigenem Store pro Test und typsicheren Startwerten
+(`initial()`), siehe `06-teststrategie.md` §2 und `anhang/A7`.
+**Folgen:** Keine neuen Pakete, denn `useHydrateAtoms` gehört zu `jotai/utils`. Die Vorlage wurde
+nicht im Spike ausgeführt (Nutzerentscheidung) und wird in P04-S02 zuerst geprüft. Die Grenzen von
+jsdom bleiben (`06-teststrategie.md` §4).

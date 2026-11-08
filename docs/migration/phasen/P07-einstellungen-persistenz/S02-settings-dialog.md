@@ -29,9 +29,10 @@ Zahnrad rechts in der Toolbar öffnet „Settings“ mit den sieben Schaltern in
    „Highlight nodes …“ mit identischem `title`. „Cancel“ (Text-Button) schließt ohne Änderung,
    „Save“ (Raised, Primärfarbe) → `updateSettingsAtom` mit dem Formular und schließen. Abstand unter den Schaltern 16 px.
 4. Toolbar: rechts `IconButton` `settings`, `aria-label="Settings"` → Dialog öffnen.
-5. Tests: Dialog zeigt sieben Schalter mit exakten Labels in Reihenfolge und aktuellen Werten;
-   Umschalten + Cancel ändert nichts; Umschalten + Save speichert (`settingsAtom` + `localStorage`); Escape = Cancel;
-   Fokus startet auf „Save“.
+5. Tests (mit `renderWithState`, Startwerte per `initial(settingsAtom, …)`, `06-teststrategie.md` §2):
+   Dialog zeigt sieben Schalter mit exakten Labels in Reihenfolge und aktuellen Werten;
+   Umschalten + Cancel ändert nichts; Umschalten + Save speichert (`store.get(settingsAtom)` +
+   `localStorage`); Escape = Cancel; Fokus startet auf „Save“.
 
 ## Akzeptanzkriterien
 - [ ] Optik und Verhalten wie Altsystem.
