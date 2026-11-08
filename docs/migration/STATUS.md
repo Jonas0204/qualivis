@@ -39,7 +39,7 @@ Ablauf: README, „Branches und Pull Requests“. Ziel aller PRs: `rewrite/react
 | Schritt | Titel | Status | Datum | Notiz |
 |---|---|---|---|---|
 | P01, P02 | M0: Fundament, Golden-Infrastruktur | ☑ | 08.11.2026 | Commit `5647a06`, PR #1 |
-| P03-S00 | CI für Pull Requests | ☐ | | |
+| P03-S00 | CI für Pull Requests | ☑ | 08.11.2026 | nur Linux; Lauf erst im PR der Phase sichtbar |
 | P03-S01 | Kern: Skelett, Modell | ☐ | | |
 | P03-S02 | Kern: Altcode 1:1 | ☐ | | |
 | P03-S03 | Kern: escomplex-Adapter | ☐ | | |
@@ -89,4 +89,5 @@ Hier jede Abweichung vom Plan mit Begründung und Verweis (ADR bzw. Nutzerentsch
 solange sie für kommende Schritte wichtig ist. Vor dem PR der Phase wandert sie in die betroffenen
 Karten oder Grundlagen oder wird gestrichen; Erledigtes steht in der Git-Historie.
 
-- (derzeit keine)
+- P03-S00: CI nur auf `ubuntu-latest` statt Matrix mit Windows und macOS (Nutzer, 08.11.2026);
+  ADR-016 und Karte angepasst.

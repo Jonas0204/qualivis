@@ -4,13 +4,13 @@ Meilenstein M1 · Abhängig von: M0 · Umfang S
 
 ## Ziel
 Jeder Pull Request nach `rewrite/react` und jeder Push auf `rewrite/react` führt `pnpm check` auf
-Ubuntu, Windows und macOS aus. Der Nutzer sieht das Ergebnis direkt im PR, auch unterwegs.
+Ubuntu aus. Der Nutzer sieht das Ergebnis direkt im PR, auch unterwegs. Windows und macOS deckt die
+lokale Entwicklung ab (Nutzer, 08.11.2026: Linux reicht in der CI).
 
 ## Kontext
 - ADR-016 (CI und Pages)
 - `package.json` (Skripte, `packageManager`), `.node-version`
-- Das Repo ist öffentlich: GitHub-gehostete Standard-Runner sind dort kostenlos, auch Windows und
-  macOS.
+- Das Repo ist öffentlich: GitHub-gehostete Standard-Runner sind dort kostenlos.
 
 ## Dateien
 `.github/workflows/ci.yml` (neu)
@@ -45,12 +45,8 @@ Ubuntu, Windows und macOS aus. Der Nutzer sieht das Ergebnis direkt im PR, auch 
 
    jobs:
      check:
-       name: check (${{ matrix.os }})
-       strategy:
-         fail-fast: false
-         matrix:
-           os: [ubuntu-latest, windows-latest, macos-latest]
-       runs-on: ${{ matrix.os }}
+       name: check
+       runs-on: ubuntu-latest
        timeout-minutes: 20
        steps:
          - uses: actions/checkout@<sha> # <version>
@@ -67,11 +63,10 @@ Ubuntu, Windows und macOS aus. Der Nutzer sieht das Ergebnis direkt im PR, auch 
    ```
 3. `pnpm format` (Biome formatiert auch YAML), dann `pnpm check`.
 4. Dem Nutzer vorschlagen (stellt er selbst auf GitHub ein, optional): Settings → Branches →
-   Regel für `rewrite/react` mit den drei Checks `check (…)` als Pflicht.
+   Regel für `rewrite/react` mit dem Check `check` als Pflicht.
 
 ## Akzeptanzkriterien
-- [ ] Der PR der Phase P03 zeigt drei grüne Checks: `check (ubuntu-latest)`,
-      `check (windows-latest)`, `check (macos-latest)`.
+- [ ] Der PR der Phase P03 zeigt den grünen Check `check`.
 - [ ] Alle Actions sind per vollständigem Commit-SHA gepinnt, mit Version als Kommentar.
 - [ ] `permissions: contents: read`, keine Secrets, kein `pull_request_target`.
 - [ ] `pnpm check` lokal grün.
@@ -85,8 +80,6 @@ nicht wiederholt abfragen.
   `package.json`, bricht die Action bei abweichenden Angaben ab.
 - Ein Workflow für `pull_request` läuft schon in dem PR, der ihn hinzufügt (GitHub nutzt den
   Merge-Stand). Ein extra PR nur für die CI ist nicht nötig.
-- Scheitern auf Windows nur Golden- oder Fixture-Tests: zuerst Zeilenenden prüfen
-  (`git ls-files --eol testdata | head`); `.gitattributes` setzt `testdata/** -text`.
 - `fsevents` wird außerhalb von macOS nicht installiert; `allowBuilds` steht schon auf `false`.
 
 ## Nicht tun

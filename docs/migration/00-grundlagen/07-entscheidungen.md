@@ -159,8 +159,9 @@ Branch `gh-pages` den alten Build aus, der dort nicht lädt (`<base href="/compo
 Skripte liegen aber unter `/qualivis/`). In öffentlichen Repos sind die Standard-Runner (auch Windows
 und macOS) und Pages kostenlos. Der Nutzer prüft PRs oft unterwegs.
 **Entscheidung (Nutzer, 08.11.2026):**
-- CI als eigene Karte P03-S00: `pnpm check` auf Ubuntu, Windows und macOS für PRs und Pushes nach
-  `rewrite/react`; ab P04-S01 zusätzlich `pnpm build`, ab P10-S03 `pnpm quality:self`.
+- CI als eigene Karte P03-S00: `pnpm check` auf Ubuntu für PRs und Pushes nach `rewrite/react`;
+  ab P04-S01 zusätzlich `pnpm build`, ab P10-S03 `pnpm quality:self`. Windows und macOS prüft die
+  lokale Entwicklung (Nutzer, 08.11.2026: Linux reicht in der CI).
 - Ab M1 (Karte P04-S07) veröffentlicht ein Workflow nach jedem Merge in `rewrite/react` die **neue**
   App auf GitHub Pages. Die alte Seite wird dort nicht mehr ausgeliefert.
 - Der Branch `gh-pages` bleibt unverändert als Quelle der Goldens; `pnpm legacy:extract` liest fest
