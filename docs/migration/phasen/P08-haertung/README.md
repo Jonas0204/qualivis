@@ -57,6 +57,9 @@ Erkenntnisse aus `STATUS.md` (Abweichungen, offene Punkte) einarbeiten, mit dem 
   (ohne `legacy/`) und `web/src/{state,lib,features}` gegen vorhandene Testdateien abgleichen; für
   jedes Modul ohne Test einen **Verhaltenstest** ergänzen; keine Tests, die nur Zeilen abdecken.
 - Eigenprüfung (ab M7) zeigt zusätzlich Funktionen über den Schwellenwerten des Tools.
+- Aufräumen (Nutzer, 08.11.2026): Quelltext-Eingaben in Kern-Tests stehen als Zeilenliste mit
+  `[…].join('\n')` (z. B. `packages/core/src/analysis/analyzeProject.test.ts`). Lesbarer machen:
+  Template-String mit kleinem Helfer, der den ersten Zeilenumbruch entfernt, oder Fixture-Dateien.
 
 ## S07 – Barrierefreiheit (M)
 - Tastaturbedienung: Toolbar, Aktionsleiste, Dateibaum, Dialog, Select, Split-Trenner vollständig.
