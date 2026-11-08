@@ -7,7 +7,8 @@ Jede Einstellung wirkt genau wie im Altsystem; Speichern startet den Graph neu (
 Vollbild-Wechsel → nur „Zoom to fit“).
 
 ## Kontext
-- Altcode `graph.component.ts:82-96` (Reaktion auf Einstellungen), §2, §6, §7, §9, §12, §13
+- Altcode `graph.component.ts:82-96` (Reaktion auf Einstellungen)
+- `01-referenz-altsystem/03-visuelle-regeln.md` §2, §6, §7, §9, §12, §13
 
 ## Wirkungstabelle (Abnahmegrundlage)
 

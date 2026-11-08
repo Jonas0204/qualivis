@@ -5,6 +5,7 @@ dieselben Ergebnisse wie das Altsystem (Halstead-Fließkommawerte mit kleiner To
 
 | Schritt | Titel | Umfang |
 |---|---|---|
+| [S00](S00-ci.md) | CI für Pull Requests (GitHub Actions) | S |
 | [S01](S01-paket-skelett.md) | Paket-Skelett, Modelltypen und Konstanten | M |
 | [S02](S02-altcode-uebernehmen.md) | Analysehelfer 1:1 übernehmen (vorerst `@ts-nocheck`) | S |
 | [S03](S03-escomplex-adapter.md) | escomplex-Adapter mit `path-browserify` | S |

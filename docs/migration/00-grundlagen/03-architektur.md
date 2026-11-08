@@ -187,7 +187,8 @@ export type LayoutEngine = {
 
 - Kein Router-Paket. `useUrlState` liest/schreibt `?id=` per `history.pushState`/`popstate`.
   `view` = `upload` ohne Analyse, sonst `graph`. Zurück-Button des Browsers funktioniert.
-- Basis-Pfad: Vite `base: './'` → läuft unter beliebigem Unterpfad (falls später einmal deployt wird).
+- Basis-Pfad: Vite `base: './'` → läuft unter beliebigem Unterpfad, z. B. auf GitHub Pages unter
+  `/qualivis/` (P04-S07).
 - Deep-Link `?id=` funktioniert auch nach Neuladen (Korrektur von N4, ADR-011), sofern die
   Analyse aus dem Speicher wiederhergestellt werden kann.
 

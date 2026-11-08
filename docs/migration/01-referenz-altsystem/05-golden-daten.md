@@ -34,7 +34,7 @@ Nutzers.
 
 ## 2. Erfassungsprinzip (im Spike erprobt)
 
-1. Legacy-Build aus `origin/gh-pages` nach `.cache/legacy-build/` entpacken, lokal unter
+1. Legacy-Build (Commit `5f0155e` im Branch `gh-pages`) nach `.cache/legacy-build/` entpacken, lokal unter
    `http://127.0.0.1:4300/component-graph/` ausliefern (Server: `tools/legacy/serve-legacy.mjs`). Der Server liefert
    auch die Fixtures (`/fixtures/<name>/manifest.json` + Dateien) und nimmt Ergebnisse per
    `POST /capture/<name>/<datei>` entgegen.

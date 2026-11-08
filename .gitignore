@@ -1,5 +1,7 @@
 # Local instructions for Claude (identity, push rules) - never commit
 CLAUDE.md
+# Personal Claude Code settings; only .claude/skills/ is shared
+.claude/settings.local.json
 node_modules/
 dist/
 coverage/

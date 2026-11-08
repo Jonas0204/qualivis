@@ -11,7 +11,7 @@ installing its old dependencies, and to capture golden reference data from it.
 
 | Command | Effect |
 |---|---|
-| `pnpm legacy:extract` | `git archive origin/gh-pages` → `.cache/legacy-build/` (needs `git` and `tar`; if `origin/gh-pages` is missing: `git fetch origin gh-pages`) |
+| `pnpm legacy:extract [ref]` | `git archive` of the legacy build commit `5f0155e` (branch `gh-pages`) → `.cache/legacy-build/` (needs `git` and `tar`; if the commit is missing locally: `git fetch origin gh-pages`) |
 | `pnpm legacy:serve [port]` | serves the build at `http://127.0.0.1:4300/component-graph/` (default port 4300) |
 
 ## Server endpoints (`serve-legacy.mjs`)

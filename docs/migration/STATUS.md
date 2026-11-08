@@ -6,7 +6,7 @@ Datum der Bestätigung durch den Nutzer.
 
 | Meilenstein | Status | Bestätigt am |
 |---|---|---|
-| M0 Fundament | ☑ (08.11.2026) | mit dem Merge des PR |
+| M0 Fundament | ☑ (08.11.2026) | 08.11.2026 (Merge von PR #1) |
 | M1 Erstes Produkt | ☐ | |
 | M2 Graph-Parität | ☐ | |
 | M3 Analyse-UI | ☐ | |
@@ -23,7 +23,8 @@ Ablauf: README, „Branches und Pull Requests“. Ziel aller PRs: `rewrite/react
 | Phase | Branch | PR | Status |
 |---|---|---|---|
 | Plan | `rewrite/react` (direkt, vor Einführung der PRs) | – | ☑ |
-| P01 Fundament + P02 Golden-Infrastruktur | `rewrite/m0-fundament` (beide zusammen) | (Link nach dem Anlegen) | ☑ |
+| P01 Fundament + P02 Golden-Infrastruktur | `rewrite/m0-fundament` (beide zusammen) | [#1](https://github.com/Jonas0204/qualivis/pull/1) | ☑ |
+| Docs: Agenten-Einstieg, Karten für CI und Pages | direkt auf `rewrite/react` (ohne PR, auf Wunsch des Nutzers) | – | ☑ |
 | P03 Kern-MVP | `rewrite/p03-kern-mvp` | | ☐ |
 | P04 Web-MVP | `rewrite/p04-web-mvp` | | ☐ |
 | P05 Graph-Parität | `rewrite/p05-graph-paritaet` | | ☐ |
@@ -45,6 +46,7 @@ Ablauf: README, „Branches und Pull Requests“. Ziel aller PRs: `rewrite/react
 | P02-S01 | Legacy-Build lokal | ☑ | 08.11.2026 | `tar` mit relativen Pfaden (GNU-tar unter Git Bash); Server-Tests mit `QV_*`; Karte entfernt |
 | P02-S02 | Fixtures `mini`, `realworld` | ☑ | 08.11.2026 | `mini` = A3 (8/8 identisch), `realworld` = Commit `ee72eba` (38/38 identisch); Karte entfernt |
 | P02-S03 | Goldens erfassen, Diff-Werkzeug | ☑ | 08.11.2026 | `mini` 13 Dateien (byteidentisch zum Spike), `realworld` 45 Dateien; Plausibilitätswerte stimmen; Karte entfernt |
+| P03-S00 | CI für Pull Requests | ☐ | | |
 | P03-S01 | Kern: Skelett, Modell | ☐ | | |
 | P03-S02 | Kern: Altcode 1:1 | ☐ | | |
 | P03-S03 | Kern: escomplex-Adapter | ☐ | | |
@@ -57,6 +59,7 @@ Ablauf: README, „Branches und Pull Requests“. Ziel aller PRs: `rewrite/react
 | P04-S04 | Web: Analyse-Fluss | ☐ | | |
 | P04-S05 | Web: Minimaler Graph | ☐ | | |
 | P04-S06 | M1-Abnahme | ☐ | | |
+| P04-S07 | GitHub Pages (neue App) | ☐ | | |
 | P05-S01 | Regeln: Größe, Icons | ☐ | | |
 | P05-S02 | Regeln: Geometrie, Farben | ☐ | | |
 | P05-S03 | Regeln: Cluster, Constraints | ☐ | | |
@@ -114,3 +117,9 @@ Ablauf: README, „Branches und Pull Requests“. Ziel aller PRs: `rewrite/react
   entfernt (Inhalt steht jetzt in `tools/`, `testdata/` und den Konfigurationsdateien). Abweichungen:
   siehe `phasen/P01-fundament/README.md` und `phasen/P02-golden-infrastruktur/README.md`.
   Installationen darf der Assistent seit heute nach Nachfrage selbst ausführen (README R4).
+- 08.11.2026 – Plan aus Sicht von Agenten überarbeitet: `AGENTS.md` im Root als einziger Einstieg,
+  Skills `schritt-umsetzen` und `phase-abschliessen` (O13, ADR-017). Das Repo ist ein öffentlicher
+  Fork (O2, O14). CI als Karte P03-S00, GitHub Pages für die neue App ab M1 als Karte P04-S07 (O3,
+  O4, ADR-016); `legacy:extract` liest jetzt fest Commit `5f0155e`. Risiken heißen jetzt RI1–RI13,
+  damit sie nicht mit den Regeln R1–R10 verwechselt werden. Quellenangabe in
+  `02-qualitaetskriterien.md` verallgemeinert, Kurzverweis in P07-S03 ergänzt.

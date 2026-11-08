@@ -164,3 +164,40 @@ user-event. Alle Komponenten- und Hook-Tests rendern zusätzlich über den `Test
 **Folgen:** Keine neuen Pakete, denn `useHydrateAtoms` gehört zu `jotai/utils`. Die Vorlage wurde
 nicht im Spike ausgeführt (Nutzerentscheidung) und wird in P04-S02 zuerst geprüft. Die Grenzen von
 jsdom bleiben (`06-teststrategie.md` §4).
+
+### ADR-016 CI mit GitHub Actions und GitHub Pages für die neue App (ersetzt O3, O4)
+**Kontext:** Am 07.11.2026 entschieden: vorerst kein Deployment, keine CI (O3, O4). Am 08.11.2026
+festgestellt: Das Repo ist ein öffentlicher GitHub-Fork. GitHub Pages ist aktiv und liefert aus dem
+Branch `gh-pages` den alten Build aus, der dort nicht lädt (`<base href="/component-graph/">`, die
+Skripte liegen aber unter `/qualivis/`). In öffentlichen Repos sind die Standard-Runner (auch Windows
+und macOS) und Pages kostenlos. Der Nutzer prüft PRs oft unterwegs.
+**Entscheidung (Nutzer, 08.11.2026):**
+- CI als eigene Karte P03-S00: `pnpm check` auf Ubuntu, Windows und macOS für PRs und Pushes nach
+  `rewrite/react`; ab P04-S01 zusätzlich `pnpm build`, ab P10-S03 `pnpm quality:self`.
+- Ab M1 (Karte P04-S07) veröffentlicht ein Workflow nach jedem Merge in `rewrite/react` die **neue**
+  App auf GitHub Pages. Die alte Seite wird dort nicht mehr ausgeliefert.
+- Der Branch `gh-pages` bleibt unverändert als Quelle der Goldens; `pnpm legacy:extract` liest fest
+  den Commit `5f0155e`.
+- Dependabot und Renovate vorerst nicht.
+**Folgen:** Actions per Commit-SHA gepinnt, nur lesender Token, keine Secrets, kein
+`pull_request_target`. Workflow-Dateien sind CI/CD-Änderungen und brauchen die Zustimmung des
+Nutzers (Schritt 0 der Karten). Pages-Quelle und Environment-Freigabe stellt der Nutzer auf GitHub
+ein. Wird das Repo privat (O14), sind die Actions-Minuten begrenzt und Pages braucht ein Bezahl-Abo;
+dann beide Karten neu bewerten.
+
+### ADR-017 Einstieg für Agenten: `AGENTS.md` und Skills
+**Kontext:** Agenten (Claude Code, GitHub Copilot in VS Code, Codex u. a.) beginnen jede Sitzung ohne
+Vorwissen. Der Plan hat rund 37.000 Wörter (grob 90.000 Tokens). Bisher galt pro Sitzung: README und
+vier Grundlagen-Dokumente lesen (≈ 5.300 Wörter), dann die Karte. Alles zu lesen kostet Kontext und
+Genauigkeit, auch bei großen Kontextfenstern. Die Karten verweisen kurz (`§4`, „Funktionsinventar
+U3“, gekürzte Altcode-Pfade). Die lokale `CLAUDE.md` ist nicht versioniert und nur für Claude Code
+gedacht.
+**Entscheidung (Nutzer, 08.11.2026):** `AGENTS.md` im Repo-Root ist die einzige Pflicht-Einstiegsdatei:
+Leseweg, Kurzregeln, Abkürzungen mit Dateipfaden, Befehle. Abläufe liegen als Skills in
+`.claude/skills/` (`schritt-umsetzen`, `phase-abschliessen`); diesen Ordner lesen Claude Code und
+GitHub Copilot in VS Code. Die lokale `CLAUDE.md` importiert `@AGENTS.md`, weil Claude Code eine
+`AGENTS.md` nicht liest, sobald eine `CLAUDE.md` existiert.
+**Folgen:** Pflichtlektüre pro Schritt ≈ 3.000–5.000 Wörter. Die Regeln stehen ausführlich weiter im
+Plan-README (R1–R10), `AGENTS.md` enthält nur die Kurzfassung; Regeländerungen in beiden Dateien
+nachziehen. Neue Kurzverweise in Karten nur, wenn sie in der Abkürzungstabelle von `AGENTS.md`
+stehen. `phase-abschliessen` startet nur auf Wunsch des Nutzers.

@@ -1,8 +1,8 @@
 # P10 – Kern als Paket und CLI (Meilenstein M7)
 
-**Ziel:** `@qualivis/core` ist als Paket baubar (bleibt privat, keine Veröffentlichung – O2), und
+**Ziel:** `@qualivis/core` ist als Paket baubar (keine npm-Veröffentlichung – O2), und
 `@qualivis/cli` analysiert einen Ordner auf der Kommandozeile – mit denselben Ergebnissen wie die
-App, mit Text- oder JSON-Ausgabe und Exit-Codes (damit später eine CI möglich wäre). Das Projekt
+App, mit Text- oder JSON-Ausgabe und Exit-Codes (auch für die CI). Das Projekt
 prüft sich selbst damit (G6).
 
 > Kompakte Karten; vor Beginn zu Einzeldateien verfeinern (S00). Erster Unterschritt jeder Karte ist
@@ -36,10 +36,12 @@ prüft sich selbst damit (G6).
 
 ## S03 – Eigenprüfung G6 („Dogfooding“) (S)
 - Root-Skript `quality:self`: `qualivis analyze apps/web/src --fail-on error` (+ `packages/*/src` ohne
-  `legacy/`). Kein Knoten darf `warning/error` haben (Qualitätskriterien §1). Läuft lokal (keine CI, O4).
+  `legacy/`). Kein Knoten darf `warning/error` haben (Qualitätskriterien §1). Läuft lokal und in der
+  CI: in `.github/workflows/ci.yml` die Zeile `- run: pnpm quality:self` ergänzen (ADR-016, vorher
+  nachfragen).
 - Optional: Legacy-Capture des neuen Web-Quelltexts (G6-Teil 2); scheitert der alte Parser an neuer
   Syntax, dokumentieren und weglassen.
 
 ## Entfallen (Nutzerentscheidungen 07.11.2026)
-- ~~CI-Vorschlag~~ – vorerst keine CI (O4). Bei Bedarf später als eigene Aufgabe.
-- ~~Veröffentlichung~~ – keine Lizenz, bleibt privat (O2).
+- ~~CI-Vorschlag~~ – die CI kommt schon mit P03-S00 (ADR-016).
+- ~~Veröffentlichung~~ – keine Lizenz, keine npm-Veröffentlichung (O2).

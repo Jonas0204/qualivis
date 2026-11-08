@@ -123,7 +123,9 @@ apps/web/src/test/setup.ts
    `font-feature-settings: 'liga'`, `white-space nowrap`, `display inline-block`, `direction ltr`).
    Test: rendert den Ligatur-Namen als Text, ist `aria-hidden`.
 9. `App.tsx`: vorerst `<div className={styles.app} />` (leer).
-10. Nutzer bitten: `pnpm install`.
+10. Nach Nachfrage beim Nutzer `pnpm install` ausführen (neue Abhängigkeiten, README R4).
+11. Gibt es `.github/workflows/ci.yml` (P03-S00): nach `- run: pnpm check` die Zeile
+    `- run: pnpm build` ergänzen (gleiche Einrückung; CI/CD-Änderung, vorher nachfragen).
 
 ## Akzeptanzkriterien
 - [ ] `pnpm dev` → `http://127.0.0.1:5173` zeigt eine Seite mit Hintergrund `#fafafa`, keine

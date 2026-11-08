@@ -13,5 +13,6 @@ entspricht bereits dem Altsystem.
 | [S04](S04-analyse-fluss.md) | Analyse-Fluss mit Fortschrittsbalken | S |
 | [S05](S05-minimaler-graph.md) | Minimaler Graph mit Kraft-Layout | M |
 | [S06](S06-m1-abnahme.md) | M1-Abnahme | S |
+| [S07](S07-pages.md) | Neue App auf GitHub Pages (nach jedem Merge) | S |
 
 Nicht in dieser Phase: Größen nach Metrik, Icons, WebCola, Zoom/Pan, Panels, Einstellungen.

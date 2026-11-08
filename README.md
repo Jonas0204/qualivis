@@ -7,6 +7,7 @@ Angular app "Component Graph".
 
 > Work in progress. The plan and its status live in [docs/migration](docs/migration/README.md).
 > The original Angular app is kept for reference in [legacy/angular](legacy/angular/LEGACY.md).
+> AI agents start with [AGENTS.md](AGENTS.md).
 
 ## Requirements
 
@@ -22,7 +23,7 @@ Angular app "Component Graph".
 | `pnpm check` | lint (Biome), type check (TypeScript), tests (Vitest) |
 | `pnpm format` | format and fix with Biome |
 | `pnpm dev` | start the app (from P04 on) |
-| `pnpm legacy:extract` | extract the legacy production build (`origin/gh-pages`) to `.cache/` |
+| `pnpm legacy:extract` | extract the legacy production build (commit `5f0155e` on branch `gh-pages`) to `.cache/` |
 | `pnpm legacy:serve` | serve the legacy build locally for golden captures ([tools/legacy](tools/legacy/README.md)) |
 
 ## Repository layout
@@ -30,6 +31,7 @@ Angular app "Component Graph".
 | Path | Content |
 |---|---|
 | `docs/migration/` | migration plan, decisions (ADRs), status |
+| `AGENTS.md`, `.claude/skills/` | entry point and workflows for AI agents (Claude Code, GitHub Copilot) |
 | `legacy/angular/` | original Angular app, read-only reference |
 | `testdata/` | fixtures and golden reference data ([testdata/README.md](testdata/README.md)) |
 | `tools/` | development tools (legacy server, golden capture, JSON diff) |

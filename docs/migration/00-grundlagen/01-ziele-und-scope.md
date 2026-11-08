@@ -8,11 +8,11 @@ Die Angular-9-App „Component Graph“ (Tarner, van den Bongard, Beck, VISSOFT 
 
 - **React 19** nur für die Oberfläche, **kein** UI-Framework, **kein** D3-DOM-Code.
 - Analyse-Kern als framework-freies TypeScript-Paket `@qualivis/core` (Node + Browser), später
-  zusätzlich als CLI nutzbar (z. B. für eine spätere CI).
+  zusätzlich als CLI nutzbar (z. B. in der CI).
 - **pnpm 12** mit gehärteter Lieferkette, Vite 8, Vitest 5, TypeScript 7, Biome 2.6, feste Versionen.
 - Entwicklung auf **Windows und macOS** (Node 24).
-- Das Projekt bleibt **privat**: keine Lizenz, keine Veröffentlichung, kein Deployment, keine CI
-  (Entscheidungen O2–O4).
+- Das Repository ist **öffentlich** (GitHub-Fork), hat keine Lizenz und wird nicht als Paket
+  veröffentlicht. CI ab P03-S00, die neue App ab M1 auf GitHub Pages (O2–O4, O14, ADR-016).
 
 ## 2. Was gleich bleiben muss
 

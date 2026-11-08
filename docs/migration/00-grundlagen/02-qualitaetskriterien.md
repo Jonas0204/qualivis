@@ -1,7 +1,7 @@
 # Qualitätskriterien
 
-Grundlage: Bachelorarbeit *Wartbarkeit von Web-Frontends – Eine kritische Analyse und Vergleich von
-Metriken* (J. H., 2026). Übernommen wird nur, was sich **mit den vorhandenen Werkzeugen**
+Grundlage: eine Bachelorarbeit zur Wartbarkeit von Web-Frontends. Übernommen wird nur, was sich
+**mit den vorhandenen Werkzeugen**
 (TypeScript, Biome, Vitest und ab M7 die eigene CLI) automatisch prüfen lässt – kein SonarQube,
 keine Zusatzwerkzeuge.
 

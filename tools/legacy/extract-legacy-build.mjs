@@ -1,4 +1,5 @@
-// Extracts the legacy Angular production build (branch origin/gh-pages) to .cache/legacy-build.
+// Extracts the legacy Angular production build (commit 5f0155e on branch gh-pages) to
+// .cache/legacy-build.
 // Read-only git operation (git archive); does not touch the working tree or index.
 import { execFileSync } from 'node:child_process';
 import { mkdirSync, rmSync } from 'node:fs';
@@ -9,7 +10,9 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const cacheDir = join(root, '.cache');
 const target = join(cacheDir, 'legacy-build');
 const tarFile = join(cacheDir, 'legacy-build.tar');
-const ref = process.argv[2] ?? 'origin/gh-pages';
+// Pinned on purpose: the branch head may change, the golden source must not.
+const legacyBuildCommit = '5f0155e9dbf88fe0e258336bc7e506fb5573ab9b';
+const ref = process.argv[2] ?? legacyBuildCommit;
 
 mkdirSync(cacheDir, { recursive: true });
 rmSync(target, { recursive: true, force: true });

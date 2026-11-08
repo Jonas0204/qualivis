@@ -11,6 +11,9 @@ Stand: 07.11.2026. Die riskantesten Annahmen wurden vorab in einem Wegwerf-Spike
 geprüft (`anhang/A6-spike-protokoll.md`): Der übernommene Kern liefert mit Babel 7.29 und
 escomplex 0.1 für zwei Testprojekte dieselben Ergebnisse wie der alte Build (0 Abweichungen).
 
+> **Einstieg für Agenten:** [`AGENTS.md`](../../AGENTS.md) im Repo-Root (Leseweg, Kurzregeln,
+> Abkürzungen, Befehle). Abläufe liegen als Skills in `.claude/skills/`.
+
 ## Inhalt
 
 | Ordner/Datei | Inhalt |
@@ -23,8 +26,8 @@ escomplex 0.1 für zwei Testprojekte dieselben Ergebnisse wie der alte Build (0 
 | [04-technologie-stack.md](00-grundlagen/04-technologie-stack.md) | Versionen, `pnpm-workspace.yaml`, Patches, Befehle |
 | [05-konventionen.md](00-grundlagen/05-konventionen.md) | Code-Stil, TypeScript, React, CSS, Commits, Aufbau der Schritt-Karten |
 | [06-teststrategie.md](00-grundlagen/06-teststrategie.md) | Testebenen, Golden-Konzept G1–G6 („God-Test“) |
-| [07-entscheidungen.md](00-grundlagen/07-entscheidungen.md) | ADR-001 bis ADR-015 |
-| [08-risiken-und-offene-punkte.md](00-grundlagen/08-risiken-und-offene-punkte.md) | Offene Nutzerentscheidungen, Risiken |
+| [07-entscheidungen.md](00-grundlagen/07-entscheidungen.md) | ADR-001 bis ADR-017 |
+| [08-risiken-und-offene-punkte.md](00-grundlagen/08-risiken-und-offene-punkte.md) | Nutzerentscheidungen O1–O14, Risiken RI1–RI13 |
 | **01-referenz-altsystem/** | |
 | [01-funktionsinventar.md](01-referenz-altsystem/01-funktionsinventar.md) | Jedes sichtbare Verhalten des Altsystems (Abnahmegrundlage) |
 | [02-analyse-kern.md](01-referenz-altsystem/02-analyse-kern.md) | Analyse-Pipeline, Dateien, Datenstrukturen, Eigenheiten K1–K11 |
@@ -34,8 +37,8 @@ escomplex 0.1 für zwei Testprojekte dieselben Ergebnisse wie der alte Build (0 
 | **phasen/** | |
 | [P01-fundament](phasen/P01-fundament/README.md) | **erledigt:** Repo-Umbau, Workspace, Tooling (M0) |
 | [P02-golden-infrastruktur](phasen/P02-golden-infrastruktur/README.md) | **erledigt:** Altsystem lokal, Fixtures, Goldens (M0) |
-| [P03-kern-mvp](phasen/P03-kern-mvp/README.md) | `@qualivis/core` mit Golden G1 (M1) |
-| [P04-web-mvp](phasen/P04-web-mvp/README.md) | Erstes sichtbares Produkt (M1) |
+| [P03-kern-mvp](phasen/P03-kern-mvp/README.md) | CI, `@qualivis/core` mit Golden G1 (M1) |
+| [P04-web-mvp](phasen/P04-web-mvp/README.md) | Erstes sichtbares Produkt, GitHub Pages (M1) |
 | [P05-graph-paritaet](phasen/P05-graph-paritaet/README.md) | Graph wie im Original (M2) |
 | [P06-panels-navigation](phasen/P06-panels-navigation/README.md) | Panels, Auswahl, Drill-down (M3) |
 | [P07-einstellungen-persistenz](phasen/P07-einstellungen-persistenz/README.md) | Einstellungen, Persistenz, Hinweise (M4) |
@@ -52,13 +55,17 @@ escomplex 0.1 für zwei Testprojekte dieselben Ergebnisse wie der alte Build (0 
 
 ## So wird der Plan benutzt
 
-1. **Einmalig lesen:** dieses README, dann `00-grundlagen/01`, `03`, `05`, `06`.
-2. **Pro Schritt:** `STATUS.md` → nächsten offenen Schritt wählen → Phasen-README → Schritt-Karte →
-   nur die dort verlinkten Referenzabschnitte und Altcode-Stellen lesen. Erster Schritt einer Phase:
-   zuerst den Phasen-Branch anlegen (Abschnitt „Branches und Pull Requests“).
+1. **Einstieg:** [`AGENTS.md`](../../AGENTS.md) im Repo-Root: Leseweg, Kurzregeln, Abkürzungen,
+   Befehle. Die Grundlagen (`00-grundlagen/`) werden nicht vorab gelesen, sondern nur, wenn die
+   Karte oder die Tabelle in `AGENTS.md` darauf verweist.
+2. **Pro Schritt:** Skill `schritt-umsetzen` (`.claude/skills/schritt-umsetzen/SKILL.md`; ohne
+   Skill-Unterstützung die Datei lesen und befolgen): `STATUS.md` → nächster offener Schritt →
+   Phasen-README → Schritt-Karte → nur die dort verlinkten Abschnitte und Altcode-Stellen. Erster
+   Schritt einer Phase: zuerst den Phasen-Branch anlegen (Abschnitt „Branches und Pull Requests“).
 3. **Umsetzen** direkt im Arbeitsverzeichnis, Akzeptanzkriterien abhaken, Prüfbefehle ausführen.
 4. **Abschluss:** `STATUS.md` aktualisieren, dem Nutzer Ergebnis + Commit-Vorschlag melden. Die
-   Änderungen bleiben **uncommittet**, bis der Nutzer sie in der IDE geprüft hat (R3).
+   Änderungen bleiben **uncommittet**, bis der Nutzer sie in der IDE geprüft hat (R3). Phase
+   fertig: Skill `phase-abschliessen`, nur auf Wunsch des Nutzers.
 
 Reihenfolge ist bis M4 verbindlich. Ein Schritt beginnt erst, wenn seine Abhängigkeiten erledigt sind.
 
@@ -85,7 +92,9 @@ Ablauf:
 3. **Phase fertig** (Meilenstein-Abnahme, falls die Phase eine hat): nach Nachfrage pushen und einen
    PR mit Ziel `rewrite/react` anlegen. Titel `Pnn: <Phasentitel>`. Beschreibung: erledigte Schritte,
    Prüfergebnisse (`pnpm check`, ggf. G1/G2), Abweichungen, offene Punkte. **Keine** Hinweise auf
-   Claude/KI. Den Link zum PR in `STATUS.md` (Tabelle „Phasen“) eintragen.
+   Claude/KI. Gibt es eine CI (ab P03-S00), nennt der Assistent einmal den Stand der Checks. Den
+   Link zum PR trägt der erste Schritt der nächsten Phase in `STATUS.md` (Tabelle „Phasen“) ein.
+   Ablauf als Skill: `phase-abschliessen`.
 4. **Review und Merge** macht der Nutzer auf GitHub, und zwar als **Merge-Commit**: Kein Squash,
    damit die Schritt-Commits sichtbar bleiben; kein Rebase. Änderungswünsche aus dem Review kommen
    als weitere Commits auf denselben Branch, nie per `--amend` oder Force-Push.
@@ -102,7 +111,8 @@ Anmeldung macht **der Nutzer selbst** (`gh auth login`); der Assistent fasst kei
 - **R2 – Nutzerregeln haben Vorrang.** Die globale `CLAUDE.md` des Nutzers gilt (u. a. keine
   History-Umschreibung, nichts außerhalb des Projektordners, keine Änderungen an Claude-Konfiguration,
   keine Secrets, nichts löschen ohne Bestätigung). Ergänzend gilt die **lokale** `CLAUDE.md` im
-  Repo-Root (nicht versioniert): Commit-Identität und Push nach Nachfrage.
+  Repo-Root (nicht versioniert): Commit-Identität und Push nach Nachfrage. Das Repo ist
+  **öffentlich**: keine personenbezogenen Daten in Dateien, Commits und PRs (RI13).
 - **R3 – Review vor Commit, Commits nur auf Anweisung.** Änderungen werden direkt im
   Arbeitsverzeichnis gemacht und bleiben **uncommittet**, damit der Nutzer sie im Diff seiner IDE
   prüfen kann. Am Ende jedes Schritts `git status` und Diff zusammenfassen und eine Commit-Message
@@ -127,18 +137,15 @@ Anmeldung macht **der Nutzer selbst** (`gh auth login`); der Assistent fasst kei
 
 ## Vorlage: Arbeitsauftrag für ein ausführendes Modell
 
+In Claude Code reicht `/schritt-umsetzen P03-S01` (ohne ID: nächster offener Schritt). GitHub Copilot
+in VS Code wählt den Skill anhand seiner Beschreibung. Für andere Werkzeuge diesen Text verwenden:
+
 ```
-Du setzt den Migrationsplan in docs/migration/ um. Lies zuerst docs/migration/README.md
-(insbesondere die Regeln R1–R10) sowie 00-grundlagen/03-architektur.md, 05-konventionen.md und
-06-teststrategie.md. Bearbeite dann ausschließlich den Schritt <Pxx-Syy> gemäß der Datei
-docs/migration/phasen/<Phase>/<Syy-…>.md. Lies nur die dort verlinkten Referenzen.
-Ist es der erste Schritt einer Phase, lege zuerst den Phasen-Branch an (README, „Branches und Pull
-Requests“). Halte dich an die Akzeptanzkriterien, führe die Prüfbefehle aus, aktualisiere STATUS.md und
-lass die Änderungen uncommittet, damit ich sie in der IDE prüfen kann. Schlage am Ende eine
-Commit-Message vor (committen nur auf meine Anweisung, gemäß lokaler CLAUDE.md; pushen und PRs nur
-nach Nachfrage). Wenn du eine Installation brauchst, nenne mir Befehl, Pakete und Zweck und
-warte auf meine Zustimmung. Wenn etwas unklar ist oder
-nicht zum Code passt: stoppe und frage.
+Lies AGENTS.md im Repo-Root und setze dann Schritt <Pxx-Syy> (ohne Angabe: den nächsten offenen
+Schritt) nach .claude/skills/schritt-umsetzen/SKILL.md um. Lies nur, was AGENTS.md und die Karte
+nennen. Lass die Änderungen uncommittet, damit ich sie in der IDE prüfen kann, und schlag am Ende
+eine Commit-Message vor. Installationen, Commits, Push und PR nur nach Rückfrage. Wenn etwas unklar
+ist oder nicht zum Code passt: stoppe und frage.
 ```
 
 ## Ergebnis nach M4 (Ausblick)
