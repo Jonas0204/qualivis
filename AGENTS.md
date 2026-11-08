@@ -79,7 +79,7 @@ Alle Plan-Dateien liegen unter `docs/migration/`.
 | ADR-nnn, ADR-011 A1–A10 (Korrekturen) | `00-grundlagen/07-entscheidungen.md` |
 | O2, O5, O14 (Nutzerentscheidungen ohne ADR), RI1–RI13 (Risiken) | `00-grundlagen/08-risiken-und-offene-punkte.md` |
 | R1–R10 (Regeln) | `README.md`, Abschnitt „Regeln für die Umsetzung“ |
-| A4, A5, A7 (Vorlagen) | `anhang/` |
+| A7 (Vorlage) | `anhang/` |
 | Goldens `legacy-*.json` | `testdata/golden/<fixture>/` (Fixtures `mini`, `realworld`) |
 
 **Altcode-Pfade** (nach „Altcode“ oder „Altsystem“, meist unter „Kontext“) sind in den Karten
@@ -99,7 +99,7 @@ gekürzt. Die Zeilenangaben gelten unverändert, denn die Dateien wurden nur ver
 |---|---|
 | `pnpm check` | Lint (Biome), Typprüfung, alle Tests; vor jeder Übergabe grün |
 | `pnpm format` | formatieren und automatisch behebbare Lint-Fehler beheben |
-| `pnpm test:parity` | nur die Golden-Tests des Kerns (ab P03-S05) |
+| `pnpm test:parity` | nur die Golden-Tests des Kerns |
 | `pnpm dev`, `pnpm build` | App starten bzw. bauen (ab P04) |
 | `pnpm legacy:extract`, `pnpm legacy:serve` | alten Build entpacken und lokal starten, nur für Golden-Erfassung (`tools/legacy/README.md`) |
 | `node tools/golden/diff-json.mjs <erwartet.json> <ist.json> [n]` | zeigt die ersten n (Standard 60) Pfade, an denen zwei JSON-Dateien abweichen; Exit 0 gleich, 1 verschieden, 2 Aufruffehler |
@@ -109,7 +109,7 @@ gekürzt. Die Zeilenangaben gelten unverändert, denn die Dateien wurden nur ver
 | Pfad | Inhalt |
 |---|---|
 | `docs/migration/` | Plan, `STATUS.md`, Entscheidungen (ADRs) |
-| `packages/core/` | Analyse-Kern `@qualivis/core` (ab P03) |
+| `packages/core/` | Analyse-Kern `@qualivis/core` |
 | `apps/web/` | React-App (ab P04) |
 | `tools/` | Hilfsprogramme mit Tests: Node-Versionsprüfung, Legacy-Server, Capture-Skript, JSON-Diff |
 | `testdata/fixtures/`, `testdata/golden/` | Testprojekte und Referenzdaten aus dem alten Build |

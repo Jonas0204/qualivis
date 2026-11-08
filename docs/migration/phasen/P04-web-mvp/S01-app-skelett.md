@@ -9,7 +9,10 @@ Icon-Komponente und Test-Setup. `pnpm dev` zeigt eine leere Seite mit Hintergrun
 ## Kontext
 - `00-grundlagen/03-architektur.md` §2, §9; `04-technologie-stack.md`; `05-konventionen.md` §6
 - `01-referenz-altsystem/04-stil-referenz.md` (alle Tokens)
-- `anhang/A4` (Vite-Alias `path` → `path-browserify`)
+- Vite-Alias `path` → `path-browserify` (ADR-005, Analyse-Kern §3): Der gepatchte
+  `typhonjs-plugin-manager` enthält noch `require('path')` (wird nie aufgerufen). Mit pnpm sieht
+  dieses Paket `path-browserify` nicht, deshalb löst der Alias den absoluten Pfad aus Sicht von
+  `apps/web` auf; `path-browserify` steht dafür auch in `apps/web/package.json`.
 - Altsystem: `legacy/angular/src/index.html`, `src/styles.scss`, `src/assets/favicon.png`
 
 ## Dateien
@@ -77,7 +80,7 @@ apps/web/src/test/setup.ts
      base: './',
      plugins: [react()],
      resolve: {
-       // Patched legacy deps still require('path'); give them the same POSIX module (ADR-005, A4).
+       // Patched legacy deps still require('path'); give them the same POSIX module (ADR-005).
        alias: { path: fileURLToPath(import.meta.resolve('path-browserify')) },
      },
      server: { host: '127.0.0.1', port: 5173, strictPort: true },
@@ -124,7 +127,7 @@ apps/web/src/test/setup.ts
    Test: rendert den Ligatur-Namen als Text, ist `aria-hidden`.
 9. `App.tsx`: vorerst `<div className={styles.app} />` (leer).
 10. Nach Nachfrage beim Nutzer `pnpm install` ausführen (neue Abhängigkeiten, README R4).
-11. Gibt es `.github/workflows/ci.yml` (P03-S00): nach `- run: pnpm check` die Zeile
+11. In `.github/workflows/ci.yml` nach `- run: pnpm check` die Zeile
     `- run: pnpm build` ergänzen (gleiche Einrückung; CI/CD-Änderung, vorher nachfragen).
 
 ## Akzeptanzkriterien

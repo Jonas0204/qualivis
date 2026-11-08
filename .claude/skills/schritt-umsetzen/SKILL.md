@@ -1,11 +1,11 @@
 ---
 name: schritt-umsetzen
-description: Setzt einen Schritt des Qualivis-Migrationsplans um (Schritt-Karte docs/migration/phasen/Pnn-*/Syy-*.md, z. B. P03-S01). Verwenden, wenn der Nutzer "nächster Schritt", "setze P03-S01 um" oder "mach mit dem Plan weiter" sagt.
+description: Setzt einen Schritt des Qualivis-Migrationsplans um (Schritt-Karte docs/migration/phasen/Pnn-*/Syy-*.md, z. B. P04-S01). Verwenden, wenn der Nutzer "nächster Schritt", "setze P04-S01 um" oder "mach mit dem Plan weiter" sagt.
 ---
 
 # Schritt umsetzen
 
-Eingabe: optional eine Schritt-ID wie `P03-S01`. Ohne ID gilt der nächste offene Schritt.
+Eingabe: optional eine Schritt-ID wie `P04-S01`. Ohne ID gilt der nächste offene Schritt.
 
 ## 1. Schritt bestimmen
 

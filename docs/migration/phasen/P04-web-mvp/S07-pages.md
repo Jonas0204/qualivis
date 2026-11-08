@@ -1,6 +1,6 @@
 # P04-S07 – Neue App auf GitHub Pages (nach jedem Merge)
 
-Meilenstein M1 · Abhängig von: P04-S06 (M1 bestätigt), P03-S00 (CI) · Umfang S
+Meilenstein M1 · Abhängig von: P04-S06 (M1 bestätigt) · Umfang S
 
 ## Ziel
 Nach jedem Merge in `rewrite/react` baut GitHub Actions die neue App und veröffentlicht sie unter
@@ -21,8 +21,13 @@ mehr ausgeliefert. Der Branch selbst bleibt unverändert, denn er ist die Quelle
 ## Schritte
 0. **Vorher nachfragen:** Die Karte ändert CI/CD und veröffentlicht die App. Erst nach Zustimmung
    des Nutzers beginnen.
-1. Versionen und SHAs wie in P03-S00 ermitteln, zusätzlich für `actions/upload-pages-artifact` und
-   `actions/deploy-pages`. Die drei Actions aus `ci.yml` mit denselben SHAs übernehmen.
+1. Für `actions/upload-pages-artifact` und `actions/deploy-pages` die neueste Version mit Datum
+   ermitteln und den Commit-SHA dazu holen; die Version muss mindestens 3 Tage alt sein, wie bei
+   `minimumReleaseAge`. Die drei Actions aus `ci.yml` mit denselben SHAs übernehmen.
+   ```bash
+   gh api repos/actions/deploy-pages/releases/latest --jq '.tag_name + " " + .published_at'
+   gh api repos/actions/deploy-pages/commits/<tag> --jq .sha
+   ```
 2. `.github/workflows/pages.yml`:
    ```yaml
    name: Pages

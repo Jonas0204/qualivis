@@ -23,8 +23,8 @@ Dateien (path, File)                              path beginnt mit '/', z. B. '/
        appGraph = generateAppGraph(fileMap, componentFiles, report)
 ```
 
-Die neue Funktion `analyzeProject()` (P03-S04) bildet genau diese Schritte nach, ohne RxJS und
-Angular. Fortschrittsmeldungen (50 % / 50 %) sind optional (`onProgress`).
+Die Funktion `analyzeProject()` in `packages/core` bildet genau diese Schritte nach, ohne RxJS und
+Angular; `analyzeProjectAsync()` meldet zusätzlich den Fortschritt (50 % / 50 %, `onProgress`).
 
 ## 2. Dateien des Kerns (werden kopiert)
 
@@ -52,33 +52,18 @@ Nicht übernommen: `helper/getFilesAsync.ts` (wird in der Web-App als `readDropp
 portiert), `helper/cookie.ts`, `helper/debounce.ts`, `helper/looksLike.ts` (ungenutzt),
 `helper/isColliding.ts` (Web-App), `constants/data.ts` (Demo-Daten, ADR-011).
 
-## 3. Verifizierte Anpassungen (Spike, nur diese sind nötig)
+## 3. Anpassungen gegenüber dem Altcode
 
-1. **Typimport**: `import { NodePath } from 'babel-traverse'` → `import type { NodePath } from '@babel/traverse'` (`traverseHelper.ts:3`).
-2. **CJS-Interop** (nur im Browser-Bundle nötig, schadet in Node nicht): Default-Import von
-   `@babel/traverse` über `cjsDefault()` auflösen (`traverse.ts`, `traverseHelper.ts`). Ohne das
-   wirft der Vite-Build zur Laufzeit `TypeError: (0 , X.default) is not a function`.
-3. **escomplex mit POSIX-Pfad**: nicht `typhonjs-escomplex-project` (Default-Instanz mit Node-`path`)
-   verwenden, sondern `new ESComplexProject(pathBrowserify)` aus
-   `typhonjs-escomplex-project/dist/ESComplexProject` mit dem Paket `path-browserify` (Nodes
-   `path.posix` für Browser, ADR-005). Grund: Unter Windows liefert Node-`path` Backslash-Pfade →
-   projektweite Metriken (`adjacencyList`, `visibilityList`, `coreSize`, `changeCost`,
-   `firstOrderDensity`) weichen ab; im Browser gibt es Nodes `path` nicht. Der alte Browser-Build
-   nutzte das POSIX-Polyfill `path@0.12.7`. Code siehe `anhang/A4-posix-path-und-interop.md`.
-4. **Typfehler** unter `strict: true, noImplicitAny: false`: 47 Stellen (meist mögliche
-   `undefined`/`null` und Babel-Union-Typen). Beheben **nur** mit `!`, `as`-Casts oder
-   Typannotationen – **keine** Laufzeitänderung (P03-S02).
-5. Der Patch für `typhonjs-plugin-manager` lässt `require('path')` am Dateianfang stehen. Vite
+Im Kern umgesetzt (Details: `packages/core/src/legacy/README.md` und der Code): Typimport
+`NodePath` aus `@babel/traverse`, CJS-Interop über `cjsDefault()`, escomplex mit
+`path-browserify` (ADR-005), Typisierung nur mit `!`, Casts und Annotationen, DOM-freier Typ
+`FileWithPath`. Für die Web-App gilt zusätzlich:
+
+1. Der Patch für `typhonjs-plugin-manager` lässt `require('path')` am Dateianfang stehen. Vite
    meldet „Module "path" has been externalized“; das ist harmlos, wird aber per Vite-Alias
    `path` → `path-browserify` unterdrückt (P04-S01).
-6. Das Hilfskonstrukt `Buffer = { isBuffer: false }` aus der alten `index.html` ist **nicht** nötig
+2. Das Hilfskonstrukt `Buffer = { isBuffer: false }` aus der alten `index.html` ist **nicht** nötig
    (`jsesc` 3.1 prüft `typeof Buffer`).
-7. **DOM-freier Kern:** `generateAppGraph.ts` und `isComponentFile.ts` importieren den Typ
-   `FileWithPath` aus `getFilesAsync.ts`, der vom DOM-Typ `File` abhängt. Im Kern wird stattdessen
-   `export type FileWithPath = { path: string }` aus `model/files.ts` importiert (beide Dateien
-   lesen nur `.path`). Reine Typänderung. `console.error/warn` im Altcode bleibt; der Kern deklariert
-   dafür eine minimale `console`-Typdefinition (`src/types/globals.d.ts`, dort auch `setTimeout`),
-   weil `lib` kein `dom` enthält.
 
 ## 4. Datenstrukturen
 

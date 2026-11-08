@@ -63,7 +63,7 @@ sollen auf Windows und macOS dasselbe liefern.
 Abhängigkeiten). Dieselbe Implementierung läuft in Node (Tests, CLI) und im Browser – kein kopierter
 Code im Repo. Der alte Browser-Build nutzte das vergleichbare Polyfill `path@0.12.7`.
 **Folgen:** Ergebnisse sind betriebssystemunabhängig. Der Spike nutzte eine wortgleiche Portierung
-von Nodes POSIX-Code; dass `path-browserify` dasselbe liefert, bestätigt G1 in P03-S03.
+von Nodes POSIX-Code; dass `path-browserify` dasselbe liefert, bestätigt G1.
 
 ### ADR-006 Kanonische Dateireihenfolge
 **Kontext:** Die Knotenreihenfolge folgt der Eingabereihenfolge; die liefert der Browser beim
@@ -159,7 +159,7 @@ Branch `gh-pages` den alten Build aus, der dort nicht lädt (`<base href="/compo
 Skripte liegen aber unter `/qualivis/`). In öffentlichen Repos sind die Standard-Runner (auch Windows
 und macOS) und Pages kostenlos. Der Nutzer prüft PRs oft unterwegs.
 **Entscheidung (Nutzer, 08.11.2026):**
-- CI als eigene Karte P03-S00: `pnpm check` auf Ubuntu für PRs und Pushes nach `rewrite/react`;
+- CI (`.github/workflows/ci.yml`): `pnpm check` auf Ubuntu für PRs und Pushes nach `rewrite/react`;
   ab P04-S01 zusätzlich `pnpm build`, ab P10-S03 `pnpm quality:self`. Windows und macOS prüft die
   lokale Entwicklung (Nutzer, 08.11.2026: Linux reicht in der CI).
 - Ab M1 (Karte P04-S07) veröffentlicht ein Workflow nach jedem Merge in `rewrite/react` die **neue**

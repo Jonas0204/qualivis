@@ -43,5 +43,5 @@ prüft sich selbst damit (G6).
   Syntax, dokumentieren und weglassen.
 
 ## Entfallen (Nutzerentscheidungen 07.11.2026)
-- ~~CI-Vorschlag~~ – die CI kommt schon mit P03-S00 (ADR-016).
+- ~~CI-Vorschlag~~ – die CI gibt es seit P03 (ADR-016).
 - ~~Veröffentlichung~~ – keine Lizenz, keine npm-Veröffentlichung (O2).

@@ -39,7 +39,7 @@ Grundlagen und `STATUS.md`.
 | [04-stil-referenz.md](01-referenz-altsystem/04-stil-referenz.md) | Gemessene Farben, Schriften, Maße |
 | **phasen/** | |
 | P01, P02 | **erledigt** (M0): Repo-Umbau, Workspace, Golden-Infrastruktur; Karten entfernt |
-| [P03-kern-mvp](phasen/P03-kern-mvp/README.md) | CI, `@qualivis/core` mit Golden G1 (M1) |
+| P03 | **erledigt** (M1, Teil 1): CI, `@qualivis/core` mit Golden G1; Karten entfernt |
 | [P04-web-mvp](phasen/P04-web-mvp/README.md) | Erstes sichtbares Produkt, GitHub Pages (M1) |
 | [P05-graph-paritaet](phasen/P05-graph-paritaet/README.md) | Graph wie im Original (M2) |
 | [P06-panels-navigation](phasen/P06-panels-navigation/README.md) | Panels, Auswahl, Drill-down (M3) |
@@ -49,8 +49,6 @@ Grundlagen und `STATUS.md`.
 | [P10-core-paket-cli](phasen/P10-core-paket-cli/README.md) | Paket-Build (privat), CLI, Eigenprüfung (M7) |
 | [P11-abschluss](phasen/P11-abschluss/README.md) | Doku, Babel 8 (M8) |
 | **anhang/** | |
-| [A4-posix-path-und-interop.md](anhang/A4-posix-path-und-interop.md) | POSIX-Pfad, CJS-Interop, escomplex-Adapter (erprobt) |
-| [A5-golden-test-und-diff.md](anhang/A5-golden-test-und-diff.md) | Golden-Test G1 mit Toleranz (erprobt); Diff-Werkzeug liegt in `tools/golden/` |
 | [A7-test-provider.md](anhang/A7-test-provider.md) | Jotai-Testhilfen `TestProvider`, `initial`, `renderWithState` (Vorlage, Prüfung in P04-S02) |
 
 ## So wird der Plan benutzt
@@ -92,7 +90,7 @@ Ablauf:
 3. **Phase fertig** (Meilenstein-Abnahme, falls die Phase eine hat): umgesetzte Teile der Doku
    entfernen (nach Zustimmung), dann nach Nachfrage pushen und einen PR mit Ziel `rewrite/react` anlegen. Titel `Pnn: <Phasentitel>`. Beschreibung: erledigte Schritte,
    Prüfergebnisse (`pnpm check`, ggf. G1/G2), Abweichungen, offene Punkte. **Keine** Hinweise auf
-   Claude/KI. Gibt es eine CI (ab P03-S00), nennt der Assistent einmal den Stand der Checks. Den
+   Claude/KI. Gibt es eine CI, nennt der Assistent einmal den Stand der Checks. Den
    Link zum PR trägt der erste Schritt der nächsten Phase in `STATUS.md` (Tabelle „Phasen“) ein.
    Ablauf als Skill: `phase-abschliessen`.
 4. **Review und Merge** macht der Nutzer auf GitHub, und zwar als **Merge-Commit**: Kein Squash,
@@ -137,7 +135,7 @@ Anmeldung macht **der Nutzer selbst** (`gh auth login`); der Assistent fasst kei
 
 ## Vorlage: Arbeitsauftrag für ein ausführendes Modell
 
-In Claude Code reicht `/schritt-umsetzen P03-S01` (ohne ID: nächster offener Schritt). GitHub Copilot
+In Claude Code reicht `/schritt-umsetzen P04-S01` (ohne ID: nächster offener Schritt). GitHub Copilot
 in VS Code wählt den Skill anhand seiner Beschreibung. Für andere Werkzeuge diesen Text verwenden:
 
 ```

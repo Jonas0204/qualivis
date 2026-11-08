@@ -59,7 +59,7 @@ Nie Tokens lesen, setzen oder ausgeben.
 
 ## 5. Danach
 
-- Den PR-Link nennen. Gibt es eine CI (ab P03-S00): den aktuellen Stand der Checks einmal nennen
+- Den PR-Link nennen. Gibt es eine CI: den aktuellen Stand der Checks einmal nennen
   (`gh pr checks <nummer>`), nicht abwarten oder wiederholt abfragen.
 - Nie mergen, approven, schließen, Auto-Merge einschalten oder Branches löschen. Gemergt wird vom
   Nutzer per Merge-Commit.
