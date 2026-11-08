@@ -1,4 +1,3 @@
-// @ts-nocheck -- legacy code copied 1:1 from legacy/angular; typed in P03-S06
 import type { Component, Import } from '../model/fileMap';
 import type { Graph } from '../model/graph';
 import { findReportWithGraph } from './findReport';

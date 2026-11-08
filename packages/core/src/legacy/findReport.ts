@@ -1,4 +1,3 @@
-// @ts-nocheck -- legacy code copied 1:1 from legacy/angular; typed in P03-S06
 import type { FileMap } from '../model/fileMap';
 import type { Graph } from '../model/graph';
 
@@ -9,12 +8,12 @@ export function findReport(
   componentName: string,
   functionName?: string
 ) {
-  const component = fileMap[fileName].components[componentName];
+  const component = fileMap[fileName].components![componentName];
   return findReportWithGraph(component.graph, fullReport, fileName, componentName, functionName);
 }
 
 export function findReportWithGraph(
-  componentGraph: Graph,
+  componentGraph: Graph | undefined,
   fullReport: any,
   fileName: string,
   componentName: string,

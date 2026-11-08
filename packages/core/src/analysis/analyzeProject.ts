@@ -75,15 +75,16 @@ const pipeline = function* (files: readonly SourceFile[]): Generator<number, Ana
   for (const file of componentFiles) {
     const { components, defaultExport } = traverse(asts, file.path, report);
     fileMap[file.path].components = components;
-    fileMap[file.path].defaultExport = defaultExport;
+    fileMap[file.path].defaultExport = defaultExport as string; // legacy: null if there is none
     yield progressPercent;
   }
 
   const result = filterFileMap(fileMap);
   attachReports(result, report);
+  // Legacy quirk K1 (02-analyse-kern.md §6): never undefined, traverse always sets components.
   const appGraph = hasSingleComponent(result)
     ? { nodes: [], links: [] }
-    : generateAppGraph(result, componentFiles, report);
+    : (generateAppGraph(result, componentFiles, report) as Graph);
   return { fileMap: result, appGraph, report };
 };
 

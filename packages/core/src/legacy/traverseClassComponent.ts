@@ -1,4 +1,3 @@
-// @ts-nocheck -- legacy code copied 1:1 from legacy/angular; typed in P03-S06
 import * as t from '@babel/types';
 import type { Component, Import } from '../model/fileMap';
 import type { Graph } from '../model/graph';
@@ -25,7 +24,7 @@ export function traverseClassComponent(componentPath, name, fileName, asts, full
   const aliases: { [alias: string]: string } = {};
   const dependencies: Import[] = [];
   // SuperClass
-  const superClass: Import = getSuperClass(componentPath, fileName, asts);
+  const superClass: Import | undefined = getSuperClass(componentPath, fileName, asts);
   const lineStart: number = componentPath.node.loc.start.line;
   const lineEnd: number = componentPath.node.loc.end.line;
   let linesJSX = 0;

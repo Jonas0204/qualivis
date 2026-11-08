@@ -1,4 +1,3 @@
-// @ts-nocheck -- legacy code copied 1:1 from legacy/angular; typed in P03-S06
 import type { FileMap, FileTree } from '../model/fileMap';
 
 export function extractFileTree(fileMap: FileMap): FileTree[] {
@@ -14,13 +13,13 @@ export function extractFileTree(fileMap: FileMap): FileTree[] {
     parts.shift(); // remove first empty string element (fileName always starts with '/')
 
     const leaf: FileTree = {
-      name: parts.pop(),
+      name: parts.pop()!,
       id: fileName,
       type: 'file'
     };
 
     let index = 0;
-    let innerTree: FileTree = fileTrees.find(node => node.name === parts[0]);
+    let innerTree: FileTree = fileTrees.find(node => node.name === parts[0])!;
     let folderIsMissing = !innerTree;
 
     if (innerTree) {

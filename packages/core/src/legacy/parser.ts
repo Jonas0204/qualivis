@@ -1,8 +1,7 @@
-// @ts-nocheck -- legacy code copied 1:1 from legacy/angular; typed in P03-S06
 import { parse as babelParse, type ParserOptions } from '@babel/parser';
 
 export function parse(code: string, fileName?: string) {
-  const fileExtension = fileName.split('.').pop();
+  const fileExtension = fileName!.split('.').pop();
 
   const options: ParserOptions = {
     sourceType: 'module',
@@ -34,9 +33,9 @@ export function parse(code: string, fileName?: string) {
   };
 
   if (fileExtension === 'tsx' || fileExtension === 'ts') {
-    options.plugins.push('typescript');
+    options.plugins!.push('typescript');
   } else {
-    options.plugins.push('flow');
+    options.plugins!.push('flow');
   }
 
   return babelParse(code, options);

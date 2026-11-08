@@ -1,4 +1,3 @@
-// @ts-nocheck -- legacy code copied 1:1 from legacy/angular; typed in P03-S06
 import type { FileMap, Import } from '../model/fileMap';
 import type { FileWithPath } from '../model/files';
 import type { Graph, Node } from '../model/graph';
@@ -9,7 +8,7 @@ export function generateAppGraph(
   fileMap: FileMap,
   componentFiles: FileWithPath[],
   fullReport: any
-): Graph {
+): Graph | undefined {
   const nodes: Node[] = [];
   const links = [];
 
@@ -22,14 +21,14 @@ export function generateAppGraph(
 
       if (component.graph) {
         // remove the component node which is the first element
-        functions = [...component.graph.nodes.slice(1)].sort(previewCircleCompare);
+        functions = [...component.graph.nodes.slice(1)].sort(previewCircleCompare as (a: Node, b: Node) => number);
       }
 
       nodes.push({
         id: `${fileName}#${componentName}`,
         label: componentName
           .split('/')
-          .pop()
+          .pop()!
           .split('.')[0],
         functions,
         type: 'component',
@@ -43,15 +42,15 @@ export function generateAppGraph(
           component.extends.source,
           fileName,
           componentFiles
-        );
+        )!;
       }
 
-      component.dependencies = [...component.dependencies]
+      component.dependencies = [...component.dependencies!]
         .map(dependency => {
-          dependency.source = getCompleteFilePath(dependency.source, fileName, componentFiles);
+          dependency.source = getCompleteFilePath(dependency.source, fileName, componentFiles)!;
           return dependency.source && dependency;
         })
-        .filter(d => d);
+        .filter(d => d) as Import[];
 
       component.dependencies.forEach(dependency => {
         if (!dependency.source.startsWith('/')) {
@@ -146,7 +145,7 @@ function getCompleteFilePath(importPath: string, fileName: string, componentFile
   return file ? file.path : importPath;
 }
 
-function getDefaultExport(fileMap: FileMap, dependency: Import, currentFileName: string): Import {
+function getDefaultExport(fileMap: FileMap, dependency: Import, currentFileName: string): Import | undefined {
   const fileName = Object.keys(fileMap).find(name => name === dependency.source);
 
   if (!fileName || !fileMap[fileName].defaultExport) {

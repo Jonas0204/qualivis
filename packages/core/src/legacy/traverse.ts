@@ -1,4 +1,3 @@
-// @ts-nocheck -- legacy code copied 1:1 from legacy/angular; typed in P03-S06
 import _babelTraverse from '@babel/traverse';
 import type * as t from '@babel/types';
 import { cjsDefault } from '../analysis/interop';
@@ -16,10 +15,10 @@ import {
 
 const babelTraverse = cjsDefault(_babelTraverse);
 
-export function traverse(asts: AstWithPath[], fileName: string, fullReport) {
-  const ast: t.File = asts.find(theAst => theAst.srcPath === fileName).ast;
+export function traverse(asts: AstWithPath[], fileName: string, fullReport): { components: ComponentMap; defaultExport: string | null } {
+  const ast: t.File = asts.find(theAst => theAst.srcPath === fileName)!.ast;
   const components: ComponentMap = {};
-  let defaultExport: string = null;
+  let defaultExport: string | null = null;
 
   if (!ast) {
     console.error('AST not found:', fileName);
@@ -29,7 +28,7 @@ export function traverse(asts: AstWithPath[], fileName: string, fullReport) {
     ClassDeclaration: path => {
       if (isReactClassComponent(path, asts, fileName)) {
         path.skip();
-        const classComponentName = path.node.id.name;
+        const classComponentName = path.node.id!.name;
         components[classComponentName] = traverseClassComponent(
           path,
           classComponentName,
@@ -42,7 +41,7 @@ export function traverse(asts: AstWithPath[], fileName: string, fullReport) {
     FunctionDeclaration: path => {
       if (isReactFunctionComponent(path)) {
         path.skip();
-        const functionComponentName = path.node.id.name;
+        const functionComponentName = path.node.id!.name;
         components[functionComponentName] = traverseFunctionComponent(
           path,
           functionComponentName,
@@ -53,12 +52,12 @@ export function traverse(asts: AstWithPath[], fileName: string, fullReport) {
       }
     },
     'FunctionExpression|ArrowFunctionExpression': path => {
-      if (!path.parentPath.isVariableDeclarator() && !path.parentPath.isCallExpression()) {
+      if (!path.parentPath!.isVariableDeclarator() && !path.parentPath!.isCallExpression()) {
         return;
       }
       if (isReactFunctionComponent(path)) {
         path.skip();
-        const functionComponentName = path.findParent(p => p.isVariableDeclarator()).node.id.name;
+        const functionComponentName = (path.findParent(p => p.isVariableDeclarator())!.node as any).id.name; // legacy: untyped Babel access
         components[functionComponentName] = traverseFunctionComponent(
           path,
           functionComponentName,
@@ -69,17 +68,17 @@ export function traverse(asts: AstWithPath[], fileName: string, fullReport) {
       }
     },
     ExportDefaultDeclaration: path => {
-      if (path.node.declaration.id) {
-        defaultExport = path.node.declaration.id.name;
+      if ((path.node.declaration as t.ClassDeclaration).id) {
+        defaultExport = (path.node.declaration as t.ClassDeclaration).id!.name;
       } else if (
         path.get('declaration').isAssignmentExpression() &&
         path.get('declaration.left').isIdentifier()
       ) {
-        defaultExport = path.node.declaration.left.name;
+        defaultExport = (path.node.declaration as any).left.name; // legacy: untyped Babel access
       } else if (path.get('declaration').isIdentifier()) {
-        defaultExport = path.node.declaration.name;
+        defaultExport = (path.node.declaration as t.Identifier).name;
 
-        const binding = path.scope.getBinding(defaultExport);
+        const binding = path.scope.getBinding(defaultExport)!;
         let name = '';
         if (binding.path.isImportDefaultSpecifier()) {
           name = 'default';
@@ -95,7 +94,7 @@ export function traverse(asts: AstWithPath[], fileName: string, fullReport) {
           fileName
         );
 
-        const componentFile = getComponentFileFromImportPath(source, asts);
+        const componentFile = getComponentFileFromImportPath(source!, asts);
 
         if (!componentFile) {
           console.error('Component file not found', source);
@@ -115,14 +114,14 @@ export function traverse(asts: AstWithPath[], fileName: string, fullReport) {
         path.get('declaration').isFunctionDeclaration() &&
         isReactFunctionComponent(path.get('declaration'))
       ) {
-        defaultExport = path.node.id.name;
+        defaultExport = (path.node as any).id.name; // legacy: untyped Babel access
       }
     },
     CallExpression: path => {
       if (
         !path.parentPath.isVariableDeclarator() ||
         !path.get('callee').isCallExpression() ||
-        path.node.callee.callee.name !== 'connect' ||
+        (path.node.callee as any).callee.name !== 'connect' || // legacy: untyped Babel access
         path.get('arguments').length === 0
       ) {
         return;
@@ -135,11 +134,11 @@ export function traverse(asts: AstWithPath[], fileName: string, fullReport) {
         if (!componentDependency) {
           return;
         }
-        const componentName = path.parentPath.node.id.name;
+        const componentName = (path.parentPath.node.id as t.Identifier).name;
         components[componentName] = {
           dependencies: [componentDependency],
-          lineStart: path.node.loc.start.line,
-          lineEnd: path.node.loc.end.line
+          lineStart: path.node.loc!.start.line,
+          lineEnd: path.node.loc!.end.line
         };
       }
     }

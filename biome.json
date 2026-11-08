@@ -67,7 +67,12 @@
             "useOptionalChain": "off",
             "useMathMinMax": "off"
           },
-          "style": { "useTemplate": "off", "noParameterAssign": "off", "useImportType": "error" },
+          "style": {
+            "useTemplate": "off",
+            "noParameterAssign": "off",
+            "noNonNullAssertion": "off",
+            "useImportType": "error"
+          },
           "suspicious": {
             "noExplicitAny": "off",
             "noImplicitAnyLet": "off",

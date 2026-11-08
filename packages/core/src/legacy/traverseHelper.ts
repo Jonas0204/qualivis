@@ -1,5 +1,3 @@
-// @ts-nocheck -- legacy code copied 1:1 from legacy/angular; typed in P03-S06
-
 import type { NodePath } from '@babel/traverse';
 import _babelTraverse from '@babel/traverse';
 import * as t from '@babel/types';
@@ -31,7 +29,7 @@ export function mergeAliasesWithOriginals(graph: Graph, aliases: { [alias: strin
       }
       return link;
     })
-    .filter(link => link); // filter out links that are undefined
+    .filter(link => link) as Link[]; // filter out links that are undefined
 }
 
 export function filterInvalidLinks(graph: Graph, logging = false) {
@@ -396,7 +394,7 @@ export function isFunctionWithName(path, functionComponentName: string) {
 }
 
 export function getComponentDependencies(path, fileName: string, asts: AstWithPath[]) {
-  const dependencies = [];
+  const dependencies: Import[] = [];
 
   const dependency = getComponentDependency(path, fileName, asts);
 
@@ -543,7 +541,7 @@ export function isComponentFileImport(importPath: string, asts: AstWithPath[]) {
 export function getComponentFileFromImportPath(
   importPath: string,
   asts: AstWithPath[]
-): AstWithPath {
+): AstWithPath | undefined {
   if (!importPath.startsWith('/')) {
     const searchString = '/src/';
     const index = asts[0].srcPath.indexOf(searchString);
@@ -581,7 +579,7 @@ export function findCallExpressionInnerArgument(path) {
 }
 
 export function getLinesOfCode(path: NodePath) {
-  return path.node.loc.end.line - path.node.loc.start.line + 1;
+  return path.node.loc!.end.line - path.node.loc!.start.line + 1;
 }
 
 export function getMaxJSXNesting(path) {
