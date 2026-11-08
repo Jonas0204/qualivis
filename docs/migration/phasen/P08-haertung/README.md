@@ -12,7 +12,7 @@ Karten S01–S09 als Einzeldateien im Format aus `00-grundlagen/05-konventionen.
 Erkenntnisse aus `STATUS.md` (Abweichungen, offene Punkte) einarbeiten, mit dem Nutzer abstimmen.
 
 ## S01 – Kern: `noImplicitAny` und Report-Typen (M)
-- `packages/core/tsconfig.json`: `noImplicitAny: true`. Fehler im Altcode nur mit Typannotationen
+- `packages/core/tsconfig.src.json`: `noImplicitAny: true`. Fehler im Altcode nur mit Typannotationen
   beheben (Parameter-Typen wie `path: NodePath<t.ClassDeclaration>`; bei Unklarheit `NodePath`).
 - `model/report.ts` präzisieren (Methoden-, Klassen-, Modul-Report gemäß escomplex-Struktur, siehe
   Golden `legacy-report.json`); Index-Signaturen entfernen, wo möglich.

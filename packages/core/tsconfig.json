@@ -1,11 +1,4 @@
 {
-  "extends": "../../tsconfig.base.json",
-  "compilerOptions": {
-    "noImplicitAny": false,
-    "noUncheckedIndexedAccess": false,
-    "lib": ["es2023"],
-    "types": []
-  },
-  "include": ["src"],
-  "exclude": ["src/**/*.test.ts"]
+  "files": [],
+  "references": [{ "path": "./tsconfig.src.json" }, { "path": "./tsconfig.test.json" }]
 }

@@ -44,7 +44,7 @@ Ablauf: README, „Branches und Pull Requests“. Ziel aller PRs: `rewrite/react
 | P03-S02 | Kern: Altcode 1:1 | ☑ | 08.11.2026 | 10 Dateien, Diff nur Zeile 1 und Importe (Biome: `import type`, Sortierung); keine weiteren Regeln abgeschaltet |
 | P03-S03 | Kern: escomplex-Adapter | ☑ | 08.11.2026 | Tests auf Windows grün; macOS offen (lokal beim Nutzer), Linux über CI |
 | P03-S04 | Kern: `analyzeProject` | ☑ | 08.11.2026 | eine Generator-Pipeline für sync und async (keine Duplikation); 119 Zeilen |
-| P03-S05 | Kern: Golden G1, API | ☐ | | |
+| P03-S05 | Kern: Golden G1, API | ☑ | 08.11.2026 | G1 6/6 grün, **keine** Toleranz genutzt (diff-json: alle 6 Dateien identisch); Gegenprobe ohne Sortierung → App-Graph rot |
 | P03-S06 | Kern: Altcode typisieren | ☐ | | |
 | P04-S01 | Web: Skelett, Tokens, Schriften | ☐ | | |
 | P04-S02 | Web: Jotai-Atome | ☐ | | |

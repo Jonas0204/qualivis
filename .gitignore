@@ -5,6 +5,7 @@ CLAUDE.md
 node_modules/
 dist/
 coverage/
+*.tsbuildinfo
 .cache/
 *.log
 .DS_Store

@@ -40,7 +40,9 @@ e2e/ (@qualivis/e2e, Playwright, separat installierbar) · tools/ (Node-Skripte 
 ├─ patches/                  pnpm-Patches (escomplex-commons, plugin-manager)
 ├─ packages/
 │  ├─ core/
-│  │  ├─ package.json  tsconfig.json  vitest.config.ts  README.md
+│  │  ├─ package.json  vitest.config.ts  README.md
+│  │  ├─ tsconfig.json            nur Verweise (für die IDE) auf tsconfig.src.json (src ohne Tests,
+│  │  │                           ohne Node/DOM) und tsconfig.test.json (Tests, mit Node-Typen)
 │  │  ├─ src/
 │  │  │  ├─ index.ts                 öffentliche API (nur hier wird exportiert)
 │  │  │  ├─ analysis/                analyzeProject.ts, escomplex.ts (mit path-browserify), interop.ts,
