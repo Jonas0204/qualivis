@@ -29,7 +29,14 @@
         "noDefaultExport": "error",
         "useConsistentTypeDefinitions": { "level": "error", "options": { "style": "type" } }
       },
-      "suspicious": { "noConsole": "error", "noExplicitAny": "error", "noDoubleEquals": "error" }
+      "suspicious": { "noConsole": "error", "noExplicitAny": "error", "noDoubleEquals": "error" },
+      "nursery": {
+        "useConsistentFunctionStyle": "error",
+        "useReactFunctionComponentDefinition": {
+          "level": "error",
+          "options": { "namedComponents": "arrowFunction" }
+        }
+      }
     }
   },
   "overrides": [
@@ -69,7 +76,8 @@
             "noTsIgnore": "off",
             "noDoubleEquals": "off"
           },
-          "correctness": { "noUnusedFunctionParameters": "off", "noUnusedVariables": "off" }
+          "correctness": { "noUnusedFunctionParameters": "off", "noUnusedVariables": "off" },
+          "nursery": { "useConsistentFunctionStyle": "off" }
         }
       }
     },

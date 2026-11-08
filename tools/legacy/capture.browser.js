@@ -29,7 +29,7 @@ window.qvCapture = async function qvCapture(fixture) {
   const safeName = id => id.replace(/[^a-zA-Z0-9]+/g, '_').replace(/^_+|_+$/g, '');
   const text = el => (el ? el.textContent.replace(/\s+/g, ' ').trim() : null);
 
-  function snapshot(view) {
+  const snapshot = view => {
     const root = document.querySelector('#d3-root');
     const nodes = nodeEls().map(g => {
       const d = g.__data__;
@@ -99,9 +99,9 @@ window.qvCapture = async function qvCapture(fixture) {
       nodes,
       links,
     };
-  }
+  };
 
-  async function readPanel() {
+  const readPanel = async () => {
     await sleep(300);
     const panel = document.querySelector('app-code-quality');
     return {
@@ -119,9 +119,9 @@ window.qvCapture = async function qvCapture(fixture) {
         description: text(i.querySelector('.description')),
       })),
     };
-  }
+  };
 
-  async function panelsForAll() {
+  const panelsForAll = async () => {
     const out = [];
     for (const g of nodeEls()) {
       g.querySelector('circle.circle-overlay').dispatchEvent(
@@ -133,7 +133,7 @@ window.qvCapture = async function qvCapture(fixture) {
       .querySelector('#d3-root svg')
       .dispatchEvent(new MouseEvent('click', { bubbles: true }));
     return out;
-  }
+  };
 
   // 1. Load fixture via synthetic drop (paths in canonical order from the manifest)
   const list = await (await fetch(`/fixtures/${fixture}/manifest.json`)).json();

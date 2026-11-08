@@ -10,9 +10,9 @@ const files = [
   { srcPath: '/p/src/b.js', code: 'export default 1;\n' },
 ];
 
-function analyze() {
+const analyze = () => {
   return analyzeModules(files.map(f => ({ ast: parse(f.code, f.srcPath), srcPath: f.srcPath })));
-}
+};
 
 describe('analyzeModules', () => {
   it('reports every module under its unchanged path', () => {

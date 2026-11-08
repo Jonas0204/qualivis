@@ -10,6 +10,8 @@ const ESComplexProject = cjsDefault(_ESComplexProject);
  * (legacy: the `path` npm polyfill). Node's win32 `path` would change project-level metrics
  * (adjacencyList, visibilityList, coreSize, ...) and does not exist in the browser (ADR-005).
  */
-export function analyzeModules(modules: Array<{ ast: unknown; srcPath: string }>): EscomplexReport {
+export const analyzeModules = (
+  modules: Array<{ ast: unknown; srcPath: string }>
+): EscomplexReport => {
   return new ESComplexProject(pathBrowserify).analyze(modules) as EscomplexReport;
-}
+};

@@ -18,7 +18,7 @@ const dirs = {
 let server;
 let base;
 
-function freePort() {
+const freePort = () => {
   return new Promise((resolvePort, reject) => {
     const probe = createServer();
     probe.once('error', reject);
@@ -27,9 +27,9 @@ function freePort() {
       probe.close(() => resolvePort(port));
     });
   });
-}
+};
 
-function startServer(port) {
+const startServer = port => {
   return new Promise((resolveStart, reject) => {
     const child = spawn(process.execPath, [script, String(port)], {
       env: {
@@ -46,7 +46,7 @@ function startServer(port) {
       if (String(chunk).includes('legacy server on')) resolveStart(child);
     });
   });
-}
+};
 
 beforeAll(async () => {
   mkdirSync(dirs.build, { recursive: true });

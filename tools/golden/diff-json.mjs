@@ -12,14 +12,14 @@ const right = JSON.parse(readFileSync(b, 'utf8'));
 const max = Number(maxArg ?? 60);
 const diffs = [];
 
-function walk(x, y, path) {
+const walk = (x, y, path) => {
   if (diffs.length >= 10_000 || Object.is(x, y)) return;
   if (typeof x !== 'object' || typeof y !== 'object' || x === null || y === null) {
     diffs.push(`${path}: ${JSON.stringify(x)} -> ${JSON.stringify(y)}`);
     return;
   }
   for (const k of new Set([...Object.keys(x), ...Object.keys(y)])) walk(x[k], y[k], `${path}.${k}`);
-}
+};
 walk(left, right, '$');
 
 const byPrefix = {};

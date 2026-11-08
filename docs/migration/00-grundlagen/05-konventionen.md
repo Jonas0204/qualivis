@@ -28,6 +28,12 @@
 - **`type` statt `interface`** für alle Typdefinitionen (`type GraphNodeProps = { … }`; Erweiterung
   mit `&`). Erzwungen durch Biome `useConsistentTypeDefinitions` (Option `style: "type"`, automatisch
   behebbar). Ausnahme: übernommener Altcode in `packages/core/src/legacy/` und Fixtures.
+- **Arrow-Funktionen statt Funktionsdeklarationen**, auch für React-Komponenten:
+  `export const sortFiles = (files: readonly SourceFile[]): SourceFile[] => { … };`. Erzwungen durch
+  Biome `nursery/useConsistentFunctionStyle` und `nursery/useReactFunctionComponentDefinition`
+  (`arrowFunction`). Snippets mit `function` in Karten und Anhängen sinngemäß umsetzen. Ausnahmen:
+  Altcode in `packages/core/src/legacy/`, Generatoren (`function*`), TS-Überladungen. In `.tsx`
+  braucht ein generischer Arrow ein Komma: `<T,>(…) =>`. (Nutzer, 08.11.2026)
 - Keine Enums; String-Unions (`type View = 'app' | 'component'`).
 - Keine Default-Exports in neuem Code (Ausnahme: Konfigurationsdateien, die es verlangen).
 - Versionen in `pnpm-workspace.yaml` (Catalog) immer **fest** (`1.2.3`, kein `^`/`~`).

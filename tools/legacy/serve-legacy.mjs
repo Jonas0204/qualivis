@@ -26,14 +26,14 @@ const types = {
   '.txt': 'text/plain; charset=utf-8',
 };
 
-function safeJoin(base, rel) {
+const safeJoin = (base, rel) => {
   const full = resolve(base, normalize(rel).replace(/^([/\\])+/, ''));
   if (full !== resolve(base) && !full.startsWith(resolve(base) + sep))
     throw new Error('path escape');
   return full;
-}
+};
 
-async function listFiles(dir, prefix = '') {
+const listFiles = async (dir, prefix = '') => {
   const out = [];
   for (const entry of await readdir(dir, { withFileTypes: true })) {
     const rel = prefix ? `${prefix}/${entry.name}` : entry.name;
@@ -41,12 +41,12 @@ async function listFiles(dir, prefix = '') {
     else out.push(rel);
   }
   return out.sort(); // canonical order (ADR-006)
-}
+};
 
-function send(res, status, body, type = 'text/plain; charset=utf-8') {
+const send = (res, status, body, type = 'text/plain; charset=utf-8') => {
   res.writeHead(status, { 'content-type': type, 'cache-control': 'no-store' });
   res.end(body);
-}
+};
 
 createServer(async (req, res) => {
   try {

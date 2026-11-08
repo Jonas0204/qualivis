@@ -9,14 +9,14 @@ const script = fileURLToPath(new URL('./diff-json.mjs', import.meta.url));
 const temp = mkdtempSync(join(tmpdir(), 'qv-diff-json-'));
 let counter = 0;
 
-function writeJson(value) {
+const writeJson = value => {
   counter += 1;
   const file = join(temp, `doc-${counter}.json`);
   writeFileSync(file, JSON.stringify(value));
   return file;
-}
+};
 
-function runDiff(...args) {
+const runDiff = (...args) => {
   try {
     const out = execFileSync(process.execPath, [script, ...args], {
       encoding: 'utf8',
@@ -26,7 +26,7 @@ function runDiff(...args) {
   } catch (err) {
     return { code: err.status, out: `${err.stdout}${err.stderr}` };
   }
-}
+};
 
 afterAll(() => rmSync(temp, { recursive: true, force: true }));
 
