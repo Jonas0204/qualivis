@@ -55,16 +55,15 @@ Begründung zu den Testwerkzeugen: ADR-015.
   in `allowBuilds` steht. Dann stoppen, dem Nutzer Paket und Skript nennen, Entscheidung abwarten.
 - **Tippfehler:** Bei unbekannten Schlüsseln in `pnpm-workspace.yaml` bricht pnpm mit
   `ERR_PNPM_UNRECOGNIZED_WORKSPACE_SETTINGS` ab.
-- **Erster Install:** `@codemirror/search`, `@fontsource/*`, `jotai`, `path-browserify` und
-  `@playwright/test` waren im Spike nicht installiert; beim ersten Install auf die Auflösung achten.
+- **Erster Install:** `@codemirror/search`, `@fontsource/*`, `jotai` und `@playwright/test` waren
+  im Spike nicht installiert; beim ersten Install auf die Auflösung achten.
 
 ## 4. Patches
 
 Zwei alte escomplex-Pakete haben Fehler, die das Altsystem mit patch-package korrigiert hat. pnpm
 wendet dieselben Korrekturen selbst an: Die Dateien liegen in `patches/`, `patchedDependencies` in
 `pnpm-workspace.yaml` ordnet sie den Paketen zu, der Hash steht im Lockfile. Passt ein Patch nach
-einem Versionswechsel nicht mehr, bricht die Installation ab. `patchedDependencies` ist bis P03-S01
-auskommentiert, weil pnpm Patches für nicht installierte Pakete ablehnt.
+einem Versionswechsel nicht mehr, bricht die Installation ab.
 
 | Paket | Problem | Korrektur |
 |---|---|---|

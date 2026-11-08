@@ -14,11 +14,10 @@ allowBuilds:
   core-js: false # postinstall banner (pulled in by escomplex via babel-runtime 6)
   fsevents: false # macOS file watcher; ships a prebuilt binary, no build needed
 
-# Activated in P03-S01 together with typhonjs-escomplex-project: pnpm refuses patches for
-# packages that are not installed yet.
-# patchedDependencies:
-#   typhonjs-escomplex-commons@0.1.1: patches/typhonjs-escomplex-commons@0.1.1.patch
-#   typhonjs-plugin-manager@0.2.0: patches/typhonjs-plugin-manager@0.2.0.patch
+# Fixes for two old escomplex packages (docs/migration/00-grundlagen/04-technologie-stack.md §4)
+patchedDependencies:
+  typhonjs-escomplex-commons@0.1.1: patches/typhonjs-escomplex-commons@0.1.1.patch
+  typhonjs-plugin-manager@0.2.0: patches/typhonjs-plugin-manager@0.2.0.patch
 
 catalog:
   "@babel/parser": 7.29.12

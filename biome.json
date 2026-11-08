@@ -43,6 +43,10 @@
       "linter": { "rules": { "style": { "noDefaultExport": "off" } } }
     },
     {
+      "includes": ["packages/core/src/types/**"],
+      "linter": { "rules": { "style": { "noDefaultExport": "off" } } }
+    },
+    {
       "includes": ["tools/**", "**/*.test.ts", "**/*.test.tsx", "**/test/**"],
       "linter": { "rules": { "suspicious": { "noConsole": "off" } } }
     },
