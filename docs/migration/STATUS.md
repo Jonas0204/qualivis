@@ -8,7 +8,7 @@ Bestätigung durch den Nutzer. Vor dem PR einer Phase werden ihre Zeilen zu eine
 | Meilenstein | Status | Bestätigt am |
 |---|---|---|
 | M0 Fundament | ☑ (08.11.2026) | 08.11.2026 (Merge von PR #1) |
-| M1 Erstes Produkt | ☐ | |
+| M1 Erstes Produkt | ☑ (09.11.2026) | 09.11.2026 (Nutzer, Sichtvergleich mit dem Altsystem) |
 | M2 Graph-Parität | ☐ | |
 | M3 Analyse-UI | ☐ | |
 | M4 Funktionsparität | ☐ | |
@@ -25,7 +25,7 @@ Ablauf: README, „Branches und Pull Requests“. Ziel aller PRs: `rewrite/react
 |---|---|---|---|
 | P01 Fundament + P02 Golden-Infrastruktur | `rewrite/m0-fundament` | [#1](https://github.com/Jonas0204/qualivis/pull/1) | ☑ |
 | P03 Kern-MVP | `rewrite/p03-kern-mvp` | | ☑ |
-| P04 Web-MVP | `rewrite/p04-web-mvp` | | ☐ |
+| P04 Web-MVP | `rewrite/p04-web-mvp` | | ◐ |
 | P05 Graph-Parität | `rewrite/p05-graph-paritaet` | | ☐ |
 | P06 Panels, Navigation | `rewrite/p06-panels-navigation` | | ☐ |
 | P07 Einstellungen, Persistenz | `rewrite/p07-einstellungen-persistenz` | | ☐ |
@@ -40,13 +40,7 @@ Ablauf: README, „Branches und Pull Requests“. Ziel aller PRs: `rewrite/react
 |---|---|---|---|---|
 | P01, P02 | M0: Fundament, Golden-Infrastruktur | ☑ | 08.11.2026 | Commit `5647a06`, PR #1 |
 | P03 | M1 (Teil 1): CI, Kern `@qualivis/core`, Golden G1 | ☑ | 08.11.2026 | Commits `5e54b41`–`1bd11f9` |
-| P04-S01 | Web: Skelett, Tokens, Schriften | ☐ | | |
-| P04-S02 | Web: Jotai-Atome | ☐ | | |
-| P04-S03 | Web: Upload, App-Rahmen | ☐ | | |
-| P04-S04 | Web: Analyse-Fluss | ☐ | | |
-| P04-S05 | Web: Minimaler Graph | ☐ | | |
-| P04-S06 | M1-Abnahme | ☐ | | |
-| P04-S07 | GitHub Pages (neue App) | ☐ | | |
+| P04 | M1 (Teil 2): Web-MVP, GitHub Pages | ◐ | 09.11.2026 | Commits `5ac8732`–`fbdc621`; M1 bestätigt. Offen: `pnpm dev` auf macOS (Nutzer). Nach dem Merge des P04-PR (Nutzer): Pages-Workflow läuft durch (Environment-Freigabe für `rewrite/react`), die Seite lädt ohne 404 und ohne fremde Hosts, Drop von `mini` → 8 Knoten, 7 Pfeile, `origin/gh-pages` bleibt `5f0155e`. Danach ☑ und PR-Link in der Tabelle „Phasen“ (beim Start von P05) |
 | P05-S01 | Regeln: Größe, Icons | ☐ | | |
 | P05-S02 | Regeln: Geometrie, Farben | ☐ | | |
 | P05-S03 | Regeln: Cluster, Constraints | ☐ | | |
@@ -82,5 +76,3 @@ Ablauf: README, „Branches und Pull Requests“. Ziel aller PRs: `rewrite/react
 Hier jede Abweichung vom Plan mit Begründung und Verweis (ADR bzw. Nutzerentscheidung) eintragen,
 solange sie für kommende Schritte wichtig ist. Vor dem PR der Phase wandert sie in die betroffenen
 Karten oder Grundlagen oder wird gestrichen; Erledigtes steht in der Git-Historie.
-
-- (derzeit keine)

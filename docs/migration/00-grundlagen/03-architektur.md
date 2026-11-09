@@ -41,8 +41,9 @@ e2e/ (@qualivis/e2e, Playwright, separat installierbar) · tools/ (Node-Skripte 
 ├─ packages/
 │  ├─ core/
 │  │  ├─ package.json  vitest.config.ts  README.md
-│  │  ├─ tsconfig.json            nur Verweise (für die IDE) auf tsconfig.src.json (src ohne Tests,
-│  │  │                           ohne Node/DOM) und tsconfig.test.json (Tests, mit Node-Typen)
+│  │  ├─ tsconfig.json            nur Verweise auf tsconfig.src.json (src ohne Tests, ohne Node/DOM;
+│  │  │                           `composite`, schreibt nur `.d.ts` nach `dist/types`) und
+│  │  │                           tsconfig.test.json (Tests, mit Node-Typen)
 │  │  ├─ src/
 │  │  │  ├─ index.ts                 öffentliche API (nur hier wird exportiert)
 │  │  │  ├─ analysis/                analyzeProject.ts, escomplex.ts (mit path-browserify), interop.ts,
@@ -58,7 +59,9 @@ e2e/ (@qualivis/e2e, Playwright, separat installierbar) · tools/ (Node-Skripte 
 │  └─ cli/                           (ab P10)
 ├─ apps/
 │  └─ web/
-│     ├─ index.html  vite.config.ts  vitest.config.ts  tsconfig.json
+│     ├─ index.html  vite.config.ts  vitest.config.ts
+│     ├─ tsconfig.json               Verweis auf core/tsconfig.src.json; `typecheck` ist `tsc -b`,
+│     │                              damit der Kern mit seinen eigenen Optionen geprüft wird
 │     ├─ public/favicon.png
 │     └─ src/
 │        ├─ main.tsx                 Einstieg, Provider
@@ -71,8 +74,8 @@ e2e/ (@qualivis/e2e, Playwright, separat installierbar) · tools/ (Node-Skripte 
 │        │  ├─ graph/                GraphView.tsx, GraphCanvas.tsx, GraphNode.tsx, GraphLink.tsx,
 │        │  │                        PreviewCircles.tsx, Legend.tsx, GraphActions.tsx,
 │        │  │                        usePanZoom.ts, useNodeDrag.ts, useFade.ts, useLabelCollision.ts,
-│        │  │                        buildViewGraph.ts, graph.css,
-│        │  │                        layout/ (types.ts, colaLayout.ts, forceLayout.ts, useLayout.ts)
+│        │  │                        buildViewGraph.ts, useLayout.ts, graph.css,
+│        │  │                        layout/ (types.ts, colaLayout.ts, forceLayout.ts)
 │        │  ├─ file-tree/            FileTree.tsx, useTreeState.ts
 │        │  ├─ code-quality/         CodeQualityPanel.tsx, QualityMetricBar.tsx, IconDescription.tsx
 │        │  ├─ source-code/          SourceCodeView.tsx, neoTheme.ts
@@ -144,7 +147,7 @@ Settings  ─► settingsAtom (persistiert) ─► GraphView startet Layout neu
   - `snackbarAtom` – aktuelle Meldung
 - `StateProvider` stellt einen Jotai-`Provider` mit eigenem `store` bereit. Komponenten- und
   Hook-Tests rendern über den `TestProvider` (eigener Store, Startwerte per `useHydrateAtoms`,
-  `06-teststrategie.md` §2, `anhang/A7`); reine Atom-Tests nutzen `createStore()` + `store.set(...)`
+  `06-teststrategie.md` §2); reine Atom-Tests nutzen `createStore()` + `store.set(...)`
   → keine globalen Singletons im Test.
 - Aktionen mit mehreren Schritten (z. B. Analyse starten) sind normale Funktionen, die den `store`
   bekommen (`runAnalysis(files, store)`), oder Schreib-Atome – beides testbar ohne React.
@@ -190,7 +193,8 @@ export type LayoutEngine = {
 - Kein Router-Paket. `useUrlState` liest/schreibt `?id=` per `history.pushState`/`popstate`.
   `view` = `upload` ohne Analyse, sonst `graph`. Zurück-Button des Browsers funktioniert.
 - Basis-Pfad: Vite `base: './'` → läuft unter beliebigem Unterpfad, z. B. auf GitHub Pages unter
-  `/qualivis/` (P04-S07).
+  `/qualivis/` (`.github/workflows/pages.yml`). Der Pfad ändert sich nie (nur `?id=`), deshalb
+  braucht Pages keinen 404-Fallback.
 - Deep-Link `?id=` funktioniert auch nach Neuladen (Korrektur von N4, ADR-011), sofern die
   Analyse aus dem Speicher wiederhergestellt werden kann.
 

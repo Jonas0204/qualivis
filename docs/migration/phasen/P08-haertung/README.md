@@ -42,7 +42,8 @@ Erkenntnisse aus `STATUS.md` (Abweichungen, offene Punkte) einarbeiten, mit dem 
   Nachrichten `{ type: 'analyze', files }` → `{ type: 'progress', percent }` / `{ type: 'done', result }` /
   `{ type: 'error', message }`. `runAnalysis` nutzt den Worker, Fallback ohne Worker (Tests/jsdom).
 - Kern nur im Worker laden → Haupt-Bundle deutlich kleiner (Spike: 1,72 MB gesamt). Ziel: Haupt-Chunk
-  < 300 KB gzip. Ergebnis messen und notieren.
+  < 300 KB gzip (Ausgangswert nach P04: ein Chunk, 1,31 MB, gzip 329,7 kB; Vite warnt ab 500 kB).
+  Ergebnis messen und notieren.
 - **Abnahme:** UI bleibt während der Analyse von `realworld` bedienbar (Fortschrittsbalken animiert),
   Ergebnis identisch (G1 über Worker-Pfad im E2E-Test).
 
@@ -60,6 +61,9 @@ Erkenntnisse aus `STATUS.md` (Abweichungen, offene Punkte) einarbeiten, mit dem 
 - Aufräumen (Nutzer, 08.11.2026): Quelltext-Eingaben in Kern-Tests stehen als Zeilenliste mit
   `[…].join('\n')` (z. B. `packages/core/src/analysis/analyzeProject.test.ts`). Lesbarer machen:
   Template-String mit kleinem Helfer, der den ersten Zeilenumbruch entfernt, oder Fixture-Dateien.
+- Aufräumen (Nutzer, 09.11.2026): Bei unbekannter Komponenten-ID zeigt `buildViewGraph` den
+  App-Graph als App-Ansicht (wie P06-S06; das Altsystem rechnete ihn als Komponentenansicht). Prüfen,
+  ob der Fall nach dem Bereinigen der URL (P06-S06) noch eintreten kann; sonst vereinfachen.
 
 ## S07 – Barrierefreiheit (M)
 - Tastaturbedienung: Toolbar, Aktionsleiste, Dateibaum, Dialog, Select, Split-Trenner vollständig.

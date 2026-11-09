@@ -4,7 +4,12 @@
     "noImplicitAny": false,
     "noUncheckedIndexedAccess": false,
     "lib": ["es2023"],
-    "types": []
+    "types": [],
+    "composite": true,
+    "noEmit": false,
+    "emitDeclarationOnly": true,
+    "rootDir": "src",
+    "outDir": "dist/types"
   },
   "include": ["src"],
   "exclude": ["src/**/*.test.ts"]

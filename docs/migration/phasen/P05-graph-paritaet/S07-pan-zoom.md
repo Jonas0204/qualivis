@@ -36,7 +36,7 @@ Mausrad-Zoom, Verschieben, „Zoom to fit“ (automatisch nach dem ersten Layout
    nur, wenn die Funktion einen Wert liefert (V5: kein Zurücksetzen beim Herauszoomen; beim Neustart
    des Graphen zurück auf 14/0.8).
 4. Automatik: Beim **ersten** `end` des Layouts und `settings.autoZoom` → `zoomToFit()`. Den
-   vorläufigen `viewBox`-Ansatz aus P04-S05 entfernen.
+   vorläufigen `viewBox`-Ansatz (`fitViewBox` in `features/graph/geometry.ts`) entfernen.
 5. Bounding-Box: `zoomGroupRef.current.getBBox()` (im Browser). In Tests über injizierte
    Messfunktion.
 6. Tests:

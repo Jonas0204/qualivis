@@ -1,0 +1,12 @@
+/* Same layout as legacy app.component.scss (:host and .content) */
+.shell {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.content {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}

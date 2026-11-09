@@ -1,0 +1,31 @@
+/* Same base rules as legacy src/styles.scss, plus the app background and text colour. */
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--qv-font);
+  background: var(--qv-background);
+  color: var(--qv-text);
+}
+
+html {
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+#root {
+  height: 100%;
+}
+
+/* Children must not fire dragleave on the drop target while dragging (legacy styles.scss). */
+.is-dragging-over > * {
+  pointer-events: none;
+}

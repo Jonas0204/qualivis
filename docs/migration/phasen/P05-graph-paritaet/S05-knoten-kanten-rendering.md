@@ -41,7 +41,11 @@ das Altsystem – gespeist aus `buildViewModel`.
    dominant-baseline: central`, Farben `--qv-warn/--qv-error`; `.dots { font-size: 8px; text-anchor: middle }`;
    `.node-label { pointer-events: none }` (Klicks gehen an `tspan.label-text`: `pointer-events: auto`).
 5. `GraphView`: `buildViewModel(graph, { view, sizeMetric, nodeSizesBasedOnMetrics, showCluster })`;
-   Layout (noch Kraft-Layout aus P04, jetzt mit echten Breiten) bekommt die `VisualNode`s.
+   Layout (noch das Kraft-Layout aus `features/graph/layout/forceLayout.ts`, jetzt mit echten
+   Breiten) bekommt die `VisualNode`s, und zwar als eigene Kopie je Layout-Lauf, nicht als Wert eines
+   Atoms: d3 schreibt `x`, `y`, `vx`, `vy`, `fx`, `fy` und `index` in Knoten und Kanten (Architektur
+   §5; das Altsystem kopiert bei jeder Graph-Emission, `graph.component.ts:166-171`). Bisher schreibt
+   das Kraft-Layout in den zwischengespeicherten Wert von `viewGraphAtom` (Review P04).
 6. Tests (jsdom, feste Positionen):
    - Klassenkomponente in AV: Overlay mit `fill="url(#…)"`, Funktionskomponente `transparent`.
    - JSX-Funktion in KV: `inner-circle` mit `r = mainRadius - 3`.
