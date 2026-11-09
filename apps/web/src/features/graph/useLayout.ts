@@ -8,6 +8,8 @@ export type LayoutState = {
     run: number;
     /** True once the current engine has come to rest. */
     ended: boolean;
+    /** Counts the ends the engines reported, also those after dragging. */
+    ends: number;
 };
 
 export type Layout = LayoutState & {
@@ -23,7 +25,12 @@ export const useLayout = (
     createEngine: () => LayoutEngine | undefined,
     deps: DependencyList
 ): Layout => {
-    const [state, setState] = useState<LayoutState>({ version: 0, run: 0, ended: false });
+    const [state, setState] = useState<LayoutState>({
+        version: 0,
+        run: 0,
+        ended: false,
+        ends: 0,
+    });
     const engineRef = useRef<LayoutEngine>(undefined);
 
     // The caller names the deps, as with useEffect itself.
@@ -41,7 +48,12 @@ export const useLayout = (
             });
         });
         const offEnd = engine.onEnd(() => {
-            setState(current => ({ ...current, version: current.version + 1, ended: true }));
+            setState(current => ({
+                ...current,
+                version: current.version + 1,
+                ended: true,
+                ends: current.ends + 1,
+            }));
         });
 
         setState(current => ({ ...current, run: current.run + 1, ended: false }));

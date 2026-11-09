@@ -10,6 +10,7 @@ import { initial } from '../../test/TestProvider';
 import { GraphView } from './GraphView';
 import type { LayoutFactory, LayoutOptions } from './layout/createLayout';
 import type { LayoutEngine } from './layout/types';
+import type { LabelMeasure } from './useLabelCollision';
 import type { PanZoomMeasure } from './usePanZoom';
 
 const mini = analyzeProject(loadFixture('mini'));
@@ -563,5 +564,146 @@ describe('GraphView selection and fading', () => {
         );
 
         expect(nothingFaded(container)).toBe(true);
+    });
+});
+
+describe('GraphView overlapping labels', () => {
+    beforeEach(() => {
+        vi.spyOn(console, 'error').mockImplementation(() => {});
+        vi.spyOn(console, 'log').mockImplementation(() => {});
+        vi.useFakeTimers({
+            toFake: ['requestAnimationFrame', 'cancelAnimationFrame', 'setTimeout', 'clearTimeout'],
+        });
+    });
+    afterEach(async () => {
+        vi.useRealTimers();
+        vi.restoreAllMocks();
+        await new Promise(resolve => setTimeout(resolve, 0));
+    });
+
+    /**
+     * jsdom has no layout: a label is 10 px per letter (× `scale`) and 14 px high, centred on its
+     * node. The fake lays the nodes out 100 apart, so only TodoList (600) and ConnectedTodoList
+     * (700, 170 px wide) overlap. `shown` records whether each label was shown when measured.
+     */
+    const createLabelMeasure = () => {
+        const state = { scale: 1, shown: [] as boolean[] };
+        const measureLabel: LabelMeasure = label => {
+            state.shown.push(label.style.display === '');
+            const [x = 0, y = 0] = (label.closest('g.node')?.getAttribute('transform') ?? '')
+                .replace(/[^\d.,-]/g, '')
+                .split(',')
+                .map(Number);
+            const width = (label.textContent?.length ?? 0) * 10 * state.scale;
+            return { x: x - width / 2, y: y - 7, width, height: 14 };
+        };
+        return { state, measureLabel };
+    };
+
+    const drawLabels = (
+        createLayout: LayoutFactory,
+        measureLabel: LabelMeasure,
+        settings: Settings = defaultSettings
+    ) =>
+        renderWithState(
+            <GraphView
+                createLayout={createLayout}
+                settings={settings}
+                measure={measure}
+                measureLabel={measureLabel}
+            />,
+            { initialValues: [done] }
+        );
+
+    /** Labels that are hidden, and the tooltips of the nodes. */
+    const hidden = (container: HTMLElement) => ({
+        labels: Array.from(
+            container.querySelectorAll<SVGTSpanElement>('tspan.label-text'),
+            label => (label.style.display === 'none' ? label.textContent : undefined)
+        ).filter(Boolean),
+        titles: Array.from(
+            container.querySelectorAll('g.node > title'),
+            title => title.textContent
+        ),
+    });
+    const nothingHidden = { labels: [], titles: [] };
+
+    const wait = (ms: number) => {
+        act(() => {
+            vi.advanceTimersByTime(ms);
+        });
+    };
+
+    it('hides the earlier of two overlapping labels 250 ms after the layout end, with a tooltip', () => {
+        const { createLayout } = createFakeLayout();
+        const { measureLabel } = createLabelMeasure();
+        const { container } = drawLabels(createLayout, measureLabel);
+
+        // Zoom to fit after the end zooms too; the measuring waits for its last frame.
+        wait(400);
+        expect(hidden(container)).toEqual(nothingHidden);
+
+        wait(250);
+        expect(hidden(container)).toEqual({ labels: ['TodoList'], titles: ['TodoList'] });
+        // The tooltip comes after the label, as the legacy app appended it to the node.
+        const todoList = container.querySelector('g.node > title')?.parentElement;
+        expect(todoList?.lastElementChild?.tagName).toBe('title');
+    });
+
+    it('measures again after a zoom change and at a later layout end, with all labels shown', () => {
+        const { createLayout, engines } = createFakeLayout();
+        const { state, measureLabel } = createLabelMeasure();
+        const { container, getByRole } = drawLabels(createLayout, measureLabel);
+        wait(650);
+        expect(hidden(container).labels).toEqual(['TodoList']);
+
+        state.scale = 0.5;
+        state.shown = [];
+        fireEvent.click(getByRole('button', { name: 'Zoom to 100%' }));
+        wait(300);
+        expect(hidden(container).labels).toEqual(['TodoList']);
+        wait(250);
+        expect(hidden(container)).toEqual(nothingHidden);
+        expect(state.shown).toEqual(Array(8).fill(true));
+
+        state.scale = 1;
+        act(() => engines[0]?.end());
+        wait(250);
+        expect(hidden(container).labels).toEqual(['TodoList']);
+    });
+
+    it('hides no label with the setting off', () => {
+        const { createLayout } = createFakeLayout();
+        const { state, measureLabel } = createLabelMeasure();
+        const { container } = drawLabels(createLayout, measureLabel, {
+            ...defaultSettings,
+            hideOverlappingLabels: false,
+        });
+
+        wait(1000);
+
+        expect(hidden(container)).toEqual(nothingHidden);
+        expect(state.shown).toEqual([]);
+    });
+
+    it('shows all labels again on a restart until the new layout has ended', () => {
+        const { createLayout } = createFakeLayout();
+        const { measureLabel } = createLabelMeasure();
+        const { container, rerender } = drawLabels(createLayout, measureLabel);
+        wait(650);
+        expect(hidden(container).labels).toEqual(['TodoList']);
+
+        rerender(
+            <GraphView
+                createLayout={createLayout}
+                settings={{ ...defaultSettings, colaLayout: false }}
+                measure={measure}
+                measureLabel={measureLabel}
+            />
+        );
+        expect(hidden(container)).toEqual(nothingHidden);
+
+        wait(650);
+        expect(hidden(container).labels).toEqual(['TodoList']);
     });
 });

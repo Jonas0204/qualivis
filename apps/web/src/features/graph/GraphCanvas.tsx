@@ -9,6 +9,7 @@ import {
     type MouseEvent as ReactMouseEvent,
     type PointerEvent as ReactPointerEvent,
     type Ref,
+    type RefCallback,
     useId,
     useMemo,
 } from 'react';
@@ -39,6 +40,14 @@ export type GraphHighlight = {
     fade?: GraphFade<VisualLink>;
 };
 
+/** Overlapping labels (§13, useLabelCollision). */
+export type GraphLabels = {
+    /** Ids of the nodes whose label is hidden. */
+    hidden: ReadonlySet<string>;
+    /** Ref of the label text of a node, for measuring. */
+    ref: (nodeId: string) => RefCallback<SVGTSpanElement>;
+};
+
 export type GraphEvents = {
     /** Pointer down on the background (pan). */
     onPointerDown?: (event: ReactPointerEvent<SVGSVGElement>) => void;
@@ -61,6 +70,7 @@ type GraphCanvasProps = {
     zoomGroupRef?: Ref<SVGGElement>;
     events?: GraphEvents;
     highlight?: GraphHighlight;
+    labels?: GraphLabels;
 };
 
 const unscaled: GraphZoom = { transform: identityTransform };
@@ -84,6 +94,7 @@ export const GraphCanvas = ({
     zoomGroupRef,
     events = {},
     highlight = {},
+    labels,
 }: GraphCanvasProps) => {
     // Unique ids per graph, so that two graphs in one document do not share their defs. Only
     // letters, digits, "_" and "-", so the ids also work in url(#…).
@@ -146,6 +157,12 @@ export const GraphCanvas = ({
                                         opacity: fadeOpacity(fade, fade?.opaqueNodes.has(node.id)),
                                         labelFontSize: zoom.labelFontSize,
                                     }}
+                                    label={
+                                        labels && {
+                                            hidden: labels.hidden.has(node.id),
+                                            ref: labels.ref(node.id),
+                                        }
+                                    }
                                     events={events.node}
                                 />
                             );

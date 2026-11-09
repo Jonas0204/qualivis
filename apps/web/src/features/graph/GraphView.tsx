@@ -18,6 +18,7 @@ import type { LayoutNode } from './layout/types';
 import type { ViewGraph } from './selectViewGraph';
 import { useElementSize } from './useElementSize';
 import { useFade } from './useFade';
+import { type LabelMeasure, useLabelCollision } from './useLabelCollision';
 import { useLayout } from './useLayout';
 import { useNodeDrag } from './useNodeDrag';
 import { browserMeasure, type PanZoomMeasure, usePanZoom } from './usePanZoom';
@@ -31,6 +32,8 @@ type GraphViewProps = {
     settings?: Settings;
     /** Measurements for zoom to fit; tests pass fixed ones, since jsdom has no layout. */
     measure?: PanZoomMeasure;
+    /** Measures a label for hiding overlapping labels; tests pass fixed values, as for `measure`. */
+    measureLabel?: LabelMeasure;
 };
 
 // Until the size metric select in P05-S11.
@@ -57,12 +60,13 @@ const placeLike = (nodes: readonly LayoutNode[], before: ReadonlyMap<string, Lay
 
 /**
  * Graph of the current view, laid out by the engine of the settings, with pan, zoom, drag,
- * selection and fading.
+ * selection, fading and hiding of overlapping labels.
  */
 export const GraphView = ({
     createLayout = createDefaultLayout,
     settings = defaultSettings,
     measure = browserMeasure,
+    measureLabel,
 }: GraphViewProps) => {
     const viewGraph = useAtomValue(viewGraphAtom);
     const selection = useAtomValue(selectionAtom);
@@ -73,6 +77,7 @@ export const GraphView = ({
     const nodeSizesBasedOnMetrics = settings.nodeSizesBasedOnMetrics ?? true;
     const colaLayout = settings.colaLayout ?? true;
     const autoZoom = settings.autoZoom ?? true;
+    const hideOverlappingLabels = settings.hideOverlappingLabels ?? true;
 
     // G5: Ctrl+click removes a node from this graph only (legacy removeNode,
     // graph.component.ts:1050-1056), not from the analysis. Restarts keep the removal as in the
@@ -97,12 +102,6 @@ export const GraphView = ({
         [viewGraph, removedIds, nodeSizesBasedOnMetrics]
     );
 
-    const [zoomStyle, setZoomStyle] = useState<ZoomStyle>({});
-    const handleZoom = useCallback((transform: ZoomTransform) => {
-        setZoomStyle(current => nextZoomStyle(current, transform.k));
-    }, []);
-    const panZoom = usePanZoom({ measure, onZoom: handleZoom });
-
     // Like the legacy app, the layout takes the area size when it starts and does not restart when
     // the area is resized; hence `size !== undefined` instead of `size` in the deps. A new engine
     // for the same model starts from the positions of the old one, as the legacy restartGraph did.
@@ -121,6 +120,34 @@ export const GraphView = ({
             ...size,
         });
     }, [model, size !== undefined, colaLayout, createLayout]);
+
+    // G18: measure the labels again at every end of the layout (also after dragging) and when the
+    // zoom level changes (legacy lastZoomValue); panning moves all labels alike.
+    const labelCollision = useLabelCollision({
+        enabled: hideOverlappingLabels,
+        run: layout.run,
+        measure: measureLabel,
+    });
+    const { update: updateLabels } = labelCollision;
+    useEffect(() => {
+        if (layout.ends > 0) {
+            updateLabels();
+        }
+    }, [layout.ends, updateLabels]);
+
+    const [zoomStyle, setZoomStyle] = useState<ZoomStyle>({});
+    const lastZoomRef = useRef<number>(undefined);
+    const handleZoom = useCallback(
+        (transform: ZoomTransform) => {
+            setZoomStyle(current => nextZoomStyle(current, transform.k));
+            if (transform.k !== lastZoomRef.current) {
+                lastZoomRef.current = transform.k;
+                updateLabels();
+            }
+        },
+        [updateLabels]
+    );
+    const panZoom = usePanZoom({ measure, onZoom: handleZoom });
 
     // A restart draws new labels and links, which the legacy app gave the default sizes again.
     const [styleRun, setStyleRun] = useState(layout.run);
@@ -216,6 +243,7 @@ export const GraphView = ({
                     zoomGroupRef={panZoom.zoomGroupRef}
                     events={events}
                     highlight={{ selected: selectedIds, fade: fade.faded }}
+                    labels={{ hidden: labelCollision.hidden, ref: labelCollision.labelRef }}
                 />
             )}
             {viewGraph && (

@@ -140,6 +140,40 @@ describe('GraphNode', () => {
         expect(container.querySelector('text.node-label')).toBeNull();
     });
 
+    it('hides a label with display none and shows it as tooltip of the node', () => {
+        const ref = vi.fn();
+        const container = inSvg(
+            <GraphNode
+                node={visual()}
+                view="app"
+                settings={settings}
+                label={{ hidden: true, ref }}
+            />
+        );
+
+        const label = container.querySelector('tspan.label-text');
+        expect(label?.getAttribute('style')).toBe('display: none;');
+        expect(ref).toHaveBeenCalledWith(label);
+        // Only the label text goes; the icons below it stay.
+        expect(container.querySelector('text.node-label')?.getAttribute('style')).toBeNull();
+        expect(container.querySelector('g.node > title')?.textContent).toBe('App');
+        expect(draw(visual()).querySelector('title')).toBeNull();
+        expect(draw(visual()).querySelector('tspan.label-text')?.getAttribute('style')).toBeNull();
+    });
+
+    it('has no tooltip for a hidden label when the text setting is off', () => {
+        const container = inSvg(
+            <GraphNode
+                node={visual()}
+                view="app"
+                settings={{ ...settings, text: false }}
+                label={{ hidden: true }}
+            />
+        );
+
+        expect(container.querySelector('title')).toBeNull();
+    });
+
     it('paints the cluster colours inline', () => {
         const container = inSvg(
             <GraphNode

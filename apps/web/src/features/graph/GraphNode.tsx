@@ -9,6 +9,7 @@ import {
     type CSSProperties,
     type MouseEvent as ReactMouseEvent,
     type PointerEvent as ReactPointerEvent,
+    type Ref,
     useContext,
 } from 'react';
 import { GraphDefsContext } from './graphDefsContext';
@@ -44,14 +45,25 @@ export type NodeEvents = {
     onPointerLeave?: (node: VisualNode, event: ReactPointerEvent<SVGGElement>) => void;
 };
 
+/** Overlapping labels (§13, useLabelCollision). */
+export type NodeLabel = {
+    /** Hides the label text; the node shows it as tooltip instead. */
+    hidden?: boolean;
+    /** Ref of the label text, for measuring. */
+    ref?: Ref<SVGTSpanElement>;
+};
+
 type GraphNodeProps = {
     node: VisualNode;
     view: View;
     settings: GraphNodeSettings;
     selected?: boolean;
     inlineStyle?: NodeInlineStyle;
+    label?: NodeLabel;
     events?: NodeEvents;
 };
+
+const hiddenLabelStyle: CSSProperties = { display: 'none' };
 
 /** A node handler of the graph view as a React handler for this node. */
 const bind = <E,>(node: VisualNode, handler?: (node: VisualNode, event: E) => void) =>
@@ -92,7 +104,7 @@ const ringClass = (base: string, node: VisualNode, highlight: boolean | undefine
  * One node of the graph in the order of the legacy createNodes (graph.component.ts:673-950):
  * main circle, overlay, inner circle for JSX, preview circles (app view) and label with icons.
  * Selection and cluster colours as in updateGraph (graph.component.ts:206-243), fading as in
- * createFading (711-804).
+ * createFading (711-804), hidden labels as in hideOverlappingLabels (952-982).
  */
 export const GraphNode = ({
     node,
@@ -100,12 +112,15 @@ export const GraphNode = ({
     settings,
     selected = false,
     inlineStyle = {},
+    label = {},
     events = {},
 }: GraphNodeProps) => {
     const { hatch } = useContext(GraphDefsContext);
     const radius = mainRadius(node.width, view);
     const strokeStyle = styleOf({ stroke: inlineStyle.stroke });
     const highlight = settings.currentSizeMetricErrorHighlighting;
+    const labelText = node.label || node.id;
+    const labelHidden = settings.text && label.hidden;
 
     return (
         // biome-ignore lint/a11y/noStaticElementInteractions: mouse only like the legacy graph; keyboard access to the nodes follows in P08-S07
@@ -160,7 +175,13 @@ export const GraphNode = ({
                                 : `${inlineStyle.labelFontSize}px`,
                     })}
                 >
-                    <tspan className="label-text">{node.label || node.id}</tspan>
+                    <tspan
+                        ref={label.ref}
+                        className="label-text"
+                        style={labelHidden ? hiddenLabelStyle : undefined}
+                    >
+                        {labelText}
+                    </tspan>
                     <tspan dy="1.2em" x={0}>
                         {(node.icons ?? []).map((icon, index) => (
                             // Index as key: a node can have the same icon twice.
@@ -171,6 +192,8 @@ export const GraphNode = ({
                     </tspan>
                 </text>
             )}
+            {/* The legacy app appended the tooltip to the node, after the label. */}
+            {labelHidden && <title>{labelText}</title>}
         </g>
     );
 };
