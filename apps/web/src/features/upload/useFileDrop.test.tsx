@@ -1,7 +1,12 @@
 import type { SourceFile } from '@qualivis/core';
 import { fireEvent, waitFor } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
-import { entryItem, fakeDataTransfer, fakeFileEntry } from '../../test/fakeFiles';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import {
+  entryItem,
+  fakeDataTransfer,
+  fakeFileEntry,
+  unreadableFileEntry,
+} from '../../test/fakeFiles';
 import { renderWithState } from '../../test/renderWithState';
 import { useFileDrop } from './useFileDrop';
 
@@ -16,6 +21,10 @@ const DropProbe = ({ onFiles }: DropProbeProps) => {
     </div>
   );
 };
+
+afterEach(() => {
+  vi.restoreAllMocks();
+});
 
 describe('useFileDrop', () => {
   it('marks dragging on dragenter and ignores dragleave from child elements', () => {
@@ -43,6 +52,20 @@ describe('useFileDrop', () => {
     await waitFor(() =>
       expect(onFiles).toHaveBeenCalledWith([{ path: '/my-app/App.js', code: 'code' }])
     );
+  });
+
+  it('logs a read error and passes nothing on', async () => {
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    const onFiles = vi.fn();
+    const { getByTestId } = renderWithState(<DropProbe onFiles={onFiles} />);
+    const dataTransfer = fakeDataTransfer([entryItem(unreadableFileEntry('/my-app/App.js'))]);
+
+    fireEvent.drop(getByTestId('target'), { dataTransfer });
+
+    await waitFor(() =>
+      expect(consoleError).toHaveBeenCalledWith('Reading files failed:', expect.any(DOMException))
+    );
+    expect(onFiles).not.toHaveBeenCalled();
   });
 
   it('does nothing when the drop has no items', async () => {

@@ -1,4 +1,4 @@
-import type { SourceFile } from '@qualivis/core';
+import { isComponentFile, type SourceFile } from '@qualivis/core';
 
 const isFileEntry = (entry: FileSystemEntry): entry is FileSystemFileEntry => entry.isFile;
 
@@ -25,6 +25,9 @@ const readAllEntries = async (reader: FileSystemDirectoryReader) => {
 
 const readEntry = async (entry: FileSystemEntry): Promise<SourceFile[]> => {
   if (isFileEntry(entry)) {
+    if (!isComponentFile({ path: entry.fullPath })) {
+      return [];
+    }
     const file = await getFile(entry);
     return [{ path: entry.fullPath, code: await file.text() }];
   }
@@ -45,6 +48,8 @@ const readFile = async (file: File, path: string): Promise<SourceFile> => ({
  * Reads dropped files and folders (recursively) like the legacy `getFilesAsync`: entry paths are
  * `entry.fullPath`, the fallback without `webkitGetAsEntry` uses `file.webkitRelativePath`.
  * Fallback files come first, then the entries in item order; the core sorts them later.
+ * Like the legacy app (data.service.ts:31), only files that `isComponentFile` accepts are read; the
+ * core filters with the same function, so the analysis result is unchanged.
  */
 export const readDroppedFiles = async (dataTransfer: DataTransfer): Promise<SourceFile[]> => {
   // Items are only readable during the drop event, so collect everything before the first await.
@@ -63,7 +68,7 @@ export const readDroppedFiles = async (dataTransfer: DataTransfer): Promise<Sour
       continue;
     }
     const file = item.getAsFile();
-    if (file) {
+    if (file && isComponentFile({ path: file.webkitRelativePath })) {
       fallbackReads.push(readFile(file, file.webkitRelativePath));
     }
   }

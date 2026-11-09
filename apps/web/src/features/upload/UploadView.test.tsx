@@ -1,8 +1,12 @@
 import { fireEvent, waitFor } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
-import { fakeDataTransfer, fileWithRelativePath } from '../../test/fakeFiles';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import { fakeDataTransfer, fileWithRelativePath, unreadableFile } from '../../test/fakeFiles';
 import { renderWithState } from '../../test/renderWithState';
 import { UploadView } from './UploadView';
+
+afterEach(() => {
+  vi.restoreAllMocks();
+});
 
 describe('UploadView', () => {
   it('shows the upload card with icon and text', () => {
@@ -43,6 +47,19 @@ describe('UploadView', () => {
         { path: '/my-app/src/index.js', code: 'render(App);' },
       ])
     );
+  });
+
+  it('logs a read error and passes nothing on', async () => {
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    const onFiles = vi.fn();
+    const { user, getByLabelText } = renderWithState(<UploadView onFiles={onFiles} />);
+
+    await user.upload(getByLabelText(/browse a folder/), [unreadableFile('my-app/src/App.js')]);
+
+    await waitFor(() =>
+      expect(consoleError).toHaveBeenCalledWith('Reading files failed:', expect.any(DOMException))
+    );
+    expect(onFiles).not.toHaveBeenCalled();
   });
 
   it('marks the card while dragging and clears it on drop', () => {

@@ -18,4 +18,16 @@ describe('ProgressBar', () => {
     const fill = getByRole('progressbar').firstElementChild;
     expect(fill instanceof HTMLElement && fill.style.width).toBe('37.5%');
   });
+
+  it.each([
+    [100.00000000000001, '100'],
+    [-1, '0'],
+  ])('clamps %s to %s like mat-progress-bar', (value, percent) => {
+    const { getByRole } = renderWithState(<ProgressBar value={value} />);
+
+    const bar = getByRole('progressbar');
+    const fill = bar.firstElementChild;
+    expect(bar.getAttribute('aria-valuenow')).toBe(percent);
+    expect(fill instanceof HTMLElement && fill.style.width).toBe(`${percent}%`);
+  });
 });

@@ -1,6 +1,7 @@
 import type { SourceFile } from '@qualivis/core';
 import type { ChangeEvent } from 'react';
 import { Icon } from '../../ui/Icon';
+import { logReadError } from './logReadError';
 import { readInputFiles } from './readInputFiles';
 import styles from './UploadView.module.css';
 import { useFileDrop } from './useFileDrop';
@@ -20,7 +21,7 @@ export const UploadView = ({ onFiles, error }: UploadViewProps) => {
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { files } = event.currentTarget;
     if (files) {
-      void readInputFiles(files).then(onFiles);
+      void readInputFiles(files).then(onFiles, logReadError);
     }
   };
 

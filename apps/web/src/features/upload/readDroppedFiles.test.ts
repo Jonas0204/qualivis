@@ -7,6 +7,8 @@ import {
   fileItem,
   fileWithRelativePath,
   stringItem,
+  unreadableFile,
+  unreadableFileEntry,
 } from '../../test/fakeFiles';
 import { readDroppedFiles } from './readDroppedFiles';
 
@@ -15,7 +17,7 @@ const byPath = (a: { path: string }, b: { path: string }) => a.path.localeCompar
 describe('readDroppedFiles', () => {
   it('reads a folder with subfolders recursively, using entry.fullPath', async () => {
     const folder = fakeDirectoryEntry('/my-app', [
-      fakeFileEntry('/my-app/package.json', '{}'),
+      fakeFileEntry('/my-app/index.js', 'render(App);'),
       fakeDirectoryEntry('/my-app/src', [
         fakeFileEntry('/my-app/src/App.js', 'const App = 1;'),
         fakeDirectoryEntry('/my-app/src/components', [
@@ -27,10 +29,32 @@ describe('readDroppedFiles', () => {
     const files = await readDroppedFiles(fakeDataTransfer([entryItem(folder)]));
 
     expect(files.sort(byPath)).toEqual([
-      { path: '/my-app/package.json', code: '{}' },
+      { path: '/my-app/index.js', code: 'render(App);' },
       { path: '/my-app/src/App.js', code: 'const App = 1;' },
       { path: '/my-app/src/components/Button.js', code: 'const Button = 2;' },
     ]);
+  });
+
+  it('reads only component files, like the legacy app', async () => {
+    const folder = fakeDirectoryEntry('/my-app', [
+      unreadableFileEntry('/my-app/package.json'),
+      fakeDirectoryEntry('/my-app/node_modules', [
+        unreadableFileEntry('/my-app/node_modules/react/index.js'),
+      ]),
+      fakeDirectoryEntry('/my-app/src', [
+        fakeFileEntry('/my-app/src/App.js', 'const App = 1;'),
+        unreadableFileEntry('/my-app/src/App.test.js'),
+        unreadableFileEntry('/my-app/src/logo.png'),
+      ]),
+    ]);
+    const fallbackFile = unreadableFile('my-app/README.md');
+
+    // Reading one of the unreadable files would reject the whole result.
+    const files = await readDroppedFiles(
+      fakeDataTransfer([fileItem(fallbackFile), entryItem(folder)])
+    );
+
+    expect(files).toEqual([{ path: '/my-app/src/App.js', code: 'const App = 1;' }]);
   });
 
   it('keeps reading a folder until the reader returns no more entries (ADR-011 A7)', async () => {

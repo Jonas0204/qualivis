@@ -8,6 +8,15 @@ export const fileWithRelativePath = (relativePath: string, code: string): File =
   return file;
 };
 
+const notFound = (path: string) => new DOMException(`${path} was not found`, 'NotFoundError');
+
+/** A selected `File` that can no longer be read, e.g. because it was deleted in the meantime. */
+export const unreadableFile = (relativePath: string): File => {
+  const file = fileWithRelativePath(relativePath, '');
+  Object.defineProperty(file, 'text', { value: () => Promise.reject(notFound(relativePath)) });
+  return file;
+};
+
 const nameOf = (fullPath: string) => fullPath.split('/').at(-1) ?? fullPath;
 
 export const fakeFileEntry = (fullPath: string, code: string): FileSystemEntry =>
@@ -18,6 +27,17 @@ export const fakeFileEntry = (fullPath: string, code: string): FileSystemEntry =
     fullPath,
     file: (success: (file: File) => void) =>
       queueMicrotask(() => success(new File([code], nameOf(fullPath)))),
+  }) as unknown as FileSystemEntry;
+
+/** A dropped file entry whose `file()` fails, e.g. because the file was deleted in the meantime. */
+export const unreadableFileEntry = (fullPath: string): FileSystemEntry =>
+  ({
+    isFile: true,
+    isDirectory: false,
+    name: nameOf(fullPath),
+    fullPath,
+    file: (_success: (file: File) => void, failure: (error: DOMException) => void) =>
+      queueMicrotask(() => failure(notFound(fullPath))),
   }) as unknown as FileSystemEntry;
 
 /** Directory whose reader returns at most `batchSize` entries per call, like Chromium (100). */

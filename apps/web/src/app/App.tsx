@@ -20,7 +20,8 @@ export const App = () => {
 
   return (
     <AppShell>
-      {progress !== undefined && <ProgressBar value={progress} />}
+      {/* The legacy progress bar is part of the graph view (graph-view.component.html:2). */}
+      {viewMode === 'graph' && progress !== undefined && <ProgressBar value={progress} />}
       {viewMode === 'upload' && <UploadView onFiles={handleFiles} error={error} />}
       {viewMode === 'graph' && <GraphView />}
     </AppShell>
