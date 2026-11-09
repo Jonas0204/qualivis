@@ -181,3 +181,45 @@ dann CI und Pages neu bewerten.
 Edge (`channel: 'msedge'`), ohne Browser-Download. Weicht ein einzelner Rechner ab, setzt das seine
 lokale Umgebung über `QV_BROWSER_CHANNEL` (z. B. `chrome`), nicht das Repo.
 **Folgen:** Eine Konfiguration für alle Systeme; Edge muss installiert sein.
+
+### ADR-019 Monorepo-Unterstützung als eingeschobene Phase P05.5
+**Kontext:** Der Nutzer will aus einem Monorepo eine einzelne App analysieren, die Komponenten einer
+Bibliothek aus demselben Repo nutzt. Eine Probe am Kern (09.11.2026) zeigte:
+- Der alte Kern folgt nur relativen Importen und K4; Importe über Paketnamen oder tsconfig-`paths`
+  ergeben keine Kanten.
+- Hochgeladen werden muss alles, und dann zeigt die App-Ansicht jede Komponente jeder Datei, auch
+  unbenutzte und Hilfskomponenten aus Testdateien.
+- Liegt `X.styles.ts` neben `X.tsx`, fehlt die Kante zu `X` (K12).
+- `memo`, `forwardRef` und `FC`-Pfeilfunktionen erkennt der Kern als Komponenten.
+
+Ein anonymisierter Strukturbericht des Ziel-Monorepos (09.11.2026) ergab: pnpm-Workspaces; die App
+importiert die Bibliothek fast nur über tiefe Unterpfade, die tsconfig-`paths` und ein Vite-Alias
+auf `src` abbilden; keine Einstiegsfelder, keine Barrel-Dateien; TypeScript, ESM; Tests in
+`__tests__/`; die Bibliothek hat mehrere hundert Quelldateien.
+
+**Entscheidung (Nutzer, 09.11.2026):**
+- Eingeschobene Phase **P05.5** zwischen P05 und P06, ohne Umnummerierung und ohne eigenen
+  Meilenstein; sie endet mit der Abnahme am echten Monorepo. Ausnahme von Ziele §3 (keine neuen
+  Analysefunktionen vor Abschluss).
+- Neue Vorstufe `packages/core/src/workspace/` vor dem unveränderten Kern (R5):
+  1. Pakete aus allen `package.json` und `paths` aus `tsconfig.json`/`jsconfig.json` (mit
+     `extends`, JSONC) lesen.
+  2. Import-Angaben auflösen: relativ, tsconfig-`paths`, Paketname mit `src/`-Rückfall.
+  3. Vom gewählten App-Ordner aus die erreichbaren Dateien sammeln, ohne Tests und Typ-Importe.
+  4. Auflösbare Angaben in diesen Dateien durch relative Pfade mit Endung ersetzen (gleiche Zeile).
+  5. Mit dem alten Kern analysieren und den Originalcode zurück in die FileMap setzen.
+- Der Upload liest zusätzlich die Konfigurationsdateien und betritt `node_modules`, `build` und
+  `dist` nicht mehr.
+- Hat ein Upload mindestens zwei Pakete mit Quelldateien, fragt die Upload-Ansicht nach dem
+  App-Ordner. Vorausgewählt ist „Whole project“, also der bisherige Weg.
+- Nicht in P05.5: Barrel-Dateien und `exports`-Tabellen (O16), optische Unterscheidung von
+  Bibliotheksknoten (O17), Testdateien außerhalb von `__tests__/` mit Suffix `Test` (O18),
+  gespeicherte Auswahl und Auswahl beim Drop auf den Graphen (O19), Vite-/webpack-Aliase.
+
+**Folgen:**
+- Für Uploads mit einem Paket und für „Whole project“ ändert sich nichts; G1/G2 bleiben gleich.
+- Der neue Weg hat keine Goldens, denn das Altsystem kann ihn nicht. Er wird mit dem eigenen
+  Testprojekt `monorepo` und von Hand hergeleiteten Erwartungen getestet.
+- Im neuen Weg umgeht die Endung K12; im alten Weg bleibt K12 erhalten.
+- Halstead-Werte umgeschriebener Dateien können minimal abweichen.
+- Große Bibliotheken belasten den Browser (RI14); der Worker kommt in P08-S04.

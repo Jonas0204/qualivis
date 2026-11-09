@@ -27,6 +27,7 @@ Ablauf: README, „Branches und Pull Requests“. Ziel aller PRs: `rewrite/react
 | P03 Kern-MVP | `rewrite/p03-kern-mvp` | | ☑ |
 | P04 Web-MVP | `rewrite/p04-web-mvp` | [#2](https://github.com/Jonas0204/qualivis/pull/2) | ☑ |
 | P05 Graph-Parität | `rewrite/p05-graph-paritaet` | | ◐ |
+| P05.5 Monorepo-Unterstützung (eingeschoben, ADR-019) | `rewrite/p05.5-monorepo` | | ☐ |
 | P06 Panels, Navigation | `rewrite/p06-panels-navigation` | | ☐ |
 | P07 Einstellungen, Persistenz | `rewrite/p07-einstellungen-persistenz` | | ☐ |
 | P08 Härtung | `rewrite/p08-haertung` | | ☐ |
@@ -53,6 +54,14 @@ Ablauf: README, „Branches und Pull Requests“. Ziel aller PRs: `rewrite/react
 | P05-S10 | Label-Kollision | ☑ | 09.11.2026 | `lib/isColliding.ts`, `lib/debounce.ts` (ohne `immediate`, mit `cancel`), `labelCollision.ts` (`hiddenLabels`), `useLabelCollision.ts`: misst die `tspan.label-text` in Dokumentreihenfolge, vorher alle eingeblendet, 250 ms entprellt; ein Neustart des Layouts zeigt alle Labels wieder bis zum nächsten Ende. Auslöser: jedes Layout-Ende (`useLayout` zählt `ends`, auch nach dem Ziehen) und jede Änderung der Zoomstufe. `GraphNode` mit `label` (`display: none` am Label, `<title>` am Knoten). Im Browser mit `realworld` geprüft (50 %: zwei Labels ausgeblendet, mit Tooltip) |
 | P05-S11 | Legende, Aktionsleiste | ☑ | 09.11.2026 | UI-Bausteine `Button` (text, stroked, raised), `IconButton`, `Tooltip` (500 ms, unterhalb, `aria-describedby`, per Portal) und `Select` (Combobox mit Listbox, Tasten wie mat-select). `Legend` nach §15 mit den Defs-IDs des Graphen (`GraphCanvas` zeichnet sie als Kind neben dem SVG); Knotenklassen gelten für Graph und Legende. `GraphActions`: Zurück (KV mit `componentIdAtom`), „Toggle cluster“, Größenmetrik (Wechsel startet das Layout von den bisherigen Positionen neu, N11), Zoom, Vollbild (`fullScreenAtom`, danach „Zoom to fit“). Im Browser mit `realworld` geprüft (AV) |
 | P05-S12 | M2-Abnahme | ◐ | 09.11.2026 | Doppelklick auf eine Komponente mit inneren Funktionen öffnet die KV (G3, vorläufig nur `componentIdAtom`). `pnpm check`, `pnpm test:parity`, `pnpm build` grün; Bundle ohne `d3-selection` und `d3-zoom`. Sichtvergleich `mini` bei 1280 × 800 (AV, KV `App`, „Toggle cluster“): gleich, auch Zoom und Clusterfarben. Freigabe von M2 durch den Nutzer steht aus |
+| P05.5-S01 | Testprojekt `monorepo` | ☐ | | |
+| P05.5-S02 | Upload: Konfiguration, Ordner überspringen | ☐ | | |
+| P05.5-S03 | Kern: Pakete, tsconfig | ☐ | | |
+| P05.5-S04 | Kern: Importe auflösen | ☐ | | |
+| P05.5-S05 | Kern: erreichbare Dateien | ☐ | | |
+| P05.5-S06 | Kern: umschreiben, analysieren | ☐ | | |
+| P05.5-S07 | Upload: App-Ordner wählen | ☐ | | |
+| P05.5-S08 | Abnahme am echten Monorepo | ☐ | | |
 | P06-S01 | Split-Layout | ☐ | | |
 | P06-S02 | Auswahlmodell | ☐ | | |
 | P06-S03 | Dateibaum | ☐ | | |

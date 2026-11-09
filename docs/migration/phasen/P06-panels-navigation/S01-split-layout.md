@@ -1,6 +1,6 @@
 # P06-S01 – SplitPane und Panel-Layout
 
-Meilenstein M3 · Abhängig von: M2 · Umfang M
+Meilenstein M3 · Abhängig von: M2, P05.5-S08 · Umfang M
 
 ## Ziel
 Die Graph-Seite ist in drei verschiebbare Spalten (275 px | Rest | 575 px) geteilt, die rechte

@@ -7,8 +7,8 @@ u. a.). Sie sagt, was du lesen musst und was nicht. Alles Weitere erreichst du �
 
 Qualivis ist der React-Neubau der Angular-App „Component Graph“; das Original liegt unverändert in
 `legacy/angular/`. Gearbeitet wird nur nach dem Migrationsplan in `docs/migration/`: Phasen P01–P11
-mit nummerierten Schritt-Karten. Analyse-Ergebnisse und Aussehen müssen gleich bleiben; der Beweis
-sind Golden-Daten aus dem alten Build.
+(dazu die eingeschobene P05.5) mit nummerierten Schritt-Karten. Analyse-Ergebnisse und Aussehen
+müssen gleich bleiben; der Beweis sind Golden-Daten aus dem alten Build.
 
 ## Leseweg pro Aufgabe (sonst nichts)
 
@@ -70,14 +70,14 @@ Alle Plan-Dateien liegen unter `docs/migration/`.
 | In der Karte | Datei |
 |---|---|
 | Funktionsinventar, IDs `U`, `N`, `G`, `F`, `Q`, `S`, `P` + Zahl | `01-referenz-altsystem/01-funktionsinventar.md` |
-| Analyse-Kern §n, Eigenheiten K1–K11 | `01-referenz-altsystem/02-analyse-kern.md` |
+| Analyse-Kern §n, Eigenheiten K1–K12 | `01-referenz-altsystem/02-analyse-kern.md` |
 | `§n` ohne Dateiname (P05, P07-S03), Eigenheiten V1–V7 | `01-referenz-altsystem/03-visuelle-regeln.md` |
 | Stil-Referenz §n | `01-referenz-altsystem/04-stil-referenz.md` |
 | Architektur §n, Konventionen §n, Teststrategie §n | `00-grundlagen/03-architektur.md`, `05-konventionen.md`, `06-teststrategie.md` |
 | G1–G6 (Golden-Stufen) | `00-grundlagen/06-teststrategie.md` §3 |
 | M0–M8 (Meilensteine) | `00-grundlagen/01-ziele-und-scope.md` §4 |
 | ADR-nnn, ADR-011 A1–A11 (Korrekturen) | `00-grundlagen/07-entscheidungen.md` |
-| O2, O5, O14 (Nutzerentscheidungen ohne ADR), RI1–RI13 (Risiken) | `00-grundlagen/08-risiken-und-offene-punkte.md` |
+| O2, O5, O14, O16–O19 (Nutzerentscheidungen ohne ADR), RI1–RI16 (Risiken) | `00-grundlagen/08-risiken-und-offene-punkte.md` |
 | R1–R10 (Regeln) | `README.md`, Abschnitt „Regeln für die Umsetzung“ |
 | Goldens `legacy-*.json` | `testdata/golden/<fixture>/` (Fixtures `mini`, `realworld`) |
 

@@ -28,7 +28,8 @@ Die Angular-9-App „Component Graph“ (Tarner, van den Bongard, Beck, VISSOFT 
 
 ## 3. Nicht-Ziele
 
-- Neue Analysefunktionen oder Metriken (erst nach Abschluss, als eigene Vorhaben).
+- Neue Analysefunktionen oder Metriken (erst nach Abschluss, als eigene Vorhaben). Ausnahme:
+  Monorepo-Unterstützung (P05.5, ADR-019).
 - Mobile Optimierung über das Altsystem hinaus.
 - Server-Komponente, Login, Datenübertragung: Die App bleibt rein clientseitig und offline-fähig.
 - Babel 8 (eigene Phase nach dem MVP, Frist Juni 2027).
@@ -51,6 +52,9 @@ Qualität (Tests, Typen, Lint) gilt **ab dem ersten Schritt**, nicht erst in der
 | **M6 Parität E2E** | automatisierte Paritätstests gegen Altsystem | P09 | Vergleichsbericht |
 | **M7 Kern als Paket + CLI** | `@qualivis/core` als Paket baubar (privat), `qualivis analyze` auf der Kommandozeile, Eigenprüfung | P10 | CLI-Ausgabe, `pnpm quality:self` |
 | **M8 Abschluss** | Doku, Babel-8-Migration | P11 | – |
+
+Zwischen M2 und M3 liegt die eingeschobene Phase **P05.5 Monorepo-Unterstützung** (ADR-019): ohne
+eigenen Meilenstein, sie endet mit der Abnahme am echten Monorepo des Nutzers.
 
 Reihenfolge ist verbindlich bis M4. Ab M5 können Phasen nach Absprache umsortiert werden.
 

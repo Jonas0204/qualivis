@@ -52,6 +52,9 @@ e2e/ (@qualivis/e2e, Playwright, separat installierbar) · tools/ (Node-Skripte 
 │  │  │  │                           extractFileTree.ts, isComponentFile.ts, nestedStringAccess.ts
 │  │  │  ├─ rules/                   nodeVisuals.ts, icons.ts, cluster.ts, reactConstraints.ts,
 │  │  │  │                           previewGeometry.ts, linkGeometry.ts, color.ts, thresholds.ts
+│  │  │  ├─ workspace/               (P05.5, ADR-019) projectFiles.ts, jsonc.ts, packages.ts,
+│  │  │  │                           tsconfig.ts, resolveImport.ts, scanImports.ts, selectFiles.ts,
+│  │  │  │                           rewriteImports.ts, analyzeWorkspace.ts, appCandidates.ts
 │  │  │  ├─ model/                   graph.ts, report.ts, settings.ts, qualityMetrics.ts,
 │  │  │  │                           specialMethods.ts, files.ts, graphSettings.ts, clusterColors.ts
 │  │  │  └─ types/                   globals.d.ts, escomplex.d.ts, path-browserify.d.ts
@@ -69,7 +72,7 @@ e2e/ (@qualivis/e2e, Playwright, separat installierbar) · tools/ (Node-Skripte 
 │        ├─ state/                   analysisAtoms.ts, viewAtoms.ts, selectionAtoms.ts,
 │        │                           settingsAtoms.ts, snackbarAtoms.ts, selection.ts, StateProvider.tsx
 │        ├─ features/
-│        │  ├─ upload/               UploadView.tsx, readDroppedFiles.ts, useFileDrop.ts, DropOverlay.tsx
+│        │  ├─ upload/               UploadView.tsx, ProjectChoice.tsx, readDroppedFiles.ts, useFileDrop.ts, DropOverlay.tsx
 │        │  ├─ analysis/             runAnalysis.ts (später worker/)
 │        │  ├─ graph/                GraphView.tsx, GraphCanvas.tsx, GraphNode.tsx, GraphLink.tsx,
 │        │  │                        PreviewCircles.tsx, Legend.tsx, GraphActions.tsx,
@@ -90,7 +93,7 @@ e2e/ (@qualivis/e2e, Playwright, separat installierbar) · tools/ (Node-Skripte 
 │  └─ golden/                        diff-json.mjs
 ├─ testdata/
 │  ├─ README.md
-│  ├─ fixtures/{mini,realworld}/
+│  ├─ fixtures/{mini,realworld,monorepo}/   monorepo ohne Goldens (P05.5)
 │  └─ golden/{mini,realworld}/
 ├─ legacy/angular/                   altes Projekt (nur Referenz, wird nicht gebaut)
 └─ docs/
@@ -121,8 +124,10 @@ e2e/ (@qualivis/e2e, Playwright, separat installierbar) · tools/ (Node-Skripte 
 ## 4. Datenfluss
 
 ```
-Upload/Drop ─► readDroppedFiles() ─► SourceFile[] {path, code}
-          ─► runAnalysis() ─► core.analyzeProjectAsync(files, {onProgress})
+Upload/Drop ─► readDroppedFiles() ─► ProjectFiles {sources, configs} (ab P05.5)
+          ─► ab 2 Paketen: Auswahl des App-Ordners (P05.5, ADR-019)
+          ─► runAnalysis() ─► core.analyzeProjectAsync(sources, {onProgress})
+                             bzw. core.analyzeWorkspaceAsync(project, {appDir}, {onProgress})
           ─► analysisAtom = { status, progress, result, error }
 GraphView ─► viewGraphAtom (abgeleitet aus analysisAtom + componentIdAtom) ─► Graph der Ansicht + view
           ─► core.buildViewModel(graph, {view, sizeMetric, …}) ─► VisualNode[] (Größen, Icons, Cluster, …)
