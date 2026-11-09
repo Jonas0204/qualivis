@@ -1,6 +1,7 @@
 import type { SourceFile } from '@qualivis/core';
 import { useAtomValue, useStore } from 'jotai';
 import { runAnalysis } from '../features/analysis/runAnalysis';
+import { GraphView } from '../features/graph/GraphView';
 import { UploadView } from '../features/upload/UploadView';
 import { analysisErrorAtom, analysisProgressAtom } from '../state/analysisAtoms';
 import { viewModeAtom } from '../state/viewAtoms';
@@ -21,6 +22,7 @@ export const App = () => {
     <AppShell>
       {progress !== undefined && <ProgressBar value={progress} />}
       {viewMode === 'upload' && <UploadView onFiles={handleFiles} error={error} />}
+      {viewMode === 'graph' && <GraphView />}
     </AppShell>
   );
 };

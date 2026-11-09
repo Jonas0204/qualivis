@@ -18,6 +18,10 @@
   --qv-gutter: #eeeeee;
   --qv-cluster-button-on: #e6e6e6;
 
+  /* Graph (compiled color.scale values): component border and fill */
+  --qv-graph-component: #28bd8c;
+  --qv-graph-component-fill: #c5f3e4;
+
   /* Material theme "deeppurple-amber", only the parts the app uses */
   --qv-primary: #673ab7;
   --qv-primary-light: #d1c4e9;

@@ -44,7 +44,7 @@ Ablauf: README, „Branches und Pull Requests“. Ziel aller PRs: `rewrite/react
 | P04-S02 | Web: Jotai-Atome | ☑ | 09.11.2026 | Atome Analyse/Ansicht, `StateProvider`, Testhilfen. A7 erstmals ausgeführt: `new Map(…)` lehnt `tsc` ab (Jotai 3, TS 7), daher die Ausweichlösung aus A7 (Nutzer, 09.11.2026) |
 | P04-S03 | Web: Upload, App-Rahmen | ☑ | 09.11.2026 | Auswahl und Drop liefern `SourceFile[]` (A7: `readEntries` bis leer), Upload-Karte, Toolbar, `AppShell`; Sichtvergleich mit dem Altsystem gleich bis auf Titel und Zahnrad (P07) |
 | P04-S04 | Web: Analyse-Fluss | ☑ | 09.11.2026 | `runAnalysis` mit Fortschritt und Fehlerzeile (A5), `ProgressBar`; `realworld` im Browser analysiert (38 Dateien, Balken, Wechsel zur Graph-Ansicht) |
-| P04-S05 | Web: Minimaler Graph | ☐ | | |
+| P04-S05 | Web: Minimaler Graph | ☑ | 09.11.2026 | `viewGraphAtom`, Kraft-Layout (§9.3, Ziehen nach §11), `GraphCanvas`, viewBox um die Knoten; `realworld` in der Seite: 32 Kreise, 36 Pfeile, alles im Bild. Die laufende Animation prüft der Nutzer in S06 (im versteckten Browserfenster pausiert `requestAnimationFrame`) |
 | P04-S06 | M1-Abnahme | ☐ | | |
 | P04-S07 | GitHub Pages (neue App) | ☐ | | |
 | P05-S01 | Regeln: Größe, Icons | ☐ | | |
@@ -83,4 +83,7 @@ Hier jede Abweichung vom Plan mit Begründung und Verweis (ADR bzw. Nutzerentsch
 solange sie für kommende Schritte wichtig ist. Vor dem PR der Phase wandert sie in die betroffenen
 Karten oder Grundlagen oder wird gestrichen; Erledigtes steht in der Git-Historie.
 
-- (derzeit keine)
+- Kanten, deren Quell- oder Zielknoten fehlt, werden mit dem Konsolenfehler des Altsystems
+  weggelassen. Das Altsystem behielt sie, und d3 brach dann mit „node not found“ ab. Gilt auch für
+  das Auflösen der Kanten in P05-S04 (`buildViewModel`). In `mini` und `realworld` kommt das nicht
+  vor. (Nutzer, 09.11.2026)

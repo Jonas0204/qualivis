@@ -18,7 +18,7 @@ automatisch in die Fläche eingepasst. Das ist das **erste sichtbare Produkt (M1
 apps/web/src/features/graph/buildViewGraph.ts      buildViewGraph.test.ts
 apps/web/src/features/graph/layout/types.ts
 apps/web/src/features/graph/layout/forceLayout.ts  forceLayout.test.ts
-apps/web/src/features/graph/layout/useLayout.ts
+apps/web/src/features/graph/useLayout.ts
 apps/web/src/features/graph/GraphView.tsx          GraphView.test.tsx
 apps/web/src/features/graph/GraphCanvas.tsx        GraphCanvas.test.tsx
 apps/web/src/features/graph/graph.css

@@ -71,8 +71,8 @@ e2e/ (@qualivis/e2e, Playwright, separat installierbar) · tools/ (Node-Skripte 
 │        │  ├─ graph/                GraphView.tsx, GraphCanvas.tsx, GraphNode.tsx, GraphLink.tsx,
 │        │  │                        PreviewCircles.tsx, Legend.tsx, GraphActions.tsx,
 │        │  │                        usePanZoom.ts, useNodeDrag.ts, useFade.ts, useLabelCollision.ts,
-│        │  │                        buildViewGraph.ts, graph.css,
-│        │  │                        layout/ (types.ts, colaLayout.ts, forceLayout.ts, useLayout.ts)
+│        │  │                        buildViewGraph.ts, useLayout.ts, graph.css,
+│        │  │                        layout/ (types.ts, colaLayout.ts, forceLayout.ts)
 │        │  ├─ file-tree/            FileTree.tsx, useTreeState.ts
 │        │  ├─ code-quality/         CodeQualityPanel.tsx, QualityMetricBar.tsx, IconDescription.tsx
 │        │  ├─ source-code/          SourceCodeView.tsx, neoTheme.ts
