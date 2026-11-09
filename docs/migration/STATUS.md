@@ -46,7 +46,7 @@ Ablauf: README, „Branches und Pull Requests“. Ziel aller PRs: `rewrite/react
 | P04-S04 | Web: Analyse-Fluss | ☑ | 09.11.2026 | `runAnalysis` mit Fortschritt und Fehlerzeile (A5), `ProgressBar`; `realworld` im Browser analysiert (38 Dateien, Balken, Wechsel zur Graph-Ansicht) |
 | P04-S05 | Web: Minimaler Graph | ☑ | 09.11.2026 | `viewGraphAtom`, Kraft-Layout (§9.3, Ziehen nach §11), `GraphCanvas`, viewBox um die Knoten; `realworld` in der Seite: 32 Kreise, 36 Pfeile, alles im Bild. Die laufende Animation prüft der Nutzer in S06 (im versteckten Browserfenster pausiert `requestAnimationFrame`) |
 | P04-S06 | M1-Abnahme | ☑ | 09.11.2026 | `pnpm check` (115 Tests), G1 (11 Tests) und `pnpm build` grün; JS 1,31 MB, gzip 329,65 kB; CSS gzip 18,63 kB; Vite warnt vor dem Chunk über 500 kB (Code-Splitting: P08-S04). `pnpm audit --prod`: keine Meldungen. Sichtvergleich durch den Nutzer: keine Abweichungen (Anordnung als Baum kommt mit P05-S06, Vorschaukreise mit P05-S05) |
-| P04-S07 | GitHub Pages (neue App) | ☐ | | |
+| P04-S07 | GitHub Pages (neue App) | ◐ | 09.11.2026 | `pages.yml` mit `upload-pages-artifact` v5.0.0 und `deploy-pages` v5.0.1 (per SHA), README-Link; `check` und `build` grün, Build unter `/qualivis/` geprüft (alle Dateien 200, keine fremden Hosts). Pages-Quelle „GitHub Actions“ hat der Nutzer gesetzt. Offen bis nach dem Merge des P04-PR: Environment-Freigabe für `rewrite/react` prüfen, Seite und `mini` testen |
 | P05-S01 | Regeln: Größe, Icons | ☐ | | |
 | P05-S02 | Regeln: Geometrie, Farben | ☐ | | |
 | P05-S03 | Regeln: Cluster, Constraints | ☐ | | |

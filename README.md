@@ -5,6 +5,8 @@ based on *Visually Analyzing the Structure and Code Quality of Component-based W
 (Tarner, van den Bongard, Beck, VISSOFT 2021). Qualivis is the React rewrite of the original
 Angular app "Component Graph".
 
+Live: https://jonas0204.github.io/qualivis/ (state of `rewrite/react`)
+
 > Work in progress. The plan and its status live in [docs/migration](docs/migration/README.md).
 > The original Angular app is kept for reference in [legacy/angular](legacy/angular/LEGACY.md).
 > AI agents start with [AGENTS.md](AGENTS.md).
