@@ -417,6 +417,20 @@ describe('GraphView selection and fading', () => {
         expect(linkOpacities(container)).toEqual(['1', '0.1', '0.1', '0.1', '1', '0.1', '0.1']);
     });
 
+    it('opens the component view on a double click on a component with inner functions (G3)', () => {
+        const { createLayout } = createFakeLayout();
+        const { container, store } = drawView(createLayout);
+
+        // Footer has no inner function, ConnectedTodoList no graph (K5).
+        fireEvent.doubleClick(node(container, 'Footer'));
+        fireEvent.doubleClick(node(container, 'ConnectedTodoList'));
+        expect(store.get(componentIdAtom)).toBeUndefined();
+
+        fireEvent.doubleClick(node(container, 'App'));
+        expect(store.get(componentIdAtom)).toBe(app);
+        expect(container.querySelector('svg.qv-legend')?.getAttribute('height')).toBe('270');
+    });
+
     it('keeps the nodes reached from the clicked one and fills them lightly', () => {
         const { createLayout } = createFakeLayout();
         const { container } = drawView(createLayout);

@@ -251,6 +251,15 @@ export const GraphView = ({
                 selectGraphNode(node);
             },
             onClick: node => fade.fadeTo(node.id),
+            // G3 (legacy createNodeGroup, graph.component.ts:693-701): a component of the app graph
+            // with inner functions opens its component view; until the URL in P06-S06 only the
+            // component id goes. Components without a graph have no functions; there the legacy
+            // handler threw on `functions.length`, here nothing happens.
+            onDoubleClick: node => {
+                if (node.id.startsWith('/') && (node.functions?.length ?? 0) >= 1) {
+                    setComponentId(node.id);
+                }
+            },
             // G6: fade while the pointer is over a node with Ctrl held.
             onPointerEnter: (node, event) => {
                 if (event.ctrlKey) {

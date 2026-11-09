@@ -41,6 +41,8 @@ export type NodeEvents = {
     onCircleClick?: (node: VisualNode, event: ReactMouseEvent<SVGCircleElement>) => void;
     /** Click anywhere on the node, preview circles too (legacy click.fade). */
     onClick?: (node: VisualNode, event: ReactMouseEvent<SVGGElement>) => void;
+    /** Double click anywhere on the node (legacy dblclick of the node group). */
+    onDoubleClick?: (node: VisualNode, event: ReactMouseEvent<SVGGElement>) => void;
     onPointerEnter?: (node: VisualNode, event: ReactPointerEvent<SVGGElement>) => void;
     onPointerLeave?: (node: VisualNode, event: ReactPointerEvent<SVGGElement>) => void;
 };
@@ -130,6 +132,7 @@ export const GraphNode = ({
             style={styleOf({ opacity: inlineStyle.opacity })}
             onPointerDown={bind(node, events.onPointerDown)}
             onClick={bind(node, events.onClick)}
+            onDoubleClick={bind(node, events.onDoubleClick)}
             onPointerEnter={bind(node, events.onPointerEnter)}
             onPointerLeave={bind(node, events.onPointerLeave)}
         >
