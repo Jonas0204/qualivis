@@ -6,24 +6,51 @@
     background: var(--qv-background);
 }
 
-/* Until the action bar in P05-S11: position and colour of the legacy .action-buttons.right */
-.qv-graph-zoom {
+/* legacy .action-buttons (graph.component.scss:11-37); two classes, so they win over the modules */
+.qv-graph-area .qv-graph-actions {
     position: absolute;
     top: 8px;
-    right: 8px;
     display: flex;
     align-items: center;
     color: var(--qv-graph-button);
 
-    > button {
+    &.left {
+        left: 8px;
+    }
+
+    &.right {
+        right: 8px;
+    }
+
+    > * {
         height: 40px;
-        min-width: 40px;
-        padding: 0 8px;
-        border: none;
-        background: transparent;
-        color: inherit;
-        font: inherit;
-        cursor: pointer;
+    }
+
+    .show-cluster-button {
+        margin-right: 16px;
+
+        &.on {
+            background: var(--qv-cluster-button-on);
+        }
+    }
+}
+
+/* legacy #legend (graph.component.scss:167-183) */
+.qv-legend {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    border-top: 1px solid;
+    border-left: 1px solid;
+    border-color: rgba(200, 200, 200, 0.9);
+    border-top-left-radius: 8px;
+    background: rgba(250, 250, 250, 0.9);
+    cursor: default;
+
+    .description {
+        dominant-baseline: central;
+        font-size: 12px;
+        font-weight: 300;
     }
 }
 
@@ -36,7 +63,10 @@
     user-select: none;
     /* d3-zoom and d3-drag set this, so touch input pans and drags instead of scrolling */
     touch-action: none;
+}
 
+/* legacy ::ng-deep #d3-root: the node classes style the graph and the legend alike */
+:is(.qv-graph, .qv-legend) {
     /* legacy createNodeGroup: inline style of every node group */
     .node {
         cursor: pointer;

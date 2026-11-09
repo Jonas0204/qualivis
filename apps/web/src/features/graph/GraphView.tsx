@@ -2,17 +2,20 @@ import {
     buildViewModel,
     defaultSettings,
     graphSettings,
+    qualityMetrics,
     type Settings,
+    type View,
     type VisualLink,
     type VisualNode,
     withoutNodes,
 } from '@qualivis/core';
-import { useAtomValue, useSetAtom } from 'jotai';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { selectGraphNodeAtom, selectionAtom } from '../../state/selectionAtoms';
-import { viewGraphAtom } from '../../state/viewAtoms';
-import { Icon } from '../../ui/Icon';
+import { componentIdAtom, fullScreenAtom, viewGraphAtom } from '../../state/viewAtoms';
+import { GraphActions } from './GraphActions';
 import { GraphCanvas, type GraphEvents } from './GraphCanvas';
+import { Legend } from './Legend';
 import { createLayout as createDefaultLayout, type LayoutFactory } from './layout/createLayout';
 import type { LayoutNode } from './layout/types';
 import type { ViewGraph } from './selectViewGraph';
@@ -36,9 +39,6 @@ type GraphViewProps = {
     measureLabel?: LabelMeasure;
 };
 
-// Until the size metric select in P05-S11.
-const sizeMetric = graphSettings.defaultSizeMetric;
-
 const noNodeIds: readonly string[] = [];
 const noLinks: readonly VisualLink[] = [];
 
@@ -59,8 +59,21 @@ const placeLike = (nodes: readonly LayoutNode[], before: ReadonlyMap<string, Lay
 };
 
 /**
+ * G14: the size metric of the select; as in the legacy app it stays when the view changes. N11
+ * (legacy graph.component.ts:124-134): the component view offers no component-only metric, so it
+ * goes back to "Lines of Code" there.
+ */
+const useSizeMetric = (view: View | undefined) => {
+    const [sizeMetric, setSizeMetric] = useState(graphSettings.defaultSizeMetric);
+    if (view === 'component' && qualityMetrics[sizeMetric]?.componentOnly) {
+        setSizeMetric('sloc.physical');
+    }
+    return [sizeMetric, setSizeMetric] as const;
+};
+
+/**
  * Graph of the current view, laid out by the engine of the settings, with pan, zoom, drag,
- * selection, fading and hiding of overlapping labels.
+ * selection, fading, hiding of overlapping labels, the legend and the action bars.
  */
 export const GraphView = ({
     createLayout = createDefaultLayout,
@@ -69,6 +82,8 @@ export const GraphView = ({
     measureLabel,
 }: GraphViewProps) => {
     const viewGraph = useAtomValue(viewGraphAtom);
+    const [componentId, setComponentId] = useAtom(componentIdAtom);
+    const [fullScreen, setFullScreen] = useAtom(fullScreenAtom);
     const selection = useAtomValue(selectionAtom);
     const setSelection = useSetAtom(selectionAtom);
     const selectGraphNode = useSetAtom(selectGraphNodeAtom);
@@ -79,13 +94,18 @@ export const GraphView = ({
     const autoZoom = settings.autoZoom ?? true;
     const hideOverlappingLabels = settings.hideOverlappingLabels ?? true;
 
+    const [sizeMetric, setSizeMetric] = useSizeMetric(viewGraph?.view);
+    // G15: cluster colours; the legacy app kept them on when the view changed.
+    const [showCluster, setShowCluster] = useState(false);
+
     // G5: Ctrl+click removes a node from this graph only (legacy removeNode,
     // graph.component.ts:1050-1056), not from the analysis. Restarts keep the removal as in the
     // legacy app; another graph (other view, new analysis) shows all nodes again.
     const [removal, setRemoval] = useState<Removal>();
     const removedIds = removal && removal.viewGraph === viewGraph ? removal.nodeIds : noNodeIds;
-    // The legacy restart kept the node objects, so the layout went on from where the nodes were.
-    const nodesBeforeRemovalRef = useRef<ReadonlyMap<string, LayoutNode>>(undefined);
+    // The legacy restart (after a removal or another size metric) kept the node objects, so the
+    // layout went on from where the nodes were.
+    const nodesBeforeRestartRef = useRef<ReadonlyMap<string, LayoutNode>>(undefined);
 
     // A new copy for every graph: the layout writes positions into its nodes and links, so they
     // must not be the value of an atom (architecture §5; the legacy app copied on every graph,
@@ -99,7 +119,7 @@ export const GraphView = ({
                 sizeMetric,
                 nodeSizesBasedOnMetrics,
             }),
-        [viewGraph, removedIds, nodeSizesBasedOnMetrics]
+        [viewGraph, removedIds, sizeMetric, nodeSizesBasedOnMetrics]
     );
 
     // Like the legacy app, the layout takes the area size when it starts and does not restart when
@@ -109,9 +129,9 @@ export const GraphView = ({
         if (!model || !size) {
             return undefined;
         }
-        if (nodesBeforeRemovalRef.current) {
-            placeLike(model.nodes, nodesBeforeRemovalRef.current);
-            nodesBeforeRemovalRef.current = undefined;
+        if (nodesBeforeRestartRef.current) {
+            placeLike(model.nodes, nodesBeforeRestartRef.current);
+            nodesBeforeRestartRef.current = undefined;
         }
         return createLayout(colaLayout, {
             nodes: model.nodes,
@@ -169,6 +189,16 @@ export const GraphView = ({
         }
     }, [layout.run, layout.ended, autoZoom, zoomToFit]);
 
+    // G13: switching full screen fits the graph in, also without "Auto zoom" (legacy settings
+    // subscription, graph.component.ts:90-93).
+    const fullScreenRef = useRef(fullScreen);
+    useEffect(() => {
+        if (fullScreenRef.current !== fullScreen) {
+            fullScreenRef.current = fullScreen;
+            zoomToFit();
+        }
+    }, [fullScreen, zoomToFit]);
+
     const fade = useFade(model?.links ?? noLinks, layout.run, settings);
     const drag = useNodeDrag({
         getEngine: layout.getEngine,
@@ -178,12 +208,24 @@ export const GraphView = ({
 
     const selectedIds = useMemo(() => new Set(selection?.map(node => node.id)), [selection]);
 
+    const keepPositions = () => {
+        if (model) {
+            nodesBeforeRestartRef.current = new Map(model.nodes.map(each => [each.id, each]));
+        }
+    };
+
     const removeNode = (node: VisualNode) => {
-        if (!viewGraph || !model) {
+        if (!viewGraph) {
             return;
         }
-        nodesBeforeRemovalRef.current = new Map(model.nodes.map(each => [each.id, each]));
+        keepPositions();
         setRemoval({ viewGraph, nodeIds: [...removedIds, node.id] });
+    };
+
+    // Legacy onMetricSelectionChange (graph.component.ts:1167-1170): restart the layout.
+    const changeSizeMetric = (metric: string) => {
+        keepPositions();
+        setSizeMetric(metric);
     };
 
     const events: GraphEvents = {
@@ -244,18 +286,29 @@ export const GraphView = ({
                     events={events}
                     highlight={{ selected: selectedIds, fade: fade.faded }}
                     labels={{ hidden: labelCollision.hidden, ref: labelCollision.labelRef }}
-                />
+                    showCluster={showCluster}
+                >
+                    <Legend view={viewGraph.view} />
+                </GraphCanvas>
             )}
             {viewGraph && (
-                // Until the action bar with tooltips in P05-S11 (graph.component.html:199-209).
-                <div className="qv-graph-zoom">
-                    <button type="button" aria-label="Zoom to 100%" onClick={panZoom.zoomTo100}>
-                        {zoomLevel(panZoom.transform.k)}%
-                    </button>
-                    <button type="button" aria-label="Zoom to fit" onClick={panZoom.zoomToFit}>
-                        <Icon name="all_out" />
-                    </button>
-                </div>
+                <GraphActions
+                    view={viewGraph.view}
+                    // N13: until the URL in P06-S06 only the component id goes.
+                    onBack={componentId === undefined ? undefined : () => setComponentId(undefined)}
+                    cluster={{
+                        hasCluster: model?.hasCluster ?? false,
+                        show: showCluster,
+                        onToggle: () => setShowCluster(show => !show),
+                    }}
+                    sizeMetric={{ value: sizeMetric, onChange: changeSizeMetric }}
+                    zoom={{
+                        level: zoomLevel(panZoom.transform.k),
+                        onZoomTo100: panZoom.zoomTo100,
+                        onZoomToFit: panZoom.zoomToFit,
+                    }}
+                    fullScreen={{ on: fullScreen, onToggle: () => setFullScreen(on => !on) }}
+                />
             )}
         </div>
     );

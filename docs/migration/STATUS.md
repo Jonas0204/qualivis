@@ -51,7 +51,7 @@ Ablauf: README, „Branches und Pull Requests“. Ziel aller PRs: `rewrite/react
 | P05-S08 | Knoten ziehen | ☑ | 09.11.2026 | `useNodeDrag.ts` wie d3-drag 1.x: Der Knoten behält den Abstand zum Zeiger, der Drag beginnt erst mit der ersten Bewegung, Shift beim Loslassen fixiert (Kraft-Layout). Der Zeiger wird wie bei d3 über `window` verfolgt statt per Pointer-Capture. `useLayout` liefert die laufende Engine und zählt Neustarts (`run`). Ziehen mit WebCola im Browser geprüft, Kraft-Layout per Test (Umschalten erst in P07) |
 | P05-S09 | Auswahl, Ausblenden | ☑ | 09.11.2026 | Kern `connectivity.ts` (`connectedNodes`, `isLinkHighlighted`, `withoutNodes`), `useFade.ts` (Fokus gilt für einen Layout-Lauf, nicht während eines Drags), `selectionAtoms.ts` (Grundform). `GraphNode` mit `inlineStyle` und `events`, `GraphCanvas` mit `events` und `highlight`. Klick auf den Kreis wählt aus und blendet aus (G1), Strg+Klick entfernt Knoten samt Kanten nur aus der Ansicht, bleibt über Neustarts und startet das Layout von den bisherigen Positionen (G5), Strg+Überfahren (G6), Klick auf den Hintergrund (G7). Deckkraft per Inline-Style, Übergang per CSS (250 ms). Knoten nur mit der Maus wie im Altsystem; Tastatur folgt in P08-S07. Im Browser geprüft; Sichtvergleich mit dem Altsystem steht aus (Nutzer) |
 | P05-S10 | Label-Kollision | ☑ | 09.11.2026 | `lib/isColliding.ts`, `lib/debounce.ts` (ohne `immediate`, mit `cancel`), `labelCollision.ts` (`hiddenLabels`), `useLabelCollision.ts`: misst die `tspan.label-text` in Dokumentreihenfolge, vorher alle eingeblendet, 250 ms entprellt; ein Neustart des Layouts zeigt alle Labels wieder bis zum nächsten Ende. Auslöser: jedes Layout-Ende (`useLayout` zählt `ends`, auch nach dem Ziehen) und jede Änderung der Zoomstufe. `GraphNode` mit `label` (`display: none` am Label, `<title>` am Knoten). Im Browser mit `realworld` geprüft (50 %: zwei Labels ausgeblendet, mit Tooltip) |
-| P05-S11 | Legende, Aktionsleiste | ☐ | | |
+| P05-S11 | Legende, Aktionsleiste | ☑ | 09.11.2026 | UI-Bausteine `Button` (text, stroked, raised), `IconButton`, `Tooltip` (500 ms, unterhalb, `aria-describedby`, per Portal) und `Select` (Combobox mit Listbox, Tasten wie mat-select). `Legend` nach §15 mit den Defs-IDs des Graphen (`GraphCanvas` zeichnet sie als Kind neben dem SVG); Knotenklassen gelten für Graph und Legende. `GraphActions`: Zurück (KV mit `componentIdAtom`), „Toggle cluster“, Größenmetrik (Wechsel startet das Layout von den bisherigen Positionen neu, N11), Zoom, Vollbild (`fullScreenAtom`, danach „Zoom to fit“). Im Browser mit `realworld` geprüft (AV) |
 | P05-S12 | M2-Abnahme | ☐ | | |
 | P06-S01 | Split-Layout | ☐ | | |
 | P06-S02 | Auswahlmodell | ☐ | | |
@@ -112,3 +112,10 @@ Karten oder Grundlagen oder wird gestrichen; Erledigtes steht in der Git-Histori
   Vorschaukreises, der so nach und nach verloren ging, während der Label-Tooltip blieb, auch wenn
   das Label wieder zu sehen war. Neu hat ein Knoten genau dann einen Tooltip, wenn sein Label
   ausgeblendet ist; die Tooltips der Vorschaukreise bleiben.
+- **Aktionsleiste (P05-S11):** Die Auswahl der Größenmetrik richtet sich nach der Ansicht, nicht
+  nach der Komponenten-ID. Bei einer Analyse mit nur einer Komponente bot das Altsystem in deren
+  Komponentenansicht auch „Lines of JSX Code“ und „Maximum JSX nesting“ an; neu fehlen sie dort, und
+  eine gewählte wird wie beim Wechsel in die Komponentenansicht auf „Lines of Code“ zurückgesetzt.
+  Der Tooltip verschwindet beim Klicken auf sein Element (matTooltip blieb stehen und lag dann über
+  der geöffneten Liste). Die Liste der Auswahl öffnet unter dem Feld (mat-select legte die gewählte
+  Option über den Wert); Klickwellen (Ripple) der Material-Buttons fehlen.

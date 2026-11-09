@@ -7,6 +7,7 @@ import {
 } from '@qualivis/core';
 import {
     type MouseEvent as ReactMouseEvent,
+    type ReactNode,
     type PointerEvent as ReactPointerEvent,
     type Ref,
     type RefCallback,
@@ -71,6 +72,8 @@ type GraphCanvasProps = {
     events?: GraphEvents;
     highlight?: GraphHighlight;
     labels?: GraphLabels;
+    /** Drawn after the SVG with the ids of its defs, e.g. the legend. */
+    children?: ReactNode;
 };
 
 const unscaled: GraphZoom = { transform: identityTransform };
@@ -95,6 +98,7 @@ export const GraphCanvas = ({
     events = {},
     highlight = {},
     labels,
+    children,
 }: GraphCanvasProps) => {
     // Unique ids per graph, so that two graphs in one document do not share their defs. Only
     // letters, digits, "_" and "-", so the ids also work in url(#…).
@@ -170,6 +174,7 @@ export const GraphCanvas = ({
                     </g>
                 </g>
             </svg>
+            {children}
         </GraphDefsContext>
     );
 };

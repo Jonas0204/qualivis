@@ -3,13 +3,14 @@ import { createStore } from 'jotai';
 import { describe, expect, it } from 'vitest';
 import { loadFixture } from '../test/fixtures';
 import { analysisAtom, initialAnalysisState } from './analysisAtoms';
-import { componentIdAtom, viewGraphAtom, viewModeAtom } from './viewAtoms';
+import { componentIdAtom, fullScreenAtom, viewGraphAtom, viewModeAtom } from './viewAtoms';
 
 describe('viewAtoms', () => {
-    it('starts on the upload view with no component selected', () => {
+    it('starts on the upload view with no component selected and not in full screen', () => {
         const store = createStore();
         expect(store.get(viewModeAtom)).toBe('upload');
         expect(store.get(componentIdAtom)).toBeUndefined();
+        expect(store.get(fullScreenAtom)).toBe(false);
     });
 
     it('stores the view mode and component id', () => {

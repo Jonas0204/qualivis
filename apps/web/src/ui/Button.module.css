@@ -1,0 +1,96 @@
+/* Angular Material 8 buttons (mat-button, mat-stroked-button, mat-raised-button, mat-icon-button) in
+   the deeppurple-amber theme; style reference §1-§3, docs/migration/01-referenz-altsystem/
+   04-stil-referenz.md. Material's ripple is left out. */
+.button {
+    position: relative;
+    box-sizing: border-box;
+    display: inline-block;
+    min-width: 64px;
+    margin: 0;
+    padding: 0 16px;
+    border: none;
+    border-radius: 4px;
+    outline: none;
+    overflow: visible;
+    background: transparent;
+    color: inherit;
+    font-family: var(--qv-font);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 36px;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: baseline;
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* .mat-button-focus-overlay: the current colour over the button on hover and keyboard focus */
+.button::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: currentColor;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 200ms cubic-bezier(0.35, 0, 0.25, 1);
+}
+
+@media (hover: hover) {
+    .text:hover::before,
+    .stroked:hover::before,
+    .iconButton:hover::before {
+        opacity: 0.04;
+    }
+}
+
+.button:focus-visible::before {
+    opacity: 0.12;
+}
+
+.stroked {
+    padding: 0 15px;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    line-height: 34px;
+}
+
+.raised {
+    background: var(--qv-surface);
+    box-shadow:
+        0 3px 1px -2px rgba(0, 0, 0, 0.2),
+        0 2px 2px 0 rgba(0, 0, 0, 0.14),
+        0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.raised:active {
+    box-shadow:
+        0 5px 5px -3px rgba(0, 0, 0, 0.2),
+        0 8px 10px 1px rgba(0, 0, 0, 0.14),
+        0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.primary {
+    color: var(--qv-primary);
+}
+
+.raised.primary {
+    background: var(--qv-primary);
+    color: var(--qv-on-primary);
+}
+
+.iconButton {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    min-width: 0;
+    height: 40px;
+    padding: 0;
+    border-radius: 50%;
+    line-height: 40px;
+}

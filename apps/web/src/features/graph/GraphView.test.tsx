@@ -4,6 +4,7 @@ import { StrictMode } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { analysisAtom, initialAnalysisState } from '../../state/analysisAtoms';
 import { selectionAtom } from '../../state/selectionAtoms';
+import { componentIdAtom, fullScreenAtom } from '../../state/viewAtoms';
 import { loadFixture } from '../../test/fixtures';
 import { renderWithState } from '../../test/renderWithState';
 import { initial } from '../../test/TestProvider';
@@ -705,5 +706,81 @@ describe('GraphView overlapping labels', () => {
 
         wait(650);
         expect(hidden(container).labels).toEqual(['TodoList']);
+    });
+});
+
+describe('GraphView legend and actions', () => {
+    beforeEach(() => {
+        vi.spyOn(console, 'error').mockImplementation(() => {});
+        vi.spyOn(console, 'log').mockImplementation(() => {});
+        vi.useFakeTimers({ toFake: ['requestAnimationFrame', 'cancelAnimationFrame'] });
+    });
+    afterEach(() => {
+        vi.useRealTimers();
+        vi.restoreAllMocks();
+    });
+
+    it('draws the legend of the view with the hatch of the graph', () => {
+        const { createLayout } = createFakeLayout();
+        const { container } = drawView(createLayout);
+
+        const hatch = container.querySelector('svg.qv-graph pattern')?.id;
+        const legend = container.querySelector('svg.qv-legend');
+        expect(hatch).toMatch(/^qv-hatch-/);
+        expect(legend?.querySelector('.circle-overlay[fill]')?.getAttribute('fill')).toBe(
+            `url(#${hatch})`
+        );
+        expect(legend?.getAttribute('height')).toBe('246');
+    });
+
+    it('restarts the layout from the node positions with another size metric', () => {
+        const { createLayout, engines } = createFakeLayout();
+        const { getByRole } = drawView(createLayout);
+        const select = () => getByRole('combobox', { name: 'Node size metric' });
+
+        fireEvent.click(select());
+        fireEvent.click(getByRole('option', { name: 'Cyclomatic Complexity' }));
+
+        expect(engines).toHaveLength(2);
+        expect(engines[0]?.stopped).toBe(true);
+        expect(engines[1]?.positions).toEqual(
+            engines[0]?.options.nodes.map(({ id, x, y }) => ({ id, x, y }))
+        );
+        expect(select().textContent).toBe('Cyclomatic Complexity');
+    });
+
+    it('goes back to "Lines of Code" in the component view and back to the app graph (N11, N13)', () => {
+        const { createLayout } = createFakeLayout();
+        const { container, getByRole, queryByRole, store } = drawView(createLayout);
+        const select = () => getByRole('combobox', { name: 'Node size metric' });
+        expect(queryByRole('button', { name: 'Back to app graph' })).toBeNull();
+
+        fireEvent.click(select());
+        fireEvent.click(getByRole('option', { name: 'Lines of JSX Code' }));
+        act(() => store.set(componentIdAtom, app));
+        expect(select().textContent).toBe('Lines of Code');
+        expect(container.querySelector('svg.qv-legend')?.getAttribute('height')).toBe('270');
+
+        fireEvent.click(getByRole('button', { name: 'Back to app graph' }));
+        expect(store.get(componentIdAtom)).toBeUndefined();
+        expect(select().textContent).toBe('Lines of Code');
+    });
+
+    it('toggles full screen and fits the graph in, also without "Auto zoom"', () => {
+        const { createLayout } = createFakeLayout();
+        const { container, getByRole, store } = drawView(createLayout, {
+            ...defaultSettings,
+            autoZoom: false,
+        });
+        finishZoom();
+        expect(zoomGroupTransform(container)).toBe('translate(0,0) scale(1)');
+
+        fireEvent.click(getByRole('button', { name: 'Toggle fullscreen' }));
+        finishZoom();
+        expect(store.get(fullScreenAtom)).toBe(true);
+        expect(zoomGroupTransform(container)).toBe('translate(25,150) scale(0.5)');
+        expect(getByRole('button', { name: 'Toggle fullscreen' }).textContent).toBe(
+            'fullscreen_exit'
+        );
     });
 });
