@@ -1,5 +1,7 @@
-/* Served locally instead of the Google CDN used by the legacy index.html (ADR-009). */
-@import "@fontsource/roboto/300.css";
-@import "@fontsource/roboto/400.css";
-@import "@fontsource/roboto/500.css";
+/* Served locally instead of the Google CDN used by the legacy index.html (ADR-009). Roboto only
+   ships the latin subset (German and English, Latin-1, general punctuation, €); the weights are the
+   legacy ones, without italic or bold (user decision, see docs/migration/STATUS.md). */
+@import "@fontsource/roboto/latin-300.css";
+@import "@fontsource/roboto/latin-400.css";
+@import "@fontsource/roboto/latin-500.css";
 @import "@fontsource/material-icons";

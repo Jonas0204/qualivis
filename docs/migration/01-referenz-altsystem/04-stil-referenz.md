@@ -64,7 +64,9 @@ Clusterfarben (`constants/cluster-colors.ts`): `#8321d9 #6ad921 #d92121 #1d5ebf 
 
 - Schrift **Roboto** (300, 400, 500), Fallback `"Helvetica Neue", sans-serif`; Icons **Material
   Icons** (Ligaturen). Beide werden **lokal** ausgeliefert (`@fontsource/roboto`,
-  `@fontsource/material-icons`), nicht vom Google-CDN (ADR-009).
+  `@fontsource/material-icons`), nicht vom Google-CDN (ADR-009). Von Roboto nur die Teilmenge
+  `latin` für Deutsch und Englisch (Nutzer, 09.11.2026); das Altsystem lud von Google alle
+  Teilmengen. Andere Schriftsysteme erscheinen in der Ersatzschrift.
 - `body`: `margin 0`, `font-family Roboto, "Helvetica Neue", sans-serif`, `box-sizing border-box` vererbt.
 - Toolbar-Titel: 500 20px/32px, weiß, ohne Unterstreichung; Fokus sichtbar: unterstrichen.
 - Panel-Überschrift „Code Quality“: 500 16px/28px, Rand unten 16 px; Name daneben 400 15px/24px.

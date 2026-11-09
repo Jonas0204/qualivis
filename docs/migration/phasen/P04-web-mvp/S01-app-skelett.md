@@ -110,8 +110,8 @@ apps/web/src/test/setup.ts
    `<link rel="icon" type="image/png" href="./favicon.png" sizes="196x196">`, `<div id="root"></div>`,
    `<script type="module" src="/src/main.tsx"></script>`. **Keine** externen Links (Google-CDN entfällt).
 7. Styles:
-   - `fonts.css`: `@import '@fontsource/roboto/300.css'; @import '@fontsource/roboto/400.css';
-     @import '@fontsource/roboto/500.css'; @import '@fontsource/material-icons';`
+   - `fonts.css`: `@import '@fontsource/roboto/latin-300.css'; @import '@fontsource/roboto/latin-400.css';
+     @import '@fontsource/roboto/latin-500.css'; @import '@fontsource/material-icons';`
    - `tokens.css`: `:root { … }` mit **allen** Tokens aus der Stil-Referenz §1 (Namen dort), plus
      Schriftfamilien `--qv-font: Roboto, "Helvetica Neue", sans-serif` und
      `--qv-font-icons: 'Material Icons'`.

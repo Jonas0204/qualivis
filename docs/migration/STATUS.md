@@ -87,3 +87,8 @@ Karten oder Grundlagen oder wird gestrichen; Erledigtes steht in der Git-Histori
   weggelassen. Das Altsystem behielt sie, und d3 brach dann mit „node not found“ ab. Gilt auch für
   das Auflösen der Kanten in P05-S04 (`buildViewModel`). In `mini` und `realworld` kommt das nicht
   vor. (Nutzer, 09.11.2026)
+- Roboto wird nur mit der Teilmenge `latin` ausgeliefert (Deutsch und Englisch, Latin-1, allgemeine
+  Satzzeichen, €), in den Schnitten 300, 400 und 500 wie im Altsystem, ohne Kursiv und Fett. Das
+  Altsystem lud von Google alle Teilmengen. Zeichen anderer Schriftsysteme, etwa in Ordnernamen,
+  erscheinen deshalb in der Ersatzschrift; beim Sichtvergleich (P09) ist das keine Abweichung.
+  (Nutzer, 09.11.2026)
