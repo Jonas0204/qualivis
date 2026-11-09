@@ -53,12 +53,45 @@ export const translateTo = ({ k }: ZoomTransform, screen: Point, graph: Point): 
 export const zoomAt = (transform: ZoomTransform, pointer: Point, factor: number): ZoomTransform =>
     translateTo({ ...transform, k: transform.k * factor }, pointer, invert(transform, pointer));
 
+/** A pointer held on the graph: where it is now and which graph point it grabbed. */
+export type Grip = { screen: Point; graph: Point };
+
+const midpoint = (a: Point, b: Point): Point => ({ x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 });
+
+const squaredDistance = (a: Point, b: Point): number => (b.x - a.x) ** 2 + (b.y - a.y) ** 2;
+
 /**
- * Scale factor of one wheel event (default wheelDelta of d3-zoom 1.x), per pixel, line or page.
- * No limits: the default scale extent of d3-zoom is [0, ∞).
+ * Transform while pointers hold the graph (d3-zoom 1.x touchmoved): one pointer pans, two fingers
+ * scale by their distance on screen against their distance in the graph and keep the grabbed
+ * midpoint under their midpoint. If either distance is 0 the scale stays (d3-zoom would reach 0
+ * or infinity).
  */
-export const wheelFactor = (deltaY: number, deltaMode: number): number =>
-    2 ** (-deltaY * (deltaMode === 1 ? 0.05 : deltaMode ? 1 : 0.002));
+export const gripTransform = (
+    current: ZoomTransform,
+    first: Grip,
+    second?: Grip
+): ZoomTransform => {
+    if (!second) {
+        return translateTo(current, first.screen, first.graph);
+    }
+    const onScreen = squaredDistance(first.screen, second.screen);
+    const inGraph = squaredDistance(first.graph, second.graph);
+    const k = onScreen > 0 && inGraph > 0 ? Math.sqrt(onScreen / inGraph) : current.k;
+    return translateTo(
+        { ...current, k },
+        midpoint(first.screen, second.screen),
+        midpoint(first.graph, second.graph)
+    );
+};
+
+/**
+ * Scale factor of one wheel event (default wheelDelta of d3-zoom), per pixel, line or page.
+ * No limits: the default scale extent of d3-zoom is [0, ∞). Browsers send a pinch on the touchpad
+ * as Ctrl+wheel with small deltas; as in d3-zoom 3 they count ten times (a Ctrl+wheel notch of a
+ * mouse zooms by 4 instead of about 1.15).
+ */
+export const wheelFactor = (deltaY: number, deltaMode: number, ctrlKey = false): number =>
+    2 ** (-deltaY * (deltaMode === 1 ? 0.05 : deltaMode ? 1 : 0.002) * (ctrlKey ? 10 : 1));
 
 /** Zoom level of the "{n}%" button. */
 export const zoomLevel = (k: number): number => Math.round(k * 100);

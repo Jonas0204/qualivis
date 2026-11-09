@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
     easeCubicInOut,
     fitTransform,
+    gripTransform,
     identityTransform,
     interpolateTransform,
     invert,
@@ -86,6 +87,37 @@ describe('translateTo', () => {
     });
 });
 
+describe('gripTransform', () => {
+    it('pans with one grip', () => {
+        expect(
+            gripTransform(
+                { k: 2, x: 10, y: 20 },
+                { screen: { x: 130, y: 90 }, graph: { x: 45, y: 40 } }
+            )
+        ).toEqual({ k: 2, x: 40, y: 10 });
+    });
+
+    it('scales with two grips by distance on screen against distance in the graph', () => {
+        expect(
+            gripTransform(
+                identityTransform,
+                { screen: { x: 0, y: 0 }, graph: { x: 0, y: 0 } },
+                { screen: { x: 50, y: 0 }, graph: { x: 100, y: 0 } }
+            )
+        ).toEqual({ k: 0.5, x: 0, y: 0 });
+    });
+
+    it('keeps the scale when two grips meet in one point', () => {
+        expect(
+            gripTransform(
+                { k: 2, x: 0, y: 0 },
+                { screen: { x: 50, y: 50 }, graph: { x: 10, y: 10 } },
+                { screen: { x: 50, y: 50 }, graph: { x: 30, y: 10 } }
+            )
+        ).toEqual({ k: 2, x: 10, y: 30 });
+    });
+});
+
 describe('invert', () => {
     it('turns a screen point into graph coordinates', () => {
         expect(invert({ k: 2, x: 10, y: 20 }, { x: 30, y: 60 })).toEqual({ x: 10, y: 20 });
@@ -98,6 +130,12 @@ describe('wheelFactor', () => {
         expect(wheelFactor(-20, 1)).toBe(2);
         expect(wheelFactor(1, 2)).toBe(0.5);
         expect(wheelFactor(0, 0)).toBe(1);
+    });
+
+    it('counts Ctrl+wheel (pinch on the touchpad) ten times like d3-zoom 3', () => {
+        expect(wheelFactor(-50, 0, true)).toBe(2);
+        expect(wheelFactor(100, 0, true)).toBe(0.25);
+        expect(wheelFactor(-50, 0, false)).toBe(wheelFactor(-50, 0));
     });
 });
 
