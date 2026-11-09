@@ -5,7 +5,7 @@ export default defineConfig({
     projects: [
       { test: { name: 'tools', environment: 'node', include: ['tools/**/*.test.mjs'] } },
       'packages/core',
-      // 'apps/web' is added in P04-S01
+      'apps/web',
     ],
   },
 });

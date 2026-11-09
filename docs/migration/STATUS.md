@@ -25,7 +25,7 @@ Ablauf: README, „Branches und Pull Requests“. Ziel aller PRs: `rewrite/react
 |---|---|---|---|
 | P01 Fundament + P02 Golden-Infrastruktur | `rewrite/m0-fundament` | [#1](https://github.com/Jonas0204/qualivis/pull/1) | ☑ |
 | P03 Kern-MVP | `rewrite/p03-kern-mvp` | | ☑ |
-| P04 Web-MVP | `rewrite/p04-web-mvp` | | ☐ |
+| P04 Web-MVP | `rewrite/p04-web-mvp` | | ◐ |
 | P05 Graph-Parität | `rewrite/p05-graph-paritaet` | | ☐ |
 | P06 Panels, Navigation | `rewrite/p06-panels-navigation` | | ☐ |
 | P07 Einstellungen, Persistenz | `rewrite/p07-einstellungen-persistenz` | | ☐ |
@@ -40,7 +40,7 @@ Ablauf: README, „Branches und Pull Requests“. Ziel aller PRs: `rewrite/react
 |---|---|---|---|---|
 | P01, P02 | M0: Fundament, Golden-Infrastruktur | ☑ | 08.11.2026 | Commit `5647a06`, PR #1 |
 | P03 | M1 (Teil 1): CI, Kern `@qualivis/core`, Golden G1 | ☑ | 08.11.2026 | Commits `5e54b41`–`1bd11f9` |
-| P04-S01 | Web: Skelett, Tokens, Schriften | ☐ | | |
+| P04-S01 | Web: Skelett, Tokens, Schriften | ☑ | 09.11.2026 | `apps/web` mit Vite 8, 32 Tokens, lokalen Schriften, `Icon`; CI baut mit. macOS prüft der Nutzer noch |
 | P04-S02 | Web: Jotai-Atome | ☐ | | |
 | P04-S03 | Web: Upload, App-Rahmen | ☐ | | |
 | P04-S04 | Web: Analyse-Fluss | ☐ | | |
@@ -83,4 +83,6 @@ Hier jede Abweichung vom Plan mit Begründung und Verweis (ADR bzw. Nutzerentsch
 solange sie für kommende Schritte wichtig ist. Vor dem PR der Phase wandert sie in die betroffenen
 Karten oder Grundlagen oder wird gestrichen; Erledigtes steht in der Git-Historie.
 
-- (derzeit keine)
+- P04-S01: Zusätzlich `apps/web/src/app/App.module.css` (`.app { height: 100%; }`), weil die Karte
+  `styles.app` nutzt, die Datei aber nicht nennt. P04-S03 entscheidet beim Umbau von `App.tsx`, ob sie
+  bleibt.

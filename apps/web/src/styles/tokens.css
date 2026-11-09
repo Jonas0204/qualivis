@@ -1,0 +1,44 @@
+/* Values measured in the legacy build: docs/migration/01-referenz-altsystem/04-stil-referenz.md §1 */
+:root {
+  /* Base colours (legacy styles/variables.scss, compiled) */
+  --qv-background: #fafafa;
+  --qv-surface: #ffffff;
+  --qv-text: rgba(0, 0, 0, 0.87);
+  --qv-text-light-grey: #989898;
+  --qv-selected: rgba(0, 0, 0, 0.08);
+  --qv-selected-hover: rgba(0, 0, 0, 0.12);
+  --qv-file-tree-icon: rgba(0, 0, 0, 0.65);
+  --qv-graph-button: #808080;
+  --qv-metric-border: #bdbdbd;
+  --qv-warn: #f2a60d;
+  --qv-error: #f20d0d;
+  --qv-success-muted: #b4f0a8;
+  --qv-warn-muted: #f0d8a8;
+  --qv-error-muted: #f0a8a8;
+  --qv-gutter: #eeeeee;
+  --qv-cluster-button-on: #e6e6e6;
+
+  /* Material theme "deeppurple-amber", only the parts the app uses */
+  --qv-primary: #673ab7;
+  --qv-primary-light: #d1c4e9;
+  --qv-on-primary: #ffffff;
+  --qv-accent: #ffd740;
+  --qv-accent-track: rgba(255, 215, 64, 0.54);
+  --qv-toggle-thumb-off: #fafafa;
+  --qv-toggle-track-off: rgba(0, 0, 0, 0.38);
+  --qv-snackbar-bg: #323232;
+  --qv-snackbar-text: hsla(0, 0%, 100%, 0.7);
+  --qv-tooltip-bg: rgba(97, 97, 97, 0.9);
+  --qv-dialog-shadow:
+    0 11px 15px -7px rgba(0, 0, 0, 0.2), 0 24px 38px 3px rgba(0, 0, 0, 0.14),
+    0 9px 46px 8px rgba(0, 0, 0, 0.12);
+  --qv-snackbar-shadow:
+    0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.14),
+    0 1px 18px 0 rgba(0, 0, 0, 0.12);
+  --qv-option-hover: rgba(0, 0, 0, 0.04);
+  --qv-option-selected: rgba(0, 0, 0, 0.12);
+
+  /* Font families, loaded locally in fonts.css */
+  --qv-font: Roboto, "Helvetica Neue", sans-serif;
+  --qv-font-icons: "Material Icons";
+}
