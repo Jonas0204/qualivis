@@ -31,13 +31,14 @@ byte-identical in all 13 files; for `realworld` the report, file map and app gra
 | `legacy-panels-app.json` | code quality panel for every node of the app view |
 | `legacy-dom-component-<id>.json` | the same for each component view (every component with functions) |
 | `legacy-panels-component-<id>.json` | panels of all nodes of that component view |
+| `legacy-cluster-colors.json` | only `mini`: fill and stroke of every node with a cluster in the component view of `App`, cluster colours on (captured 2026-11-09 with `tools/legacy/capture-cluster-colors.browser.js`) |
 
 `<id>` is the node id with every run of non-alphanumeric characters replaced by `_`
 (e.g. `mini_src_App_js_App`).
 
 | Fixture | Files | Component views |
 |---|---|---|
-| `mini` | 13 | 4 (App, BaseWidget, Counter, Header) |
+| `mini` | 14 | 4 (App, BaseWidget, Counter, Header) |
 | `realworld` | 45 | 20 |
 
 ## Procedure

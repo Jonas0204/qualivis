@@ -5,6 +5,7 @@ import { graphSettings } from '../model/graphSettings';
 import { sizeConstant, warningThreshold } from '../model/qualityMetrics';
 import type { MetricReport } from '../model/report';
 import { getNodeIcons, type VisualIcon } from './icons';
+import { previewWidth } from './previewGeometry';
 import { metricValue, resolveThreshold } from './thresholds';
 
 /** App view (`app`) or component view (`component`), see visual rules §1. */
@@ -22,9 +23,6 @@ export type NodeVisual = {
 
 /** Size when node sizes are not based on metrics (2 × circleRadius = 48). */
 const fixedSize = graphSettings.circleRadius * 2;
-
-/** Room for the preview circles of app view nodes (legacy getCirclePreviewWidth, = 14). */
-const previewWidth = (graphSettings.previewCircleRadius + graphSettings.circleStrokeWidth / 2) * 4;
 
 /**
  * Size, warning level and icons of a graph node; the node itself stays unchanged.

@@ -37,6 +37,12 @@ overridden with `QV_LEGACY_BUILD_DIR`, `QV_FIXTURES_DIR` and `QV_CAPTURE_DIR`.
    Expected result for `mini`: `{ fixture: 'mini', files: 8, componentViews: 4 }`.
 4. Start again at step 2 for the next fixture.
 
+Cluster colours (`capture-cluster-colors.browser.js`, P05-S02): after step 2 paste the script and
+run `await qvCaptureClusterColors('mini')`. It loads the fixture itself, opens the component view
+of `App`, switches the cluster colours on and writes only `legacy-cluster-colors.json`. Expected
+result: 9 nodes with clusters 0–6. Do not run `qvCapture` for it: that rewrites all goldens, and
+their positions depend on the window size.
+
 Golden files are never edited by hand; see [testdata/README.md](../../testdata/README.md).
 
 ## Known limits

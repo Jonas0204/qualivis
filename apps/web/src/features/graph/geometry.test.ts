@@ -1,18 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { fitViewBox, shortenToTarget } from './geometry';
-
-describe('shortenToTarget', () => {
-    it('ends the link the radius before the target centre', () => {
-        expect(shortenToTarget({ x: 0, y: 0 }, { x: 100, y: 0 }, 24.5)).toEqual({ x: 75.5, y: 0 });
-    });
-
-    it('shortens along the direction of the link', () => {
-        const end = shortenToTarget({ x: 10, y: 10 }, { x: 40, y: 50 }, 25);
-
-        expect(end.x).toBeCloseTo(25);
-        expect(end.y).toBeCloseTo(30);
-    });
-});
+import { fitViewBox } from './geometry';
 
 describe('fitViewBox', () => {
     it('spans all nodes plus a margin of 48 px', () => {

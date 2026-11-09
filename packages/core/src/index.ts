@@ -16,8 +16,24 @@ export type * from './model/report';
 export * from './model/settings';
 export * from './model/specialMethods';
 export type * from './model/types';
+export type { ClusterResult } from './rules/cluster';
+export { computeClusters } from './rules/cluster';
+export { brightenColor, clusterColor } from './rules/color';
 export type { IconDescription, VisualIcon } from './rules/icons';
 export { describeIconText, getNodeIcons } from './rules/icons';
+export type { Point } from './rules/linkGeometry';
+export { linkEnd } from './rules/linkGeometry';
 export type { NodeVisual, View, VisualOptions } from './rules/nodeVisuals';
 export { computeNodeVisual } from './rules/nodeVisuals';
+export type { PreviewCircle } from './rules/previewGeometry';
+export {
+    indexAngle,
+    mainRadius,
+    outerRadius,
+    previewCircles,
+    previewDots,
+    previewWidth,
+} from './rules/previewGeometry';
+export type { ReactConstraint } from './rules/reactConstraints';
+export { reactConstraints } from './rules/reactConstraints';
 export { resolveThreshold } from './rules/thresholds';

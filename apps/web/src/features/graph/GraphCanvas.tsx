@@ -1,6 +1,5 @@
-import { graphSettings } from '@qualivis/core';
+import { graphSettings, linkEnd } from '@qualivis/core';
 import type { ViewLink, ViewNode } from './buildViewGraph';
-import { shortenToTarget } from './geometry';
 
 type GraphCanvasProps = {
     nodes: readonly ViewNode[];
@@ -8,10 +7,8 @@ type GraphCanvasProps = {
     viewBox: string;
 };
 
-// Until P05 every circle has the same radius (no sizes from metrics yet).
+// Until P05-S05 every circle has the same radius (no sizes from metrics yet).
 const radius = graphSettings.circleRadius;
-// A link ends at the outer edge of the target's stroke (§8: mainRadius + 0.5).
-const linkEndRadius = radius + graphSettings.circleStrokeWidth / 2;
 
 const position = (node: ViewNode) => ({ x: node.x ?? 0, y: node.y ?? 0 });
 
@@ -38,7 +35,7 @@ export const GraphCanvas = ({ nodes, links, viewBox }: GraphCanvasProps) => (
         >
             {links.map((link, index) => {
                 const start = position(link.source);
-                const end = shortenToTarget(start, position(link.target), linkEndRadius);
+                const end = linkEnd(start, position(link.target), radius);
                 return (
                     <line
                         // Index as key: links keep their order, and the same pair can occur twice.

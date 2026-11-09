@@ -42,8 +42,8 @@ Ablauf: README, „Branches und Pull Requests“. Ziel aller PRs: `rewrite/react
 | P03 | M1 (Teil 1): CI, Kern `@qualivis/core`, Golden G1 | ☑ | 08.11.2026 | Commits `5e54b41`–`1bd11f9` |
 | P04 | M1 (Teil 2): Web-MVP, GitHub Pages | ☑ | 09.11.2026 | Commits `5ac8732`–`317cc37`, PR #2. Nach dem Merge: Pages-Workflow grün, Seite vom Nutzer geprüft, `origin/gh-pages` unverändert `5f0155e`. `pnpm dev` auf macOS bleibt offen (RI11) |
 | P05-S01 | Regeln: Größe, Icons | ☑ | 09.11.2026 | `resolveThreshold`, `getNodeIcons`, `describeIconText`, `computeNodeVisual` in `packages/core/src/rules/`, 34 Tests; neue Korrektur ADR-011 A11 (feste Größe statt `NaN`) |
-| P05-S02 | Regeln: Geometrie, Farben | ☐ | | |
-| P05-S03 | Regeln: Cluster, Constraints | ☐ | | |
+| P05-S02 | Regeln: Geometrie, Farben | ☑ | 09.11.2026 | `previewGeometry.ts`, `linkGeometry.ts` (Web nutzt `linkEnd`), `color.ts`; Vorschaukreise von `App` und Clusterfarben gleich dem Altsystem (`legacy-cluster-colors.json` neu erfasst) |
+| P05-S03 | Regeln: Cluster, Constraints | ☑ | 09.11.2026 | `cluster.ts`, `reactConstraints.ts`; Cluster der KV `App` (`mini`) gleich dem Golden |
 | P05-S04 | Golden G2 | ☐ | | |
 | P05-S05 | Knoten-/Kanten-Rendering | ☐ | | |
 | P05-S06 | WebCola-Adapter | ☐ | | |

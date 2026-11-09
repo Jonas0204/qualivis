@@ -1,19 +1,4 @@
-export type Point = { x: number; y: number };
-
-/**
- * End of a link that stops `radius` before the target's centre (graph.component.ts:615-642):
- * the arrowhead then touches the circle.
- */
-export const shortenToTarget = (source: Point, target: Point, radius: number): Point => {
-    const diffX = target.x - source.x;
-    const diffY = target.y - source.y;
-    const distance = Math.sqrt(diffX ** 2 + diffY ** 2);
-    const actualDistance = distance - radius;
-    return {
-        x: source.x + (diffX / distance) * actualDistance,
-        y: source.y + (diffY / distance) * actualDistance,
-    };
-};
+type Point = { x: number; y: number };
 
 /** Margin around the outermost node centres: one node diameter. */
 const viewBoxMargin = 48;
