@@ -6,8 +6,8 @@ import { isComponentFile, type SourceFile } from '@qualivis/core';
  * are read; the core filters with the same function, so the analysis result is unchanged.
  */
 export const readInputFiles = (files: FileList | File[]): Promise<SourceFile[]> =>
-  Promise.all(
-    Array.from(files, file => ({ file, path: `/${file.webkitRelativePath}` }))
-      .filter(({ path }) => isComponentFile({ path }))
-      .map(async ({ file, path }) => ({ path, code: await file.text() }))
-  );
+    Promise.all(
+        Array.from(files, file => ({ file, path: `/${file.webkitRelativePath}` }))
+            .filter(({ path }) => isComponentFile({ path }))
+            .map(async ({ file, path }) => ({ path, code: await file.text() }))
+    );

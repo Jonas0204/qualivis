@@ -12,32 +12,38 @@ import './graph.css';
 export type LayoutFactory = (options: ForceLayoutOptions) => LayoutEngine;
 
 type GraphViewProps = {
-  /** Builds the layout engine; tests pass a fake one. */
-  createLayout?: LayoutFactory;
+    /** Builds the layout engine; tests pass a fake one. */
+    createLayout?: LayoutFactory;
 };
 
 /** Graph of the current view, laid out with the force layout and fitted into the area. */
 export const GraphView = ({ createLayout = createForceLayout }: GraphViewProps) => {
-  const graph = useAtomValue(viewGraphAtom);
-  const areaRef = useRef<HTMLDivElement>(null);
-  const size = useElementSize(areaRef);
+    const graph = useAtomValue(viewGraphAtom);
+    const areaRef = useRef<HTMLDivElement>(null);
+    const size = useElementSize(areaRef);
 
-  // Like the legacy app, the layout takes the area size when it starts and does not restart when
-  // the area is resized; hence `size !== undefined` instead of `size` in the deps.
-  useLayout(
-    () =>
-      graph && size ? createLayout({ nodes: graph.nodes, links: graph.links, ...size }) : undefined,
-    [graph, size !== undefined, createLayout]
-  );
+    // Like the legacy app, the layout takes the area size when it starts and does not restart when
+    // the area is resized; hence `size !== undefined` instead of `size` in the deps.
+    useLayout(
+        () =>
+            graph && size
+                ? createLayout({ nodes: graph.nodes, links: graph.links, ...size })
+                : undefined,
+        [graph, size !== undefined, createLayout]
+    );
 
-  // Nodes get their first position when the engine is created; draw them only from then on.
-  const placed = graph?.nodes.every(node => node.x !== undefined && node.y !== undefined);
+    // Nodes get their first position when the engine is created; draw them only from then on.
+    const placed = graph?.nodes.every(node => node.x !== undefined && node.y !== undefined);
 
-  return (
-    <div ref={areaRef} className="qv-graph-area">
-      {graph && placed && (
-        <GraphCanvas nodes={graph.nodes} links={graph.links} viewBox={fitViewBox(graph.nodes)} />
-      )}
-    </div>
-  );
+    return (
+        <div ref={areaRef} className="qv-graph-area">
+            {graph && placed && (
+                <GraphCanvas
+                    nodes={graph.nodes}
+                    links={graph.links}
+                    viewBox={fitViewBox(graph.nodes)}
+                />
+            )}
+        </div>
+    );
 };

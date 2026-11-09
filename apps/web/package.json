@@ -1,37 +1,37 @@
 {
-  "name": "@qualivis/web",
-  "version": "0.0.0",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "typecheck": "tsc -b tsconfig.json",
-    "test": "vitest run"
-  },
-  "dependencies": {
-    "@fontsource/material-icons": "catalog:",
-    "@fontsource/roboto": "catalog:",
-    "@qualivis/core": "workspace:*",
-    "d3-force": "catalog:",
-    "jotai": "catalog:",
-    "path-browserify": "catalog:",
-    "react": "catalog:",
-    "react-dom": "catalog:"
-  },
-  "devDependencies": {
-    "@testing-library/dom": "catalog:",
-    "@testing-library/react": "catalog:",
-    "@testing-library/user-event": "catalog:",
-    "@types/d3-force": "catalog:",
-    "@types/node": "catalog:",
-    "@types/react": "catalog:",
-    "@types/react-dom": "catalog:",
-    "@vitejs/plugin-react": "catalog:",
-    "jsdom": "catalog:",
-    "typescript": "catalog:",
-    "vite": "catalog:",
-    "vitest": "catalog:"
-  }
+    "name": "@qualivis/web",
+    "version": "0.0.0",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "preview": "vite preview",
+        "typecheck": "tsc -b tsconfig.json",
+        "test": "vitest run"
+    },
+    "dependencies": {
+        "@fontsource/material-icons": "catalog:",
+        "@fontsource/roboto": "catalog:",
+        "@qualivis/core": "workspace:*",
+        "d3-force": "catalog:",
+        "jotai": "catalog:",
+        "path-browserify": "catalog:",
+        "react": "catalog:",
+        "react-dom": "catalog:"
+    },
+    "devDependencies": {
+        "@testing-library/dom": "catalog:",
+        "@testing-library/react": "catalog:",
+        "@testing-library/user-event": "catalog:",
+        "@types/d3-force": "catalog:",
+        "@types/node": "catalog:",
+        "@types/react": "catalog:",
+        "@types/react-dom": "catalog:",
+        "@vitejs/plugin-react": "catalog:",
+        "jsdom": "catalog:",
+        "typescript": "catalog:",
+        "vite": "catalog:",
+        "vitest": "catalog:"
+    }
 }

@@ -13,72 +13,75 @@ const done = initial(analysisAtom, { ...initialAnalysisState, status: 'done', re
 
 /** Fake engine: puts the nodes in a row at once and reports the end, without animation. */
 const createFakeLayout = () => {
-  const engines: { stopped: boolean }[] = [];
-  const createLayout: LayoutFactory = ({ nodes }) => {
-    const record = { stopped: false };
-    engines.push(record);
-    const endListeners = new Set<() => void>();
-    const engine: LayoutEngine = {
-      start: () => {
-        nodes.forEach((node, index) => {
-          node.x = index * 100;
-          node.y = 0;
-        });
-        for (const listener of endListeners) {
-          listener();
-        }
-      },
-      stop: () => {
-        record.stopped = true;
-      },
-      onTick: () => () => undefined,
-      onEnd: listener => {
-        endListeners.add(listener);
-        return () => endListeners.delete(listener);
-      },
-      dragStart: () => undefined,
-      drag: () => undefined,
-      dragEnd: () => undefined,
+    const engines: { stopped: boolean }[] = [];
+    const createLayout: LayoutFactory = ({ nodes }) => {
+        const record = { stopped: false };
+        engines.push(record);
+        const endListeners = new Set<() => void>();
+        const engine: LayoutEngine = {
+            start: () => {
+                nodes.forEach((node, index) => {
+                    node.x = index * 100;
+                    node.y = 0;
+                });
+                for (const listener of endListeners) {
+                    listener();
+                }
+            },
+            stop: () => {
+                record.stopped = true;
+            },
+            onTick: () => () => undefined,
+            onEnd: listener => {
+                endListeners.add(listener);
+                return () => endListeners.delete(listener);
+            },
+            dragStart: () => undefined,
+            drag: () => undefined,
+            dragEnd: () => undefined,
+        };
+        return engine;
     };
-    return engine;
-  };
-  return { engines, createLayout };
+    return { engines, createLayout };
 };
 
 describe('GraphView', () => {
-  it('draws the 8 nodes and 7 links of the mini app graph, fitted into the view', () => {
-    const { createLayout } = createFakeLayout();
-    const { container, getByRole } = renderWithState(<GraphView createLayout={createLayout} />, {
-      initialValues: [done],
+    it('draws the 8 nodes and 7 links of the mini app graph, fitted into the view', () => {
+        const { createLayout } = createFakeLayout();
+        const { container, getByRole } = renderWithState(
+            <GraphView createLayout={createLayout} />,
+            {
+                initialValues: [done],
+            }
+        );
+
+        expect(container.querySelectorAll('g.node')).toHaveLength(8);
+        expect(container.querySelectorAll('line')).toHaveLength(7);
+        // Nodes at x = 0 … 700, y = 0, plus 48 px on every side.
+        expect(getByRole('img', { name: 'Component graph' }).getAttribute('viewBox')).toBe(
+            '-48 -48 796 96'
+        );
     });
 
-    expect(container.querySelectorAll('g.node')).toHaveLength(8);
-    expect(container.querySelectorAll('line')).toHaveLength(7);
-    // Nodes at x = 0 … 700, y = 0, plus 48 px on every side.
-    expect(getByRole('img', { name: 'Component graph' }).getAttribute('viewBox')).toBe(
-      '-48 -48 796 96'
-    );
-  });
+    it('draws nothing before an analysis result exists', () => {
+        const { createLayout, engines } = createFakeLayout();
+        const { container } = renderWithState(<GraphView createLayout={createLayout} />);
 
-  it('draws nothing before an analysis result exists', () => {
-    const { createLayout, engines } = createFakeLayout();
-    const { container } = renderWithState(<GraphView createLayout={createLayout} />);
+        expect(container.querySelector('svg')).toBeNull();
+        expect(engines).toHaveLength(0);
+    });
 
-    expect(container.querySelector('svg')).toBeNull();
-    expect(engines).toHaveLength(0);
-  });
+    it('leaves no engine running in StrictMode and after unmount', () => {
+        const { createLayout, engines } = createFakeLayout();
+        const { unmount } = renderWithState(
+            <StrictMode>
+                <GraphView createLayout={createLayout} />
+            </StrictMode>,
+            { initialValues: [done] }
+        );
 
-  it('leaves no engine running in StrictMode and after unmount', () => {
-    const { createLayout, engines } = createFakeLayout();
-    const { unmount } = renderWithState(
-      <StrictMode>
-        <GraphView createLayout={createLayout} />
-      </StrictMode>,
-      { initialValues: [done] }
-    );
-
-    expect(engines.filter(engine => !engine.stopped)).toHaveLength(1);
-    unmount();
-    expect(engines.every(engine => engine.stopped)).toBe(true);
-  });
+        expect(engines.filter(engine => !engine.stopped)).toHaveLength(1);
+        unmount();
+        expect(engines.every(engine => engine.stopped)).toBe(true);
+    });
 });

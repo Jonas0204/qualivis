@@ -1,98 +1,120 @@
 {
-  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
-  "vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true },
-  "files": {
-    "includes": ["**", "!legacy", "!testdata", "!.cache", "!**/dist", "!pnpm-lock.yaml", "!**/*.md"]
-  },
-  "formatter": { "indentStyle": "space", "indentWidth": 2, "lineWidth": 100 },
-  "javascript": {
-    "formatter": {
-      "quoteStyle": "single",
-      "arrowParentheses": "asNeeded",
-      "trailingCommas": "es5",
-      "semicolons": "always"
-    }
-  },
-  "assist": { "actions": { "source": { "organizeImports": "on" } } },
-  "linter": {
-    "rules": {
-      "preset": "recommended",
-      "complexity": {
-        "noExcessiveCognitiveComplexity": {
-          "level": "error",
-          "options": { "maxAllowedComplexity": 15 }
+    "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+    "vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true },
+    "files": {
+        "includes": [
+            "**",
+            "!legacy",
+            "!testdata",
+            "!.cache",
+            "!**/dist",
+            "!pnpm-lock.yaml",
+            "!**/*.md"
+        ]
+    },
+    "formatter": { "indentStyle": "space", "indentWidth": 4, "lineWidth": 100 },
+    "javascript": {
+        "formatter": {
+            "quoteStyle": "single",
+            "arrowParentheses": "asNeeded",
+            "trailingCommas": "es5",
+            "semicolons": "always"
         }
-      },
-      "style": {
-        "useImportType": "error",
-        "noParameterAssign": "error",
-        "noDefaultExport": "error",
-        "useConsistentTypeDefinitions": { "level": "error", "options": { "style": "type" } }
-      },
-      "suspicious": { "noConsole": "error", "noExplicitAny": "error", "noDoubleEquals": "error" },
-      "nursery": {
-        "useConsistentFunctionStyle": "error",
-        "useReactFunctionComponentDefinition": {
-          "level": "error",
-          "options": { "namedComponents": "arrowFunction" }
-        }
-      }
-    }
-  },
-  "overrides": [
-    {
-      "includes": [
-        "**/*.config.ts",
-        "**/vite.config.ts",
-        "**/vitest.config.ts",
-        "**/playwright.config.ts"
-      ],
-      "linter": { "rules": { "style": { "noDefaultExport": "off" } } }
     },
-    {
-      "includes": ["packages/core/src/types/**"],
-      "linter": { "rules": { "style": { "noDefaultExport": "off" } } }
-    },
-    {
-      "includes": ["tools/**", "**/*.test.ts", "**/*.test.tsx", "**/test/**"],
-      "linter": { "rules": { "suspicious": { "noConsole": "off" } } }
-    },
-    {
-      "includes": ["packages/core/src/legacy/**"],
-      "formatter": { "enabled": false },
-      "linter": {
+    "assist": { "actions": { "source": { "organizeImports": "on" } } },
+    "linter": {
         "rules": {
-          "complexity": {
-            "noExcessiveCognitiveComplexity": "off",
-            "useOptionalChain": "off",
-            "useMathMinMax": "off"
-          },
-          "style": {
-            "useTemplate": "off",
-            "noParameterAssign": "off",
-            "noNonNullAssertion": "off",
-            "useImportType": "error"
-          },
-          "suspicious": {
-            "noExplicitAny": "off",
-            "noImplicitAnyLet": "off",
-            "useIterableCallbackReturn": "off",
-            "noConsole": "off",
-            "noTsIgnore": "off",
-            "noDoubleEquals": "off"
-          },
-          "correctness": { "noUnusedFunctionParameters": "off", "noUnusedVariables": "off" },
-          "nursery": { "useConsistentFunctionStyle": "off" }
+            "preset": "recommended",
+            "complexity": {
+                "noExcessiveCognitiveComplexity": {
+                    "level": "error",
+                    "options": { "maxAllowedComplexity": 15 }
+                }
+            },
+            "style": {
+                "useImportType": "error",
+                "noParameterAssign": "error",
+                "noDefaultExport": "error",
+                "useConsistentTypeDefinitions": { "level": "error", "options": { "style": "type" } }
+            },
+            "suspicious": {
+                "noConsole": "error",
+                "noExplicitAny": "error",
+                "noDoubleEquals": "error"
+            },
+            "nursery": {
+                "useConsistentFunctionStyle": "error",
+                "useReactFunctionComponentDefinition": {
+                    "level": "error",
+                    "options": { "namedComponents": "arrowFunction" }
+                }
+            }
         }
-      }
     },
-    {
-      "includes": ["tools/legacy/capture.browser.js"],
-      "linter": {
-        "rules": {
-          "complexity": { "useOptionalChain": "off", "noExcessiveCognitiveComplexity": "off" }
+    "overrides": [
+        {
+            "includes": ["**/*.yml", "**/*.yaml"],
+            "formatter": { "indentWidth": 2 }
+        },
+        {
+            "includes": [
+                "**/*.config.ts",
+                "**/vite.config.ts",
+                "**/vitest.config.ts",
+                "**/playwright.config.ts"
+            ],
+            "linter": { "rules": { "style": { "noDefaultExport": "off" } } }
+        },
+        {
+            "includes": ["packages/core/src/types/**"],
+            "linter": { "rules": { "style": { "noDefaultExport": "off" } } }
+        },
+        {
+            "includes": ["tools/**", "**/*.test.ts", "**/*.test.tsx", "**/test/**"],
+            "linter": { "rules": { "suspicious": { "noConsole": "off" } } }
+        },
+        {
+            "includes": ["packages/core/src/legacy/**"],
+            "formatter": { "enabled": false },
+            "linter": {
+                "rules": {
+                    "complexity": {
+                        "noExcessiveCognitiveComplexity": "off",
+                        "useOptionalChain": "off",
+                        "useMathMinMax": "off"
+                    },
+                    "style": {
+                        "useTemplate": "off",
+                        "noParameterAssign": "off",
+                        "noNonNullAssertion": "off",
+                        "useImportType": "error"
+                    },
+                    "suspicious": {
+                        "noExplicitAny": "off",
+                        "noImplicitAnyLet": "off",
+                        "useIterableCallbackReturn": "off",
+                        "noConsole": "off",
+                        "noTsIgnore": "off",
+                        "noDoubleEquals": "off"
+                    },
+                    "correctness": {
+                        "noUnusedFunctionParameters": "off",
+                        "noUnusedVariables": "off"
+                    },
+                    "nursery": { "useConsistentFunctionStyle": "off" }
+                }
+            }
+        },
+        {
+            "includes": ["tools/legacy/capture.browser.js"],
+            "linter": {
+                "rules": {
+                    "complexity": {
+                        "useOptionalChain": "off",
+                        "noExcessiveCognitiveComplexity": "off"
+                    }
+                }
+            }
         }
-      }
-    }
-  ]
+    ]
 }

@@ -15,26 +15,26 @@ export type InitialAtomValue = readonly [AnyWritableAtom, unknown];
 
 /** Type-safe `[atom, value]` pair: the value must fit the atom. */
 export const initial = <Value,>(
-  atom: WritableAtom<Value, [Value], unknown>,
-  value: NoInfer<Value>
+    atom: WritableAtom<Value, [Value], unknown>,
+    value: NoInfer<Value>
 ): InitialAtomValue => [atom, value];
 
 type HydrateAtomsProps = { initialValues: readonly InitialAtomValue[]; children: ReactNode };
 
 const HydrateAtoms = ({ initialValues, children }: HydrateAtomsProps) => {
-  useHydrateAtoms(initialValues);
-  return children;
+    useHydrateAtoms(initialValues);
+    return children;
 };
 
 type TestProviderProps = {
-  store?: StateStore;
-  initialValues?: readonly InitialAtomValue[];
-  children: ReactNode;
+    store?: StateStore;
+    initialValues?: readonly InitialAtomValue[];
+    children: ReactNode;
 };
 
 /** Isolated store plus initial atom values for component and hook tests. */
 export const TestProvider = ({ store, initialValues = [], children }: TestProviderProps) => (
-  <StateProvider store={store}>
-    <HydrateAtoms initialValues={initialValues}>{children}</HydrateAtoms>
-  </StateProvider>
+    <StateProvider store={store}>
+        <HydrateAtoms initialValues={initialValues}>{children}</HydrateAtoms>
+    </StateProvider>
 );

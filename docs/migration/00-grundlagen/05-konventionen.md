@@ -10,9 +10,11 @@
 
 ## 2. Formatierung und Lint (Biome)
 
-- 2 Leerzeichen, Zeilenlänge 100, einfache Anführungszeichen, Semikolons, Trailing Commas `es5`,
-  Arrow-Parameter ohne Klammern wenn möglich (`arrowParentheses: "asNeeded"`) – entspricht der
-  alten `.prettierrc` (`singleQuote`, `printWidth 100`).
+- 4 Leerzeichen (YAML und Markdown 2, siehe `.editorconfig`; Nutzer, 09.11.2026), Zeilenlänge 100,
+  einfache Anführungszeichen, Semikolons, Trailing Commas `es5`, Arrow-Parameter ohne Klammern wenn
+  möglich (`arrowParentheses: "asNeeded"`) – wie die alte `.prettierrc` (`singleQuote`,
+  `printWidth 100`), die aber mit 2 Leerzeichen einrückte.
+- `packages/core/src/legacy/` wird nicht formatiert und behält die Einrückung des Altcodes.
 - Vor jeder Übergabe: `pnpm format` dann `pnpm check`.
 - `// biome-ignore` nur mit Begründung im selben Kommentar und nur, wenn die Regel im Einzelfall
   falsch liegt. Nie für Sicherheitsregeln.

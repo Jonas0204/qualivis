@@ -6,7 +6,7 @@ afterEach(() => cleanup());
 
 // jsdom has no ResizeObserver. Elements there have no size, so a stub that never reports is enough.
 globalThis.ResizeObserver ??= class {
-  observe() {}
-  unobserve() {}
-  disconnect() {}
+    observe() {}
+    unobserve() {}
+    disconnect() {}
 };

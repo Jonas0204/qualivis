@@ -1,28 +1,28 @@
 {
-  "name": "qualivis",
-  "private": true,
-  "type": "module",
-  "packageManager": "pnpm@12.16.1",
-  "engines": {
-    "node": ">=24"
-  },
-  "scripts": {
-    "dev": "pnpm --filter @qualivis/web dev",
-    "build": "pnpm --filter @qualivis/web build",
-    "preview": "pnpm --filter @qualivis/web preview",
-    "lint": "biome check .",
-    "format": "biome check --write .",
-    "typecheck": "pnpm -r --if-present run typecheck",
-    "test": "vitest run",
-    "test:parity": "vitest run --project core test/golden",
-    "check": "pnpm lint && pnpm typecheck && pnpm test",
-    "legacy:extract": "node tools/legacy/extract-legacy-build.mjs",
-    "legacy:serve": "node tools/legacy/serve-legacy.mjs"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "catalog:",
-    "@types/node": "catalog:",
-    "typescript": "catalog:",
-    "vitest": "catalog:"
-  }
+    "name": "qualivis",
+    "private": true,
+    "type": "module",
+    "packageManager": "pnpm@12.16.1",
+    "engines": {
+        "node": ">=24"
+    },
+    "scripts": {
+        "dev": "pnpm --filter @qualivis/web dev",
+        "build": "pnpm --filter @qualivis/web build",
+        "preview": "pnpm --filter @qualivis/web preview",
+        "lint": "biome check .",
+        "format": "biome check --write .",
+        "typecheck": "pnpm -r --if-present run typecheck",
+        "test": "vitest run",
+        "test:parity": "vitest run --project core test/golden",
+        "check": "pnpm lint && pnpm typecheck && pnpm test",
+        "legacy:extract": "node tools/legacy/extract-legacy-build.mjs",
+        "legacy:serve": "node tools/legacy/serve-legacy.mjs"
+    },
+    "devDependencies": {
+        "@biomejs/biome": "catalog:",
+        "@types/node": "catalog:",
+        "typescript": "catalog:",
+        "vitest": "catalog:"
+    }
 }

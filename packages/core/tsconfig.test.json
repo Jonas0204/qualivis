@@ -1,12 +1,12 @@
 {
-  "extends": "./tsconfig.src.json",
-  "compilerOptions": {
-    "types": ["node"],
-    "composite": false,
-    "emitDeclarationOnly": false,
-    "noEmit": true,
-    "rootDir": "."
-  },
-  "include": ["src", "test", "vitest.config.ts"],
-  "exclude": ["src/types/globals.d.ts"]
+    "extends": "./tsconfig.src.json",
+    "compilerOptions": {
+        "types": ["node"],
+        "composite": false,
+        "emitDeclarationOnly": false,
+        "noEmit": true,
+        "rootDir": "."
+    },
+    "include": ["src", "test", "vitest.config.ts"],
+    "exclude": ["src/types/globals.d.ts"]
 }

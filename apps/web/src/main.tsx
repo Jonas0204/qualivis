@@ -8,13 +8,13 @@ import './styles/global.css';
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {
-  throw new Error('Missing #root element in index.html');
+    throw new Error('Missing #root element in index.html');
 }
 
 createRoot(rootElement).render(
-  <StrictMode>
-    <StateProvider>
-      <App />
-    </StateProvider>
-  </StrictMode>
+    <StrictMode>
+        <StateProvider>
+            <App />
+        </StateProvider>
+    </StrictMode>
 );

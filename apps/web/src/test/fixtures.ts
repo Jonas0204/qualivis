@@ -8,19 +8,22 @@ import type { SourceFile } from '@qualivis/core';
 const repoRoot = resolve(import.meta.dirname, '../../../..');
 
 const walk = (dir: string): string[] =>
-  readdirSync(dir).flatMap(name => {
-    const full = join(dir, name);
-    return statSync(full).isDirectory() ? walk(full) : [full];
-  });
+    readdirSync(dir).flatMap(name => {
+        const full = join(dir, name);
+        return statSync(full).isDirectory() ? walk(full) : [full];
+    });
 
 /** Files of `testdata/fixtures/<fixture>` as '/<fixture>/<relative path>', sorted. */
 export const loadFixture = (fixture: string): SourceFile[] => {
-  const root = join(repoRoot, 'testdata', 'fixtures', fixture);
-  return (
-    walk(root)
-      // Windows paths → POSIX paths (no-op on macOS and Linux).
-      .map(full => relative(root, full).split('\\').join('/'))
-      .sort()
-      .map(rel => ({ path: `/${fixture}/${rel}`, code: readFileSync(join(root, rel), 'utf8') }))
-  );
+    const root = join(repoRoot, 'testdata', 'fixtures', fixture);
+    return (
+        walk(root)
+            // Windows paths → POSIX paths (no-op on macOS and Linux).
+            .map(full => relative(root, full).split('\\').join('/'))
+            .sort()
+            .map(rel => ({
+                path: `/${fixture}/${rel}`,
+                code: readFileSync(join(root, rel), 'utf8'),
+            }))
+    );
 };

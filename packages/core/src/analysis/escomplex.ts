@@ -11,7 +11,7 @@ const ESComplexProject = cjsDefault(_ESComplexProject);
  * (adjacencyList, visibilityList, coreSize, ...) and does not exist in the browser (ADR-005).
  */
 export const analyzeModules = (
-  modules: Array<{ ast: unknown; srcPath: string }>
+    modules: Array<{ ast: unknown; srcPath: string }>
 ): EscomplexReport => {
-  return new ESComplexProject(pathBrowserify).analyze(modules) as EscomplexReport;
+    return new ESComplexProject(pathBrowserify).analyze(modules) as EscomplexReport;
 };

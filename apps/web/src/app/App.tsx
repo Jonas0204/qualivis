@@ -9,21 +9,21 @@ import { ProgressBar } from '../ui/ProgressBar';
 import { AppShell } from './AppShell';
 
 export const App = () => {
-  const store = useStore();
-  const viewMode = useAtomValue(viewModeAtom);
-  const progress = useAtomValue(analysisProgressAtom);
-  const error = useAtomValue(analysisErrorAtom);
+    const store = useStore();
+    const viewMode = useAtomValue(viewModeAtom);
+    const progress = useAtomValue(analysisProgressAtom);
+    const error = useAtomValue(analysisErrorAtom);
 
-  const handleFiles = (files: SourceFile[]) => {
-    void runAnalysis(files, store);
-  };
+    const handleFiles = (files: SourceFile[]) => {
+        void runAnalysis(files, store);
+    };
 
-  return (
-    <AppShell>
-      {/* The legacy progress bar is part of the graph view (graph-view.component.html:2). */}
-      {viewMode === 'graph' && progress !== undefined && <ProgressBar value={progress} />}
-      {viewMode === 'upload' && <UploadView onFiles={handleFiles} error={error} />}
-      {viewMode === 'graph' && <GraphView />}
-    </AppShell>
-  );
+    return (
+        <AppShell>
+            {/* The legacy progress bar is part of the graph view (graph-view.component.html:2). */}
+            {viewMode === 'graph' && progress !== undefined && <ProgressBar value={progress} />}
+            {viewMode === 'upload' && <UploadView onFiles={handleFiles} error={error} />}
+            {viewMode === 'graph' && <GraphView />}
+        </AppShell>
+    );
 };

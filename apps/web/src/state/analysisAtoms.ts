@@ -4,18 +4,18 @@ import { atom } from 'jotai';
 export type AnalysisStatus = 'idle' | 'running' | 'done' | 'error';
 
 export type AnalysisState = {
-  status: AnalysisStatus;
-  /** `undefined` hides the progress bar, as in the legacy app. */
-  progress: number | undefined;
-  result: AnalysisResult | undefined;
-  error: string | undefined;
+    status: AnalysisStatus;
+    /** `undefined` hides the progress bar, as in the legacy app. */
+    progress: number | undefined;
+    result: AnalysisResult | undefined;
+    error: string | undefined;
 };
 
 export const initialAnalysisState: AnalysisState = {
-  status: 'idle',
-  progress: undefined,
-  result: undefined,
-  error: undefined,
+    status: 'idle',
+    progress: undefined,
+    result: undefined,
+    error: undefined,
 };
 
 export const analysisAtom = atom<AnalysisState>(initialAnalysisState);

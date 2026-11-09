@@ -1,30 +1,30 @@
 /* Graph styles (global, the SVG classes match the legacy app). Colours: style reference §1. */
 .qv-graph-area {
-  position: relative;
-  height: 100%;
-  background: var(--qv-background);
+    position: relative;
+    height: 100%;
+    background: var(--qv-background);
 }
 
 /* legacy graph.component.html: inline style of the SVG */
 .qv-graph {
-  position: absolute;
-  display: block;
-  width: 100%;
-  height: 100%;
-  user-select: none;
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: 100%;
+    user-select: none;
 }
 
 .qv-graph .circle-node.component {
-  fill: var(--qv-graph-component-fill);
+    fill: var(--qv-graph-component-fill);
 }
 
 .qv-graph .circle-overlay.component {
-  stroke: var(--qv-graph-component);
+    stroke: var(--qv-graph-component);
 }
 
 .qv-graph .node-label {
-  font-size: 14px;
-  dominant-baseline: central;
-  text-anchor: middle;
-  pointer-events: none;
+    font-size: 14px;
+    dominant-baseline: central;
+    text-anchor: middle;
+    pointer-events: none;
 }

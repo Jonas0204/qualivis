@@ -18,13 +18,13 @@ mkdirSync(cacheDir, { recursive: true });
 rmSync(target, { recursive: true, force: true });
 mkdirSync(target, { recursive: true });
 execFileSync('git', ['archive', '--format=tar', '-o', tarFile, ref], {
-  cwd: root,
-  stdio: 'inherit',
+    cwd: root,
+    stdio: 'inherit',
 });
 // Relative paths on purpose: GNU tar (e.g. from Git Bash on Windows) reads "D:\..." as host:path.
 execFileSync('tar', ['-xf', 'legacy-build.tar', '-C', 'legacy-build'], {
-  cwd: cacheDir,
-  stdio: 'inherit',
+    cwd: cacheDir,
+    stdio: 'inherit',
 });
 rmSync(tarFile, { force: true });
 console.log(`Legacy build extracted from ${ref} to ${target}`);
