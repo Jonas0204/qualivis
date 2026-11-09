@@ -24,7 +24,10 @@ Breite, warn/error, Icons, Cluster, Vorschaukreise, „...“, Kantenliste.
    Ablauf wie `createSimulation` (§9, `graph.component.ts:563-569`): tiefe Kopie per
    `JSON.parse(JSON.stringify(graph))` (wie Altsystem; `structuredClone` ist im DOM-freien Kern nicht
    typisiert) → Visuals →
-   (nur KV) Cluster → (nur KV) Constraints → Kanten auflösen.
+   (nur KV) Cluster → (nur KV) Constraints → Kanten auflösen. Kanten, deren Quell- oder Zielknoten
+   fehlt, mit dem Konsolenfehler des Altsystems weglassen, wie `resolveLinks` in
+   `apps/web/src/features/graph/buildViewGraph.ts`: Das Altsystem behielt sie, und d3 brach dann mit
+   „node not found“ ab (Nutzer, 09.11.2026). In `mini` und `realworld` kommt das nicht vor.
 2. `rules.golden.test.ts`:
    - Für jedes Fixture: `analyzeProject(loadFixture(f))`.
    - AV: `buildViewModel(appGraph, { view: 'app', sizeMetric: 'sloc.physical', nodeSizesBasedOnMetrics: true, showCluster: false })`

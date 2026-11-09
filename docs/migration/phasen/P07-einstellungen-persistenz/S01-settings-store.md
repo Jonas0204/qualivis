@@ -31,7 +31,8 @@ Vollbild-Atom direkt nutzen.
 3. Alle Verwender (`GraphView`, `GraphActions`, Vollbild) auf `settingsAtom` umstellen; das vorläufige
    Vollbild-Atom aus P05-S11 entfällt (`settings.fullScreen`).
 4. `apps/web/src/test/setup.ts`: im vorhandenen `afterEach` zusätzlich `localStorage.clear()`
-   (`atomWithStorage` schreibt auch beim Hydrieren durch den `TestProvider`, `anhang/A7`).
+   (`atomWithStorage` schreibt auch beim Hydrieren durch den `TestProvider`, Teststrategie §2,
+   Regel 5).
 5. Tests: Standardwerte ohne Speicher; Zusammenführung mit gespeicherten Teilwerten; ungültige Werte
    (String statt Boolean, unbekannter Schlüssel, kaputtes JSON) werden ignoriert; Änderung wird
    gespeichert; `localStorage` wirft → kein Absturz. Komponenten mit Einstellungen starten im Test

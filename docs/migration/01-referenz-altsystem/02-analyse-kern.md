@@ -61,7 +61,7 @@ Im Kern umgesetzt (Details: `packages/core/src/legacy/README.md` und der Code): 
 
 1. Der Patch für `typhonjs-plugin-manager` lässt `require('path')` am Dateianfang stehen. Vite
    meldet „Module "path" has been externalized“; das ist harmlos, wird aber per Vite-Alias
-   `path` → `path-browserify` unterdrückt (P04-S01).
+   `path` → `path-browserify` unterdrückt (`apps/web/vite.config.ts`).
 2. Das Hilfskonstrukt `Buffer = { isBuffer: false }` aus der alten `index.html` ist **nicht** nötig
    (`jsesc` 3.1 prüft `typeof Buffer`).
 

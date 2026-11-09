@@ -26,6 +26,6 @@ Neue offene Fragen bekommen die nächste freie ID (O16 …).
 | RI8 | TypeScript 7 / Werkzeuge haben Kinderkrankheiten | gering | mittel | im Spike verifiziert; bei Problemen TS 6.0 als Rückfall (ADR) |
 | RI9 | `localStorage`-Limit (≈ 5 MB) bei großen Projekten | mittel | gering | `try/catch`, Meldung; später IndexedDB (eigene ADR) |
 | RI10 | Installationen ohne Rückfrage | gering | mittel | Installationen nur nach Nachfrage mit Befehl, Paketen und Zweck (README R4); Hook des Nutzers prüft zusätzlich |
-| RI11 | Unterschiede Windows/macOS (Pfade, Dateiüberwachung, Browser-Kanal) | mittel | gering | `path-browserify`, `.gitattributes eol=lf`, plattformneutrale Befehle, `tar` mit relativen Pfaden (M0); P04-S01 prüft `pnpm dev` auf dem Mac |
+| RI11 | Unterschiede Windows/macOS (Pfade, Dateiüberwachung, Browser-Kanal) | mittel | gering | `path-browserify`, `.gitattributes eol=lf`, plattformneutrale Befehle, `tar` mit relativen Pfaden (M0); `pnpm dev` auf dem Mac prüft der Nutzer (offen) |
 | RI12 | Jotai 3 ist neu (09/2026); Beispiele im Netz meist v2 | mittel | gering | nur Grund-API nutzen (`atom`, `useAtom*`, `atomWithStorage`, `createStore`, `Provider`); Doku der installierten Version |
 | RI13 | Öffentliches Repo: personenbezogene Daten oder Secrets gelangen in Dateien, Commits oder PRs | mittel | hoch | Regel in `AGENTS.md` und README R2; Commits mit noreply-Adresse; vor jedem Commit den Diff auf Klarnamen, private E-Mail-Adressen und lokale Pfade mit Benutzernamen prüfen. Was einmal gepusht ist, bleibt in der Historie (keine History-Umschreibung) |

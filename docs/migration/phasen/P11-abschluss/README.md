@@ -24,6 +24,7 @@
 
 ## Entfallen (Nutzerentscheidungen 07.11.2026)
 - ~~Entscheidung zum Altsystem~~ – `legacy/angular/` bleibt im Repo (O5).
-- ~~Deployment~~ – läuft seit P04-S07 nach jedem Merge per GitHub Pages (ADR-016). Der Branch
+- ~~Deployment~~ – läuft seit P04 nach jedem Merge per GitHub Pages (`.github/workflows/pages.yml`,
+  ADR-016). Der Branch
   `gh-pages` enthält den Legacy-Build und ist Quelle der Goldens – nie überschreiben oder löschen.
 - ~~Umbenennung~~ – entschieden: „Qualivis“ (ADR-012).

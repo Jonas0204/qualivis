@@ -8,7 +8,7 @@ vertikal (363 px | Rest), Trenner 8 px `#eee`. Vollbild blendet linke und rechte
 
 ## Kontext
 - Funktionsinventar §9, G13; Stil-Referenz §3; Altcode `graph-view.component.html/.scss`,
-  angular-split-CSS (`anhang`-frei, Werte in der Stil-Referenz)
+  angular-split-CSS (Werte in der Stil-Referenz)
 
 ## Dateien
 `apps/web/src/ui/SplitPane.tsx`, `SplitPane.module.css`, `SplitPane.test.tsx`,

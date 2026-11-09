@@ -24,7 +24,7 @@ Live: https://jonas0204.github.io/qualivis/ (state of `rewrite/react`)
 | `pnpm install` | install dependencies (exact versions, 3-day minimum release age) |
 | `pnpm check` | lint (Biome), type check (TypeScript), tests (Vitest) |
 | `pnpm format` | format and fix with Biome |
-| `pnpm dev` | start the app (from P04 on) |
+| `pnpm dev` | start the app |
 | `pnpm legacy:extract` | extract the legacy production build (commit `5f0155e` on branch `gh-pages`) to `.cache/` |
 | `pnpm legacy:serve` | serve the legacy build locally for golden captures ([tools/legacy](tools/legacy/README.md)) |
 

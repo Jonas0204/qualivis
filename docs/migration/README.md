@@ -40,7 +40,7 @@ Grundlagen und `STATUS.md`.
 | **phasen/** | |
 | P01, P02 | **erledigt** (M0): Repo-Umbau, Workspace, Golden-Infrastruktur; Karten entfernt |
 | P03 | **erledigt** (M1, Teil 1): CI, `@qualivis/core` mit Golden G1; Karten entfernt |
-| [P04-web-mvp](phasen/P04-web-mvp/README.md) | Erstes sichtbares Produkt, GitHub Pages (M1) |
+| P04 | **erledigt** (M1, Teil 2): Web-MVP, GitHub Pages; Karten entfernt |
 | [P05-graph-paritaet](phasen/P05-graph-paritaet/README.md) | Graph wie im Original (M2) |
 | [P06-panels-navigation](phasen/P06-panels-navigation/README.md) | Panels, Auswahl, Drill-down (M3) |
 | [P07-einstellungen-persistenz](phasen/P07-einstellungen-persistenz/README.md) | Einstellungen, Persistenz, Hinweise (M4) |
@@ -48,8 +48,6 @@ Grundlagen und `STATUS.md`.
 | [P09-e2e-paritaet](phasen/P09-e2e-paritaet/README.md) | Playwright, automatisierte Parität (M6) |
 | [P10-core-paket-cli](phasen/P10-core-paket-cli/README.md) | Paket-Build (privat), CLI, Eigenprüfung (M7) |
 | [P11-abschluss](phasen/P11-abschluss/README.md) | Doku, Babel 8 (M8) |
-| **anhang/** | |
-| [A7-test-provider.md](anhang/A7-test-provider.md) | Jotai-Testhilfen `TestProvider`, `initial`, `renderWithState` (Vorlage, Prüfung in P04-S02) |
 
 ## So wird der Plan benutzt
 
@@ -135,7 +133,7 @@ Anmeldung macht **der Nutzer selbst** (`gh auth login`); der Assistent fasst kei
 
 ## Vorlage: Arbeitsauftrag für ein ausführendes Modell
 
-In Claude Code reicht `/schritt-umsetzen P04-S01` (ohne ID: nächster offener Schritt). GitHub Copilot
+In Claude Code reicht `/schritt-umsetzen P05-S01` (ohne ID: nächster offener Schritt). GitHub Copilot
 in VS Code wählt den Skill anhand seiner Beschreibung. Für andere Werkzeuge diesen Text verwenden:
 
 ```

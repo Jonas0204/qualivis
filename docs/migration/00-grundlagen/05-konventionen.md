@@ -61,6 +61,9 @@ Ordner der Altcode-Kopie (`packages/core/src/legacy/`) behalten die **alten Date
 - Zustand: lokal mit `useState`/`useReducer`; geteilt über Jotai-Atome (`state/`). Kein Prop-Drilling
   über mehr als zwei Ebenen. Abgeleitete Werte als abgeleitete Atome oder `useMemo`, nicht per
   `useEffect` + `setState`.
+- Atome immer auf Modulebene definieren, nie in der Render-Funktion: `useAtomValue(atom(get => …))`
+  erzeugt bei jedem Render ein neues Atom. Code arbeitet immer innerhalb des `StateProvider`, nie mit
+  dem globalen Jotai-Default-Store.
 - Effekte (`useEffect`) nur für Synchronisation mit Externem (Layout-Engine, CodeMirror, Events);
   jede Effekt-Funktion räumt auf.
 - Keine Berechnung von Fachwerten in Komponenten – dafür `@qualivis/core` oder Hilfsfunktionen.

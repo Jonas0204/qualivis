@@ -148,10 +148,11 @@ API gilt die Dokumentation der **installierten** Version (v3).
 **Entscheidung (Nutzer, 07.11.2026):** Komponententests bleiben bei Vitest + jsdom + Testing Library +
 user-event. Alle Komponenten- und Hook-Tests rendern zusätzlich über den `TestProvider`
 (`StateProvider` + `useHydrateAtoms`) mit eigenem Store pro Test und typsicheren Startwerten
-(`initial()`), siehe `06-teststrategie.md` §2 und `anhang/A7`.
-**Folgen:** Keine neuen Pakete, denn `useHydrateAtoms` gehört zu `jotai/utils`. Die Vorlage wurde
-nicht im Spike ausgeführt (Nutzerentscheidung) und wird in P04-S02 zuerst geprüft. Die Grenzen von
-jsdom bleiben (`06-teststrategie.md` §4).
+(`initial()`), siehe `06-teststrategie.md` §2.
+**Folgen:** Keine neuen Pakete, denn `useHydrateAtoms` gehört zu `jotai/utils`. Mit Jotai 3 und
+TS 7 akzeptiert `useHydrateAtoms` als Schreib-Argumente nur `any[]` (jotai #2650);
+`apps/web/src/test/TestProvider.tsx` kapselt das an einer Stelle, `initial()` hält die Werte
+typsicher (Nutzer, 09.11.2026). Die Grenzen von jsdom bleiben (`06-teststrategie.md` §4).
 
 ### ADR-016 CI mit GitHub Actions und GitHub Pages für die neue App
 **Kontext:** Ursprünglich waren weder Deployment noch CI geplant. Am 08.11.2026 festgestellt: Das Repo ist ein öffentlicher GitHub-Fork. GitHub Pages ist aktiv und liefert aus dem
@@ -160,9 +161,9 @@ Skripte liegen aber unter `/qualivis/`). In öffentlichen Repos sind die Standar
 und macOS) und Pages kostenlos. Der Nutzer prüft PRs oft unterwegs.
 **Entscheidung (Nutzer, 08.11.2026):**
 - CI (`.github/workflows/ci.yml`): `pnpm check` auf Ubuntu für PRs und Pushes nach `rewrite/react`;
-  ab P04-S01 zusätzlich `pnpm build`, ab P10-S03 `pnpm quality:self`. Windows und macOS prüft die
+  seit P04 zusätzlich `pnpm build`, ab P10-S03 `pnpm quality:self`. Windows und macOS prüft die
   lokale Entwicklung (Nutzer, 08.11.2026: Linux reicht in der CI).
-- Ab M1 (Karte P04-S07) veröffentlicht ein Workflow nach jedem Merge in `rewrite/react` die **neue**
+- Ab M1 veröffentlicht `.github/workflows/pages.yml` nach jedem Merge in `rewrite/react` die **neue**
   App auf GitHub Pages. Die alte Seite wird dort nicht mehr ausgeliefert.
 - Der Branch `gh-pages` bleibt unverändert als Quelle der Goldens; `pnpm legacy:extract` liest fest
   den Commit `5f0155e`.
@@ -171,7 +172,7 @@ und macOS) und Pages kostenlos. Der Nutzer prüft PRs oft unterwegs.
 `pull_request_target`. Workflow-Dateien sind CI/CD-Änderungen und brauchen die Zustimmung des
 Nutzers (Schritt 0 der Karten). Pages-Quelle und Environment-Freigabe stellt der Nutzer auf GitHub
 ein. Wird das Repo privat (O14), sind die Actions-Minuten begrenzt und Pages braucht ein Bezahl-Abo;
-dann beide Karten neu bewerten.
+dann CI und Pages neu bewerten.
 
 ### ADR-018 E2E-Browser: Microsoft Edge (ändert ADR-008)
 **Kontext:** ADR-008 nannte als Standard Windows `msedge` und macOS `chrome`.

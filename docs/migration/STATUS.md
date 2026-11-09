@@ -40,13 +40,7 @@ Ablauf: README, „Branches und Pull Requests“. Ziel aller PRs: `rewrite/react
 |---|---|---|---|---|
 | P01, P02 | M0: Fundament, Golden-Infrastruktur | ☑ | 08.11.2026 | Commit `5647a06`, PR #1 |
 | P03 | M1 (Teil 1): CI, Kern `@qualivis/core`, Golden G1 | ☑ | 08.11.2026 | Commits `5e54b41`–`1bd11f9` |
-| P04-S01 | Web: Skelett, Tokens, Schriften | ☑ | 09.11.2026 | `apps/web` mit Vite 8, 32 Tokens, lokalen Schriften, `Icon`; CI baut mit. macOS prüft der Nutzer noch |
-| P04-S02 | Web: Jotai-Atome | ☑ | 09.11.2026 | Atome Analyse/Ansicht, `StateProvider`, Testhilfen. A7 erstmals ausgeführt: `new Map(…)` lehnt `tsc` ab (Jotai 3, TS 7), daher die Ausweichlösung aus A7 (Nutzer, 09.11.2026) |
-| P04-S03 | Web: Upload, App-Rahmen | ☑ | 09.11.2026 | Auswahl und Drop liefern `SourceFile[]` (A7: `readEntries` bis leer), Upload-Karte, Toolbar, `AppShell`; Sichtvergleich mit dem Altsystem gleich bis auf Titel und Zahnrad (P07) |
-| P04-S04 | Web: Analyse-Fluss | ☑ | 09.11.2026 | `runAnalysis` mit Fortschritt und Fehlerzeile (A5), `ProgressBar`; `realworld` im Browser analysiert (38 Dateien, Balken, Wechsel zur Graph-Ansicht) |
-| P04-S05 | Web: Minimaler Graph | ☑ | 09.11.2026 | `viewGraphAtom`, Kraft-Layout (§9.3, Ziehen nach §11), `GraphCanvas`, viewBox um die Knoten; `realworld` in der Seite: 32 Kreise, 36 Pfeile, alles im Bild. Die laufende Animation prüft der Nutzer in S06 (im versteckten Browserfenster pausiert `requestAnimationFrame`) |
-| P04-S06 | M1-Abnahme | ☑ | 09.11.2026 | `pnpm check` (115 Tests), G1 (11 Tests) und `pnpm build` grün; JS 1,31 MB, gzip 329,65 kB; CSS gzip 18,63 kB; Vite warnt vor dem Chunk über 500 kB (Code-Splitting: P08-S04). `pnpm audit --prod`: keine Meldungen. Sichtvergleich durch den Nutzer: keine Abweichungen (Anordnung als Baum kommt mit P05-S06, Vorschaukreise mit P05-S05) |
-| P04-S07 | GitHub Pages (neue App) | ◐ | 09.11.2026 | `pages.yml` mit `upload-pages-artifact` v5.0.0 und `deploy-pages` v5.0.1 (per SHA), README-Link; `check` und `build` grün, Build unter `/qualivis/` geprüft (alle Dateien 200, keine fremden Hosts). Pages-Quelle „GitHub Actions“ hat der Nutzer gesetzt. Offen bis nach dem Merge des P04-PR: Environment-Freigabe für `rewrite/react` prüfen, Seite und `mini` testen |
+| P04 | M1 (Teil 2): Web-MVP, GitHub Pages | ◐ | 09.11.2026 | Commits `5ac8732`–`fbdc621`; M1 bestätigt. Offen: `pnpm dev` auf macOS (Nutzer). Nach dem Merge des P04-PR (Nutzer): Pages-Workflow läuft durch (Environment-Freigabe für `rewrite/react`), die Seite lädt ohne 404 und ohne fremde Hosts, Drop von `mini` → 8 Knoten, 7 Pfeile, `origin/gh-pages` bleibt `5f0155e`. Danach ☑ und PR-Link in der Tabelle „Phasen“ (beim Start von P05) |
 | P05-S01 | Regeln: Größe, Icons | ☐ | | |
 | P05-S02 | Regeln: Geometrie, Farben | ☐ | | |
 | P05-S03 | Regeln: Cluster, Constraints | ☐ | | |
@@ -82,13 +76,3 @@ Ablauf: README, „Branches und Pull Requests“. Ziel aller PRs: `rewrite/react
 Hier jede Abweichung vom Plan mit Begründung und Verweis (ADR bzw. Nutzerentscheidung) eintragen,
 solange sie für kommende Schritte wichtig ist. Vor dem PR der Phase wandert sie in die betroffenen
 Karten oder Grundlagen oder wird gestrichen; Erledigtes steht in der Git-Historie.
-
-- Kanten, deren Quell- oder Zielknoten fehlt, werden mit dem Konsolenfehler des Altsystems
-  weggelassen. Das Altsystem behielt sie, und d3 brach dann mit „node not found“ ab. Gilt auch für
-  das Auflösen der Kanten in P05-S04 (`buildViewModel`). In `mini` und `realworld` kommt das nicht
-  vor. (Nutzer, 09.11.2026)
-- Roboto wird nur mit der Teilmenge `latin` ausgeliefert (Deutsch und Englisch, Latin-1, allgemeine
-  Satzzeichen, €), in den Schnitten 300, 400 und 500 wie im Altsystem, ohne Kursiv und Fett. Das
-  Altsystem lud von Google alle Teilmengen. Zeichen anderer Schriftsysteme, etwa in Ordnernamen,
-  erscheinen deshalb in der Ersatzschrift; beim Sichtvergleich (P09) ist das keine Abweichung.
-  (Nutzer, 09.11.2026)

@@ -55,8 +55,8 @@ Begründung zu den Testwerkzeugen: ADR-015.
   in `allowBuilds` steht. Dann stoppen, dem Nutzer Paket und Skript nennen, Entscheidung abwarten.
 - **Tippfehler:** Bei unbekannten Schlüsseln in `pnpm-workspace.yaml` bricht pnpm mit
   `ERR_PNPM_UNRECOGNIZED_WORKSPACE_SETTINGS` ab.
-- **Erster Install:** `@codemirror/search`, `@fontsource/*`, `jotai` und `@playwright/test` waren
-  im Spike nicht installiert; beim ersten Install auf die Auflösung achten.
+- **Erster Install:** `@codemirror/search` und `@playwright/test` waren im Spike nicht installiert;
+  beim ersten Install auf die Auflösung achten.
 
 ## 4. Patches
 

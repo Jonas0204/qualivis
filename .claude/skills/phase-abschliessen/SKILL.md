@@ -10,8 +10,11 @@ disable-model-invocation: true
 
 - Aktueller Branch ist der Phasen-Branch (`rewrite/pNN-…`), das Arbeitsverzeichnis ist sauber.
 - Alle Schritte der Phase sind in `docs/migration/STATUS.md` ☑ (oder ⊘ mit Begründung),
-  einschließlich des Abnahme-Schritts.
-- Jeder Schritt hat einen Commit: `git log --oneline rewrite/react..HEAD`.
+  einschließlich des Abnahme-Schritts. Ausnahme: ◐ für einen Schritt, dessen Karte die letzte
+  Prüfung erst nach dem Merge vorsieht (z. B. die veröffentlichte Seite); die Zeile nennt genau
+  diese offene Prüfung.
+- Jeder Schritt hat einen Commit: `git fetch origin`, dann
+  `git log --oneline origin/rewrite/react..HEAD` (der PR vergleicht mit dem Stand auf GitHub).
 - `pnpm check` ist grün.
 
 Fehlt etwas: melden und nicht weitermachen.
@@ -19,7 +22,7 @@ Fehlt etwas: melden und nicht weitermachen.
 ## 2. Unabhängiges Review
 
 - **Subagent:** stärkstes Modell, nur lesen (Regeln: `AGENTS.md`, „Subagenten“). Auftrag:
-  - den Diff `rewrite/react..HEAD` gegen die Karten der Phase prüfen, die noch vorhanden sind,
+  - den Diff `origin/rewrite/react..HEAD` gegen die Karten der Phase prüfen, die noch vorhanden sind,
   - ebenso gegen den Altcode und `05-konventionen.md` prüfen,
   - Befunde mit Datei, Zeile und Begründung melden.
 - Jeden Befund selbst prüfen. Echte Fehler dem Nutzer melden und nach seiner Zustimmung beheben,
@@ -33,7 +36,8 @@ Was umgesetzt ist, steht im Code und in der Git-Historie. Vorschlagen, aus der D
 - die Schritt-Karten und die README der Phase (`docs/migration/phasen/Pnn-*/`),
 - ADRs, die mit dieser Phase vollständig umgesetzt sind und deren Regeln in Konfiguration oder
   Grundlagen stehen (IDs nicht neu vergeben),
-- Vorlagen in `anhang/` und Code-Snippets in anderen Dokumenten, die nur diese Phase brauchte,
+- Vorlagen (Ordner `docs/migration/anhang/`, falls vorhanden) und Code-Snippets in anderen
+  Dokumenten, die nur diese Phase brauchte,
 - erledigte Nutzerentscheidungen (O…) und Notizen in `STATUS.md`.
 
 Kandidaten finden:

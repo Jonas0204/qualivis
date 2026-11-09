@@ -66,8 +66,7 @@ Echte Browser-Prüfungen erledigt später Playwright in E2E-Tests (P09), getrenn
 
 Komponenten lesen geteilten Zustand aus Jotai-Atomen. Damit jeder Test mit einem bekannten,
 isolierten Zustand startet, laufen alle Komponenten- und Hook-Tests über die Testhilfen aus
-`apps/web/src/test/`. Sie werden in P04-S02 eingeführt; die Vorlage steht in
-`anhang/A7-test-provider.md`.
+`apps/web/src/test/`.
 
 - `TestProvider` = `StateProvider` (eigener Jotai-Store) + `useHydrateAtoms`, das die Startwerte vor dem
   ersten Rendern setzt (Muster aus der Jotai-Testanleitung).
@@ -88,7 +87,8 @@ Regeln:
    Jotai-Default-Store benutzen und nie Atome zwischen Tests „aufräumen“.
 2. Startwerte gehören in `initialValues`, nicht in ein `store.set` nach dem Rendern, sonst rendert
    die Komponente zuerst mit dem Standardwert. `act(() => store.set(…))` nur, um eine Änderung
-   **während** des Tests zu simulieren.
+   **während** des Tests zu simulieren. `useHydrateAtoms` setzt jeden Wert pro Store nur einmal;
+   andere Startwerte brauchen einen neuen Store, kein erneutes Rendern.
 3. Geprüft wird, was der Nutzer sieht (Rollen, Texte, Attribute), und mit `store.get(…)` der
    gespeicherte Zustand, nicht interne Funktionsaufrufe.
 4. Reine Atom-Logik (abgeleitete Atome, Schreib-Atome, `runAnalysis(files, store)`) braucht kein
