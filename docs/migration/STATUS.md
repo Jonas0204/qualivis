@@ -49,7 +49,7 @@ Ablauf: README, „Branches und Pull Requests“. Ziel aller PRs: `rewrite/react
 | P05-S06 | WebCola-Adapter | ☑ | 09.11.2026 | `colaLayout.ts` (nur `webcola/dist/src/layout`, Animation per `requestAnimationFrame`), `createLayout.ts`, `GraphView` mit `settings`-Prop (bis P07) und Engine-Wechsel. Erstes Layout im nächsten Frame, damit der doppelte StrictMode-Effekt die Knoten nicht vorbelegt. G3 (`colaLayout.golden.test.ts`): Positionen aller 26 Ansichten bitgleich zum Altsystem (siehe Notizen). Bundle ohne `d3-selection` und d3 v1 |
 | P05-S07 | Zoom & Pan | ☑ | 09.11.2026 | `zoomMath.ts`, `usePanZoom.ts` (Mausrad als nativer Listener mit `passive: false`, Verschieben, Einpassen in 250 ms per `requestAnimationFrame`), `GraphCanvas` mit Zoom-Gruppe statt `viewBox`. Einpassen nach dem ersten Layout-Ende jedes Laufs; V5 (Label-/Kantenbreite) gilt bis zum Neustart. Wie d3-zoom 1.x: kein Verschieben mit Strg oder anderer Maustaste, der Klick nach dem Verschieben wird verschluckt. Strg+Mausrad (Pinch) zoomt den Graphen (Abweichung, siehe Notizen). Auf Touchscreens zoomen zwei Finger wie bei d3-zoom 1.x (`gripTransform`), ein dritter wird ignoriert. Vorläufige Knöpfe „{n}%“ und „Zoom to fit“ bis S11. `geometry.ts` (`fitViewBox`) entfernt |
 | P05-S08 | Knoten ziehen | ☑ | 09.11.2026 | `useNodeDrag.ts` wie d3-drag 1.x: Der Knoten behält den Abstand zum Zeiger, der Drag beginnt erst mit der ersten Bewegung, Shift beim Loslassen fixiert (Kraft-Layout). Der Zeiger wird wie bei d3 über `window` verfolgt statt per Pointer-Capture. `useLayout` liefert die laufende Engine und zählt Neustarts (`run`). Ziehen mit WebCola im Browser geprüft, Kraft-Layout per Test (Umschalten erst in P07) |
-| P05-S09 | Auswahl, Ausblenden | ☐ | | |
+| P05-S09 | Auswahl, Ausblenden | ☑ | 09.11.2026 | Kern `connectivity.ts` (`connectedNodes`, `isLinkHighlighted`, `withoutNodes`), `useFade.ts` (Fokus gilt für einen Layout-Lauf, nicht während eines Drags), `selectionAtoms.ts` (Grundform). `GraphNode` mit `inlineStyle` und `events`, `GraphCanvas` mit `events` und `highlight`. Klick auf den Kreis wählt aus und blendet aus (G1), Strg+Klick entfernt Knoten samt Kanten nur aus der Ansicht, bleibt über Neustarts und startet das Layout von den bisherigen Positionen (G5), Strg+Überfahren (G6), Klick auf den Hintergrund (G7). Deckkraft per Inline-Style, Übergang per CSS (250 ms). Knoten nur mit der Maus wie im Altsystem; Tastatur folgt in P08-S07. Im Browser geprüft; Sichtvergleich mit dem Altsystem steht aus (Nutzer) |
 | P05-S10 | Label-Kollision | ☐ | | |
 | P05-S11 | Legende, Aktionsleiste | ☐ | | |
 | P05-S12 | M2-Abnahme | ☐ | | |
@@ -95,3 +95,15 @@ Karten oder Grundlagen oder wird gestrichen; Erledigtes steht in der Git-Histori
   d3-zoom 3: Der Graph zoomt um den Zeiger, Strg zählt zehnfach (ein Strg-Mausrad-Schritt der Maus
   zoomt vierfach). Strg+Klick (Knoten entfernen) und Strg beim Überfahren (Ausblenden) bleiben frei
   für S09.
+- **Label nicht klickbar (P05-S09, betrifft S12 und P09):** Karte S09 und Inventar G1 nennen
+  „Klick auf Kreis oder Label“. Im Altsystem hat `.node-label` aber `pointer-events: none`, der
+  Klick-Handler an `tspan.label-text` griff also nie; ein Klick auf das Label trifft den Kreis
+  darunter oder den Hintergrund. Neu genauso, ohne Handler am Label.
+- **Helle Füllung nur beim aktuellen Fokus (P05-S09):** Das Altsystem färbte indirekt verbundene
+  Knoten `#fafafa` und setzte die Füllung beim Einblenden nicht zurück (d3 `style('fill', false)`
+  ändert nichts). Nach Strg+Überfahren blieben Knoten also hell, bis zur nächsten Auswahl oder
+  zum Neustart. Neu sind genau die indirekten Knoten des aktuellen Fokus hell.
+- **Auswahl-Grundform (P05-S09, betrifft P06-S02):** `SelectedNode` sind die Felder `id`, `label`,
+  `type`, `report`, `icons` des Ansichtsmodells; die Icons sind also `VisualIcon` (Beschreibung als
+  Objekt) statt `NodeIcon` (HTML-Text). `selectGraphNodeAtom` nimmt noch keine `componentId`, die
+  braucht erst P06-S02 für Code und Zeilen.

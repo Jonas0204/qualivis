@@ -35,6 +35,8 @@
     --qv-graph-special-selected: #96d7e9;
     --qv-graph-special-preview: #c0e7f2;
     --qv-graph-special-preview-jsx: #4cbbd9;
+    /* Fill of indirectly connected nodes while the graph is faded (createFading) */
+    --qv-graph-indirect-fill: #fafafa;
 
     /* Material theme "deeppurple-amber", only the parts the app uses */
     --qv-primary: #673ab7;

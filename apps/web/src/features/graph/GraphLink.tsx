@@ -7,6 +7,8 @@ type GraphLinkProps = {
     view: View;
     /** Line width set by zooming (zoomMath nextZoomStyle), as inline style like the legacy app. */
     strokeWidth?: number;
+    /** Opacity while the graph is faded (useFade); the legacy app set the attribute instead. */
+    opacity?: number;
 };
 
 const position = (node: { x?: number; y?: number }) => ({ x: node.x ?? 0, y: node.y ?? 0 });
@@ -15,7 +17,7 @@ const position = (node: { x?: number; y?: number }) => ({ x: node.x ?? 0, y: nod
  * Arrow from the centre of the source to the edge of the target (legacy createLinks and tick,
  * graph.component.ts:615-671); dashed when the target is inherited.
  */
-export const GraphLink = ({ link, view, strokeWidth }: GraphLinkProps) => {
+export const GraphLink = ({ link, view, strokeWidth, opacity }: GraphLinkProps) => {
     const { arrowhead } = useContext(GraphDefsContext);
     const start = position(link.source);
     const end = linkEnd(start, position(link.target), mainRadius(link.target.width, view));
@@ -32,7 +34,11 @@ export const GraphLink = ({ link, view, strokeWidth }: GraphLinkProps) => {
             x2={end.x}
             y2={end.y}
             strokeWidth={graphSettings.linkStrokeWidth}
-            style={strokeWidth === undefined ? undefined : { strokeWidth }}
+            style={
+                strokeWidth === undefined && opacity === undefined
+                    ? undefined
+                    : { strokeWidth, opacity }
+            }
             strokeDasharray={link.inherits ? '4 2' : undefined}
             markerEnd={`url(#${arrowhead})`}
         />

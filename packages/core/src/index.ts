@@ -20,6 +20,8 @@ export type { ClusterResult } from './rules/cluster';
 export { computeClusters } from './rules/cluster';
 export type { ClusterPaint } from './rules/color';
 export { brightenColor, clusterColor, clusterPaint } from './rules/color';
+export type { Connections, LinkEnds } from './rules/connectivity';
+export { connectedNodes, isLinkHighlighted, withoutNodes } from './rules/connectivity';
 export type { IconDescription, VisualIcon } from './rules/icons';
 export { describeIconText, getNodeIcons } from './rules/icons';
 export type { Point } from './rules/linkGeometry';

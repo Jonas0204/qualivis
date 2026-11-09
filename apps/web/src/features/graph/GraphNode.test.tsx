@@ -1,6 +1,7 @@
 import type { Node, View, VisualNode } from '@qualivis/core';
+import { fireEvent } from '@testing-library/react';
 import type { ReactElement } from 'react';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { renderWithState } from '../../test/renderWithState';
 import { GraphNode, type GraphNodeSettings } from './GraphNode';
 
@@ -145,7 +146,7 @@ describe('GraphNode', () => {
                 node={visual({ width: 48, returnsJSX: true })}
                 view="component"
                 settings={settings}
-                clusterPaint={{ fill: 'rgb(1, 2, 3)', stroke: 'rgb(4, 5, 6)' }}
+                inlineStyle={{ fill: 'rgb(1, 2, 3)', stroke: 'rgb(4, 5, 6)' }}
             />
         );
 
@@ -155,6 +156,48 @@ describe('GraphNode', () => {
         expect(style('.circle-overlay')).toBe('stroke: rgb(4, 5, 6);');
         expect(style('.inner-circle')).toBe('stroke: rgb(4, 5, 6);');
         expect(draw(visual()).querySelector('.circle-node')?.getAttribute('style')).toBeNull();
+    });
+
+    it('fades with an inline opacity and has no style without it', () => {
+        const faded = inSvg(
+            <GraphNode
+                node={visual()}
+                view="app"
+                settings={settings}
+                inlineStyle={{ opacity: 0.1 }}
+            />
+        );
+
+        expect(faded.querySelector('g.node')?.getAttribute('style')).toBe('opacity: 0.1;');
+        expect(draw(visual()).querySelector('g.node')?.getAttribute('style')).toBeNull();
+    });
+
+    it('reports clicks on the overlay and anywhere on the node, with the node', () => {
+        const node = visual();
+        const onCircleClick = vi.fn();
+        const onClick = vi.fn();
+        const container = inSvg(
+            <GraphNode
+                node={node}
+                view="app"
+                settings={settings}
+                events={{ onCircleClick, onClick }}
+            />
+        );
+
+        const overlay = container.querySelector('circle.circle-overlay');
+        const label = container.querySelector('tspan.label-text');
+        if (!overlay || !label) {
+            throw new Error('no overlay or label');
+        }
+        fireEvent.click(overlay);
+        // The label has no handler of its own: `.node-label` lets clicks through in the browser.
+        fireEvent.click(label);
+
+        expect(onCircleClick).toHaveBeenCalledTimes(1);
+        expect(onCircleClick).toHaveBeenCalledWith(node, expect.anything());
+        expect(onClick).toHaveBeenCalledTimes(2);
+        expect(onClick).toHaveBeenLastCalledWith(node, expect.anything());
     });
 
     it('draws one preview circle per function, hides those that do not fit and adds "..."', () => {

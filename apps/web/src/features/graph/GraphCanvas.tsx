@@ -5,11 +5,18 @@ import {
     type VisualLink,
     type VisualNode,
 } from '@qualivis/core';
-import { type PointerEvent as ReactPointerEvent, type Ref, useId, useMemo } from 'react';
+import {
+    type MouseEvent as ReactMouseEvent,
+    type PointerEvent as ReactPointerEvent,
+    type Ref,
+    useId,
+    useMemo,
+} from 'react';
 import { GraphDefs } from './GraphDefs';
 import { GraphLink } from './GraphLink';
-import { GraphNode, type GraphNodeSettings } from './GraphNode';
+import { GraphNode, type GraphNodeSettings, type NodeEvents } from './GraphNode';
 import { GraphDefsContext } from './graphDefsContext';
+import type { GraphFade } from './useFade';
 import {
     identityTransform,
     transformAttribute,
@@ -24,6 +31,23 @@ export type GraphZoom = ZoomStyle & {
     transition?: boolean;
 };
 
+/** Selection (§14) and fading (§12) of the graph. */
+export type GraphHighlight = {
+    /** Ids of the selected nodes. */
+    selected?: ReadonlySet<string>;
+    /** Undefined while nothing is faded. */
+    fade?: GraphFade<VisualLink>;
+};
+
+export type GraphEvents = {
+    /** Pointer down on the background (pan). */
+    onPointerDown?: (event: ReactPointerEvent<SVGSVGElement>) => void;
+    /** Any click in the SVG; on the background when the target is the SVG itself. */
+    onClick?: (event: ReactMouseEvent<SVGSVGElement>) => void;
+    /** The pointer down of a node has to stop the event, or the background pans too. */
+    node?: NodeEvents;
+};
+
 type GraphCanvasProps = {
     nodes: readonly VisualNode[];
     links: readonly VisualLink[];
@@ -35,13 +59,18 @@ type GraphCanvasProps = {
     zoom?: GraphZoom;
     svgRef?: Ref<SVGSVGElement>;
     zoomGroupRef?: Ref<SVGGElement>;
-    /** Pointer down on the background (pan). */
-    onPointerDown?: (event: ReactPointerEvent<SVGSVGElement>) => void;
-    /** Pointer down on a node (drag); it has to stop the event, or the background pans too. */
-    onNodePointerDown?: (node: VisualNode, event: ReactPointerEvent<SVGGElement>) => void;
+    events?: GraphEvents;
+    highlight?: GraphHighlight;
 };
 
 const unscaled: GraphZoom = { transform: identityTransform };
+
+/** Fill of indirectly connected nodes while faded (graph.component.ts:787). */
+const indirectFill = 'var(--qv-graph-indirect-fill)';
+
+/** Opacity of a node or link while faded; undefined while nothing is faded. */
+const fadeOpacity = (fade: GraphFade<VisualLink> | undefined, opaque: boolean | undefined) =>
+    fade && (opaque ? 1 : graphSettings.fadeOpacity);
 
 /** SVG of the graph at the current node positions; markup and classes as in the legacy app. */
 export const GraphCanvas = ({
@@ -53,8 +82,8 @@ export const GraphCanvas = ({
     zoom = unscaled,
     svgRef,
     zoomGroupRef,
-    onPointerDown,
-    onNodePointerDown,
+    events = {},
+    highlight = {},
 }: GraphCanvasProps) => {
     // Unique ids per graph, so that two graphs in one document do not share their defs. Only
     // letters, digits, "_" and "-", so the ids also work in url(#…).
@@ -63,15 +92,18 @@ export const GraphCanvas = ({
         () => ({ arrowhead: `qv-arrowhead-${id}`, hatch: `qv-hatch-${id}` }),
         [id]
     );
+    const { fade, selected } = highlight;
 
     return (
         <GraphDefsContext value={defIds}>
+            {/* biome-ignore lint/a11y/useKeyWithClickEvents: mouse only like the legacy graph; keyboard access follows in P08-S07 */}
             <svg
                 ref={svgRef}
                 className="qv-graph"
                 role="img"
                 aria-label="Component graph"
-                onPointerDown={onPointerDown}
+                onPointerDown={events.onPointerDown}
+                onClick={events.onClick}
             >
                 <GraphDefs />
                 {/* legacy #zoomGroup */}
@@ -92,23 +124,32 @@ export const GraphCanvas = ({
                                 link={link}
                                 view={view}
                                 strokeWidth={zoom.linkStrokeWidth}
+                                opacity={fadeOpacity(fade, fade?.opaqueLinks.has(link))}
                             />
                         ))}
                     </g>
                     <g className="nodes">
-                        {nodes.map(node => (
-                            <GraphNode
-                                key={node.id}
-                                node={node}
-                                view={view}
-                                settings={settings}
-                                clusterPaint={clusterPaint(node.cluster, view, showCluster)}
-                                labelFontSize={zoom.labelFontSize}
-                                onPointerDown={
-                                    onNodePointerDown && (event => onNodePointerDown(node, event))
-                                }
-                            />
-                        ))}
+                        {nodes.map(node => {
+                            const paint = clusterPaint(node.cluster, view, showCluster);
+                            return (
+                                <GraphNode
+                                    key={node.id}
+                                    node={node}
+                                    view={view}
+                                    settings={settings}
+                                    selected={selected?.has(node.id)}
+                                    inlineStyle={{
+                                        fill: fade?.indirectNodes.has(node.id)
+                                            ? indirectFill
+                                            : paint?.fill,
+                                        stroke: paint?.stroke,
+                                        opacity: fadeOpacity(fade, fade?.opaqueNodes.has(node.id)),
+                                        labelFontSize: zoom.labelFontSize,
+                                    }}
+                                    events={events.node}
+                                />
+                            );
+                        })}
                     </g>
                 </g>
             </svg>

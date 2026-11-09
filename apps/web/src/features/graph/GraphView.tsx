@@ -1,11 +1,23 @@
-import { buildViewModel, defaultSettings, graphSettings, type Settings } from '@qualivis/core';
-import { useAtomValue } from 'jotai';
+import {
+    buildViewModel,
+    defaultSettings,
+    graphSettings,
+    type Settings,
+    type VisualLink,
+    type VisualNode,
+    withoutNodes,
+} from '@qualivis/core';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { selectGraphNodeAtom, selectionAtom } from '../../state/selectionAtoms';
 import { viewGraphAtom } from '../../state/viewAtoms';
 import { Icon } from '../../ui/Icon';
-import { GraphCanvas } from './GraphCanvas';
+import { GraphCanvas, type GraphEvents } from './GraphCanvas';
 import { createLayout as createDefaultLayout, type LayoutFactory } from './layout/createLayout';
+import type { LayoutNode } from './layout/types';
+import type { ViewGraph } from './selectViewGraph';
 import { useElementSize } from './useElementSize';
+import { useFade } from './useFade';
 import { useLayout } from './useLayout';
 import { useNodeDrag } from './useNodeDrag';
 import { browserMeasure, type PanZoomMeasure, usePanZoom } from './usePanZoom';
@@ -24,31 +36,65 @@ type GraphViewProps = {
 // Until the size metric select in P05-S11.
 const sizeMetric = graphSettings.defaultSizeMetric;
 
-/** Graph of the current view, laid out by the engine of the settings, with pan, zoom and drag. */
+const noNodeIds: readonly string[] = [];
+const noLinks: readonly VisualLink[] = [];
+
+/** Nodes removed with Ctrl+click (G5), for the graph they were removed from. */
+type Removal = { viewGraph: ViewGraph; nodeIds: readonly string[] };
+
+/** Gives the nodes the position (and pin) of the node with the same id before the restart. */
+const placeLike = (nodes: readonly LayoutNode[], before: ReadonlyMap<string, LayoutNode>) => {
+    for (const node of nodes) {
+        const old = before.get(node.id);
+        if (old) {
+            node.x = old.x;
+            node.y = old.y;
+            node.fx = old.fx;
+            node.fy = old.fy;
+        }
+    }
+};
+
+/**
+ * Graph of the current view, laid out by the engine of the settings, with pan, zoom, drag,
+ * selection and fading.
+ */
 export const GraphView = ({
     createLayout = createDefaultLayout,
     settings = defaultSettings,
     measure = browserMeasure,
 }: GraphViewProps) => {
     const viewGraph = useAtomValue(viewGraphAtom);
+    const selection = useAtomValue(selectionAtom);
+    const setSelection = useSetAtom(selectionAtom);
+    const selectGraphNode = useSetAtom(selectGraphNodeAtom);
     const areaRef = useRef<HTMLDivElement>(null);
     const size = useElementSize(areaRef);
     const nodeSizesBasedOnMetrics = settings.nodeSizesBasedOnMetrics ?? true;
     const colaLayout = settings.colaLayout ?? true;
     const autoZoom = settings.autoZoom ?? true;
 
+    // G5: Ctrl+click removes a node from this graph only (legacy removeNode,
+    // graph.component.ts:1050-1056), not from the analysis. Restarts keep the removal as in the
+    // legacy app; another graph (other view, new analysis) shows all nodes again.
+    const [removal, setRemoval] = useState<Removal>();
+    const removedIds = removal && removal.viewGraph === viewGraph ? removal.nodeIds : noNodeIds;
+    // The legacy restart kept the node objects, so the layout went on from where the nodes were.
+    const nodesBeforeRemovalRef = useRef<ReadonlyMap<string, LayoutNode>>(undefined);
+
     // A new copy for every graph: the layout writes positions into its nodes and links, so they
     // must not be the value of an atom (architecture §5; the legacy app copied on every graph,
-    // graph.component.ts:166-171).
+    // graph.component.ts:166-171). Clusters and constraints leave out the removed nodes, as the
+    // legacy restart computed them again (createSimulation, 563-574).
     const model = useMemo(
         () =>
             viewGraph &&
-            buildViewModel(viewGraph.graph, {
+            buildViewModel(withoutNodes(viewGraph.graph, removedIds), {
                 view: viewGraph.view,
                 sizeMetric,
                 nodeSizesBasedOnMetrics,
             }),
-        [viewGraph, nodeSizesBasedOnMetrics]
+        [viewGraph, removedIds, nodeSizesBasedOnMetrics]
     );
 
     const [zoomStyle, setZoomStyle] = useState<ZoomStyle>({});
@@ -60,18 +106,21 @@ export const GraphView = ({
     // Like the legacy app, the layout takes the area size when it starts and does not restart when
     // the area is resized; hence `size !== undefined` instead of `size` in the deps. A new engine
     // for the same model starts from the positions of the old one, as the legacy restartGraph did.
-    const layout = useLayout(
-        () =>
-            model && size
-                ? createLayout(colaLayout, {
-                      nodes: model.nodes,
-                      links: model.links,
-                      constraints: model.constraints,
-                      ...size,
-                  })
-                : undefined,
-        [model, size !== undefined, colaLayout, createLayout]
-    );
+    const layout = useLayout(() => {
+        if (!model || !size) {
+            return undefined;
+        }
+        if (nodesBeforeRemovalRef.current) {
+            placeLike(model.nodes, nodesBeforeRemovalRef.current);
+            nodesBeforeRemovalRef.current = undefined;
+        }
+        return createLayout(colaLayout, {
+            nodes: model.nodes,
+            links: model.links,
+            constraints: model.constraints,
+            ...size,
+        });
+    }, [model, size !== undefined, colaLayout, createLayout]);
 
     // A restart draws new labels and links, which the legacy app gave the default sizes again.
     const [styleRun, setStyleRun] = useState(layout.run);
@@ -93,10 +142,59 @@ export const GraphView = ({
         }
     }, [layout.run, layout.ended, autoZoom, zoomToFit]);
 
+    const fade = useFade(model?.links ?? noLinks, layout.run, settings);
     const drag = useNodeDrag({
         getEngine: layout.getEngine,
         getTransform: panZoom.getTransform,
+        onDraggingChange: fade.onDraggingChange,
     });
+
+    const selectedIds = useMemo(() => new Set(selection?.map(node => node.id)), [selection]);
+
+    const removeNode = (node: VisualNode) => {
+        if (!viewGraph || !model) {
+            return;
+        }
+        nodesBeforeRemovalRef.current = new Map(model.nodes.map(each => [each.id, each]));
+        setRemoval({ viewGraph, nodeIds: [...removedIds, node.id] });
+    };
+
+    const events: GraphEvents = {
+        onPointerDown: panZoom.onPointerDown,
+        // G7 (legacy deselectNodes, graph.component.ts:1172-1177): a click on the background itself.
+        onClick: event => {
+            if (event.target === event.currentTarget) {
+                fade.fadeIn();
+                setSelection(null);
+            }
+        },
+        node: {
+            onPointerDown: drag.onPointerDown,
+            // G1 and G5 (legacy onNodeClick, graph.component.ts:1030-1048).
+            onCircleClick: (node, event) => {
+                if (event.ctrlKey) {
+                    // The legacy fading of this click reached only the nodes drawn before the
+                    // restart, so it does not fade here.
+                    event.stopPropagation();
+                    removeNode(node);
+                    return;
+                }
+                selectGraphNode(node);
+            },
+            onClick: node => fade.fadeTo(node.id),
+            // G6: fade while the pointer is over a node with Ctrl held.
+            onPointerEnter: (node, event) => {
+                if (event.ctrlKey) {
+                    fade.fadeTo(node.id);
+                }
+            },
+            onPointerLeave: (_node, event) => {
+                if (event.ctrlKey) {
+                    fade.fadeIn();
+                }
+            },
+        },
+    };
 
     // Nodes get their first position when the engine starts; draw them only from then on.
     const placed = model?.nodes.every(node => node.x !== undefined && node.y !== undefined);
@@ -116,8 +214,8 @@ export const GraphView = ({
                     }}
                     svgRef={panZoom.svgRef}
                     zoomGroupRef={panZoom.zoomGroupRef}
-                    onPointerDown={panZoom.onPointerDown}
-                    onNodePointerDown={drag.onPointerDown}
+                    events={events}
+                    highlight={{ selected: selectedIds, fade: fade.faded }}
                 />
             )}
             {viewGraph && (

@@ -3,6 +3,7 @@ import { act, fireEvent } from '@testing-library/react';
 import { StrictMode } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { analysisAtom, initialAnalysisState } from '../../state/analysisAtoms';
+import { selectionAtom } from '../../state/selectionAtoms';
 import { loadFixture } from '../../test/fixtures';
 import { renderWithState } from '../../test/renderWithState';
 import { initial } from '../../test/TestProvider';
@@ -21,6 +22,8 @@ type FakeEngine = {
     calls: string[];
     /** Reports the end again, as after a drag. */
     end: () => void;
+    /** Where the nodes were when the engine was built. */
+    positions: { id: string; x?: number; y?: number }[];
 };
 
 /** Fake engine: puts the nodes in a row at once and reports the end, without animation. */
@@ -34,7 +37,14 @@ const createFakeLayout = () => {
                 listener();
             }
         };
-        const record: FakeEngine = { colaLayout, options, stopped: false, calls: [], end };
+        const record: FakeEngine = {
+            colaLayout,
+            options,
+            stopped: false,
+            calls: [],
+            end,
+            positions: nodes.map(({ id, x, y }) => ({ id, x, y })),
+        };
         engines.push(record);
         const engine: LayoutEngine = {
             start: () => {
@@ -320,5 +330,238 @@ describe('GraphView', () => {
         expect(engines[1]?.options.nodes).not.toBe(engines[0]?.options.nodes);
         // Without sizes by metric every node is 48 wide (2 × circleRadius), as in the legacy app.
         expect(engines[1]?.options.nodes.every(node => node.width === 48)).toBe(true);
+    });
+});
+
+const app = '/mini/src/App.js#App';
+const header = '/mini/src/components/Header.js#Header';
+
+describe('GraphView selection and fading', () => {
+    beforeEach(() => {
+        vi.spyOn(console, 'error').mockImplementation(() => {});
+        vi.spyOn(console, 'log').mockImplementation(() => {});
+        vi.useFakeTimers({ toFake: ['requestAnimationFrame', 'cancelAnimationFrame'] });
+    });
+    afterEach(async () => {
+        vi.useRealTimers();
+        vi.restoreAllMocks();
+        await new Promise(resolve => setTimeout(resolve, 0));
+    });
+
+    const nodes = (container: HTMLElement) =>
+        Array.from(container.querySelectorAll<SVGGElement>('g.zoom-group g.node'));
+    const node = (container: HTMLElement, label: string) => {
+        const found = nodes(container).find(
+            group => group.querySelector('.label-text')?.textContent === label
+        );
+        if (!found) {
+            throw new Error(`no node ${label}`);
+        }
+        return found;
+    };
+    const overlay = (container: HTMLElement, label: string) => {
+        const circle = node(container, label).querySelector('circle.circle-overlay');
+        if (!circle) {
+            throw new Error(`no overlay for ${label}`);
+        }
+        return circle;
+    };
+    /** Opacity per label; '' means not faded (1). */
+    const nodeOpacities = (container: HTMLElement) =>
+        Object.fromEntries(
+            nodes(container).map(group => [
+                group.querySelector('.label-text')?.textContent,
+                group.style.opacity,
+            ])
+        );
+    const linkOpacities = (container: HTMLElement) =>
+        Array.from(
+            container.querySelectorAll<SVGLineElement>('g.links line'),
+            line => line.style.opacity
+        );
+    const nothingFaded = (container: HTMLElement) =>
+        Object.values(nodeOpacities(container)).every(opacity => opacity === '') &&
+        linkOpacities(container).every(opacity => opacity === '');
+
+    it('selects a node on click and fades what is not connected to it (G1, §14)', () => {
+        const { createLayout } = createFakeLayout();
+        const { container, store } = drawView(createLayout);
+
+        fireEvent.click(overlay(container, 'Header'));
+
+        expect(store.get(selectionAtom)?.map(selected => selected.id)).toEqual([header]);
+        expect(console.log).toHaveBeenCalledWith(
+            'Select node: ',
+            expect.objectContaining({ id: header, label: 'Header', type: 'component' })
+        );
+        expect(node(container, 'Header').querySelector('.circle-node')?.getAttribute('class')).toBe(
+            'circle-node component selected'
+        );
+        expect(overlay(container, 'Header').getAttribute('stroke-width')).toBe('2');
+        expect(overlay(container, 'App').getAttribute('stroke-width')).toBe('1');
+        // Header has the links from App and (inherited) from BaseWidget.
+        expect(nodeOpacities(container)).toEqual({
+            App: '1',
+            BaseWidget: '1',
+            Counter: '0.1',
+            Footer: '0.1',
+            Header: '1',
+            TodoItem: '0.1',
+            TodoList: '0.1',
+            ConnectedTodoList: '0.1',
+        });
+        // Links in graph order: App → Header, Counter, ConnectedTodoList, Footer; BaseWidget →
+        // Header; TodoList → TodoItem; ConnectedTodoList → TodoList.
+        expect(linkOpacities(container)).toEqual(['1', '0.1', '0.1', '0.1', '1', '0.1', '0.1']);
+    });
+
+    it('keeps the nodes reached from the clicked one and fills them lightly', () => {
+        const { createLayout } = createFakeLayout();
+        const { container } = drawView(createLayout);
+
+        fireEvent.click(overlay(container, 'App'));
+
+        // From App over ConnectedTodoList to TodoList and TodoItem; only BaseWidget fades.
+        expect(nodeOpacities(container)).toEqual({
+            App: '1',
+            BaseWidget: '0.1',
+            Counter: '1',
+            Footer: '1',
+            Header: '1',
+            TodoItem: '1',
+            TodoList: '1',
+            ConnectedTodoList: '1',
+        });
+        expect(linkOpacities(container)).toEqual(['1', '1', '1', '1', '0.1', '1', '1']);
+        const fill = (label: string) =>
+            node(container, label).querySelector<SVGElement>('.circle-node')?.style.fill;
+        expect(fill('TodoList')).toBe('var(--qv-graph-indirect-fill)');
+        expect(fill('TodoItem')).toBe('var(--qv-graph-indirect-fill)');
+        expect(fill('ConnectedTodoList')).toBe('');
+    });
+
+    it('shows everything and clears the selection on a click on the background (G7)', () => {
+        const { createLayout } = createFakeLayout();
+        const { container, store, getByRole } = drawView(createLayout);
+        fireEvent.click(overlay(container, 'Header'));
+
+        // A click on a link is no click on the background.
+        const link = container.querySelector('g.links line');
+        if (!link) {
+            throw new Error('no link');
+        }
+        fireEvent.click(link);
+        expect(store.get(selectionAtom)).toHaveLength(1);
+
+        fireEvent.click(getByRole('img', { name: 'Component graph' }));
+
+        expect(store.get(selectionAtom)).toBeNull();
+        expect(nothingFaded(container)).toBe(true);
+        expect(node(container, 'Header').querySelector('.circle-node')?.getAttribute('class')).toBe(
+            'circle-node component'
+        );
+    });
+
+    it('fades while the pointer is over a node with Ctrl held (G6)', () => {
+        const { createLayout } = createFakeLayout();
+        const { container, store } = drawView(createLayout);
+
+        fireEvent.pointerEnter(node(container, 'Header'));
+        expect(nodeOpacities(container).Counter).toBe('');
+
+        fireEvent.pointerEnter(node(container, 'Header'), { ctrlKey: true });
+        expect(nodeOpacities(container).Counter).toBe('0.1');
+        expect(store.get(selectionAtom)).toBeNull();
+
+        fireEvent.pointerLeave(node(container, 'Header'), { ctrlKey: true });
+        expect(nothingFaded(container)).toBe(true);
+    });
+
+    it('does not fade while a node is dragged', () => {
+        const { createLayout } = createFakeLayout();
+        const { container } = drawView(createLayout, { ...defaultSettings, autoZoom: false });
+
+        fireEvent.pointerDown(node(container, 'Counter'), {
+            pointerId: 1,
+            clientX: 200,
+            clientY: 0,
+        });
+        fireEvent.pointerMove(window, { pointerId: 1, clientX: 220, clientY: 10 });
+        fireEvent.pointerEnter(node(container, 'Header'), { ctrlKey: true });
+        expect(nothingFaded(container)).toBe(true);
+
+        fireEvent.pointerUp(window, { pointerId: 1, clientX: 220, clientY: 10 });
+        fireEvent.pointerEnter(node(container, 'Header'), { ctrlKey: true });
+        expect(nodeOpacities(container).Footer).toBe('0.1');
+    });
+
+    it('selects without fading when "fade" is off', () => {
+        const { createLayout } = createFakeLayout();
+        const { container, store } = drawView(createLayout, { ...defaultSettings, fade: false });
+
+        fireEvent.click(overlay(container, 'Header'));
+        fireEvent.pointerEnter(node(container, 'App'), { ctrlKey: true });
+
+        expect(store.get(selectionAtom)?.map(selected => selected.id)).toEqual([header]);
+        expect(nothingFaded(container)).toBe(true);
+    });
+
+    it('removes a node and its links with Ctrl+click and lays out the rest from there (G5)', () => {
+        const { createLayout, engines } = createFakeLayout();
+        const { container, store } = drawView(createLayout);
+
+        fireEvent.click(overlay(container, 'App'), { ctrlKey: true });
+
+        expect(nodes(container)).toHaveLength(7);
+        expect(
+            nodes(container).map(group => group.querySelector('.label-text')?.textContent)
+        ).not.toContain('App');
+        // Only the three links without App are left.
+        expect(container.querySelectorAll('g.links line')).toHaveLength(3);
+        expect(store.get(selectionAtom)).toBeNull();
+        expect(nothingFaded(container)).toBe(true);
+        // The new engine starts from the old positions: the fake laid the nodes out 100 apart.
+        expect(engines).toHaveLength(2);
+        expect(engines[0]?.stopped).toBe(true);
+        expect(engines[1]?.positions.slice(0, 2)).toEqual([
+            { id: '/mini/src/base/BaseWidget.js#BaseWidget', x: 100, y: 0 },
+            { id: '/mini/src/components/Counter.tsx#Counter', x: 200, y: 0 },
+        ]);
+        // Only the view lost the node, not the analysis.
+        expect(mini.appGraph.nodes.some(each => each.id === app)).toBe(true);
+    });
+
+    it('keeps removed nodes across a restart and shows them again for a new graph', () => {
+        const { createLayout } = createFakeLayout();
+        const { container, store, rerender } = drawView(createLayout);
+        fireEvent.click(overlay(container, 'App'), { ctrlKey: true });
+
+        rerender(
+            <GraphView
+                createLayout={createLayout}
+                settings={{ ...defaultSettings, colaLayout: false }}
+                measure={measure}
+            />
+        );
+        expect(nodes(container)).toHaveLength(7);
+
+        act(() => store.set(analysisAtom, { ...store.get(analysisAtom) }));
+        expect(nodes(container)).toHaveLength(8);
+    });
+
+    it('shows everything again after a restart of the layout', () => {
+        const { createLayout } = createFakeLayout();
+        const { container, rerender } = drawView(createLayout);
+        fireEvent.click(overlay(container, 'Header'));
+
+        rerender(
+            <GraphView
+                createLayout={createLayout}
+                settings={{ ...defaultSettings, colaLayout: false }}
+                measure={measure}
+            />
+        );
+
+        expect(nothingFaded(container)).toBe(true);
     });
 });
