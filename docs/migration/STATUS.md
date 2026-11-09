@@ -8,7 +8,7 @@ Bestätigung durch den Nutzer. Vor dem PR einer Phase werden ihre Zeilen zu eine
 | Meilenstein | Status | Bestätigt am |
 |---|---|---|
 | M0 Fundament | ☑ (08.11.2026) | 08.11.2026 (Merge von PR #1) |
-| M1 Erstes Produkt | ☐ | |
+| M1 Erstes Produkt | ☑ (09.11.2026) | 09.11.2026 (Nutzer, Sichtvergleich mit dem Altsystem) |
 | M2 Graph-Parität | ☐ | |
 | M3 Analyse-UI | ☐ | |
 | M4 Funktionsparität | ☐ | |
@@ -45,7 +45,7 @@ Ablauf: README, „Branches und Pull Requests“. Ziel aller PRs: `rewrite/react
 | P04-S03 | Web: Upload, App-Rahmen | ☑ | 09.11.2026 | Auswahl und Drop liefern `SourceFile[]` (A7: `readEntries` bis leer), Upload-Karte, Toolbar, `AppShell`; Sichtvergleich mit dem Altsystem gleich bis auf Titel und Zahnrad (P07) |
 | P04-S04 | Web: Analyse-Fluss | ☑ | 09.11.2026 | `runAnalysis` mit Fortschritt und Fehlerzeile (A5), `ProgressBar`; `realworld` im Browser analysiert (38 Dateien, Balken, Wechsel zur Graph-Ansicht) |
 | P04-S05 | Web: Minimaler Graph | ☑ | 09.11.2026 | `viewGraphAtom`, Kraft-Layout (§9.3, Ziehen nach §11), `GraphCanvas`, viewBox um die Knoten; `realworld` in der Seite: 32 Kreise, 36 Pfeile, alles im Bild. Die laufende Animation prüft der Nutzer in S06 (im versteckten Browserfenster pausiert `requestAnimationFrame`) |
-| P04-S06 | M1-Abnahme | ☐ | | |
+| P04-S06 | M1-Abnahme | ☑ | 09.11.2026 | `pnpm check` (115 Tests), G1 (11 Tests) und `pnpm build` grün; JS 1,31 MB, gzip 329,65 kB; CSS gzip 18,63 kB; Vite warnt vor dem Chunk über 500 kB (Code-Splitting: P08-S04). `pnpm audit --prod`: keine Meldungen. Sichtvergleich durch den Nutzer: keine Abweichungen (Anordnung als Baum kommt mit P05-S06, Vorschaukreise mit P05-S05) |
 | P04-S07 | GitHub Pages (neue App) | ☐ | | |
 | P05-S01 | Regeln: Größe, Icons | ☐ | | |
 | P05-S02 | Regeln: Geometrie, Farben | ☐ | | |
