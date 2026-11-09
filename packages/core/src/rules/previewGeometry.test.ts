@@ -89,6 +89,17 @@ describe('previewDots', () => {
 
     it('sits at the first hidden circle', () => {
         const firstHidden = previewCircles(20, functions(8)).find(c => c.hidden);
-        expect(previewDots(20, functions(8))).toEqual({ x: firstHidden?.cx, y: firstHidden?.cy });
+        expect(previewDots(20, functions(8))).toEqual({
+            x: firstHidden?.cx,
+            y: firstHidden?.cy,
+            className: 'function dots innerFunction',
+        });
+    });
+
+    it('takes the class from the type of that function', () => {
+        const list = functions(8).map((node, i) =>
+            i === 5 ? { ...node, type: 'component' as const } : node
+        );
+        expect(previewDots(20, list)?.className).toBe('function dots component');
     });
 });

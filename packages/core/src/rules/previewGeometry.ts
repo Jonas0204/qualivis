@@ -68,23 +68,27 @@ export const previewCircles = (
     }));
 };
 
+export type PreviewDots = { x: number; y: number; className: string };
+
 /**
- * Position of the "..." of an app view node: at the first hidden preview circle, or undefined when
- * all circles fit.
+ * Position and class of the "..." of an app view node: at the first hidden preview circle, or
+ * undefined when all circles fit.
  */
 export const previewDots = (
     parentWidth: number,
     functions: readonly Node[]
-): { x: number; y: number } | undefined => {
+): PreviewDots | undefined => {
     const r = outerRadius(parentWidth, 'app');
     const index = functions.findIndex(
         (_, i) => indexAngle(i + 1, r) <= fullCircle && indexAngle(i + 2, r) > fullCircle
     );
-    if (index < 0) {
+    const fn = functions[index];
+    if (!fn) {
         return undefined;
     }
     return {
         x: r * Math.cos(indexAngle(index, r) - Math.PI * 0.5),
         y: r * Math.sin(indexAngle(index, r) - Math.PI * 0.5),
+        className: `function dots ${fn.type}`,
     };
 };

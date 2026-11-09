@@ -44,8 +44,8 @@ Ablauf: README, „Branches und Pull Requests“. Ziel aller PRs: `rewrite/react
 | P05-S01 | Regeln: Größe, Icons | ☑ | 09.11.2026 | `resolveThreshold`, `getNodeIcons`, `describeIconText`, `computeNodeVisual` in `packages/core/src/rules/`, 34 Tests; neue Korrektur ADR-011 A11 (feste Größe statt `NaN`) |
 | P05-S02 | Regeln: Geometrie, Farben | ☑ | 09.11.2026 | `previewGeometry.ts`, `linkGeometry.ts` (Web nutzt `linkEnd`), `color.ts`; Vorschaukreise von `App` und Clusterfarben gleich dem Altsystem (`legacy-cluster-colors.json` neu erfasst) |
 | P05-S03 | Regeln: Cluster, Constraints | ☑ | 09.11.2026 | `cluster.ts`, `reactConstraints.ts`; Cluster der KV `App` (`mini`) gleich dem Golden |
-| P05-S04 | Golden G2 | ☐ | | |
-| P05-S05 | Knoten-/Kanten-Rendering | ☐ | | |
+| P05-S04 | Golden G2 | ☑ | 09.11.2026 | `viewModel.ts` (`buildViewModel`), `rules.golden.test.ts`: AV und alle KVs von `mini` (4) und `realworld` (20) gleich dem Altsystem; `hasCluster` nach V3 korrigiert (A4). `ViewModelOptions` ohne `showCluster`: Clusterfarben wechseln ohne neues Layout (wie `updateGraph`), dafür `clusterPaint` im Kern |
+| P05-S05 | Knoten-/Kanten-Rendering | ☑ | 09.11.2026 | `GraphNode`, `GraphLink`, `PreviewCircles`, `GraphDefs` (IDs per `useId`, Context), `graph.css` vollständig; `GraphView` baut das Ansichtsmodell per `useMemo` (keine Kopie mehr im Atom, `selectViewGraph` statt `buildViewGraph`). Zusätzlich `GraphCanvas.golden.test.tsx`: Markup aller Knoten gegen das DOM des Altsystems. Klick-Handler und `pointer-events` des Labels folgen mit der Auswahl (S09). Sichtvergleich mit dem Altsystem steht aus (Nutzer) |
 | P05-S06 | WebCola-Adapter | ☐ | | |
 | P05-S07 | Zoom & Pan | ☐ | | |
 | P05-S08 | Knoten ziehen | ☐ | | |

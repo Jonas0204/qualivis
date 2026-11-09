@@ -12,7 +12,7 @@ export type ReactConstraint = { axis: 'x'; left: number; right: number; gap: num
  * (lifecycle order, render last). `left` and `right` are indexes into `nodes`.
  */
 export const reactConstraints = (
-    nodes: readonly Node[],
+    nodes: readonly Pick<Node, 'id'>[],
     gap: number = graphSettings.nodeGap
 ): ReactConstraint[] => {
     const nodeIndexes: number[] = [];

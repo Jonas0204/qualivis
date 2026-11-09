@@ -1,5 +1,5 @@
 import { atom } from 'jotai';
-import { buildViewGraph } from '../features/graph/buildViewGraph';
+import { selectViewGraph } from '../features/graph/selectViewGraph';
 import { analysisAtom } from './analysisAtoms';
 
 export type ViewMode = 'upload' | 'graph';
@@ -8,8 +8,11 @@ export const viewModeAtom = atom<ViewMode>('upload');
 
 export const componentIdAtom = atom<string | undefined>(undefined);
 
-/** Graph of the current view (app or component), a fresh copy whenever result or id change. */
+/**
+ * Graph of the current view (app or component) and its view. It is the graph of the analysis
+ * result, not a copy: GraphView builds the view model, a copy the layout may change.
+ */
 export const viewGraphAtom = atom(get => {
     const result = get(analysisAtom).result;
-    return result ? buildViewGraph(result, get(componentIdAtom)) : undefined;
+    return result ? selectViewGraph(result, get(componentIdAtom)) : undefined;
 });

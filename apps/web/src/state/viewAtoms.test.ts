@@ -33,12 +33,12 @@ describe('viewGraphAtom', () => {
 
         const appGraph = store.get(viewGraphAtom);
         expect(appGraph?.view).toBe('app');
-        expect(appGraph?.nodes).toHaveLength(8);
+        expect(appGraph?.graph.nodes).toHaveLength(8);
 
         store.set(componentIdAtom, '/mini/src/App.js#App');
         const componentGraph = store.get(viewGraphAtom);
         expect(componentGraph?.view).toBe('component');
-        expect(componentGraph?.nodes.map(node => node.id)).toEqual(
+        expect(componentGraph?.graph.nodes.map(node => node.id)).toEqual(
             result.fileMap['/mini/src/App.js']?.components?.App?.graph?.nodes.map(node => node.id)
         );
     });

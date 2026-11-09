@@ -5,8 +5,11 @@ import type { Node } from '../model/graph';
 
 export type ClusterResult = { clusters: Record<string, number | undefined>; hasCluster: boolean };
 
+/** The fields of a node the clustering reads. */
+type ClusterNode = Pick<Node, 'id' | 'type'>;
+
 /** Components and render functions do not take part in the clustering. */
-const takesPart = (node: Node): boolean => node.type !== 'component' && node.id !== 'render';
+const takesPart = (node: ClusterNode): boolean => node.type !== 'component' && node.id !== 'render';
 
 /** jLouvain keeps its communities in an object; `constructor` would hit Object.prototype. */
 const louvainId = (id: string): string => (id === 'constructor' ? '_constructor' : id);
@@ -17,8 +20,8 @@ const louvainId = (id: string): string => (id === 'constructor' ? '_constructor'
  * it, quirk V3). Without any link jLouvain finds nothing, and there are no clusters.
  */
 export const computeClusters = (
-    nodes: readonly Node[],
-    links: readonly { source: Node; target: Node }[]
+    nodes: readonly ClusterNode[],
+    links: readonly { source: ClusterNode; target: ClusterNode }[]
 ): ClusterResult => {
     const louvainNodes = nodes
         .map(node => (takesPart(node) ? louvainId(node.id) : undefined))

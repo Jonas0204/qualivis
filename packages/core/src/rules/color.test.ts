@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { readGolden } from '../../test/golden/loadFixture';
-import { brightenColor, clusterColor } from './color';
+import { brightenColor, clusterColor, clusterPaint } from './color';
 
 type ClusterColors = { colors: { id: string; cluster: number; fill: string; stroke: string }[] };
 
@@ -39,5 +39,24 @@ describe('brightenColor', () => {
 
     it('rejects colour formats that do not occur', () => {
         expect(() => brightenColor('red', 0.5)).toThrow('Unsupported colour: red');
+    });
+});
+
+describe('clusterPaint', () => {
+    it('paints a node of the component view like the legacy app', () => {
+        const { colors } = readGolden('mini', 'legacy-cluster-colors.json') as ClusterColors;
+        for (const { cluster, fill, stroke } of colors) {
+            expect(clusterPaint(cluster, 'component', true)).toEqual({ fill, stroke });
+        }
+    });
+
+    it('paints nothing without cluster colours, in the app view or without a cluster', () => {
+        expect(clusterPaint(1, 'component', false)).toBeUndefined();
+        expect(clusterPaint(1, 'app', true)).toBeUndefined();
+        expect(clusterPaint(undefined, 'component', true)).toBeUndefined();
+    });
+
+    it('paints cluster 0, which is falsy', () => {
+        expect(clusterPaint(0, 'component', true)?.fill).toBe(brightenColor('#8321d9', 0.75));
     });
 });

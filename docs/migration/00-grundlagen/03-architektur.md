@@ -74,7 +74,7 @@ e2e/ (@qualivis/e2e, Playwright, separat installierbar) · tools/ (Node-Skripte 
 │        │  ├─ graph/                GraphView.tsx, GraphCanvas.tsx, GraphNode.tsx, GraphLink.tsx,
 │        │  │                        PreviewCircles.tsx, Legend.tsx, GraphActions.tsx,
 │        │  │                        usePanZoom.ts, useNodeDrag.ts, useFade.ts, useLabelCollision.ts,
-│        │  │                        buildViewGraph.ts, useLayout.ts, graph.css,
+│        │  │                        selectViewGraph.ts, useLayout.ts, graph.css,
 │        │  │                        layout/ (types.ts, colaLayout.ts, forceLayout.ts)
 │        │  ├─ file-tree/            FileTree.tsx, useTreeState.ts
 │        │  ├─ code-quality/         CodeQualityPanel.tsx, QualityMetricBar.tsx, IconDescription.tsx
@@ -124,8 +124,8 @@ e2e/ (@qualivis/e2e, Playwright, separat installierbar) · tools/ (Node-Skripte 
 Upload/Drop ─► readDroppedFiles() ─► SourceFile[] {path, code}
           ─► runAnalysis() ─► core.analyzeProjectAsync(files, {onProgress})
           ─► analysisAtom = { status, progress, result, error }
-GraphView ─► viewGraphAtom (abgeleitet aus analysisAtom + componentIdAtom) ─► Graph der Ansicht
-          ─► core.rules.*(graph, settings, view) ─► VisualNode[] (Größen, Icons, Cluster, …)
+GraphView ─► viewGraphAtom (abgeleitet aus analysisAtom + componentIdAtom) ─► Graph der Ansicht + view
+          ─► core.buildViewModel(graph, {view, sizeMetric, …}) ─► VisualNode[] (Größen, Icons, Cluster, …)
           ─► layout.start(VisualNode[], links, size, constraints) ─► Positionen (Tick-Ereignisse)
           ─► <GraphCanvas> rendert SVG; Interaktionen ─► selectionAtom / componentIdAtom
 Panels    ─► lesen selectionAtom + analysisAtom
@@ -141,7 +141,10 @@ Settings  ─► settingsAtom (persistiert) ─► GraphView startet Layout neu
 - Atome (je Datei in `state/`):
   - `analysisAtom` – `{ status: 'idle' | 'running' | 'done' | 'error'; progress?; result?; error? }`
   - `viewModeAtom` (`'upload' | 'graph'`), `componentIdAtom` (`string | undefined`, synchron mit URL)
-  - `viewGraphAtom` – abgeleitet: Graph der aktuellen Ansicht (AV/KV) aus Analyse + `componentIdAtom`
+  - `viewGraphAtom` – abgeleitet: Graph der aktuellen Ansicht (AV/KV) aus Analyse + `componentIdAtom`,
+    keine Kopie. Das Ansichtsmodell (`buildViewModel`, eine Kopie) baut `GraphView` per `useMemo`,
+    weil das Layout Positionen in Knoten und Kanten schreibt; der Wert eines Atoms bliebe sonst
+    nicht unverändert.
   - `selectionAtom` – `NodeSelection[] | null` (wie im Altsystem)
   - `settingsAtom` – `atomWithStorage('qualivis.settings', defaultSettings, validierender Storage)`
   - `snackbarAtom` – aktuelle Meldung

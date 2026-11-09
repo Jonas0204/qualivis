@@ -3,6 +3,7 @@
 // d3.hsl(color), `l += (1 - l) * amount` and toString() of d3-color 1.4 (ISC license), because the
 // core does not depend on d3 (ADR-003).
 import { clusterColors } from '../model/clusterColors';
+import type { View } from './nodeVisuals';
 
 /** Colour of a cluster; from index 20 on every cluster is white (legacy clusterColorScale). */
 export const clusterColor = (index: number | string): string => {
@@ -91,4 +92,25 @@ export const brightenColor = (color: string, amount: number): string => {
     const hsl = rgbToHsl(parseColor(color));
     hsl.l += (1 - hsl.l) * amount;
     return formatRgb(hslToRgb(hsl));
+};
+
+/** Inline colours of a node with cluster colours on. */
+export type ClusterPaint = { fill: string; stroke: string };
+
+/**
+ * Cluster colours of a node (legacy updateGraph, graph.component.ts:228-242): the fill of the main
+ * circle 75 % and the border of overlay and inner circle 15 % lighter than the cluster colour.
+ * Only in the component view, with cluster colours on and for nodes with a cluster.
+ */
+export const clusterPaint = (
+    cluster: number | undefined,
+    view: View,
+    showCluster: boolean
+): ClusterPaint | undefined => {
+    if (cluster === undefined || !showCluster || view !== 'component') {
+        return undefined;
+    }
+    // The legacy app passes `cluster.toString()` to the colour scale.
+    const color = clusterColor(cluster.toString());
+    return { fill: brightenColor(color, 0.75), stroke: brightenColor(color, 0.15) };
 };

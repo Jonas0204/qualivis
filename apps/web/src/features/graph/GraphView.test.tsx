@@ -1,6 +1,6 @@
 import { analyzeProject } from '@qualivis/core';
 import { StrictMode } from 'react';
-import { describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { analysisAtom, initialAnalysisState } from '../../state/analysisAtoms';
 import { loadFixture } from '../../test/fixtures';
 import { renderWithState } from '../../test/renderWithState';
@@ -46,6 +46,14 @@ const createFakeLayout = () => {
 };
 
 describe('GraphView', () => {
+    // The view model logs nodes without a report (K5: ConnectedTodoList); keep the output clean.
+    beforeEach(() => {
+        vi.spyOn(console, 'error').mockImplementation(() => {});
+    });
+    afterEach(() => {
+        vi.restoreAllMocks();
+    });
+
     it('draws the 8 nodes and 7 links of the mini app graph, fitted into the view', () => {
         const { createLayout } = createFakeLayout();
         const { container, getByRole } = renderWithState(
@@ -56,11 +64,36 @@ describe('GraphView', () => {
         );
 
         expect(container.querySelectorAll('g.node')).toHaveLength(8);
-        expect(container.querySelectorAll('line')).toHaveLength(7);
+        expect(container.querySelectorAll('g.links line')).toHaveLength(7);
         // Nodes at x = 0 … 700, y = 0, plus 48 px on every side.
         expect(getByRole('img', { name: 'Component graph' }).getAttribute('viewBox')).toBe(
             '-48 -48 796 96'
         );
+    });
+
+    it('sizes the nodes by their lines of code', () => {
+        const { createLayout } = createFakeLayout();
+        const { container } = renderWithState(<GraphView createLayout={createLayout} />, {
+            initialValues: [done],
+        });
+
+        const radius = (label: string) =>
+            Array.from(container.querySelectorAll('g.node'))
+                .find(node => node.querySelector('.label-text')?.textContent === label)
+                ?.querySelector('circle.circle-node')
+                ?.getAttribute('r');
+        // App: width 54.68… from the golden of the legacy app view, minus the preview ring of 14.
+        expect(Number(radius('App'))).toBeCloseTo((54.68428945128219 - 14) / 2, 9);
+        // Legacy quirk K5: ConnectedTodoList has no report, so it is 20 wide (main radius 3).
+        expect(radius('ConnectedTodoList')).toBe('3');
+    });
+
+    it('lays out a copy, so the analysis result keeps no positions', () => {
+        const { createLayout } = createFakeLayout();
+        renderWithState(<GraphView createLayout={createLayout} />, { initialValues: [done] });
+
+        expect(mini.appGraph.nodes.every(node => node.x === undefined)).toBe(true);
+        expect(mini.appGraph.nodes.every(node => node.width === undefined)).toBe(true);
     });
 
     it('draws nothing before an analysis result exists', () => {

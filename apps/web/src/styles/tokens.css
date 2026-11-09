@@ -18,9 +18,23 @@
     --qv-gutter: #eeeeee;
     --qv-cluster-button-on: #e6e6e6;
 
-    /* Graph (compiled color.scale values): component border and fill */
+    /* Graph (compiled color.scale values, style reference §1 "Graph"): border, fill of the main
+       circle, fill when selected, fill of a preview circle and of a JSX preview circle */
     --qv-graph-component: #28bd8c;
     --qv-graph-component-fill: #c5f3e4;
+    --qv-graph-component-selected: #8be6c8;
+    --qv-graph-component-preview: #baf0de;
+    --qv-graph-component-preview-jsx: #3ad5a2;
+    --qv-graph-function: #7881e2;
+    --qv-graph-function-fill: #dde0f8;
+    --qv-graph-function-selected: #bcc0f1;
+    --qv-graph-function-preview: #d7d9f6;
+    --qv-graph-function-preview-jsx: #8d94e7;
+    --qv-graph-special: #2daed2;
+    --qv-graph-special-fill: #caebf4;
+    --qv-graph-special-selected: #96d7e9;
+    --qv-graph-special-preview: #c0e7f2;
+    --qv-graph-special-preview-jsx: #4cbbd9;
 
     /* Material theme "deeppurple-amber", only the parts the app uses */
     --qv-primary: #673ab7;

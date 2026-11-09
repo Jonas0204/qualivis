@@ -1,4 +1,5 @@
-/* Graph styles (global, the SVG classes match the legacy app). Colours: style reference §1. */
+/* Graph styles (global, the SVG classes match the legacy app): legacy graph.component.scss
+   (#d3-root). Colours: style reference §1, docs/migration/01-referenz-altsystem/04-stil-referenz.md */
 .qv-graph-area {
     position: relative;
     height: 100%;
@@ -12,19 +13,125 @@
     width: 100%;
     height: 100%;
     user-select: none;
-}
 
-.qv-graph .circle-node.component {
-    fill: var(--qv-graph-component-fill);
-}
+    /* legacy createNodeGroup: inline style of every node group */
+    .node {
+        cursor: pointer;
+        outline: none;
+    }
 
-.qv-graph .circle-overlay.component {
-    stroke: var(--qv-graph-component);
-}
+    .icon {
+        font-family: var(--qv-font-icons), monospace;
+        text-anchor: middle;
+        dominant-baseline: central;
 
-.qv-graph .node-label {
-    font-size: 14px;
-    dominant-baseline: central;
-    text-anchor: middle;
-    pointer-events: none;
+        &.warn {
+            fill: var(--qv-warn);
+        }
+
+        &.error {
+            fill: var(--qv-error);
+        }
+    }
+
+    .diagonal-hatch line {
+        stroke: var(--qv-graph-component);
+    }
+
+    /* Same order as the legacy rules: warn and error come last and win. */
+    :is(.circle-overlay, .inner-circle, .function) {
+        &.component {
+            stroke: var(--qv-graph-component);
+        }
+
+        &.innerFunction {
+            stroke: var(--qv-graph-function);
+        }
+
+        &.innerFunction.special {
+            stroke: var(--qv-graph-special);
+        }
+
+        &.warn.warn {
+            stroke: var(--qv-warn);
+        }
+
+        &.error.error {
+            stroke: var(--qv-error);
+        }
+    }
+
+    .circle-node {
+        &.component {
+            fill: var(--qv-graph-component-fill);
+        }
+
+        &.innerFunction {
+            fill: var(--qv-graph-function-fill);
+        }
+
+        &.innerFunction.special {
+            fill: var(--qv-graph-special-fill);
+        }
+    }
+
+    .circle-node.selected {
+        &.component {
+            fill: var(--qv-graph-component-selected);
+        }
+
+        &.innerFunction {
+            fill: var(--qv-graph-function-selected);
+        }
+
+        &.innerFunction.special {
+            fill: var(--qv-graph-special-selected);
+        }
+    }
+
+    .function {
+        &.component {
+            fill: var(--qv-graph-component-preview);
+        }
+
+        &.innerFunction {
+            fill: var(--qv-graph-function-preview);
+        }
+
+        &.innerFunction.special {
+            fill: var(--qv-graph-special-preview);
+        }
+    }
+
+    .function.jsx {
+        &.component {
+            fill: var(--qv-graph-component-preview-jsx);
+        }
+
+        &.innerFunction {
+            fill: var(--qv-graph-function-preview-jsx);
+        }
+
+        &.innerFunction.special {
+            fill: var(--qv-graph-special-preview-jsx);
+        }
+    }
+
+    .dots {
+        font-size: 8px;
+        text-anchor: middle;
+    }
+
+    /* legacy createLinks: transition of the line width (zoom, P05-S07) */
+    .links line {
+        transition: stroke-width 0.1s ease-out;
+    }
+
+    /* legacy createLabels: inline style of the label */
+    .node-label {
+        font-size: 14px;
+        dominant-baseline: central;
+        text-anchor: middle;
+        pointer-events: none;
+    }
 }
