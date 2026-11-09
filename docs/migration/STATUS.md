@@ -41,7 +41,7 @@ Ablauf: README, „Branches und Pull Requests“. Ziel aller PRs: `rewrite/react
 | P01, P02 | M0: Fundament, Golden-Infrastruktur | ☑ | 08.11.2026 | Commit `5647a06`, PR #1 |
 | P03 | M1 (Teil 1): CI, Kern `@qualivis/core`, Golden G1 | ☑ | 08.11.2026 | Commits `5e54b41`–`1bd11f9` |
 | P04-S01 | Web: Skelett, Tokens, Schriften | ☑ | 09.11.2026 | `apps/web` mit Vite 8, 32 Tokens, lokalen Schriften, `Icon`; CI baut mit. macOS prüft der Nutzer noch |
-| P04-S02 | Web: Jotai-Atome | ☐ | | |
+| P04-S02 | Web: Jotai-Atome | ☑ | 09.11.2026 | Atome Analyse/Ansicht, `StateProvider`, Testhilfen. A7 erstmals ausgeführt: `new Map(…)` lehnt `tsc` ab (Jotai 3, TS 7), daher die Ausweichlösung aus A7 (Nutzer, 09.11.2026) |
 | P04-S03 | Web: Upload, App-Rahmen | ☐ | | |
 | P04-S04 | Web: Analyse-Fluss | ☐ | | |
 | P04-S05 | Web: Minimaler Graph | ☐ | | |

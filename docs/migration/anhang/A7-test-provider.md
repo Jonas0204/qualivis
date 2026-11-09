@@ -6,10 +6,10 @@ Startwerten, ohne den globalen Jotai-Standard-Store. Muster: Jotai-Testanleitung
 [#2650](https://github.com/pmndrs/jotai/discussions/2650), dort ging es um die Typisierung von
 `initialValues`. Warum jsdom trotzdem bleibt: ADR-015.
 
-> **Stand der Verifikation:** Diese Vorlage ist nur **geschrieben, nicht ausgeführt** (Nutzerentscheidung
-> 07.11.2026: ohne Spike weiter). Sie wird in **P04-S02** zum ersten Mal ausgeführt (Tests, `tsc`,
-> Biome). Bereits geprüft: `useHydrateAtoms` ist in `jotai@3.0.1` unter `jotai/utils` exportiert.
-> Außerdem sind React 19.3, Testing Library 16.3 und user-event 14.6 in jsdom 30.1.3 im Spike gelaufen.
+> **Stand der Verifikation:** geprüft in P04-S02 (Tests, `tsc`, Biome). `useHydrateAtoms(new Map(…))`
+> mit `never[]` lehnt `tsc` 7 mit Jotai 3.0.1 ab (keine Überladung passt). Im Code steht deshalb die
+> Ausweichlösung vom Ende dieser Datei (Nutzer, 09.11.2026). Die übrigen Snippets laufen wie
+> beschrieben, als Arrow-Funktionen (`05-konventionen.md` §3).
 
 ## Dateien
 
