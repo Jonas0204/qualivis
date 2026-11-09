@@ -38,6 +38,12 @@
   --qv-option-hover: rgba(0, 0, 0, 0.04);
   --qv-option-selected: rgba(0, 0, 0, 0.12);
 
+  /* Upload card: Material grey 400/500/700/800 (style reference §3) */
+  --qv-upload-border: #bdbdbd;
+  --qv-upload-border-active: #9e9e9e;
+  --qv-upload-text: #616161;
+  --qv-upload-text-active: #424242;
+
   /* Font families, loaded locally in fonts.css */
   --qv-font: Roboto, "Helvetica Neue", sans-serif;
   --qv-font-icons: "Material Icons";

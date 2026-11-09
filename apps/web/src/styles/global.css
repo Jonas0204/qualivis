@@ -24,3 +24,8 @@ html {
 #root {
   height: 100%;
 }
+
+/* Children must not fire dragleave on the drop target while dragging (legacy styles.scss). */
+.is-dragging-over > * {
+  pointer-events: none;
+}

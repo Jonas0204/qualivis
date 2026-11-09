@@ -42,7 +42,7 @@ Ablauf: README, „Branches und Pull Requests“. Ziel aller PRs: `rewrite/react
 | P03 | M1 (Teil 1): CI, Kern `@qualivis/core`, Golden G1 | ☑ | 08.11.2026 | Commits `5e54b41`–`1bd11f9` |
 | P04-S01 | Web: Skelett, Tokens, Schriften | ☑ | 09.11.2026 | `apps/web` mit Vite 8, 32 Tokens, lokalen Schriften, `Icon`; CI baut mit. macOS prüft der Nutzer noch |
 | P04-S02 | Web: Jotai-Atome | ☑ | 09.11.2026 | Atome Analyse/Ansicht, `StateProvider`, Testhilfen. A7 erstmals ausgeführt: `new Map(…)` lehnt `tsc` ab (Jotai 3, TS 7), daher die Ausweichlösung aus A7 (Nutzer, 09.11.2026) |
-| P04-S03 | Web: Upload, App-Rahmen | ☐ | | |
+| P04-S03 | Web: Upload, App-Rahmen | ☑ | 09.11.2026 | Auswahl und Drop liefern `SourceFile[]` (A7: `readEntries` bis leer), Upload-Karte, Toolbar, `AppShell`; Sichtvergleich mit dem Altsystem gleich bis auf Titel und Zahnrad (P07) |
 | P04-S04 | Web: Analyse-Fluss | ☐ | | |
 | P04-S05 | Web: Minimaler Graph | ☐ | | |
 | P04-S06 | M1-Abnahme | ☐ | | |
@@ -83,6 +83,4 @@ Hier jede Abweichung vom Plan mit Begründung und Verweis (ADR bzw. Nutzerentsch
 solange sie für kommende Schritte wichtig ist. Vor dem PR der Phase wandert sie in die betroffenen
 Karten oder Grundlagen oder wird gestrichen; Erledigtes steht in der Git-Historie.
 
-- P04-S01: Zusätzlich `apps/web/src/app/App.module.css` (`.app { height: 100%; }`), weil die Karte
-  `styles.app` nutzt, die Datei aber nicht nennt. P04-S03 entscheidet beim Umbau von `App.tsx`, ob sie
-  bleibt.
+- (derzeit keine)
