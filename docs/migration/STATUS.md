@@ -47,8 +47,8 @@ Ablauf: README, „Branches und Pull Requests“. Ziel aller PRs: `rewrite/react
 | P05-S04 | Golden G2 | ☑ | 09.11.2026 | `viewModel.ts` (`buildViewModel`), `rules.golden.test.ts`: AV und alle KVs von `mini` (4) und `realworld` (20) gleich dem Altsystem; `hasCluster` nach V3 korrigiert (A4). `ViewModelOptions` ohne `showCluster`: Clusterfarben wechseln ohne neues Layout (wie `updateGraph`), dafür `clusterPaint` im Kern |
 | P05-S05 | Knoten-/Kanten-Rendering | ☑ | 09.11.2026 | `GraphNode`, `GraphLink`, `PreviewCircles`, `GraphDefs` (IDs per `useId`, Context), `graph.css` vollständig; `GraphView` baut das Ansichtsmodell per `useMemo` (keine Kopie mehr im Atom, `selectViewGraph` statt `buildViewGraph`). Zusätzlich `GraphCanvas.golden.test.tsx`: Markup aller Knoten gegen das DOM des Altsystems. Klick-Handler und `pointer-events` des Labels folgen mit der Auswahl (S09). Sichtvergleich mit dem Altsystem steht aus (Nutzer) |
 | P05-S06 | WebCola-Adapter | ☑ | 09.11.2026 | `colaLayout.ts` (nur `webcola/dist/src/layout`, Animation per `requestAnimationFrame`), `createLayout.ts`, `GraphView` mit `settings`-Prop (bis P07) und Engine-Wechsel. Erstes Layout im nächsten Frame, damit der doppelte StrictMode-Effekt die Knoten nicht vorbelegt. G3 (`colaLayout.golden.test.ts`): Positionen aller 26 Ansichten bitgleich zum Altsystem (siehe Notizen). Bundle ohne `d3-selection` und d3 v1 |
-| P05-S07 | Zoom & Pan | ☐ | | |
-| P05-S08 | Knoten ziehen | ☐ | | |
+| P05-S07 | Zoom & Pan | ☑ | 09.11.2026 | `zoomMath.ts`, `usePanZoom.ts` (Mausrad als nativer Listener mit `passive: false`, Verschieben, Einpassen in 250 ms per `requestAnimationFrame`), `GraphCanvas` mit Zoom-Gruppe statt `viewBox`. Einpassen nach dem ersten Layout-Ende jedes Laufs; V5 (Label-/Kantenbreite) gilt bis zum Neustart. Wie d3-zoom 1.x: nichts mit Strg oder anderer Maustaste, der Klick nach dem Verschieben wird verschluckt. Vorläufige Knöpfe „{n}%“ und „Zoom to fit“ bis S11. `geometry.ts` (`fitViewBox`) entfernt |
+| P05-S08 | Knoten ziehen | ☑ | 09.11.2026 | `useNodeDrag.ts` wie d3-drag 1.x: Der Knoten behält den Abstand zum Zeiger, der Drag beginnt erst mit der ersten Bewegung, Shift beim Loslassen fixiert (Kraft-Layout). Der Zeiger wird wie bei d3 über `window` verfolgt statt per Pointer-Capture. `useLayout` liefert die laufende Engine und zählt Neustarts (`run`). Ziehen mit WebCola im Browser geprüft, Kraft-Layout per Test (Umschalten erst in P07) |
 | P05-S09 | Auswahl, Ausblenden | ☐ | | |
 | P05-S10 | Label-Kollision | ☐ | | |
 | P05-S11 | Legende, Aktionsleiste | ☐ | | |
@@ -85,3 +85,7 @@ Karten oder Grundlagen oder wird gestrichen; Erledigtes steht in der Git-Histori
   Altsystem von den bisherigen Positionen. Wechsel von Größenmetrik oder „Node sizes based on
   metrics“ baut ein neues Ansichtsmodell und startet das Layout neu von vorn; das Altsystem rechnete
   dort von den alten Positionen weiter (ADR-003: Positionen dürfen abweichen).
+- **Ziehen meldet `dragging` in beiden Layouts (P05-S08, betrifft S09):** Das Altsystem setzte
+  `dragging` nur im Kraft-Layout; beim Ziehen mit WebCola konnte es also ausblenden. Den Klick nach
+  Ziehen oder Verschieben verschluckt schon `suppressNextClick` (wie d3); S09 braucht dafür nichts
+  Eigenes.

@@ -1,7 +1,7 @@
 import type { VisualLink, VisualNode } from '@qualivis/core';
 import { describe, expect, it } from 'vitest';
 import { renderWithState } from '../../test/renderWithState';
-import { GraphCanvas } from './GraphCanvas';
+import { GraphCanvas, type GraphZoom } from './GraphCanvas';
 import type { GraphNodeSettings } from './GraphNode';
 
 const settings: GraphNodeSettings = { text: true, currentSizeMetricErrorHighlighting: false };
@@ -27,25 +27,24 @@ const links: VisualLink[] = [
     { source: app, target: footer, inherits: true },
 ];
 
-const drawCanvas = (props: { showCluster?: boolean; nodes?: VisualNode[] } = {}) =>
+const drawCanvas = (
+    props: { showCluster?: boolean; nodes?: VisualNode[]; zoom?: GraphZoom } = {}
+) =>
     renderWithState(
         <GraphCanvas
             nodes={props.nodes ?? nodes}
             links={links}
             view="component"
-            viewBox="0 0 10 10"
             settings={settings}
             showCluster={props.showCluster}
+            zoom={props.zoom}
         />
     );
 
 describe('GraphCanvas', () => {
     it('draws one group per node with its label, or its id without a label', () => {
-        const { container, getByRole } = drawCanvas();
+        const { container } = drawCanvas();
 
-        expect(getByRole('img', { name: 'Component graph' }).getAttribute('viewBox')).toBe(
-            '0 0 10 10'
-        );
         const groups = container.querySelectorAll('g.node');
         expect(groups).toHaveLength(3);
         expect(Array.from(groups, group => group.getAttribute('transform'))).toEqual([
@@ -79,6 +78,39 @@ describe('GraphCanvas', () => {
         expect(container.querySelector('.circle-overlay')?.getAttribute('fill')).toBe(
             `url(#${pattern?.id})`
         );
+    });
+
+    it('draws nodes and links in the zoom group, unscaled without zoom', () => {
+        const { container } = drawCanvas();
+
+        const zoomGroup = container.querySelector('svg > g.zoom-group');
+        expect(zoomGroup?.getAttribute('transform')).toBe('translate(0,0) scale(1)');
+        expect(zoomGroup?.getAttribute('class')).toBe('zoom-group');
+        expect(zoomGroup?.querySelectorAll('g.node')).toHaveLength(3);
+        expect(zoomGroup?.querySelectorAll('g.links line')).toHaveLength(2);
+        expect(container.querySelector('.node-label')?.getAttribute('style')).toBeNull();
+        expect(container.querySelector('g.links line')?.getAttribute('style')).toBeNull();
+    });
+
+    it('applies the zoom transform, the wheel transition and the sizes set by zooming', () => {
+        const { container } = drawCanvas({
+            zoom: {
+                transform: { k: 2.5, x: 10, y: -20 },
+                transition: true,
+                labelFontSize: 8,
+                linkStrokeWidth: 0.64,
+            },
+        });
+
+        const zoomGroup = container.querySelector('g.zoom-group');
+        expect(zoomGroup?.getAttribute('transform')).toBe('translate(10,-20) scale(2.5)');
+        expect(zoomGroup?.getAttribute('class')).toBe('zoom-group zoom-transition');
+        for (const label of container.querySelectorAll('.node-label')) {
+            expect(label.getAttribute('style')).toBe('font-size: 8px;');
+        }
+        for (const line of container.querySelectorAll('g.links line')) {
+            expect(line.getAttribute('style')).toBe('stroke-width: 0.64;');
+        }
     });
 
     it('gives two graphs in one document their own defs', () => {

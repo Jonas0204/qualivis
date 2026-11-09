@@ -76,7 +76,6 @@ const drawLikeLegacy = (result: AnalysisResult, snapshot: DomSnapshot) => {
             nodes={model.nodes}
             links={model.links}
             view={viewGraph.view}
-            viewBox="0 0 1 1"
             settings={defaultSettings}
         />
     );

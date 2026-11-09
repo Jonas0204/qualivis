@@ -6,6 +6,27 @@
     background: var(--qv-background);
 }
 
+/* Until the action bar in P05-S11: position and colour of the legacy .action-buttons.right */
+.qv-graph-zoom {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: flex;
+    align-items: center;
+    color: var(--qv-graph-button);
+
+    > button {
+        height: 40px;
+        min-width: 40px;
+        padding: 0 8px;
+        border: none;
+        background: transparent;
+        color: inherit;
+        font: inherit;
+        cursor: pointer;
+    }
+}
+
 /* legacy graph.component.html: inline style of the SVG */
 .qv-graph {
     position: absolute;
@@ -13,6 +34,8 @@
     width: 100%;
     height: 100%;
     user-select: none;
+    /* d3-zoom and d3-drag set this, so touch input pans and drags instead of scrolling */
+    touch-action: none;
 
     /* legacy createNodeGroup: inline style of every node group */
     .node {
@@ -133,5 +156,14 @@
         dominant-baseline: central;
         text-anchor: middle;
         pointer-events: none;
+    }
+
+    /* legacy addTransition while wheel zooming (graphSettings.zoomTransition) */
+    .zoom-transition {
+        transition: transform 0.1s ease-out;
+
+        .node-label {
+            transition: font-size 0.1s ease-out;
+        }
     }
 }

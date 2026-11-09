@@ -1,4 +1,5 @@
-import { analyzeProject, defaultSettings } from '@qualivis/core';
+import { analyzeProject, defaultSettings, type Settings } from '@qualivis/core';
+import { act, fireEvent } from '@testing-library/react';
 import { StrictMode } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { analysisAtom, initialAnalysisState } from '../../state/analysisAtoms';
@@ -8,29 +9,40 @@ import { initial } from '../../test/TestProvider';
 import { GraphView } from './GraphView';
 import type { LayoutFactory, LayoutOptions } from './layout/createLayout';
 import type { LayoutEngine } from './layout/types';
+import type { PanZoomMeasure } from './usePanZoom';
 
 const mini = analyzeProject(loadFixture('mini'));
 const done = initial(analysisAtom, { ...initialAnalysisState, status: 'done', result: mini });
 
-type FakeEngine = { colaLayout: boolean; options: LayoutOptions; stopped: boolean };
+type FakeEngine = {
+    colaLayout: boolean;
+    options: LayoutOptions;
+    stopped: boolean;
+    calls: string[];
+    /** Reports the end again, as after a drag. */
+    end: () => void;
+};
 
 /** Fake engine: puts the nodes in a row at once and reports the end, without animation. */
 const createFakeLayout = () => {
     const engines: FakeEngine[] = [];
     const createLayout: LayoutFactory = (colaLayout, options) => {
         const { nodes } = options;
-        const record = { colaLayout, options, stopped: false };
-        engines.push(record);
         const endListeners = new Set<() => void>();
+        const end = () => {
+            for (const listener of endListeners) {
+                listener();
+            }
+        };
+        const record: FakeEngine = { colaLayout, options, stopped: false, calls: [], end };
+        engines.push(record);
         const engine: LayoutEngine = {
             start: () => {
                 nodes.forEach((node, index) => {
                     node.x = index * 100;
                     node.y = 0;
                 });
-                for (const listener of endListeners) {
-                    listener();
-                }
+                end();
             },
             stop: () => {
                 record.stopped = true;
@@ -40,46 +52,180 @@ const createFakeLayout = () => {
                 endListeners.add(listener);
                 return () => endListeners.delete(listener);
             },
-            dragStart: () => undefined,
-            drag: () => undefined,
-            dragEnd: () => undefined,
+            dragStart: node => {
+                record.calls.push(`dragStart ${node.id}`);
+            },
+            drag: (node, { x, y }) => {
+                record.calls.push(`drag ${node.id} ${x} ${y}`);
+            },
+            dragEnd: (node, { pin }) => {
+                record.calls.push(`dragEnd ${node.id} ${pin}`);
+            },
         };
         return engine;
     };
     return { engines, createLayout };
 };
 
+// jsdom has no layout: the graph spans x -30 … 730 (8 nodes 100 apart), the area is 400 × 300.
+const measure: PanZoomMeasure = {
+    bounds: () => ({ x: -30, y: -30, width: 760, height: 60 }),
+    viewport: () => ({ width: 400, height: 300 }),
+};
+
+const drawView = (createLayout: LayoutFactory, settings: Settings = defaultSettings) =>
+    renderWithState(
+        <GraphView createLayout={createLayout} settings={settings} measure={measure} />,
+        { initialValues: [done] }
+    );
+
+const zoomGroupTransform = (container: HTMLElement) =>
+    container.querySelector('g.zoom-group')?.getAttribute('transform');
+
+/** Runs the animation frames of zoom to fit (250 ms). */
+const finishZoom = () => {
+    act(() => {
+        vi.advanceTimersByTime(300);
+    });
+};
+
 describe('GraphView', () => {
     // The view model logs nodes without a report (K5: ConnectedTodoList); keep the output clean.
     beforeEach(() => {
         vi.spyOn(console, 'error').mockImplementation(() => {});
+        vi.useFakeTimers({ toFake: ['requestAnimationFrame', 'cancelAnimationFrame'] });
     });
-    afterEach(() => {
+    afterEach(async () => {
+        vi.useRealTimers();
         vi.restoreAllMocks();
+        // A pan or drag swallows the next click until the next task (suppressNextClick).
+        await new Promise(resolve => setTimeout(resolve, 0));
     });
 
-    it('draws the 8 nodes and 7 links of the mini app graph, fitted into the view', () => {
+    it('draws the 8 nodes and 7 links of the mini app graph and fits them in after the layout', () => {
         const { createLayout } = createFakeLayout();
-        const { container, getByRole } = renderWithState(
-            <GraphView createLayout={createLayout} />,
-            {
-                initialValues: [done],
-            }
-        );
+        const { container, getByRole } = drawView(createLayout);
 
-        expect(container.querySelectorAll('g.node')).toHaveLength(8);
-        expect(container.querySelectorAll('g.links line')).toHaveLength(7);
-        // Nodes at x = 0 … 700, y = 0, plus 48 px on every side.
-        expect(getByRole('img', { name: 'Component graph' }).getAttribute('viewBox')).toBe(
-            '-48 -48 796 96'
+        expect(container.querySelectorAll('g.zoom-group g.node')).toHaveLength(8);
+        expect(container.querySelectorAll('g.zoom-group g.links line')).toHaveLength(7);
+        finishZoom();
+        // k = 0.95 / max(760 / 400, 60 / 300) = 0.5, centre (350, 0) to the middle (200, 150).
+        expect(zoomGroupTransform(container)).toBe('translate(25,150) scale(0.5)');
+        expect(getByRole('button', { name: 'Zoom to 100%' }).textContent).toBe('50%');
+    });
+
+    it('zooms to 100 %, centred on the graph, and back to fit with the buttons', () => {
+        const { createLayout } = createFakeLayout();
+        const { container, getByRole } = drawView(createLayout);
+        finishZoom();
+
+        fireEvent.click(getByRole('button', { name: 'Zoom to 100%' }));
+        finishZoom();
+        expect(zoomGroupTransform(container)).toBe('translate(-150,150) scale(1)');
+        expect(getByRole('button', { name: 'Zoom to 100%' }).textContent).toBe('100%');
+
+        fireEvent.click(getByRole('button', { name: 'Zoom to fit' }));
+        finishZoom();
+        expect(zoomGroupTransform(container)).toBe('translate(25,150) scale(0.5)');
+    });
+
+    it('fits in only after the first end of a layout run', () => {
+        const { createLayout, engines } = createFakeLayout();
+        const { container, getByRole, rerender } = drawView(createLayout);
+        finishZoom();
+        fireEvent.click(getByRole('button', { name: 'Zoom to 100%' }));
+        finishZoom();
+
+        // A later end, e.g. after dragging, leaves the zoom alone.
+        act(() => engines[0]?.end());
+        finishZoom();
+        expect(zoomGroupTransform(container)).toBe('translate(-150,150) scale(1)');
+
+        // A restart (here: the other engine) fits in again.
+        rerender(
+            <GraphView
+                createLayout={createLayout}
+                settings={{ ...defaultSettings, colaLayout: false }}
+                measure={measure}
+            />
         );
+        finishZoom();
+        expect(zoomGroupTransform(container)).toBe('translate(25,150) scale(0.5)');
+    });
+
+    it('leaves the zoom alone without "Auto zoom"', () => {
+        const { createLayout } = createFakeLayout();
+        const { container } = drawView(createLayout, { ...defaultSettings, autoZoom: false });
+        finishZoom();
+
+        expect(zoomGroupTransform(container)).toBe('translate(0,0) scale(1)');
+    });
+
+    it('caps label size and link width when zooming in and keeps them when zooming out (V5)', () => {
+        const { createLayout } = createFakeLayout();
+        const settings = { ...defaultSettings, autoZoom: false };
+        const { container, getByRole, rerender } = drawView(createLayout, settings);
+        const svg = getByRole('img', { name: 'Component graph' });
+        const labelStyle = () => container.querySelector('.node-label')?.getAttribute('style');
+        const linkStyle = () => container.querySelector('g.links line')?.getAttribute('style');
+
+        // 2 ** (600 * 0.002) = 2.297…: labels 20 / k px, links 1.6 / k.
+        fireEvent.wheel(svg, { deltaY: -600, deltaMode: 0 });
+        const k = 2 ** 1.2;
+        expect(labelStyle()).toBe(`font-size: ${20 / k}px;`);
+        expect(linkStyle()).toBe(`stroke-width: ${1.6 / k};`);
+
+        fireEvent.wheel(svg, { deltaY: 600, deltaMode: 0 });
+        expect(getByRole('button', { name: 'Zoom to 100%' }).textContent).toBe('100%');
+        expect(labelStyle()).toBe(`font-size: ${20 / k}px;`);
+        expect(linkStyle()).toBe(`stroke-width: ${1.6 / k};`);
+
+        // A restart draws the labels and links with the default sizes again.
+        rerender(
+            <GraphView
+                createLayout={createLayout}
+                settings={{ ...settings, nodeSizesBasedOnMetrics: false }}
+                measure={measure}
+            />
+        );
+        expect(labelStyle()).toBeNull();
+        expect(linkStyle()).toBeNull();
+    });
+
+    it('pans when dragging the background and drags a node without panning', () => {
+        const { createLayout, engines } = createFakeLayout();
+        const { container, getByRole } = drawView(createLayout, {
+            ...defaultSettings,
+            autoZoom: false,
+        });
+        const svg = getByRole('img', { name: 'Component graph' });
+
+        fireEvent.pointerDown(svg, { pointerId: 1, clientX: 100, clientY: 100 });
+        fireEvent.pointerMove(window, { pointerId: 1, clientX: 130, clientY: 90 });
+        fireEvent.pointerUp(window, { pointerId: 1, clientX: 130, clientY: 90 });
+        expect(zoomGroupTransform(container)).toBe('translate(30,-10) scale(1)');
+
+        // The second node sits at (100, 0), on screen at (130, -10).
+        const node = container.querySelectorAll('g.node')[1];
+        if (!node) {
+            throw new Error('no second node');
+        }
+        fireEvent.pointerDown(node, { pointerId: 2, clientX: 130, clientY: -10 });
+        fireEvent.pointerMove(window, { pointerId: 2, clientX: 150, clientY: 20 });
+        fireEvent.pointerUp(window, { pointerId: 2, clientX: 150, clientY: 20, shiftKey: true });
+
+        const id = engines[0]?.options.nodes[1]?.id;
+        expect(engines[0]?.calls).toEqual([
+            `dragStart ${id}`,
+            `drag ${id} 120 30`,
+            `dragEnd ${id} true`,
+        ]);
+        expect(zoomGroupTransform(container)).toBe('translate(30,-10) scale(1)');
     });
 
     it('sizes the nodes by their lines of code', () => {
         const { createLayout } = createFakeLayout();
-        const { container } = renderWithState(<GraphView createLayout={createLayout} />, {
-            initialValues: [done],
-        });
+        const { container } = drawView(createLayout);
 
         const radius = (label: string) =>
             Array.from(container.querySelectorAll('g.node'))
@@ -94,7 +240,7 @@ describe('GraphView', () => {
 
     it('lays out a copy, so the analysis result keeps no positions', () => {
         const { createLayout } = createFakeLayout();
-        renderWithState(<GraphView createLayout={createLayout} />, { initialValues: [done] });
+        drawView(createLayout);
 
         expect(mini.appGraph.nodes.every(node => node.x === undefined)).toBe(true);
         expect(mini.appGraph.nodes.every(node => node.width === undefined)).toBe(true);
@@ -102,9 +248,12 @@ describe('GraphView', () => {
 
     it('draws nothing before an analysis result exists', () => {
         const { createLayout, engines } = createFakeLayout();
-        const { container } = renderWithState(<GraphView createLayout={createLayout} />);
+        const { container } = renderWithState(
+            <GraphView createLayout={createLayout} measure={measure} />
+        );
 
         expect(container.querySelector('svg')).toBeNull();
+        expect(container.querySelector('button')).toBeNull();
         expect(engines).toHaveLength(0);
     });
 
@@ -112,7 +261,7 @@ describe('GraphView', () => {
         const { createLayout, engines } = createFakeLayout();
         const { unmount } = renderWithState(
             <StrictMode>
-                <GraphView createLayout={createLayout} />
+                <GraphView createLayout={createLayout} measure={measure} />
             </StrictMode>,
             { initialValues: [done] }
         );
@@ -124,7 +273,7 @@ describe('GraphView', () => {
 
     it('lays out with WebCola by default, without constraints in the app view', () => {
         const { createLayout, engines } = createFakeLayout();
-        renderWithState(<GraphView createLayout={createLayout} />, { initialValues: [done] });
+        drawView(createLayout);
 
         expect(engines).toHaveLength(1);
         expect(engines[0]?.colaLayout).toBe(true);
@@ -135,14 +284,13 @@ describe('GraphView', () => {
 
     it('switches the engine without a reload and stops the old one', () => {
         const { createLayout, engines } = createFakeLayout();
-        const { container, rerender } = renderWithState(<GraphView createLayout={createLayout} />, {
-            initialValues: [done],
-        });
+        const { container, rerender } = drawView(createLayout);
 
         rerender(
             <GraphView
                 createLayout={createLayout}
                 settings={{ ...defaultSettings, colaLayout: false }}
+                measure={measure}
             />
         );
 
@@ -157,14 +305,13 @@ describe('GraphView', () => {
 
     it('builds a new view model and engine when the node sizes setting changes', () => {
         const { createLayout, engines } = createFakeLayout();
-        const { rerender } = renderWithState(<GraphView createLayout={createLayout} />, {
-            initialValues: [done],
-        });
+        const { rerender } = drawView(createLayout);
 
         rerender(
             <GraphView
                 createLayout={createLayout}
                 settings={{ ...defaultSettings, nodeSizesBasedOnMetrics: false }}
+                measure={measure}
             />
         );
 

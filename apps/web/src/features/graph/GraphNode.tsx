@@ -6,7 +6,7 @@ import {
     type View,
     type VisualNode,
 } from '@qualivis/core';
-import { useContext } from 'react';
+import { type PointerEvent as ReactPointerEvent, useContext } from 'react';
 import { GraphDefsContext } from './graphDefsContext';
 import { PreviewCircles } from './PreviewCircles';
 
@@ -20,6 +20,10 @@ type GraphNodeProps = {
     selected?: boolean;
     /** Inline colours when cluster colours are on (clusterPaint from the core). */
     clusterPaint?: ClusterPaint;
+    /** Label size in px set by zooming (zoomMath nextZoomStyle); without it the CSS 14 px. */
+    labelFontSize?: number;
+    /** Starts dragging the node (useNodeDrag). */
+    onPointerDown?: (event: ReactPointerEvent<SVGGElement>) => void;
 };
 
 const circleNodeClass = (node: VisualNode, selected: boolean): string => {
@@ -60,6 +64,8 @@ export const GraphNode = ({
     settings,
     selected = false,
     clusterPaint,
+    labelFontSize,
+    onPointerDown,
 }: GraphNodeProps) => {
     const { hatch } = useContext(GraphDefsContext);
     const radius = mainRadius(node.width, view);
@@ -67,7 +73,11 @@ export const GraphNode = ({
     const highlight = settings.currentSizeMetricErrorHighlighting;
 
     return (
-        <g className="node" transform={`translate(${node.x ?? 0}, ${node.y ?? 0})`}>
+        <g
+            className="node"
+            transform={`translate(${node.x ?? 0}, ${node.y ?? 0})`}
+            onPointerDown={onPointerDown}
+        >
             <circle
                 className={circleNodeClass(node, selected)}
                 r={radius}
@@ -99,7 +109,12 @@ export const GraphNode = ({
             )}
             {view === 'app' && node.functions && <PreviewCircles node={node} />}
             {settings.text && (
-                <text className="node-label">
+                <text
+                    className="node-label"
+                    style={
+                        labelFontSize === undefined ? undefined : { fontSize: `${labelFontSize}px` }
+                    }
+                >
                     <tspan className="label-text">{node.label || node.id}</tspan>
                     <tspan dy="1.2em" x={0}>
                         {(node.icons ?? []).map((icon, index) => (
