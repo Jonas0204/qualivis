@@ -119,10 +119,35 @@ gekürzt. Die Zeilenangaben gelten unverändert, denn die Dateien wurden nur ver
 ## Skills
 
 - `schritt-umsetzen`: den nächsten oder einen genannten Schritt umsetzen.
-- `phase-abschliessen`: Phase prüfen, Pull Request vorbereiten, nach Nachfrage pushen und anlegen.
+- `phase-abschliessen`: Phase prüfen und reviewen lassen, Doku aufräumen, Pull Request vorbereiten,
+  nach Nachfrage pushen und anlegen.
   Nur auf ausdrücklichen Wunsch des Nutzers.
 
 Ohne Skill-Unterstützung die jeweilige `.claude/skills/<name>/SKILL.md` lesen und befolgen.
+
+## Subagenten
+
+Gilt für Werkzeuge, die Subagenten starten können (z. B. Claude Code). Grundsatz: Der Hauptagent
+arbeitet selbst, Subagenten gibt es nur für die drei Fälle in der Tabelle.
+
+- **Immer selbst:**
+  - Code schreiben, mit dem stärksten verfügbaren Modell (bei Claude: Opus).
+  - Den Kontext eines Schritts lesen. Eine Zusammenfassung verliert die genauen Zeilen, auf die es
+    beim 1:1-Verhalten ankommt.
+  - Tests und `pnpm check` ausführen, bei Bedarf im Hintergrund.
+
+| Fall | Modell | Auftrag |
+|---|---|---|
+| Unabhängiges Review am Phasenende oder nach einem großen Schritt | stärkstes (Opus) | Diff gegen Karten, Altcode und Konventionen prüfen und Befunde melden |
+| Breite Suche über viele Dateien (Altcode, Doku) | mittleres (Sonnet) | Fundstellen mit Datei und Zeile liefern; lesen tut sie dann der Hauptagent |
+| Recherche nebenbei (Versionen, Changelogs, SHAs von Actions) | mittleres (Sonnet) | Ergebnis mit Quelle |
+
+- Für Suchen nie das kleinste Modell nehmen: Eine übersehene Stelle kostet mehr als die gesparten
+  Tokens.
+- Subagenten nur lesen lassen. Im Auftrag ausdrücklich verbieten: Dateien ändern oder löschen,
+  installieren, committen, pushen.
+- Vorher dem Nutzer in einem Satz sagen, was der Subagent tut und mit welchem Modell.
+- Ergebnisse sind Hinweise, kein Beweis. Jeden Befund selbst prüfen, bevor er an den Nutzer geht.
 
 ## Pflege der Doku
 
