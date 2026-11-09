@@ -6,10 +6,19 @@ import { UploadView } from './UploadView';
 
 describe('UploadView', () => {
   it('shows the upload card with icon and text', () => {
-    const { getByText } = renderWithState(<UploadView onFiles={vi.fn()} />);
+    const { getByText, queryByRole } = renderWithState(<UploadView onFiles={vi.fn()} />);
 
     expect(getByText('Drag and drop or browse a folder')).toBeTruthy();
     expect(getByText('note_add').getAttribute('aria-hidden')).toBe('true');
+    expect(queryByRole('alert')).toBeNull();
+  });
+
+  it('shows an error message below the card', () => {
+    const { getByRole } = renderWithState(
+      <UploadView onFiles={vi.fn()} error="Analysis failed: Unexpected token (3:4)" />
+    );
+
+    expect(getByRole('alert').textContent).toBe('Analysis failed: Unexpected token (3:4)');
   });
 
   it('passes the selected folder on with paths like the legacy app', async () => {

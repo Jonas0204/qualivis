@@ -22,3 +22,6 @@ export const analysisAtom = atom<AnalysisState>(initialAnalysisState);
 
 /** Only the progress value, so components re-render only when it changes. */
 export const analysisProgressAtom = atom(get => get(analysisAtom).progress);
+
+/** Only the error message; set while the status is 'error'. */
+export const analysisErrorAtom = atom(get => get(analysisAtom).error);

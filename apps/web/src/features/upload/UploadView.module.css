@@ -1,6 +1,8 @@
-/* Same rules as legacy upload-view.component.scss */
+/* Same rules as legacy upload-view.component.scss; the column direction places the error line
+   below the card and looks the same as the legacy row without it. */
 .view {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100%;
@@ -61,4 +63,10 @@
 
 .input {
   display: none;
+}
+
+.error {
+  margin: 16px 0 0;
+  color: var(--qv-error);
+  text-align: center;
 }

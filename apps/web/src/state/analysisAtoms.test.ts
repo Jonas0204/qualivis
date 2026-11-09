@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import {
   type AnalysisState,
   analysisAtom,
+  analysisErrorAtom,
   analysisProgressAtom,
   initialAnalysisState,
 } from './analysisAtoms';
@@ -28,7 +29,7 @@ describe('analysisAtom', () => {
     expect(store.get(analysisProgressAtom)).toBe(40);
 
     store.set(analysisAtom, { ...running, status: 'error', progress: undefined, error: 'failed' });
-    expect(store.get(analysisAtom).error).toBe('failed');
+    expect(store.get(analysisErrorAtom)).toBe('failed');
     expect(store.get(analysisProgressAtom)).toBeUndefined();
   });
 });

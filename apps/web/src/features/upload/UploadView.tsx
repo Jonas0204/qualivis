@@ -5,12 +5,16 @@ import { readInputFiles } from './readInputFiles';
 import styles from './UploadView.module.css';
 import { useFileDrop } from './useFileDrop';
 
-type UploadViewProps = { onFiles: (files: SourceFile[]) => void };
+type UploadViewProps = {
+  onFiles: (files: SourceFile[]) => void;
+  /** Shown below the card until the snackbar exists (P07). */
+  error?: string | undefined;
+};
 
 // React does not type the non-standard folder-selection attribute.
 const folderSelection = { webkitdirectory: '' };
 
-export const UploadView = ({ onFiles }: UploadViewProps) => {
+export const UploadView = ({ onFiles, error }: UploadViewProps) => {
   const { isDraggingOver, handlers } = useFileDrop(onFiles);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -36,6 +40,11 @@ export const UploadView = ({ onFiles }: UploadViewProps) => {
           </span>
         </label>
       </div>
+      {error && (
+        <p role="alert" className={styles.error}>
+          {error}
+        </p>
+      )}
       <input
         type="file"
         id="file-upload"
