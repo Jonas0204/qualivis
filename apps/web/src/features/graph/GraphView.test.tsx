@@ -1,21 +1,25 @@
-import { analyzeProject } from '@qualivis/core';
+import { analyzeProject, defaultSettings } from '@qualivis/core';
 import { StrictMode } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { analysisAtom, initialAnalysisState } from '../../state/analysisAtoms';
 import { loadFixture } from '../../test/fixtures';
 import { renderWithState } from '../../test/renderWithState';
 import { initial } from '../../test/TestProvider';
-import { GraphView, type LayoutFactory } from './GraphView';
+import { GraphView } from './GraphView';
+import type { LayoutFactory, LayoutOptions } from './layout/createLayout';
 import type { LayoutEngine } from './layout/types';
 
 const mini = analyzeProject(loadFixture('mini'));
 const done = initial(analysisAtom, { ...initialAnalysisState, status: 'done', result: mini });
 
+type FakeEngine = { colaLayout: boolean; options: LayoutOptions; stopped: boolean };
+
 /** Fake engine: puts the nodes in a row at once and reports the end, without animation. */
 const createFakeLayout = () => {
-    const engines: { stopped: boolean }[] = [];
-    const createLayout: LayoutFactory = ({ nodes }) => {
-        const record = { stopped: false };
+    const engines: FakeEngine[] = [];
+    const createLayout: LayoutFactory = (colaLayout, options) => {
+        const { nodes } = options;
+        const record = { colaLayout, options, stopped: false };
         engines.push(record);
         const endListeners = new Set<() => void>();
         const engine: LayoutEngine = {
@@ -116,5 +120,58 @@ describe('GraphView', () => {
         expect(engines.filter(engine => !engine.stopped)).toHaveLength(1);
         unmount();
         expect(engines.every(engine => engine.stopped)).toBe(true);
+    });
+
+    it('lays out with WebCola by default, without constraints in the app view', () => {
+        const { createLayout, engines } = createFakeLayout();
+        renderWithState(<GraphView createLayout={createLayout} />, { initialValues: [done] });
+
+        expect(engines).toHaveLength(1);
+        expect(engines[0]?.colaLayout).toBe(true);
+        expect(engines[0]?.options.constraints).toEqual([]);
+        expect(engines[0]?.options.nodes).toHaveLength(8);
+        expect(engines[0]?.options.links).toHaveLength(7);
+    });
+
+    it('switches the engine without a reload and stops the old one', () => {
+        const { createLayout, engines } = createFakeLayout();
+        const { container, rerender } = renderWithState(<GraphView createLayout={createLayout} />, {
+            initialValues: [done],
+        });
+
+        rerender(
+            <GraphView
+                createLayout={createLayout}
+                settings={{ ...defaultSettings, colaLayout: false }}
+            />
+        );
+
+        expect(engines.map(({ colaLayout, stopped }) => ({ colaLayout, stopped }))).toEqual([
+            { colaLayout: true, stopped: true },
+            { colaLayout: false, stopped: false },
+        ]);
+        // The same view model: the new engine starts from the positions of the old one.
+        expect(engines[1]?.options.nodes).toBe(engines[0]?.options.nodes);
+        expect(container.querySelectorAll('g.node')).toHaveLength(8);
+    });
+
+    it('builds a new view model and engine when the node sizes setting changes', () => {
+        const { createLayout, engines } = createFakeLayout();
+        const { rerender } = renderWithState(<GraphView createLayout={createLayout} />, {
+            initialValues: [done],
+        });
+
+        rerender(
+            <GraphView
+                createLayout={createLayout}
+                settings={{ ...defaultSettings, nodeSizesBasedOnMetrics: false }}
+            />
+        );
+
+        expect(engines).toHaveLength(2);
+        expect(engines[0]?.stopped).toBe(true);
+        expect(engines[1]?.options.nodes).not.toBe(engines[0]?.options.nodes);
+        // Without sizes by metric every node is 48 wide (2 × circleRadius), as in the legacy app.
+        expect(engines[1]?.options.nodes.every(node => node.width === 48)).toBe(true);
     });
 });

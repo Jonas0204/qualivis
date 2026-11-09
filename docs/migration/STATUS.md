@@ -46,7 +46,7 @@ Ablauf: README, „Branches und Pull Requests“. Ziel aller PRs: `rewrite/react
 | P05-S03 | Regeln: Cluster, Constraints | ☑ | 09.11.2026 | `cluster.ts`, `reactConstraints.ts`; Cluster der KV `App` (`mini`) gleich dem Golden |
 | P05-S04 | Golden G2 | ☑ | 09.11.2026 | `viewModel.ts` (`buildViewModel`), `rules.golden.test.ts`: AV und alle KVs von `mini` (4) und `realworld` (20) gleich dem Altsystem; `hasCluster` nach V3 korrigiert (A4). `ViewModelOptions` ohne `showCluster`: Clusterfarben wechseln ohne neues Layout (wie `updateGraph`), dafür `clusterPaint` im Kern |
 | P05-S05 | Knoten-/Kanten-Rendering | ☑ | 09.11.2026 | `GraphNode`, `GraphLink`, `PreviewCircles`, `GraphDefs` (IDs per `useId`, Context), `graph.css` vollständig; `GraphView` baut das Ansichtsmodell per `useMemo` (keine Kopie mehr im Atom, `selectViewGraph` statt `buildViewGraph`). Zusätzlich `GraphCanvas.golden.test.tsx`: Markup aller Knoten gegen das DOM des Altsystems. Klick-Handler und `pointer-events` des Labels folgen mit der Auswahl (S09). Sichtvergleich mit dem Altsystem steht aus (Nutzer) |
-| P05-S06 | WebCola-Adapter | ☐ | | |
+| P05-S06 | WebCola-Adapter | ☑ | 09.11.2026 | `colaLayout.ts` (nur `webcola/dist/src/layout`, Animation per `requestAnimationFrame`), `createLayout.ts`, `GraphView` mit `settings`-Prop (bis P07) und Engine-Wechsel. Erstes Layout im nächsten Frame, damit der doppelte StrictMode-Effekt die Knoten nicht vorbelegt. G3 (`colaLayout.golden.test.ts`): Positionen aller 26 Ansichten bitgleich zum Altsystem (siehe Notizen). Bundle ohne `d3-selection` und d3 v1 |
 | P05-S07 | Zoom & Pan | ☐ | | |
 | P05-S08 | Knoten ziehen | ☐ | | |
 | P05-S09 | Auswahl, Ausblenden | ☐ | | |
@@ -76,3 +76,12 @@ Ablauf: README, „Branches und Pull Requests“. Ziel aller PRs: `rewrite/react
 Hier jede Abweichung vom Plan mit Begründung und Verweis (ADR bzw. Nutzerentscheidung) eintragen,
 solange sie für kommende Schritte wichtig ist. Vor dem PR der Phase wandert sie in die betroffenen
 Karten oder Grundlagen oder wird gestrichen; Erledigtes steht in der Git-Historie.
+
+- **Positionen in den Goldens (P05-S06, wichtig für S12 und P09):** `x`/`y` in
+  `legacy-dom-*.json` sind die Positionen direkt nach dem synchronen `start(40, 20, 20)`, vor dem
+  ersten Animations-Tick; bei der Erfassung lief keine Animation. Das fertig animierte Layout weicht
+  bei größeren Graphen davon ab (AV `realworld` bis 115 px), ist aber derselbe Algorithmus.
+- **Neustart des Layouts (P05-S06, betrifft S11 und P07):** Wechsel der Engine startet wie im
+  Altsystem von den bisherigen Positionen. Wechsel von Größenmetrik oder „Node sizes based on
+  metrics“ baut ein neues Ansichtsmodell und startet das Layout neu von vorn; das Altsystem rechnete
+  dort von den alten Positionen weiter (ADR-003: Positionen dürfen abweichen).
