@@ -25,8 +25,8 @@ Ablauf: README, „Branches und Pull Requests“. Ziel aller PRs: `rewrite/react
 |---|---|---|---|
 | P01 Fundament + P02 Golden-Infrastruktur | `rewrite/m0-fundament` | [#1](https://github.com/Jonas0204/qualivis/pull/1) | ☑ |
 | P03 Kern-MVP | `rewrite/p03-kern-mvp` | | ☑ |
-| P04 Web-MVP | `rewrite/p04-web-mvp` | | ◐ |
-| P05 Graph-Parität | `rewrite/p05-graph-paritaet` | | ☐ |
+| P04 Web-MVP | `rewrite/p04-web-mvp` | [#2](https://github.com/Jonas0204/qualivis/pull/2) | ☑ |
+| P05 Graph-Parität | `rewrite/p05-graph-paritaet` | | ◐ |
 | P06 Panels, Navigation | `rewrite/p06-panels-navigation` | | ☐ |
 | P07 Einstellungen, Persistenz | `rewrite/p07-einstellungen-persistenz` | | ☐ |
 | P08 Härtung | `rewrite/p08-haertung` | | ☐ |
@@ -40,8 +40,8 @@ Ablauf: README, „Branches und Pull Requests“. Ziel aller PRs: `rewrite/react
 |---|---|---|---|---|
 | P01, P02 | M0: Fundament, Golden-Infrastruktur | ☑ | 08.11.2026 | Commit `5647a06`, PR #1 |
 | P03 | M1 (Teil 1): CI, Kern `@qualivis/core`, Golden G1 | ☑ | 08.11.2026 | Commits `5e54b41`–`1bd11f9` |
-| P04 | M1 (Teil 2): Web-MVP, GitHub Pages | ◐ | 09.11.2026 | Commits `5ac8732`–`fbdc621`; M1 bestätigt. Offen: `pnpm dev` auf macOS (Nutzer). Nach dem Merge des P04-PR (Nutzer): Pages-Workflow läuft durch (Environment-Freigabe für `rewrite/react`), die Seite lädt ohne 404 und ohne fremde Hosts, Drop von `mini` → 8 Knoten, 7 Pfeile, `origin/gh-pages` bleibt `5f0155e`. Danach ☑ und PR-Link in der Tabelle „Phasen“ (beim Start von P05) |
-| P05-S01 | Regeln: Größe, Icons | ☐ | | |
+| P04 | M1 (Teil 2): Web-MVP, GitHub Pages | ☑ | 09.11.2026 | Commits `5ac8732`–`317cc37`, PR #2. Nach dem Merge: Pages-Workflow grün, Seite vom Nutzer geprüft, `origin/gh-pages` unverändert `5f0155e`. `pnpm dev` auf macOS bleibt offen (RI11) |
+| P05-S01 | Regeln: Größe, Icons | ☑ | 09.11.2026 | `resolveThreshold`, `getNodeIcons`, `describeIconText`, `computeNodeVisual` in `packages/core/src/rules/`, 34 Tests; neue Korrektur ADR-011 A11 (feste Größe statt `NaN`) |
 | P05-S02 | Regeln: Geometrie, Farben | ☐ | | |
 | P05-S03 | Regeln: Cluster, Constraints | ☐ | | |
 | P05-S04 | Golden G2 | ☐ | | |

@@ -108,10 +108,11 @@ Werten aus der Stil-Referenz. Roboto und Material Icons über `@fontsource/*` lo
 | A8 | Bei „Node sizes based on metrics“ = aus keine Icons/Warnstufen (V1) | Icons und Warnstufen werden immer berechnet; nur die Größe ist fest 48 | Fehler (Nutzerentscheidung 07.11.2026) |
 | A9 | Auswahl über den Dateibaum zeigt im Code-Quality-Panel keine Icons (Q5) | Icons wie beim Klick auf den Knoten im App-Graph | Fehler (Nutzerentscheidung 07.11.2026) |
 | A10 | Fenster- und Toolbar-Titel „Component Graph“ | „Qualivis“ (ADR-012) | Produktname |
+| A11 | Größenmetrik ohne Schwelle für den Knotentyp (eine Metrik nur für Komponenten, bei Funktionsknoten; wählbar in einem Projekt mit nur einer Komponente) → Größe `NaN` | feste Größe 48, keine Warnstufe; Icons wie sonst | Fehler (Nutzerentscheidung 09.11.2026) |
 
 Alles andere – auch die Eigenheiten K1–K11 und V2, V4–V7 – bleibt gleich. Weitere
-Abweichungen nur mit neuer ADR und Zustimmung des Nutzers. Die Golden-Tests sind von A8/A9 nicht
-betroffen (sie nutzen Standardeinstellungen und Klicks im Graph).
+Abweichungen nur mit neuer ADR und Zustimmung des Nutzers. Die Golden-Tests sind von A8, A9 und
+A11 nicht betroffen (sie nutzen Standardeinstellungen und Klicks im Graph).
 
 ### ADR-012 Produktname
 **Kontext:** Das Repository heißt `qualivis`, die alte App „Component Graph“.

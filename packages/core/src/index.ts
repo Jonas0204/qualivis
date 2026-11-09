@@ -16,3 +16,8 @@ export type * from './model/report';
 export * from './model/settings';
 export * from './model/specialMethods';
 export type * from './model/types';
+export type { IconDescription, VisualIcon } from './rules/icons';
+export { describeIconText, getNodeIcons } from './rules/icons';
+export type { NodeVisual, View, VisualOptions } from './rules/nodeVisuals';
+export { computeNodeVisual } from './rules/nodeVisuals';
+export { resolveThreshold } from './rules/thresholds';

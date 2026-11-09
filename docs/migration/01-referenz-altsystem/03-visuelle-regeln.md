@@ -33,7 +33,9 @@ Für jeden Knoten:
    (Achtung: Vergleich `!== undefined`, nicht Truthiness).
 6. `warn = error = false`; wenn `metricValue >= threshold * 0.8 && metricValue < threshold` →
    `warn = true`; sonst wenn `metricValue >= threshold` → `error = true`.
-7. `width = height = Math.sqrt((16000 / threshold) * metricValue / Math.PI)`.
+7. `width = height = Math.sqrt((16000 / threshold) * metricValue / Math.PI)`. Ohne Schwelle (eine
+   Metrik nur für Komponenten bei einem Funktionsknoten) ergibt das `NaN`. **Neue App (ADR-011
+   A11):** feste Größe 48, keine Warnstufe, Icons wie sonst.
 8. Nur AV: `width += 14` und `height += 14` (Vorschau-Breite, siehe Abschnitt 5).
 
 `warn`/`error` färben den Rand **nur**, wenn `settings.currentSizeMetricErrorHighlighting` aktiv
@@ -59,8 +61,8 @@ ist (Klassen `warn`/`error` an `circle-overlay` und `inner-circle`).
 6. KV **und** `deprecatedMethods.includes(id)` → `{ 'report', 'warn', 'Deprecated React lifecycle method (see <Link https://reactjs.org/docs/react-component.html#legacy-lifecycle-methods>)' }`.
 
 Im Altsystem enthalten 5 und 6 HTML (`<a href target=_blank>`), gerendert per `innerHTML`. Neu:
-Icon-Beschreibung als Datenstruktur `{ text: string; link?: { href: string; label: string } }`
-(ADR-011, kein `innerHTML`). Golden G2 vergleicht den **normalisierten Text**
+Icon-Beschreibung als Datenstruktur `{ text: string; link?: { href: string } }`; der Linktext ist
+wie im Altsystem die URL (ADR-011, kein `innerHTML`). Golden G2 vergleicht den **normalisierten Text**
 (Tags entfernt, Leerraum zusammengefasst).
 
 ## 4. Cluster (`generateCluster`, Z. 323-368) – nur KV
