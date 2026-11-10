@@ -229,7 +229,8 @@ Speichern werden einmal als Snackbar gemeldet, nie als Absturz.
 
 ## 10. Fehlerbehandlung
 
-- Kern: wirft wie das Altsystem (z. B. Syntaxfehler beim Parsen). Ab P08-S05 zusätzlich
+- Kern: wirft wie das Altsystem (z. B. Syntaxfehler beim Parsen) und loggt dabei den Pfad der
+  Datei (`Parsing failed:`). Ab P08-S05 zusätzlich
   `analyzeProject` mit `onFileError`-Option (Datei überspringen statt Abbruch) – Standard bleibt
   das alte Verhalten, damit Goldens stabil bleiben.
 - Web: `runAnalysis` fängt alle Fehler und setzt `analysisAtom` auf `status: 'error'` mit Meldung;

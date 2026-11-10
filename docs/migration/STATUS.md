@@ -42,7 +42,7 @@ Ablauf: README, „Branches und Pull Requests“. Ziel aller PRs: `rewrite/react
 | P01, P02 | M0: Fundament, Golden-Infrastruktur | ☑ | 08.11.2026 | Commit `5647a06`, PR #1 |
 | P03 | M1 (Teil 1): CI, Kern `@qualivis/core`, Golden G1 | ☑ | 08.11.2026 | Commits `5e54b41`–`1bd11f9` |
 | P04 | M1 (Teil 2): Web-MVP, GitHub Pages | ☑ | 09.11.2026 | Commits `5ac8732`–`317cc37`, PR #2. Nach dem Merge: Pages-Workflow grün, Seite vom Nutzer geprüft, `origin/gh-pages` unverändert `5f0155e`. `pnpm dev` auf macOS bleibt offen (RI11) |
-| P05 | M2: Graph-Parität | ☑ | 10.11.2026 | Commits `2b24c84`–`7cdd942` (dazu `2867e6e`, Plan P05.5), danach `31d8777` (Review-Korrektur) und Aufräumen. `pnpm test:parity` prüft G1–G3 (Kern und Web). Bewusste Abweichungen: ADR-011 A12–A17. Offen: Ein Klick auf einen Vorschaukreis wählt die Funktion noch nicht aus (G4, folgt in P06-S02); das Golden der Clusterfarben belegt nur 7 der 20 Farben (visuelle Regeln §4) |
+| P05 | M2: Graph-Parität | ☑ | 10.11.2026 | Commits `2b24c84`–`7cdd942` (dazu `2867e6e`, Plan P05.5), danach `31d8777` (Review-Korrektur), Aufräumen und ein Fix für `.venv` beim Upload. `pnpm test:parity` prüft G1–G3 (Kern und Web). Bewusste Abweichungen: ADR-011 A12–A18. Offen: Ein Klick auf einen Vorschaukreis wählt die Funktion noch nicht aus (G4, folgt in P06-S02); das Golden der Clusterfarben belegt nur 7 der 20 Farben (visuelle Regeln §4) |
 | P05.5-S01 | Testprojekt `monorepo` | ☐ | | |
 | P05.5-S02 | Upload: Konfiguration, Ordner überspringen | ☐ | | |
 | P05.5-S03 | Kern: Pakete, tsconfig | ☐ | | |

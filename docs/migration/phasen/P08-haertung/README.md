@@ -52,6 +52,8 @@ Erkenntnisse aus `STATUS.md` (Abweichungen, offene Punkte) einarbeiten, mit dem 
 ## S05 – Fehlerbehandlung (S)
 - Kern: Option `onFileError?: (path, error) => 'skip' | 'throw'` (Standard `'throw'` = Altverhalten),
   Tests. Web: übersprungene Dateien als Snackbar-Liste („3 files could not be parsed: …“).
+  Schon vorhanden: `analyzeProject.ts` loggt einen Parsefehler mit dem Pfad der Datei und wirft
+  ihn weiter; `onFileError` setzt an dieser Stelle an.
 - `app/ErrorBoundary.tsx` um `GraphPage` mit Hinweis und Button „Back to upload“.
 - ADR-011 A5 als umgesetzt markieren.
 

@@ -32,6 +32,18 @@ describe('readInputFiles', () => {
         ]);
     });
 
+    it('skips files in .venv folders (ADR-011 A18)', async () => {
+        const files = [
+            fileWithRelativePath('my-app/src/App.js', 'const App = 1;'),
+            unreadableFile('my-app/.venv/lib/python3.13/site-packages/playwright/types.d.ts'),
+        ];
+
+        // Reading the unreadable file would reject the whole result.
+        expect(await readInputFiles(files)).toEqual([
+            { path: '/my-app/src/App.js', code: 'const App = 1;' },
+        ]);
+    });
+
     it('returns an empty list for an empty selection', async () => {
         expect(await readInputFiles([])).toEqual([]);
     });

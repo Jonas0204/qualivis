@@ -7,6 +7,7 @@ import {
     fileItem,
     fileWithRelativePath,
     stringItem,
+    unreadableDirectoryEntry,
     unreadableFile,
     unreadableFileEntry,
 } from '../../test/fakeFiles';
@@ -55,6 +56,23 @@ describe('readDroppedFiles', () => {
         );
 
         expect(files).toEqual([{ path: '/my-app/src/App.js', code: 'const App = 1;' }]);
+    });
+
+    it('does not enter .venv folders and skips files in them (ADR-011 A18)', async () => {
+        const folder = fakeDirectoryEntry('/my-app', [
+            unreadableDirectoryEntry('/my-app/.venv'),
+            fakeFileEntry('/my-app/App.js', 'const App = 1;'),
+        ]);
+        const fallbackFile = unreadableFile(
+            'my-app/.venv/lib/python3.13/site-packages/playwright/types.d.ts'
+        );
+
+        // Reading the folder or the file would reject the whole result.
+        const files = await readDroppedFiles(
+            fakeDataTransfer([fileItem(fallbackFile), entryItem(folder)])
+        );
+
+        expect(files).toEqual([{ path: '/my-app/App.js', code: 'const App = 1;' }]);
     });
 
     it('keeps reading a folder until the reader returns no more entries (ADR-011 A7)', async () => {

@@ -13,11 +13,14 @@ Monorepo-Ordner schnell eingelesen wird. Das Analyse-Ergebnis bleibt unveränder
   (`excludedFolders`)
 - `apps/web/src/features/upload/readDroppedFiles.ts`, `readInputFiles.ts`, `UploadView.tsx`,
   `useFileDrop.ts`
+- Schon vorhanden (P05): `apps/web/src/features/upload/isIgnoredUploadPath.ts` überspringt Pfade mit
+  einem Ordner `.venv` in beiden Lesewegen (ADR-011 A18).
 
 ## Dateien
 `packages/core/src/workspace/projectFiles.ts` (+ Test), `packages/core/src/index.ts`,
 `apps/web/src/features/upload/readDroppedFiles.ts`, `readInputFiles.ts`, `useFileDrop.ts`,
-`UploadView.tsx` (+ Tests), `apps/web/src/app/App.tsx` (oder wo `onFiles` ankommt).
+`UploadView.tsx` (+ Tests), `apps/web/src/app/App.tsx` (oder wo `onFiles` ankommt);
+`isIgnoredUploadPath.ts` entfällt.
 
 ## Schritte
 1. `projectFiles.ts`:
@@ -29,7 +32,8 @@ Monorepo-Ordner schnell eingelesen wird. Das Analyse-Ergebnis bleibt unveränder
    /** True for a folder path the upload does not descend into (node_modules, build, dist). */
    export function isExcludedFolder(folderPath: string): boolean
    ```
-   `isExcludedFolder` prüft `${folderPath}/` gegen `excludedFolders`. Exporte in `index.ts`.
+   `isExcludedFolder` prüft `${folderPath}/` gegen `excludedFolders` und übernimmt die Regel für
+   `.venv` aus `isIgnoredUploadPath` (ADR-011 A18). Exporte in `index.ts`.
 2. `readDroppedFiles`: liefert `ProjectFiles`. Ordner, für die `isExcludedFolder(entry.fullPath)`
    gilt, werden nicht gelesen. Dateien: `isComponentFile` → `sources`, `isConfigFile` →
    `configs`, sonst nichts. Der Rückfallweg ohne `webkitGetAsEntry` filtert genauso.
@@ -51,6 +55,8 @@ Monorepo-Ordner schnell eingelesen wird. Das Analyse-Ergebnis bleibt unveränder
 `pnpm check`, `pnpm test:parity`
 
 ## Fallstricke
+- `readInputFiles` sieht keine Ordner, nur Dateipfade: Dort muss die Regel für `.venv` weiter
+  jeden Pfad prüfen, nicht nur den Ordner.
 - `entry.fullPath` eines Ordners endet ohne `/`; deshalb `${folderPath}/` prüfen, sonst trifft
   `/dist/` den Ordner `…/dist` nicht.
 - Die Kopien von Workspace-Paketen in `node_modules` (pnpm-Links) dürfen nicht mitgelesen werden;

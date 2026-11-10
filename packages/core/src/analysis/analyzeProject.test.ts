@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { analyzeProject, analyzeProjectAsync, type SourceFile } from './analyzeProject';
 
 const app: SourceFile = {
@@ -69,8 +69,21 @@ describe('analyzeProject', () => {
         expect(analyzeProject([...files].reverse())).toEqual(analyzeProject(files));
     });
 
-    it('throws on a syntax error like the legacy app', () => {
-        expect(() => analyzeProject([{ path: '/p/src/Broken.js', code: 'const = ;' }])).toThrow();
+    it('throws on a syntax error like the legacy app and logs the file path', () => {
+        const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+        try {
+            expect(() =>
+                analyzeProject([{ path: '/p/src/Broken.js', code: 'const = ;' }])
+            ).toThrow();
+            expect(consoleError).toHaveBeenCalledWith(
+                'Parsing failed:',
+                '/p/src/Broken.js',
+                expect.any(SyntaxError)
+            );
+        } finally {
+            consoleError.mockRestore();
+        }
     });
 });
 

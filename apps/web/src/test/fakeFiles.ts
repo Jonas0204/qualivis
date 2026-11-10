@@ -63,6 +63,21 @@ export const fakeDirectoryEntry = (
         },
     }) as unknown as FileSystemEntry;
 
+/** A dropped folder whose reader fails; a test with it fails if the folder is entered. */
+export const unreadableDirectoryEntry = (fullPath: string): FileSystemEntry =>
+    ({
+        isFile: false,
+        isDirectory: true,
+        name: nameOf(fullPath),
+        fullPath,
+        createReader: () => ({
+            readEntries: (
+                _success: (entries: FileSystemEntry[]) => void,
+                failure: (error: DOMException) => void
+            ) => queueMicrotask(() => failure(notFound(fullPath))),
+        }),
+    }) as unknown as FileSystemEntry;
+
 export const entryItem = (entry: FileSystemEntry): DataTransferItem =>
     ({
         kind: 'file',

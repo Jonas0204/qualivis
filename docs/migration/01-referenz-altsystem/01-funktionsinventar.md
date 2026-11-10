@@ -40,7 +40,7 @@ Abkürzungen: **AV** = App-Ansicht (Graph aller Komponenten), **KV** = Komponent
 | U4 | Während Drag über Zielbereich: CSS-Klasse `is-dragging-over`; Upload-Karte skaliert auf 1.05 (nicht bei ≤ 599 px Breite); Graph-Ansicht zeigt Overlay „Drop files here“ (schwarz 55 % Deckkraft, 32 px weiße Schrift). | `drop-target.directive.ts`, `graph-view.component.scss` |
 | U5 | Nach Auswahl/Drop: Analyse startet, Navigation zu `/graph?upload=1`. | `upload-view.component.ts:28`, `graph-view.component.ts:44-47` |
 | U6 | Fortschrittsbalken oben (Material, Primärfarbe) während der Analyse: 50 % für Parsen, 50 % für Traversieren, gleichmäßige Schritte pro Datei; danach ausgeblendet. | `data.service.ts:35-56, 222-229` |
-| U7 | Dateifilter: nur Endungen `tsx, jsx, ts, js`; Pfade mit `/node_modules/`, `/build/`, `/dist/` ausgeschlossen; Dateien `*.test.<ext>` ausgeschlossen (nur exakt vorletzter Namensteil `test`; `*.spec.*` wird **nicht** ausgeschlossen). | `helper/isComponentFile.ts`, `constants/files.ts` |
+| U7 | Dateifilter: nur Endungen `tsx, jsx, ts, js`; Pfade mit `/node_modules/`, `/build/`, `/dist/` ausgeschlossen; Dateien `*.test.<ext>` ausgeschlossen (nur exakt vorletzter Namensteil `test`; `*.spec.*` wird **nicht** ausgeschlossen). (Neue App: Der Upload überspringt zusätzlich Ordner `.venv`, ADR-011 A18.) | `helper/isComponentFile.ts`, `constants/files.ts` |
 | U8 | Ergebnis enthält nur Dateien mit ≥ 1 Komponente oder mit Default-Export, der ein Import (Pfad beginnt mit `/`) ist. | `data.service.ts:58-66` |
 
 ## 3. Graph-Ansicht (Mitte)
