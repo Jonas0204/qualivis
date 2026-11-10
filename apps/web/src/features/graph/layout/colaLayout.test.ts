@@ -49,6 +49,8 @@ const startLayout = (
 
 const positions = (nodes: LayoutNode[]) => nodes.map(({ x, y }) => [x, y]);
 
+const positionOf = (node: LayoutNode | undefined) => ({ x: node?.x, y: node?.y });
+
 const byId = (nodes: LayoutNode[], id: string): LayoutNode => {
     const found = nodes.find(n => n.id === id);
     if (!found) {
@@ -193,6 +195,70 @@ describe('createColaLayout', () => {
         expect(run.ends()).toBe(2);
         expect(b.x).toBeCloseTo(500, 6);
         expect(b.y).toBeCloseTo(450, 6);
+    });
+
+    it('keeps restored positions at rest and reports the end without a tick (ADR-011 A22)', () => {
+        const first = chain();
+        startLayout(first.nodes, first.links);
+        vi.runAllTimers();
+        const { nodes, links, b } = chain();
+        for (const [index, each] of nodes.entries()) {
+            Object.assign(each, positionOf(first.nodes[index]));
+        }
+        const restoredAt = positions(nodes);
+
+        const engine = createColaLayout({
+            nodes,
+            links,
+            constraints: [],
+            ...area,
+            restore: { running: false },
+        });
+        const ticks = vi.fn();
+        const ends = vi.fn();
+        engine.onTick(ticks);
+        engine.onEnd(ends);
+        engine.start();
+        vi.runAllTimers();
+
+        expect(ticks).not.toHaveBeenCalled();
+        expect(ends).toHaveBeenCalledTimes(1);
+        expect(positions(nodes)).toEqual(restoredAt);
+
+        // Dragging runs the layout again, as after a normal end.
+        engine.dragStart(b);
+        engine.drag(b, { x: 500, y: 450 });
+        vi.runAllTimers();
+        expect(ticks).toHaveBeenCalled();
+        expect(ends).toHaveBeenCalledTimes(2);
+    });
+
+    it('goes on animating from restored positions without the initial layout', () => {
+        const { nodes, links } = chain();
+        for (const [index, each] of nodes.entries()) {
+            Object.assign(each, { x: index * 200, y: index * 100 });
+        }
+
+        const engine = createColaLayout({
+            nodes,
+            links,
+            constraints: [],
+            ...area,
+            restore: { running: true },
+        });
+        const ticks = vi.fn();
+        engine.onTick(ticks);
+        engine.start();
+        vi.advanceTimersToNextFrame();
+        // Not moved by an initial layout yet, only placed where they were.
+        expect(positions(nodes)).toEqual([
+            [0, 0],
+            [200, 100],
+            [400, 200],
+        ]);
+        vi.advanceTimersToNextFrame();
+        expect(ticks).toHaveBeenCalledTimes(1);
+        engine.stop();
     });
 
     it('releases a dragged node even with Shift, like the legacy app', () => {

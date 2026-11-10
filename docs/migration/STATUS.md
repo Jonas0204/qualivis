@@ -110,6 +110,17 @@ Karten oder Grundlagen oder wird gestrichen; Erledigtes steht in der Git-Histori
   `requestAnimationFrame`, nicht mehr CSS. Sichtbare Abweichung: Die Linienbreite gleitet nur noch
   beim Zoomen mit dem Mausrad, nicht mehr bei Zoom to fit und Zwei-Finger-Zoom (dort ändert sie sich
   ohnehin mit jedem Frame).
+  Zweiter Teil (10.11.2026, Nutzer): Zoomen und Verschieben rendern nur noch die Zoom-Gruppe;
+  Knoten und Kanten liegen in einer memoisierten Ebene (`GraphContent`), und
+  `useLabelCollision` behält die Menge der ausgeblendeten Labels, wenn sie gleich bleibt. Eine schon
+  gezeigte Ansicht kommt mit ihren Positionen und ihrem Zoom zurück (ADR-011 A22). Neu ist auch
+  `pnpm start` (Build und `vite preview`) für Vorführungen. Offen für S09 bleibt: WebCola im
+  Worker, der Start (`start(40, 20, 20)`, etwa 2,2 s bei 400 Komponenten) und die Schritte von
+  etwa 35 ms blockieren beim ersten Aufbau einer Ansicht weiter die Seite.
+- **Erklärung der Metriken (10.11.2026, Nutzer, ADR-011 A23):** Die Texte stehen in
+  `apps/web/src/features/code-quality/metricExplanations.ts`; sie wurden mit escomplex an
+  Beispielen nachgeprüft (z. B. zählen `??`, `catch` und `for … of` nicht als Verzweigung,
+  JSX-Tags nicht für Halstead).
 - **Offen: escomplex bricht bei neuerer Syntax ab (10.11.2026):** Sein Code-Generator, den es nur
   für Schleifenköpfe, Parameter, berechnete Schlüssel und `extends` aufruft, kennt viele Babel- und
   TS-Knoten nicht. Beispiele: `for (const m of s.matchAll(/x/g))` (`reading 'pattern'`),

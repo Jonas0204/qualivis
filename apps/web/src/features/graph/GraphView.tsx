@@ -12,6 +12,7 @@ import {
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useStableHandlers } from '../../lib/useStableHandlers';
+import { analysisAtom } from '../../state/analysisAtoms';
 import {
     deselectAtom,
     selectFileAtom,
@@ -25,6 +26,16 @@ import type { NodeEvents } from './GraphNode';
 import { Legend } from './Legend';
 import { createLayout as createDefaultLayout, type LayoutFactory } from './layout/createLayout';
 import type { LayoutNode } from './layout/types';
+import {
+    isRestoredAtRest,
+    layoutRestore,
+    placeLike,
+    restoredZoomStyle,
+    restoreView,
+    useRestoreZoom,
+    useSavedViews,
+    useSaveView,
+} from './savedViews';
 import type { ViewGraph } from './selectViewGraph';
 import { useElementSize } from './useElementSize';
 import { useFade } from './useFade';
@@ -54,19 +65,6 @@ const noLinks: readonly VisualLink[] = [];
 /** Nodes removed with Ctrl+click (G5), for the graph they were removed from. */
 type Removal = { viewGraph: ViewGraph; nodeIds: readonly string[] };
 
-/** Gives the nodes the position (and pin) of the node with the same id before the restart. */
-const placeLike = (nodes: readonly LayoutNode[], before: ReadonlyMap<string, LayoutNode>) => {
-    for (const node of nodes) {
-        const old = before.get(node.id);
-        if (old) {
-            node.x = old.x;
-            node.y = old.y;
-            node.fx = old.fx;
-            node.fy = old.fy;
-        }
-    }
-};
-
 /**
  * G14: the size metric of the select; as in the legacy app it stays when the view changes. N11
  * (legacy graph.component.ts:124-134): the component view offers no component-only metric, so it
@@ -90,6 +88,7 @@ export const GraphView = ({
     measure = browserMeasure,
     measureLabel,
 }: GraphViewProps) => {
+    const analysis = useAtomValue(analysisAtom);
     const viewGraph = useAtomValue(viewGraphAtom);
     const [componentId, setComponentId] = useAtom(componentIdAtom);
     const [fullScreen, setFullScreen] = useAtom(fullScreenAtom);
@@ -117,20 +116,34 @@ export const GraphView = ({
     // layout went on from where the nodes were.
     const nodesBeforeRestartRef = useRef<ReadonlyMap<string, LayoutNode>>(undefined);
 
+    // Deviation ADR-011 A22: a view shown before in this analysis comes back as it was left, with
+    // its positions and zoom, instead of a new layout from scratch. The legacy app laid it out
+    // again, which takes seconds for a large app graph.
+    const savedViews = useSavedViews(analysis);
+
     // A new copy for every graph: the layout writes positions into its nodes and links, so they
     // must not be the value of an atom (architecture §5; the legacy app copied on every graph,
     // graph.component.ts:166-171). Clusters and constraints leave out the removed nodes, as the
     // legacy restart computed them again (createSimulation, 563-574).
-    const model = useMemo(
-        () =>
-            viewGraph &&
-            buildViewModel(withoutNodes(viewGraph.graph, removedIds), {
-                view: viewGraph.view,
-                sizeMetric,
-                nodeSizesBasedOnMetrics,
-            }),
-        [viewGraph, removedIds, sizeMetric, nodeSizesBasedOnMetrics]
-    );
+    const built = useMemo(() => {
+        if (!viewGraph) {
+            return undefined;
+        }
+        const model = buildViewModel(withoutNodes(viewGraph.graph, removedIds), {
+            view: viewGraph.view,
+            sizeMetric,
+            nodeSizesBasedOnMetrics,
+        });
+        // A restart (removal, size metric) goes on from the current positions instead.
+        const restored = restoreView(
+            nodesBeforeRestartRef.current ? undefined : savedViews.get(viewGraph.graph),
+            model.nodes,
+            { sizeMetric, nodeSizesBasedOnMetrics }
+        );
+        return { model, restored };
+    }, [viewGraph, removedIds, sizeMetric, nodeSizesBasedOnMetrics, savedViews]);
+    const model = built?.model;
+    const restored = built?.restored;
 
     // Like the legacy app, the layout takes the area size when it starts and does not restart when
     // the area is resized; hence `size !== undefined` instead of `size` in the deps. A new engine
@@ -150,9 +163,10 @@ export const GraphView = ({
                 links: model.links,
                 constraints: model.constraints,
                 ...size,
+                restore: layoutRestore(restored),
             });
         },
-        [model, size !== undefined, colaLayout, createLayout],
+        [built, size !== undefined, colaLayout, createLayout],
         () =>
             model !== undefined &&
             viewGraph !== undefined &&
@@ -187,25 +201,42 @@ export const GraphView = ({
     );
     const panZoom = usePanZoom({ measure, onZoom: handleZoom });
 
-    // A restart draws new labels and links, which the legacy app gave the default sizes again.
+    // A restart draws new labels and links, which the legacy app gave the default sizes again; a
+    // restored view gets the sizes it had.
     const [styleRun, setStyleRun] = useState(layout.run);
     if (styleRun !== layout.run) {
         setStyleRun(layout.run);
-        setZoomStyle({});
+        setZoomStyle(restoredZoomStyle(restored));
     }
 
+    // A restored view shows its zoom again and is saved when it is left (ADR-011 A22).
+    const { restore: restoreZoom, getTransform } = panZoom;
+    useRestoreZoom(restored, restoreZoom);
+
+    useSaveView({
+        views: savedViews,
+        graph: viewGraph?.graph,
+        nodes: model?.nodes,
+        ended: layout.ended,
+        zoomStyle,
+        getTransform,
+        sizeMetric,
+        nodeSizesBasedOnMetrics,
+    });
+
     // G17: fit the graph in after the first end of every layout run (legacy firstSimulation); later
-    // ends, e.g. after dragging, leave the zoom alone.
+    // ends, e.g. after dragging, leave the zoom alone. A view restored at rest keeps its zoom.
     const { zoomToFit } = panZoom;
     const fittedRun = useRef<number>(undefined);
+    const keepZoom = isRestoredAtRest(restored);
     useEffect(() => {
         if (layout.ended && fittedRun.current !== layout.run) {
             fittedRun.current = layout.run;
-            if (autoZoom) {
+            if (autoZoom && !keepZoom) {
                 zoomToFit();
             }
         }
-    }, [layout.run, layout.ended, autoZoom, zoomToFit]);
+    }, [layout.run, layout.ended, autoZoom, keepZoom, zoomToFit]);
 
     // G13: switching full screen fits the graph in, also without "Auto zoom" (legacy settings
     // subscription, graph.component.ts:90-93).

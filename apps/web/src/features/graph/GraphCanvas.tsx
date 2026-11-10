@@ -7,6 +7,7 @@ import {
 } from '@qualivis/core';
 import {
     type CSSProperties,
+    memo,
     type MouseEvent as ReactMouseEvent,
     type ReactNode,
     type PointerEvent as ReactPointerEvent,
@@ -106,6 +107,78 @@ const zoomGroupStyle = ({ labelFontSize, linkStrokeWidth }: ZoomFrame) =>
 const fadeOpacity = (fade: GraphFade<VisualLink> | undefined, opaque: boolean | undefined) =>
     fade && (opaque ? 1 : graphSettings.fadeOpacity);
 
+type GraphContentProps = Pick<GraphCanvasProps, 'nodes' | 'links' | 'view' | 'settings'> &
+    Pick<GraphHighlight, 'selected' | 'fade'> & {
+        showCluster: boolean;
+        hiddenLabels?: GraphLabels['hidden'];
+        labelRef?: GraphLabels['ref'];
+        nodeEvents?: NodeEvents;
+    };
+
+/**
+ * Links and nodes of the graph. Memoized on props that pan and zoom leave alone, so that a wheel
+ * step or a pan move renders only the zoom group, not every node and link (P08-S09).
+ */
+const GraphContent = memo(
+    ({
+        nodes,
+        links,
+        view,
+        settings,
+        showCluster,
+        selected,
+        fade,
+        hiddenLabels,
+        labelRef,
+        nodeEvents,
+    }: GraphContentProps) => (
+        <>
+            <g
+                className="links"
+                stroke={graphSettings.linkColor}
+                strokeOpacity={graphSettings.linkOpacity}
+            >
+                {links.map((link, index) => (
+                    // Index as key: links keep their order, and the same pair can occur twice.
+                    <GraphLink
+                        key={index}
+                        link={link}
+                        view={view}
+                        opacity={fadeOpacity(fade, fade?.opaqueLinks.has(link))}
+                    />
+                ))}
+            </g>
+            <g className="nodes">
+                {nodes.map(node => {
+                    const paint = clusterPaint(node.cluster, view, showCluster);
+                    return (
+                        <GraphNode
+                            key={node.id}
+                            node={node}
+                            view={view}
+                            settings={settings}
+                            selected={selected?.has(node.id)}
+                            inlineStyle={{
+                                fill: fade?.indirectNodes.has(node.id) ? indirectFill : paint?.fill,
+                                stroke: paint?.stroke,
+                                opacity: fadeOpacity(fade, fade?.opaqueNodes.has(node.id)),
+                            }}
+                            label={
+                                hiddenLabels &&
+                                labelRef && {
+                                    hidden: hiddenLabels.has(node.id),
+                                    ref: labelRef(node.id),
+                                }
+                            }
+                            events={nodeEvents}
+                        />
+                    );
+                })}
+            </g>
+        </>
+    )
+);
+
 /** SVG of the graph at the current node positions; markup and classes as in the legacy app. */
 export const GraphCanvas = ({
     nodes,
@@ -163,49 +236,18 @@ export const GraphCanvas = ({
                     transform={transformAttribute(frame.transform)}
                     style={zoomGroupStyle(frame)}
                 >
-                    <g
-                        className="links"
-                        stroke={graphSettings.linkColor}
-                        strokeOpacity={graphSettings.linkOpacity}
-                    >
-                        {links.map((link, index) => (
-                            // Index as key: links keep their order, and the same pair can occur twice.
-                            <GraphLink
-                                key={index}
-                                link={link}
-                                view={view}
-                                opacity={fadeOpacity(fade, fade?.opaqueLinks.has(link))}
-                            />
-                        ))}
-                    </g>
-                    <g className="nodes">
-                        {nodes.map(node => {
-                            const paint = clusterPaint(node.cluster, view, showCluster);
-                            return (
-                                <GraphNode
-                                    key={node.id}
-                                    node={node}
-                                    view={view}
-                                    settings={settings}
-                                    selected={selected?.has(node.id)}
-                                    inlineStyle={{
-                                        fill: fade?.indirectNodes.has(node.id)
-                                            ? indirectFill
-                                            : paint?.fill,
-                                        stroke: paint?.stroke,
-                                        opacity: fadeOpacity(fade, fade?.opaqueNodes.has(node.id)),
-                                    }}
-                                    label={
-                                        labels && {
-                                            hidden: labels.hidden.has(node.id),
-                                            ref: labels.ref(node.id),
-                                        }
-                                    }
-                                    events={events.node}
-                                />
-                            );
-                        })}
-                    </g>
+                    <GraphContent
+                        nodes={nodes}
+                        links={links}
+                        view={view}
+                        settings={settings}
+                        showCluster={showCluster}
+                        selected={selected}
+                        fade={fade}
+                        hiddenLabels={labels?.hidden}
+                        labelRef={labels?.ref}
+                        nodeEvents={events.node}
+                    />
                 </g>
             </svg>
             {children}

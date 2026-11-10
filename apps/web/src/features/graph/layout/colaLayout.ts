@@ -7,7 +7,7 @@ import {
     EventType,
     Layout,
 } from 'webcola/dist/src/layout';
-import type { LayoutEngine, LayoutLink, LayoutNode } from './types';
+import type { LayoutEngine, LayoutLink, LayoutNode, LayoutRestore } from './types';
 
 export type ColaLayoutOptions = {
     nodes: LayoutNode[];
@@ -17,6 +17,8 @@ export type ColaLayoutOptions = {
     height: number;
     /** Order of the React methods in a component view (core `reactConstraints`). */
     constraints: readonly ReactConstraint[];
+    /** Positions of an earlier layout of the graph to go on from (ADR-011 A22). */
+    restore?: LayoutRestore;
 };
 
 type Listener = () => void;
@@ -62,6 +64,11 @@ class AnimatedColaLayout extends Layout {
         }
     }
 
+    /** Reports the end without a tick, for a layout restored at rest. */
+    reportEnd(): void {
+        this.trigger({ type: EventType.end, alpha: 0 });
+    }
+
     /** WebCola calls this when the layout starts or resumes after it came to rest. */
     protected override kick(): void {
         if (this.cancelled || this.frame !== undefined) {
@@ -98,6 +105,7 @@ export const createColaLayout = ({
     width,
     height,
     constraints,
+    restore,
 }: ColaLayoutOptions): LayoutEngine => {
     const layout = new AnimatedColaLayout();
     let startFrame: number | undefined;
@@ -116,8 +124,17 @@ export const createColaLayout = ({
                     .constraints([...constraints])
                     .avoidOverlaps(true)
                     .flowLayout('y', graphSettings.nodeGap)
-                    .symmetricDiffLinkLengths(40, 0.7)
-                    .start(40, 20, 20);
+                    .symmetricDiffLinkLengths(40, 0.7);
+                if (!restore) {
+                    layout.start(40, 20, 20);
+                    return;
+                }
+                // ADR-011 A22: no initial iterations, no packing of unconnected parts and no
+                // centring, so that the nodes stay where the earlier layout left them.
+                layout.handleDisconnected(false).start(0, 0, 0, 0, restore.running, false);
+                if (!restore.running) {
+                    layout.reportEnd();
+                }
             });
         },
         stop: () => {

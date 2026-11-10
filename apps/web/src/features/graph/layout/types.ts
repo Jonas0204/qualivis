@@ -14,6 +14,13 @@ export type LayoutNode = {
 
 export type LayoutLink = { source: LayoutNode; target: LayoutNode; inherits?: boolean };
 
+/**
+ * The nodes already have the positions of an earlier layout of the same graph (ADR-011 A22): the
+ * engine keeps them and skips the initial layout. `running` goes on animating from there,
+ * otherwise the layout reports its end at once and waits, e.g. for dragging.
+ */
+export type LayoutRestore = { running: boolean };
+
 export type LayoutEngine = {
     /** Starts the animation. */
     start(): void;

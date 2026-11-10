@@ -100,6 +100,7 @@ gekürzt. Die Zeilenangaben gelten unverändert, denn die Dateien wurden nur ver
 | `pnpm format` | formatieren und automatisch behebbare Lint-Fehler beheben |
 | `pnpm test:parity` | nur die Golden-Tests von Kern und Web |
 | `pnpm dev`, `pnpm build` | App starten bzw. bauen |
+| `pnpm start` | App bauen und den fertigen Build lokal starten (schneller als `pnpm dev`, z. B. für Vorführungen) |
 | `pnpm legacy:extract`, `pnpm legacy:serve` | alten Build entpacken und lokal starten, nur für Golden-Erfassung (`tools/legacy/README.md`) |
 | `node tools/golden/diff-json.mjs <erwartet.json> <ist.json> [n]` | zeigt die ersten n (Standard 60) Pfade, an denen zwei JSON-Dateien abweichen; Exit 0 gleich, 1 verschieden, 2 Aufruffehler |
 

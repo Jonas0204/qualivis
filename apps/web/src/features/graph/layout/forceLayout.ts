@@ -7,7 +7,7 @@ import {
     forceSimulation,
     type Simulation,
 } from 'd3-force';
-import type { LayoutEngine, LayoutLink, LayoutNode } from './types';
+import type { LayoutEngine, LayoutLink, LayoutNode, LayoutRestore } from './types';
 
 export type ForceLayoutOptions = {
     nodes: LayoutNode[];
@@ -17,6 +17,8 @@ export type ForceLayoutOptions = {
     height: number;
     /** Charge strength; by default it depends on the node count. */
     force?: number;
+    /** Positions of an earlier layout of the graph to go on from (ADR-011 A22). */
+    restore?: LayoutRestore;
 };
 
 export type ForceSimulation = Simulation<LayoutNode, LayoutLink>;
@@ -70,6 +72,15 @@ export const createForceLayout = (options: ForceLayoutOptions): LayoutEngine => 
 
     return {
         start: () => {
+            // A layout restored at rest ends at once with alpha 0, as after a normal end, so that
+            // dragging heats it up the same way (ADR-011 A22).
+            if (options.restore && !options.restore.running) {
+                simulation.alpha(0);
+                for (const listener of endListeners) {
+                    listener();
+                }
+                return;
+            }
             simulation.restart();
         },
         stop: () => {

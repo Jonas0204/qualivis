@@ -922,6 +922,51 @@ describe('GraphView legend and actions', () => {
         expect(select().textContent).toBe('Lines of Code');
     });
 
+    it('shows the app view again as it was left, without a new layout (ADR-011 A22)', () => {
+        const { createLayout, engines } = createFakeLayout();
+        const { container, getByRole, store } = drawView(createLayout);
+        finishZoom();
+        fireEvent.click(getByRole('button', { name: 'Zoom to 100%' }));
+        finishZoom();
+        expect(engines[0]?.options.restore).toBeUndefined();
+
+        act(() => store.set(componentIdAtom, app));
+        finishZoom();
+        expect(engines.at(-1)?.options.restore).toBeUndefined();
+        fireEvent.click(getByRole('button', { name: 'Back to app graph' }));
+
+        const engine = engines.at(-1);
+        expect(engine?.options.restore).toEqual({ running: false });
+        // The nodes start where the first layout left them, not from scratch.
+        expect(engine?.positions.map(({ x, y }) => [x, y])).toEqual(
+            engines[0]?.options.nodes.map((_node, index) => [index * 100, 0])
+        );
+        finishZoom();
+        expect(zoomGroupTransform(container)).toBe('translate(-150,150) scale(1)');
+    });
+
+    it('lays a view out again for a new analysis and with another size metric', () => {
+        const { createLayout, engines } = createFakeLayout();
+        const { getByRole, store } = drawView(createLayout);
+        const leaveAndComeBack = () => {
+            act(() => store.set(componentIdAtom, app));
+            act(() => store.set(componentIdAtom, undefined));
+        };
+
+        act(() => store.set(analysisAtom, { ...store.get(analysisAtom) }));
+        leaveAndComeBack();
+        expect(engines.at(-1)?.options.restore).toEqual({ running: false });
+
+        act(() => store.set(analysisAtom, { ...store.get(analysisAtom) }));
+        expect(engines.at(-1)?.options.restore).toBeUndefined();
+
+        act(() => store.set(componentIdAtom, app));
+        fireEvent.click(getByRole('combobox', { name: 'Node size metric' }));
+        fireEvent.click(getByRole('option', { name: 'Cyclomatic Complexity' }));
+        act(() => store.set(componentIdAtom, undefined));
+        expect(engines.at(-1)?.options.restore).toBeUndefined();
+    });
+
     it('toggles full screen and fits the graph in, also without "Auto zoom"', () => {
         const { createLayout } = createFakeLayout();
         const { container, getByRole, store } = drawView(createLayout, {
