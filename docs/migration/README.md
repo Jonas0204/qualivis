@@ -42,7 +42,7 @@ Grundlagen und `STATUS.md`.
 | P03 | **erledigt** (M1, Teil 1): CI, `@qualivis/core` mit Golden G1; Karten entfernt |
 | P04 | **erledigt** (M1, Teil 2): Web-MVP, GitHub Pages; Karten entfernt |
 | P05 | **erledigt** (M2): Graph wie im Original; Karten entfernt |
-| P05.5 | eingeschoben (ADR-019, ohne Meilenstein): **erledigt** bis auf die Abnahme am echten Monorepo, [S08](phasen/P05.5-monorepo/S08-abnahme.md); übrige Karten entfernt |
+| P05.5 | eingeschoben (ADR-019, ohne Meilenstein): **erledigt**; Karten entfernt |
 | P06 | **erledigt** (M3): Panels, Auswahl, Drill-down, URL; Karten entfernt |
 | [P07-einstellungen-persistenz](phasen/P07-einstellungen-persistenz/README.md) | Einstellungen, Persistenz, Hinweise (M4) |
 | [P08-haertung](phasen/P08-haertung/README.md) | Typen, Worker, A11y, Sicherheit, Performance (M5) |

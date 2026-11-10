@@ -42,7 +42,7 @@ Erkenntnisse aus `STATUS.md` (Abweichungen, offene Punkte) einarbeiten, mit dem 
   Nachrichten `{ type: 'analyze', files }` → `{ type: 'progress', percent }` / `{ type: 'done', result }` /
   `{ type: 'error', message }`. `runAnalysis` nutzt den Worker, Fallback ohne Worker (Tests/jsdom).
   Der Monorepo-Weg (P05.5, `analyzeWorkspaceAsync` mit `ProjectFiles` und `appDir`) läuft ebenfalls
-  im Worker, samt Auswahl und Umschreiben; Messwerte aus P05.5-S08 als Ausgangswert (RI14).
+  im Worker, samt Auswahl und Umschreiben; Messwerte von `qualivis.info()` als Ausgangswert (RI14).
 - Kern nur im Worker laden → Haupt-Bundle deutlich kleiner (Spike: 1,72 MB gesamt). Ziel: Haupt-Chunk
   < 300 KB gzip (Ausgangswert nach P04: ein Chunk, 1,31 MB, gzip 329,7 kB; Vite warnt ab 500 kB).
   Ergebnis messen und notieren.
