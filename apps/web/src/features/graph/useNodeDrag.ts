@@ -15,6 +15,13 @@ export type NodeDrag = {
     onPointerDown: (node: LayoutNode, event: ReactPointerEvent<SVGGElement>) => void;
 };
 
+type RunningDrag = {
+    /** Stops following the pointer. */
+    stop: () => void;
+    /** Stops following the pointer and ends the drag without pinning the node. */
+    cancel: () => void;
+};
+
 /**
  * Drags nodes like d3-drag 1.x did in the legacy app (graph.component.ts:703-708, 1091-1120): the
  * node keeps its offset to the pointer, the engine reacts as in its legacy drag handler. The drag
@@ -25,9 +32,9 @@ export const useNodeDrag = ({
     getTransform,
     onDraggingChange,
 }: NodeDragOptions): NodeDrag => {
-    const stopRef = useRef<() => void>(undefined);
+    const runningRef = useRef<RunningDrag>(undefined);
 
-    useEffect(() => () => stopRef.current?.(), []);
+    useEffect(() => () => runningRef.current?.stop(), []);
 
     const onPointerDown = useCallback(
         (node: LayoutNode, event: ReactPointerEvent<SVGGElement>) => {
@@ -39,6 +46,10 @@ export const useNodeDrag = ({
             // No pan: d3-drag stops the mouse down at the node.
             event.stopPropagation();
 
+            // A second finger or pen on another node ends the running drag first. Otherwise its
+            // node would stay fixed and clicks would no longer fade.
+            runningRef.current?.cancel();
+
             const view = svg.ownerDocument.defaultView ?? window;
             const start = { x: event.clientX, y: event.clientY };
             const grabbed = invert(getTransform(), svgPoint(svg, event));
@@ -46,8 +57,18 @@ export const useNodeDrag = ({
             const offset = { x: (node.x ?? 0) - grabbed.x, y: (node.y ?? 0) - grabbed.y };
             let engine: LayoutEngine | undefined;
 
-            stopRef.current?.();
-            stopRef.current = trackPointer(view, event.pointerId, {
+            /** Ends the drag; false if it never started, so the pointer down stays a click. */
+            const finish = (pin: boolean): boolean => {
+                runningRef.current = undefined;
+                if (!engine) {
+                    return false;
+                }
+                engine.dragEnd(node, { pin });
+                onDraggingChange?.(false);
+                return true;
+            };
+
+            const stop = trackPointer(view, event.pointerId, {
                 move: move => {
                     if (!engine) {
                         if (move.clientX === start.x && move.clientY === start.y) {
@@ -64,16 +85,19 @@ export const useNodeDrag = ({
                     engine.drag(node, { x: pointer.x + offset.x, y: pointer.y + offset.y });
                 },
                 end: up => {
-                    stopRef.current = undefined;
-                    if (!engine) {
-                        return;
-                    }
                     // Shift on release pins the node in the force layout.
-                    engine.dragEnd(node, { pin: up.type === 'pointerup' && up.shiftKey });
-                    onDraggingChange?.(false);
-                    suppressNextClick(view);
+                    if (finish(up.type === 'pointerup' && up.shiftKey)) {
+                        suppressNextClick(view);
+                    }
                 },
             });
+            runningRef.current = {
+                stop,
+                cancel: () => {
+                    stop();
+                    finish(false);
+                },
+            };
         },
         [getEngine, getTransform, onDraggingChange]
     );

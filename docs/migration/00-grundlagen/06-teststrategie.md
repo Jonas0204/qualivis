@@ -180,7 +180,7 @@ Review begründet, nie blind aktualisiert (`-u` nur nach Prüfung).
 | Befehl | Inhalt |
 |---|---|
 | `pnpm test` | alle Vitest-Projekte (Unit, Golden, Komponenten) |
-| `pnpm test:parity` | nur Golden-Tests (`vitest run --project core test/golden`) |
+| `pnpm test:parity` | nur Golden-Tests von Kern und Web (`vitest run --project core --project web golden`) |
 | `pnpm exec vitest --project web` | nur Web-Tests (Entwicklung, Watch-Modus) |
 | `pnpm e2e` | Playwright-Tests (ab P09; braucht laufenden `pnpm preview`) |
 

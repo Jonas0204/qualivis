@@ -1,5 +1,5 @@
 /* .mat-tooltip of Angular Material 8: style reference §1, docs/migration/01-referenz-altsystem/
-   04-stil-referenz.md (--qv-tooltip-bg, 10 px white). */
+   04-stil-referenz.md (--qv-tooltip-bg, --qv-tooltip-text, 10 px). */
 .tooltip {
     position: fixed;
     z-index: 1000;
@@ -8,7 +8,7 @@
     overflow: hidden;
     border-radius: 4px;
     background: var(--qv-tooltip-bg);
-    color: #ffffff;
+    color: var(--qv-tooltip-text);
     font-family: var(--qv-font);
     font-size: 10px;
     text-overflow: ellipsis;

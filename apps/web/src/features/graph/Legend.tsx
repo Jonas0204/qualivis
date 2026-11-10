@@ -1,4 +1,4 @@
-import type { View } from '@qualivis/core';
+import { graphSettings, type View } from '@qualivis/core';
 import { useContext, useId } from 'react';
 import { GraphDefsContext } from './graphDefsContext';
 
@@ -49,9 +49,9 @@ export const Legend = ({ view }: LegendProps) => {
     const opacity = component ? 1 : 0.5;
     const link = (dashed: boolean) => (
         <line
-            strokeWidth={0.8}
-            stroke="#999"
-            strokeOpacity={0.6}
+            strokeWidth={graphSettings.linkStrokeWidth}
+            stroke={graphSettings.linkColor}
+            strokeOpacity={graphSettings.linkOpacity}
             markerEnd={`url(#${ids.arrowhead})`}
             x1={1}
             y1={12}

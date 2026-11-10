@@ -142,6 +142,27 @@ describe('useNodeDrag', () => {
         expect(onSvgPointerDown).toHaveBeenCalledTimes(2);
     });
 
+    it('ends the running drag without pinning when a second pointer grabs a node', () => {
+        const { calls, group, onDraggingChange } = setup();
+
+        down(group);
+        move(50, 100);
+        // A second finger touches a node while the first one still drags.
+        down(group, { pointerId: 2, clientX: 40, clientY: 80, shiftKey: true });
+        expect(calls).toEqual(['dragStart a', 'drag a 15 25', 'dragEnd a false']);
+        expect(onDraggingChange.mock.calls).toEqual([[true], [false]]);
+
+        // The first finger is no longer followed; the second one drags.
+        move(70, 100);
+        fireEvent.pointerMove(window, { pointerId: 2, clientX: 60, clientY: 80 });
+        fireEvent.pointerUp(window, { pointerId: 2, clientX: 60, clientY: 80 });
+        up();
+
+        // Pointer (40, 80) is graph point (15, 30); the node at (5, 5) keeps the offset (-10, -25).
+        expect(calls.slice(3)).toEqual(['dragStart a', 'drag a 15 5', 'dragEnd a false']);
+        expect(onDraggingChange.mock.calls).toEqual([[true], [false], [true], [false]]);
+    });
+
     it('does nothing without a running engine', () => {
         const { group, onDraggingChange } = setup({ getEngine: () => undefined });
 
