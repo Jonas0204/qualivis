@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
     easeCubicInOut,
+    easeOut,
     fitTransform,
     gripTransform,
     identityTransform,
@@ -202,5 +203,16 @@ describe('easeCubicInOut and interpolateTransform', () => {
             x: 50,
             y: -25,
         });
+    });
+});
+
+describe('easeOut', () => {
+    it('follows CSS ease-out, cubic-bezier(0, 0, 0.58, 1)', () => {
+        expect(easeOut(0)).toBe(0);
+        expect(easeOut(1)).toBe(1);
+        // Curve parameter 0.5: x = 0.375 · 0.58 + 0.125 = 0.3425, y = 0.5.
+        expect(easeOut(0.3425)).toBeCloseTo(0.5, 6);
+        expect(easeOut(0.25)).toBeGreaterThan(0.25);
+        expect(easeOut(0.6)).toBeLessThan(easeOut(0.7));
     });
 });

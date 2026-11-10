@@ -279,12 +279,15 @@ describe('GraphView', () => {
         const linkStyle = () => zoomGroupStyle()?.getPropertyValue('--qv-link-stroke-width');
 
         // 2 ** (600 * 0.002) = 2.297…: labels 20 / k px, links 1.6 / k.
+        // The wheel transition eases them for 100 ms (useZoomTransition).
         fireEvent.wheel(svg, { deltaY: -600, deltaMode: 0 });
+        finishZoom();
         const k = 2 ** 1.2;
         expect(labelStyle()).toBe(`${20 / k}px`);
         expect(linkStyle()).toBe(`${1.6 / k}`);
 
         fireEvent.wheel(svg, { deltaY: 600, deltaMode: 0 });
+        finishZoom();
         expect(getByRole('button', { name: 'Zoom to 100%' }).textContent).toBe('100%');
         expect(labelStyle()).toBe(`${20 / k}px`);
         expect(linkStyle()).toBe(`${1.6 / k}`);

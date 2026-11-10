@@ -99,6 +99,12 @@ Karten oder Grundlagen oder wird gestrichen; Erledigtes steht in der Git-Histori
   nicht hat: sichtbar, solange das Layout läuft (auch wieder nach dem Ziehen eines Knotens), beendet
   es wie ein normales Ende (`LayoutEngine.halt`), also mit Zoom to fit beim ersten Ende eines Laufs
   und neuer Messung der Beschriftungen. Ziehen startet das Layout wieder wie bisher.
+  Außerdem flackerte bei großen Graphen in Chrome beim Zoomen mit dem Mausrad alles, auch die
+  Kopfleiste (vom Nutzer bestätigt: ohne die CSS-Übergänge war es weg). Den Übergang von 0,1 s
+  (ease-out) für Transform, Schriftgröße und Linienbreite animiert jetzt `useZoomTransition` per
+  `requestAnimationFrame`, nicht mehr CSS. Sichtbare Abweichung: Die Linienbreite gleitet nur noch
+  beim Zoomen mit dem Mausrad, nicht mehr bei Zoom to fit und Zwei-Finger-Zoom (dort ändert sie sich
+  ohnehin mit jedem Frame).
 - **Offen: escomplex bricht bei neuerer Syntax ab (10.11.2026):** Sein Code-Generator, den es nur
   für Schleifenköpfe, Parameter, berechnete Schlüssel und `extends` aufruft, kennt viele Babel- und
   TS-Knoten nicht. Beispiele: `for (const m of s.matchAll(/x/g))` (`reading 'pattern'`),

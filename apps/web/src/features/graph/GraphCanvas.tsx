@@ -12,14 +12,17 @@ import {
     type PointerEvent as ReactPointerEvent,
     type Ref,
     type RefCallback,
+    useCallback,
     useId,
     useMemo,
+    useRef,
 } from 'react';
 import { GraphDefs } from './GraphDefs';
 import { GraphLink } from './GraphLink';
 import { GraphNode, type GraphNodeSettings, type NodeEvents } from './GraphNode';
 import { GraphDefsContext } from './graphDefsContext';
 import type { GraphFade } from './useFade';
+import { useZoomTransition, type ZoomFrame } from './useZoomTransition';
 import {
     identityTransform,
     transformAttribute,
@@ -30,7 +33,7 @@ import {
 /** Pan and zoom state (usePanZoom) and the label and link sizes it set (nextZoomStyle). */
 export type GraphZoom = ZoomStyle & {
     transform: ZoomTransform;
-    /** Wheel zooming eases transform and label size (legacy addTransition). */
+    /** Wheel zooming eases transform, label size and link width (useZoomTransition). */
     transition?: boolean;
 };
 
@@ -83,14 +86,20 @@ const unscaled: GraphZoom = { transform: identityTransform };
 const indirectFill = 'var(--qv-graph-indirect-fill)';
 
 /**
- * Label size and link width set by zooming as CSS variables of the zoom group (graph.css): one
- * style change instead of one per label and link, so zooming does not render every node again.
- * Without a size from zooming the defaults (14 px, 0.8).
+ * Transform and the label size and link width set by zooming, without a size from zooming the
+ * defaults (14 px, 0.8). The sizes are CSS variables of the zoom group (graph.css): one style
+ * change instead of one per label and link, so zooming does not render every node again.
  */
-const zoomGroupStyle = (zoom: GraphZoom) =>
+const zoomFrame = (zoom: GraphZoom): ZoomFrame => ({
+    transform: zoom.transform,
+    labelFontSize: zoom.labelFontSize ?? graphSettings.normalTextSize,
+    linkStrokeWidth: zoom.linkStrokeWidth ?? graphSettings.linkStrokeWidth,
+});
+
+const zoomGroupStyle = ({ labelFontSize, linkStrokeWidth }: ZoomFrame) =>
     ({
-        '--qv-label-font-size': `${zoom.labelFontSize ?? graphSettings.normalTextSize}px`,
-        '--qv-link-stroke-width': zoom.linkStrokeWidth ?? graphSettings.linkStrokeWidth,
+        '--qv-label-font-size': `${labelFontSize}px`,
+        '--qv-link-stroke-width': linkStrokeWidth,
     }) as CSSProperties;
 
 /** Opacity of a node or link while faded; undefined while nothing is faded. */
@@ -120,6 +129,20 @@ export const GraphCanvas = ({
         [id]
     );
     const { fade, selected } = highlight;
+    const frame = zoomFrame(zoom);
+    const groupRef = useRef<SVGGElement>(null);
+    useZoomTransition(groupRef, frame, zoom.transition ?? false);
+    const setGroup = useCallback(
+        (group: SVGGElement | null) => {
+            groupRef.current = group;
+            if (typeof zoomGroupRef === 'function') {
+                zoomGroupRef(group);
+            } else if (zoomGroupRef) {
+                zoomGroupRef.current = group;
+            }
+        },
+        [zoomGroupRef]
+    );
 
     return (
         <GraphDefsContext value={defIds}>
@@ -135,10 +158,10 @@ export const GraphCanvas = ({
                 <GraphDefs />
                 {/* legacy #zoomGroup */}
                 <g
-                    ref={zoomGroupRef}
-                    className={zoom.transition ? 'zoom-group zoom-transition' : 'zoom-group'}
-                    transform={transformAttribute(zoom.transform)}
-                    style={zoomGroupStyle(zoom)}
+                    ref={setGroup}
+                    className="zoom-group"
+                    transform={transformAttribute(frame.transform)}
+                    style={zoomGroupStyle(frame)}
                 >
                     <g
                         className="links"
