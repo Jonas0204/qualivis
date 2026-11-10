@@ -1,6 +1,7 @@
 import { type ReactConstraint, reactConstraints } from '@qualivis/core';
 import type { ForceCenter, ForceCollide, ForceLink, ForceManyBody } from 'd3-force';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { perfSnapshot, resetPerfStats } from '../../../lib/perfStats';
 import { createForceLayout, createForceSimulation, type ForceLayoutOptions } from './forceLayout';
 import type { LayoutEngine, LayoutLink, LayoutNode } from './types';
 
@@ -24,6 +25,9 @@ const chargeOf = (options: ForceLayoutOptions) => {
 };
 
 const positions = (nodes: LayoutNode[]) => nodes.map(({ x, y }) => [x, y]);
+
+/** Ticks of the simulation since the last reset of the timings. */
+const tickCount = () => perfSnapshot().durations['layout.tick']?.count ?? 0;
 
 type Run = { engine: LayoutEngine; ticks: () => number; ends: () => number };
 
@@ -79,24 +83,55 @@ describe.each([
 ])('createForceLayout, %s', (_name, flowOption) => {
     beforeEach(() => {
         vi.useFakeTimers({ toFake: ['requestAnimationFrame', 'cancelAnimationFrame'] });
+        resetPerfStats();
     });
     afterEach(() => {
         vi.useRealTimers();
+        vi.restoreAllMocks();
     });
 
     const layoutOptions = (count: number) => ({ ...chain(count), flow: flowOption });
 
-    it('ticks once per frame and reports the end once', () => {
+    it('ticks once in the first frame, 300 times in all, and reports the end once', () => {
         const run = startLayout(layoutOptions(3));
 
         expect(run.ticks()).toBe(0);
         vi.advanceTimersToNextFrame();
         expect(run.ticks()).toBe(1);
+        expect(tickCount()).toBe(1);
         vi.runAllTimers();
 
-        expect(run.ticks()).toBe(300);
+        expect(tickCount()).toBe(300);
         expect(run.ends()).toBe(1);
         expect(vi.getTimerCount()).toBe(0);
+    });
+
+    it('ticks 240 times per second, several times in a frame and once per frame to listeners', () => {
+        const run = startLayout(layoutOptions(3));
+
+        // The fake animation frames come every 16 ms, as on a 60 Hz display.
+        vi.advanceTimersByTime(1000);
+
+        expect(tickCount()).toBeGreaterThanOrEqual(230);
+        expect(tickCount()).toBeLessThanOrEqual(240);
+        expect(run.ticks()).toBeLessThan(65);
+        run.engine.stop();
+    });
+
+    it('stops the ticks of a frame when they take longer than the budget', () => {
+        let clock = 0;
+        vi.spyOn(performance, 'now').mockImplementation(() => {
+            clock += 10;
+            return clock;
+        });
+        const run = startLayout(layoutOptions(3));
+
+        for (let frame = 0; frame < 10; frame++) {
+            vi.advanceTimersToNextFrame();
+        }
+
+        expect(tickCount()).toBe(10);
+        run.engine.stop();
     });
 
     it('gives the same positions for the same input', () => {
@@ -203,6 +238,34 @@ describe.each([
 
         expect(removed).not.toHaveBeenCalled();
         expect(kept).toHaveBeenCalledTimes(1);
+    });
+});
+
+describe('createForceLayout on a fast display', () => {
+    afterEach(() => {
+        vi.unstubAllGlobals();
+        resetPerfStats();
+    });
+
+    it('moves the nodes in at most 120 frames per second, with 240 ticks per second', () => {
+        const frames: FrameRequestCallback[] = [];
+        vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback) =>
+            frames.push(callback)
+        );
+        vi.stubGlobal('cancelAnimationFrame', () => undefined);
+        resetPerfStats();
+        const run = startLayout(chain(3));
+
+        // A 240 Hz display: 240 frames in one second.
+        for (let index = 0; index < 240; index++) {
+            frames.shift()?.(index * (1000 / 240));
+        }
+
+        expect(run.ticks()).toBeGreaterThanOrEqual(115);
+        expect(run.ticks()).toBeLessThanOrEqual(121);
+        expect(tickCount()).toBeGreaterThanOrEqual(230);
+        expect(tickCount()).toBeLessThanOrEqual(240);
+        run.engine.stop();
     });
 });
 

@@ -108,6 +108,12 @@ Erkenntnisse aus `STATUS.md` (Abweichungen, offene Punkte) einarbeiten, mit dem 
     Kanten aus 32 Bereichen: Schritt 1,1 ms statt 69,5 ms, kein Start mehr (WebCola 3,1 s), Ruhe
     nach 300 Schritten (WebCola nach 860 noch nicht), keine Kante gegen den Fluss, keine
     Überlappung, Kreuzungen 98.500 statt 102.400.
+  - Takt des Layouts (Nutzer, 10.11.2026): 240 Ticks pro Sekunde auf jedem Bildschirm, höchstens
+    120 Bilder pro Sekunde, höchstens 6 ms Rechenzeit pro Bild. Das Layout ist nach etwa 1,25 s
+    fertig; im Altsystem lief ein Tick pro Bild, also 5 s bei 60 Hz und 2,5 s bei 120 Hz.
+  - `qualivis.info()` nennt keine Datei-, Pfad- oder Komponentennamen mehr, und
+    `qualivis.info().export()` speichert das Ergebnis als JSON-Datei. Bei langen Frames zeigt es
+    auch die Zeit für Style, Layout und Paint (`styleAndLayoutMs`).
 - **Offen:**
   - d3-force noch schneller (gemessen 10.11.2026 in Node, 300 Schritte): Die Kollision braucht
     60 % der Schrittzeit, die Abstoßung 38 %, Kanten, Zentrieren und die Schleife zusammen unter
