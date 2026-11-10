@@ -151,6 +151,34 @@ describe('createColaLayout', () => {
         expect(vi.getTimerCount()).toBe(0);
     });
 
+    it('halts in the next frame where the nodes are and runs again when a node is dragged', () => {
+        const { nodes, links, b } = chain();
+        const run = startLayout(nodes, links);
+        vi.advanceTimersToNextFrame();
+        vi.advanceTimersToNextFrame();
+        const ticks = run.ticks();
+        const halted = positions(nodes);
+
+        run.engine.halt();
+        vi.runAllTimers();
+
+        expect(run.ticks()).toBe(ticks);
+        expect(run.ends()).toBe(1);
+        expect(positions(nodes)).toEqual(halted);
+        expect(vi.getTimerCount()).toBe(0);
+
+        // At rest, halting does nothing.
+        run.engine.halt();
+        vi.runAllTimers();
+        expect(run.ends()).toBe(1);
+
+        run.engine.dragStart(b);
+        run.engine.drag(b, { x: 500, y: 450 });
+        vi.advanceTimersToNextFrame();
+        expect(run.ticks()).toBeGreaterThan(ticks);
+        run.engine.stop();
+    });
+
     it('moves a dragged node and runs the layout again', () => {
         const { nodes, links, b } = chain();
         const run = startLayout(nodes, links);

@@ -19,6 +19,12 @@ export type LayoutEngine = {
     start(): void;
     /** Stops the animation and releases the listeners. */
     stop(): void;
+    /**
+     * Ends the running animation as if the layout had come to rest: the nodes stay where they are
+     * and the end listeners run. Dragging starts it again, as after a normal end. Does nothing
+     * when the layout is at rest.
+     */
+    halt(): void;
     /** Returns a function that removes the listener. */
     onTick(listener: () => void): () => void;
     onEnd(listener: () => void): () => void;

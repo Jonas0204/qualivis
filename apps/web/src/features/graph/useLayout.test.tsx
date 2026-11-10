@@ -7,9 +7,13 @@ import { type FrameHandler, useLayout } from './useLayout';
 const createEngine = () => {
     const ticks = new Set<() => void>();
     const ends = new Set<() => void>();
+    let halted = 0;
     const engine: LayoutEngine = {
         start: () => undefined,
         stop: () => undefined,
+        halt: () => {
+            halted++;
+        },
         onTick: listener => {
             ticks.add(listener);
             return () => ticks.delete(listener);
@@ -32,7 +36,7 @@ const createEngine = () => {
             listener();
         }
     };
-    return { engine, tick, end };
+    return { engine, tick, end, halts: () => halted };
 };
 
 const nextFrame = () => {
@@ -59,6 +63,23 @@ describe('useLayout', () => {
         nextFrame();
 
         expect(result.current.version).toBe(before + 1);
+    });
+
+    it('runs from the first tick to the end, again after dragging, and halts the engine', () => {
+        const { engine, tick, end, halts } = createEngine();
+        const { result } = renderHook(() => useLayout(() => engine, []));
+        expect(result.current.running).toBe(false);
+
+        act(() => tick());
+        expect(result.current.running).toBe(true);
+
+        act(() => result.current.halt());
+        expect(halts()).toBe(1);
+        act(() => end());
+        expect(result.current).toMatchObject({ running: false, ended: true, ends: 1 });
+
+        act(() => tick());
+        expect(result.current.running).toBe(true);
     });
 
     it('leaves the frames to the frame handler and renders only when it cannot move the graph', () => {

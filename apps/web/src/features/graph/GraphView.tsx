@@ -320,6 +320,7 @@ export const GraphView = ({
                     view={viewGraph.view}
                     // N13: until the URL in P06-S06 only the component id goes.
                     onBack={componentId === undefined ? undefined : () => setComponentId(undefined)}
+                    layout={{ running: layout.running, onStop: layout.halt }}
                     cluster={{
                         hasCluster: model?.hasCluster ?? false,
                         show: showCluster,

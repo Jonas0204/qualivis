@@ -95,6 +95,10 @@ Karten oder Grundlagen oder wird gestrichen; Erledigtes steht in der Git-Histori
   Dev-Modus: Frame ohne WebCola 1,8 ms statt etwa 70 ms, Zoomschritt 4–24 ms statt etwa 70 ms. Offen
   für S09: WebCola selbst braucht dabei etwa 38 ms pro Schritt und kam im Testgraphen auch nach
   1.500 Schritten nicht zur Ruhe (vorher genauso); Optionen: Layout im Worker, Schrittgrenze.
+  Dazu auf Wunsch des Nutzers ein Knopf „Stop layout“ links über dem Graphen, den das Altsystem
+  nicht hat: sichtbar, solange das Layout läuft (auch wieder nach dem Ziehen eines Knotens), beendet
+  es wie ein normales Ende (`LayoutEngine.halt`), also mit Zoom to fit beim ersten Ende eines Laufs
+  und neuer Messung der Beschriftungen. Ziehen startet das Layout wieder wie bisher.
 - **Offen: escomplex bricht bei neuerer Syntax ab (10.11.2026):** Sein Code-Generator, den es nur
   für Schleifenköpfe, Parameter, berechnete Schlüssel und `extends` aufruft, kennt viele Babel- und
   TS-Knoten nicht. Beispiele: `for (const m of s.matchAll(/x/g))` (`reading 'pattern'`),

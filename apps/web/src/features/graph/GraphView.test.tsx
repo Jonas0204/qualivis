@@ -59,6 +59,9 @@ const createFakeLayout = () => {
             stop: () => {
                 record.stopped = true;
             },
+            halt: () => {
+                record.calls.push('halt');
+            },
             onTick: () => () => undefined,
             onEnd: listener => {
                 endListeners.add(listener);
@@ -146,6 +149,7 @@ describe('GraphView', () => {
             return {
                 start: () => undefined,
                 stop: () => undefined,
+                halt: () => undefined,
                 onTick: listener => {
                     ticks.add(listener);
                     return () => ticks.delete(listener);
@@ -170,6 +174,51 @@ describe('GraphView', () => {
         expect(container.querySelector('g.zoom-group g.links line')?.getAttribute('x1')).not.toBe(
             null
         );
+    });
+
+    it('stops a running layout with the stop button and fits the graph in', () => {
+        const ticks = new Set<() => void>();
+        const ends = new Set<() => void>();
+        const notify = (listeners: Set<() => void>) => {
+            act(() => {
+                for (const listener of listeners) {
+                    listener();
+                }
+                vi.advanceTimersByTime(20);
+            });
+        };
+        const halt = vi.fn(() => notify(ends));
+        const createLayout: LayoutFactory = (_cola, { nodes }) => ({
+            start: () => {
+                nodes.forEach((node, index) => {
+                    node.x = index * 100;
+                    node.y = 0;
+                });
+            },
+            stop: () => undefined,
+            halt,
+            onTick: listener => {
+                ticks.add(listener);
+                return () => ticks.delete(listener);
+            },
+            onEnd: listener => {
+                ends.add(listener);
+                return () => ends.delete(listener);
+            },
+            dragStart: () => undefined,
+            drag: () => undefined,
+            dragEnd: () => undefined,
+        });
+        const { container, getByRole, queryByRole } = drawView(createLayout);
+        expect(queryByRole('button', { name: 'Stop layout' })).toBeNull();
+
+        notify(ticks);
+        fireEvent.click(getByRole('button', { name: 'Stop layout' }));
+        finishZoom();
+
+        expect(halt).toHaveBeenCalledTimes(1);
+        expect(queryByRole('button', { name: 'Stop layout' })).toBeNull();
+        expect(zoomGroupTransform(container)).toBe('translate(25,150) scale(0.5)');
     });
 
     it('zooms to 100 %, centred on the graph, and back to fit with the buttons', () => {

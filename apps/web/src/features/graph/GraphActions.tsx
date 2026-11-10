@@ -18,6 +18,8 @@ type GraphActionsProps = {
     view: View;
     /** N13: shown in the component view when given. */
     onBack?: () => void;
+    /** Stop button, shown while the layout runs (not in the legacy app, P08-S09). */
+    layout: { running: boolean; onStop: () => void };
     /** G15: the cluster button is shown in the component view when the graph has clusters. */
     cluster: { hasCluster: boolean; show: boolean; onToggle: () => void };
     sizeMetric: { value: string; onChange: (metric: string) => void };
@@ -31,12 +33,13 @@ type GraphActionsProps = {
 const graphButtonColor = 'var(--qv-graph-button)';
 
 /**
- * Action bars above the graph (legacy graph.component.html:165-218): back on the left; cluster,
- * size metric, zoom and full screen on the right.
+ * Action bars above the graph (legacy graph.component.html:165-218): back and stopping the layout
+ * on the left; cluster, size metric, zoom and full screen on the right.
  */
 export const GraphActions = ({
     view,
     onBack,
+    layout,
     cluster,
     sizeMetric,
     zoom,
@@ -52,6 +55,13 @@ export const GraphActions = ({
                     <Tooltip text="Back to app graph">
                         <IconButton aria-label="Back to app graph" onClick={onBack}>
                             <Icon name="arrow_back" />
+                        </IconButton>
+                    </Tooltip>
+                )}
+                {layout.running && (
+                    <Tooltip text="Stop layout">
+                        <IconButton aria-label="Stop layout" onClick={layout.onStop}>
+                            <Icon name="stop" />
                         </IconButton>
                     </Tooltip>
                 )}

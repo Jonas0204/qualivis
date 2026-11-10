@@ -77,6 +77,17 @@ export const createForceLayout = (options: ForceLayoutOptions): LayoutEngine => 
             tickListeners.clear();
             endListeners.clear();
         },
+        // Without a further tick, which would still move the nodes by their velocity. Alpha 0, as
+        // after a normal end, so that dragging heats the simulation up the same way.
+        halt: () => {
+            if (simulation.alpha() < simulation.alphaMin()) {
+                return;
+            }
+            simulation.stop().alpha(0);
+            for (const listener of endListeners) {
+                listener();
+            }
+        },
         onTick: listener => {
             tickListeners.add(listener);
             return () => tickListeners.delete(listener);

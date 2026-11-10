@@ -127,6 +127,11 @@ export const createColaLayout = ({
             }
             layout.cancel();
         },
+        // WebCola's own stop sets alpha to 0, so that the next frame reports the end without
+        // moving the nodes (webcola/dist/src/layout.js, tick and alpha).
+        halt: () => {
+            layout.stop();
+        },
         onTick: listener => layout.addListener('tick', listener),
         onEnd: listener => layout.addListener('end', listener),
         dragStart: node => {

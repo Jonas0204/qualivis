@@ -13,11 +13,15 @@ export type LayoutState = {
     ended: boolean;
     /** Counts the ends the engines reported, also those after dragging. */
     ends: number;
+    /** True while the engine ticks: from its first tick (also after dragging) to its end. */
+    running: boolean;
 };
 
 export type Layout = LayoutState & {
     /** The running engine (for dragging); undefined without one. */
     getEngine: () => LayoutEngine | undefined;
+    /** Ends the running animation where the nodes are (LayoutEngine.halt). */
+    halt: () => void;
 };
 
 /**
@@ -41,6 +45,7 @@ export const useLayout = (
         run: 0,
         ended: false,
         ends: 0,
+        running: false,
     });
     const engineRef = useRef<LayoutEngine>(undefined);
     const onFrameRef = useRef(onFrame);
@@ -57,7 +62,12 @@ export const useLayout = (
         }
 
         let frame: number | undefined;
+        let running = false;
         const offTick = engine.onTick(() => {
+            if (!running) {
+                running = true;
+                setState(current => ({ ...current, running: true }));
+            }
             frame ??= requestAnimationFrame(() => {
                 frame = undefined;
                 if (!onFrameRef.current?.()) {
@@ -66,15 +76,17 @@ export const useLayout = (
             });
         });
         const offEnd = engine.onEnd(() => {
+            running = false;
             setState(current => ({
                 ...current,
                 version: current.version + 1,
                 ended: true,
                 ends: current.ends + 1,
+                running: false,
             }));
         });
 
-        setState(current => ({ ...current, run: current.run + 1, ended: false }));
+        setState(current => ({ ...current, run: current.run + 1, ended: false, running: false }));
         engineRef.current = engine;
         engine.start();
 
@@ -90,6 +102,7 @@ export const useLayout = (
     }, deps);
 
     const getEngine = useCallback(() => engineRef.current, []);
+    const halt = useCallback(() => engineRef.current?.halt(), []);
 
-    return { ...state, getEngine };
+    return { ...state, getEngine, halt };
 };
