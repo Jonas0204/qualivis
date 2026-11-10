@@ -9,7 +9,7 @@ Bestätigung durch den Nutzer. Vor dem PR einer Phase werden ihre Zeilen zu eine
 |---|---|---|
 | M0 Fundament | ☑ (08.11.2026) | 08.11.2026 (Merge von PR #1) |
 | M1 Erstes Produkt | ☑ (09.11.2026) | 09.11.2026 (Nutzer, Sichtvergleich mit dem Altsystem) |
-| M2 Graph-Parität | ☐ | |
+| M2 Graph-Parität | ☑ (09.11.2026) | 09.11.2026 (Nutzer, Sichtvergleich mit dem Altsystem) |
 | M3 Analyse-UI | ☐ | |
 | M4 Funktionsparität | ☐ | |
 | M5 Härtung | ☐ | |
@@ -25,8 +25,9 @@ Ablauf: README, „Branches und Pull Requests“. Ziel aller PRs: `rewrite/react
 |---|---|---|---|
 | P01 Fundament + P02 Golden-Infrastruktur | `rewrite/m0-fundament` | [#1](https://github.com/Jonas0204/qualivis/pull/1) | ☑ |
 | P03 Kern-MVP | `rewrite/p03-kern-mvp` | | ☑ |
-| P04 Web-MVP | `rewrite/p04-web-mvp` | | ◐ |
-| P05 Graph-Parität | `rewrite/p05-graph-paritaet` | | ☐ |
+| P04 Web-MVP | `rewrite/p04-web-mvp` | [#2](https://github.com/Jonas0204/qualivis/pull/2) | ☑ |
+| P05 Graph-Parität | `rewrite/p05-graph-paritaet` | | ☑ |
+| P05.5 Monorepo-Unterstützung (eingeschoben, ADR-019) | `rewrite/p05.5-monorepo` | | ☐ |
 | P06 Panels, Navigation | `rewrite/p06-panels-navigation` | | ☐ |
 | P07 Einstellungen, Persistenz | `rewrite/p07-einstellungen-persistenz` | | ☐ |
 | P08 Härtung | `rewrite/p08-haertung` | | ☐ |
@@ -40,19 +41,16 @@ Ablauf: README, „Branches und Pull Requests“. Ziel aller PRs: `rewrite/react
 |---|---|---|---|---|
 | P01, P02 | M0: Fundament, Golden-Infrastruktur | ☑ | 08.11.2026 | Commit `5647a06`, PR #1 |
 | P03 | M1 (Teil 1): CI, Kern `@qualivis/core`, Golden G1 | ☑ | 08.11.2026 | Commits `5e54b41`–`1bd11f9` |
-| P04 | M1 (Teil 2): Web-MVP, GitHub Pages | ◐ | 09.11.2026 | Commits `5ac8732`–`fbdc621`; M1 bestätigt. Offen: `pnpm dev` auf macOS (Nutzer). Nach dem Merge des P04-PR (Nutzer): Pages-Workflow läuft durch (Environment-Freigabe für `rewrite/react`), die Seite lädt ohne 404 und ohne fremde Hosts, Drop von `mini` → 8 Knoten, 7 Pfeile, `origin/gh-pages` bleibt `5f0155e`. Danach ☑ und PR-Link in der Tabelle „Phasen“ (beim Start von P05) |
-| P05-S01 | Regeln: Größe, Icons | ☐ | | |
-| P05-S02 | Regeln: Geometrie, Farben | ☐ | | |
-| P05-S03 | Regeln: Cluster, Constraints | ☐ | | |
-| P05-S04 | Golden G2 | ☐ | | |
-| P05-S05 | Knoten-/Kanten-Rendering | ☐ | | |
-| P05-S06 | WebCola-Adapter | ☐ | | |
-| P05-S07 | Zoom & Pan | ☐ | | |
-| P05-S08 | Knoten ziehen | ☐ | | |
-| P05-S09 | Auswahl, Ausblenden | ☐ | | |
-| P05-S10 | Label-Kollision | ☐ | | |
-| P05-S11 | Legende, Aktionsleiste | ☐ | | |
-| P05-S12 | M2-Abnahme | ☐ | | |
+| P04 | M1 (Teil 2): Web-MVP, GitHub Pages | ☑ | 09.11.2026 | Commits `5ac8732`–`317cc37`, PR #2. Nach dem Merge: Pages-Workflow grün, Seite vom Nutzer geprüft, `origin/gh-pages` unverändert `5f0155e`. `pnpm dev` auf macOS bleibt offen (RI11) |
+| P05 | M2: Graph-Parität | ☑ | 10.11.2026 | Commits `2b24c84`–`7cdd942` (dazu `2867e6e`, Plan P05.5), danach `31d8777` (Review-Korrektur), Aufräumen und ein Fix für `.venv` beim Upload. `pnpm test:parity` prüft G1–G3 (Kern und Web). Bewusste Abweichungen: ADR-011 A12–A18. Offen: Ein Klick auf einen Vorschaukreis wählt die Funktion noch nicht aus (G4, folgt in P06-S02); das Golden der Clusterfarben belegt nur 7 der 20 Farben (visuelle Regeln §4) |
+| P05.5-S01 | Testprojekt `monorepo` | ☐ | | |
+| P05.5-S02 | Upload: Konfiguration, Ordner überspringen | ☐ | | |
+| P05.5-S03 | Kern: Pakete, tsconfig | ☐ | | |
+| P05.5-S04 | Kern: Importe auflösen | ☐ | | |
+| P05.5-S05 | Kern: erreichbare Dateien | ☐ | | |
+| P05.5-S06 | Kern: umschreiben, analysieren | ☐ | | |
+| P05.5-S07 | Upload: App-Ordner wählen | ☐ | | |
+| P05.5-S08 | Abnahme am echten Monorepo | ☐ | | |
 | P06-S01 | Split-Layout | ☐ | | |
 | P06-S02 | Auswahlmodell | ☐ | | |
 | P06-S03 | Dateibaum | ☐ | | |

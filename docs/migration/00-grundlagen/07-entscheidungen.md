@@ -108,10 +108,18 @@ Werten aus der Stil-Referenz. Roboto und Material Icons über `@fontsource/*` lo
 | A8 | Bei „Node sizes based on metrics“ = aus keine Icons/Warnstufen (V1) | Icons und Warnstufen werden immer berechnet; nur die Größe ist fest 48 | Fehler (Nutzerentscheidung 07.11.2026) |
 | A9 | Auswahl über den Dateibaum zeigt im Code-Quality-Panel keine Icons (Q5) | Icons wie beim Klick auf den Knoten im App-Graph | Fehler (Nutzerentscheidung 07.11.2026) |
 | A10 | Fenster- und Toolbar-Titel „Component Graph“ | „Qualivis“ (ADR-012) | Produktname |
+| A11 | Größenmetrik ohne Schwelle für den Knotentyp (eine Metrik nur für Komponenten, bei Funktionsknoten; wählbar in einem Projekt mit nur einer Komponente) → Größe `NaN` | feste Größe 48, keine Warnstufe; Icons wie sonst | Fehler (Nutzerentscheidung 09.11.2026) |
+| A12 | Pinch auf dem Touchpad und Strg+Mausrad (G9) überlässt d3-zoom 1.x dem Browser, der die ganze Seite samt Toolbar zoomt | Der Graph zoomt um den Zeiger wie in d3-zoom 3; Strg zählt zehnfach, ein Strg-Mausrad-Schritt der Maus zoomt vierfach | Bedienbarkeit (Nutzerentscheidung 09.11.2026) |
+| A13 | Ziehen (G8): Nur das Kraft-Layout merkt sich den Drag, mit WebCola kann ein Drag ausblenden. Der Drag beginnt schon beim Drücken: Ein einfacher Klick löst im Kraft-Layout einen mit Shift fixierten Knoten, in WebCola steht ein gedrückter Knoten still. Mehrere Finger ziehen mehrere Knoten zugleich | Beide Layouts melden den Drag, beim Ziehen wird nicht ausgeblendet. Der Drag beginnt mit der ersten Bewegung, ein Klick ohne Bewegung bleibt ein Klick. Ein zweiter Finger auf einem Knoten beendet den laufenden Drag | Klick und Ziehen getrennt, gleich in beiden Layouts |
+| A14 | Beim Ausblenden (G1, G6) werden indirekt verbundene Knoten hell (`#fafafa`) und bleiben es nach dem Einblenden (d3 `style('fill', false)` ändert nichts), bis zur nächsten Auswahl oder zum Neustart. Strg+Überfahren blendet auch aus, wenn Strg erst über dem Knoten gedrückt und der Zeiger dann innerhalb des Knotens bewegt wird (`mouseover` der Kind-Elemente) | Hell sind genau die indirekt verbundenen Knoten des aktuellen Fokus. Strg+Überfahren wirkt beim Betreten des Knotens | Fehler bzw. Kleinigkeit |
+| A15 | Jede Messung der Labels (G18) entfernt den ersten `<title>` im Knoten. In der AV ist das oft der Tooltip eines Vorschaukreises; der Tooltip des Labels bleibt, auch wenn das Label wieder zu sehen ist | Ein Knoten hat genau dann einen Tooltip, wenn sein Label ausgeblendet ist; die Tooltips der Vorschaukreise bleiben | Fehler |
+| A16 | Legende und Auswahl der Größenmetrik (G14, N11) richten sich nach der Komponenten-ID statt nach dem gezeigten Graph: In einem Projekt mit genau einer Komponente zeigt deren KV die Legende der AV und bietet die JSX-Metriken an | Beide richten sich nach der Ansicht; eine gewählte JSX-Metrik wird dort wie beim Wechsel in die KV auf „Lines of Code“ zurückgesetzt | Fehler (passt nicht zum Graph) |
+| A17 | Material-Bausteine: Der Tooltip bleibt beim Klicken stehen und liegt dann über der geöffneten Liste; mat-select legt die Liste so, dass die gewählte Option über dem Wert liegt; Buttons zeigen eine Klickwelle (Ripple) | Der Tooltip verschwindet beim Klicken auf sein Element, die Liste öffnet unter dem Feld, keine Klickwelle | eigene, kleinere Bausteine (ADR-009) |
+| A18 | Der Dateifilter (U7) liest auch eine Python-Umgebung `.venv` im Projektordner. Deren Pakete enthalten `.d.ts`-Dateien (z. B. Playwright), an denen der Parser scheitert (`export const x: T;`), und die ganze Analyse bricht ab | Der Upload überspringt Pfade mit einem Ordner `.venv` und betritt ihn beim Hineinziehen nicht; der Filter im Kern bleibt unverändert | Fehler beim Einlesen, nicht Teil der Berechnung (Nutzerentscheidung 10.11.2026) |
 
-Alles andere – auch die Eigenheiten K1–K11 und V2, V4–V7 – bleibt gleich. Weitere
-Abweichungen nur mit neuer ADR und Zustimmung des Nutzers. Die Golden-Tests sind von A8/A9 nicht
-betroffen (sie nutzen Standardeinstellungen und Klicks im Graph).
+Alles andere – auch die Eigenheiten K1–K12 und V2, V4–V7 – bleibt gleich. Weitere
+Abweichungen nur mit neuer ADR und Zustimmung des Nutzers. Die Golden-Tests sind von A8, A9 und
+A11 nicht betroffen (sie nutzen Standardeinstellungen und Klicks im Graph).
 
 ### ADR-012 Produktname
 **Kontext:** Das Repository heißt `qualivis`, die alte App „Component Graph“.
@@ -180,3 +188,45 @@ dann CI und Pages neu bewerten.
 Edge (`channel: 'msedge'`), ohne Browser-Download. Weicht ein einzelner Rechner ab, setzt das seine
 lokale Umgebung über `QV_BROWSER_CHANNEL` (z. B. `chrome`), nicht das Repo.
 **Folgen:** Eine Konfiguration für alle Systeme; Edge muss installiert sein.
+
+### ADR-019 Monorepo-Unterstützung als eingeschobene Phase P05.5
+**Kontext:** Der Nutzer will aus einem Monorepo eine einzelne App analysieren, die Komponenten einer
+Bibliothek aus demselben Repo nutzt. Eine Probe am Kern (09.11.2026) zeigte:
+- Der alte Kern folgt nur relativen Importen und K4; Importe über Paketnamen oder tsconfig-`paths`
+  ergeben keine Kanten.
+- Hochgeladen werden muss alles, und dann zeigt die App-Ansicht jede Komponente jeder Datei, auch
+  unbenutzte und Hilfskomponenten aus Testdateien.
+- Liegt `X.styles.ts` neben `X.tsx`, fehlt die Kante zu `X` (K12).
+- `memo`, `forwardRef` und `FC`-Pfeilfunktionen erkennt der Kern als Komponenten.
+
+Ein anonymisierter Strukturbericht des Ziel-Monorepos (09.11.2026) ergab: pnpm-Workspaces; die App
+importiert die Bibliothek fast nur über tiefe Unterpfade, die tsconfig-`paths` und ein Vite-Alias
+auf `src` abbilden; keine Einstiegsfelder, keine Barrel-Dateien; TypeScript, ESM; Tests in
+`__tests__/`; die Bibliothek hat mehrere hundert Quelldateien.
+
+**Entscheidung (Nutzer, 09.11.2026):**
+- Eingeschobene Phase **P05.5** zwischen P05 und P06, ohne Umnummerierung und ohne eigenen
+  Meilenstein; sie endet mit der Abnahme am echten Monorepo. Ausnahme von Ziele §3 (keine neuen
+  Analysefunktionen vor Abschluss).
+- Neue Vorstufe `packages/core/src/workspace/` vor dem unveränderten Kern (R5):
+  1. Pakete aus allen `package.json` und `paths` aus `tsconfig.json`/`jsconfig.json` (mit
+     `extends`, JSONC) lesen.
+  2. Import-Angaben auflösen: relativ, tsconfig-`paths`, Paketname mit `src/`-Rückfall.
+  3. Vom gewählten App-Ordner aus die erreichbaren Dateien sammeln, ohne Tests und Typ-Importe.
+  4. Auflösbare Angaben in diesen Dateien durch relative Pfade mit Endung ersetzen (gleiche Zeile).
+  5. Mit dem alten Kern analysieren und den Originalcode zurück in die FileMap setzen.
+- Der Upload liest zusätzlich die Konfigurationsdateien und betritt `node_modules`, `build` und
+  `dist` nicht mehr.
+- Hat ein Upload mindestens zwei Pakete mit Quelldateien, fragt die Upload-Ansicht nach dem
+  App-Ordner. Vorausgewählt ist „Whole project“, also der bisherige Weg.
+- Nicht in P05.5: Barrel-Dateien und `exports`-Tabellen (O16), optische Unterscheidung von
+  Bibliotheksknoten (O17), Testdateien außerhalb von `__tests__/` mit Suffix `Test` (O18),
+  gespeicherte Auswahl und Auswahl beim Drop auf den Graphen (O19), Vite-/webpack-Aliase.
+
+**Folgen:**
+- Für Uploads mit einem Paket und für „Whole project“ ändert sich nichts; G1/G2 bleiben gleich.
+- Der neue Weg hat keine Goldens, denn das Altsystem kann ihn nicht. Er wird mit dem eigenen
+  Testprojekt `monorepo` und von Hand hergeleiteten Erwartungen getestet.
+- Im neuen Weg umgeht die Endung K12; im alten Weg bleibt K12 erhalten.
+- Halstead-Werte umgeschriebener Dateien können minimal abweichen.
+- Große Bibliotheken belasten den Browser (RI14); der Worker kommt in P08-S04.

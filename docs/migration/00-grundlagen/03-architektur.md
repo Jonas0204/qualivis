@@ -51,7 +51,11 @@ e2e/ (@qualivis/e2e, Playwright, separat installierbar) · tools/ (Node-Skripte 
 │  │  │  ├─ legacy/                  parser.ts, traverse*.ts, findReport.ts, generateAppGraph.ts,
 │  │  │  │                           extractFileTree.ts, isComponentFile.ts, nestedStringAccess.ts
 │  │  │  ├─ rules/                   nodeVisuals.ts, icons.ts, cluster.ts, reactConstraints.ts,
-│  │  │  │                           previewGeometry.ts, linkGeometry.ts, color.ts, thresholds.ts
+│  │  │  │                           previewGeometry.ts, linkGeometry.ts, color.ts, thresholds.ts,
+│  │  │  │                           connectivity.ts, viewModel.ts
+│  │  │  ├─ workspace/               (P05.5, ADR-019) projectFiles.ts, jsonc.ts, packages.ts,
+│  │  │  │                           tsconfig.ts, resolveImport.ts, scanImports.ts, selectFiles.ts,
+│  │  │  │                           rewriteImports.ts, analyzeWorkspace.ts, appCandidates.ts
 │  │  │  ├─ model/                   graph.ts, report.ts, settings.ts, qualityMetrics.ts,
 │  │  │  │                           specialMethods.ts, files.ts, graphSettings.ts, clusterColors.ts
 │  │  │  └─ types/                   globals.d.ts, escomplex.d.ts, path-browserify.d.ts
@@ -69,13 +73,15 @@ e2e/ (@qualivis/e2e, Playwright, separat installierbar) · tools/ (Node-Skripte 
 │        ├─ state/                   analysisAtoms.ts, viewAtoms.ts, selectionAtoms.ts,
 │        │                           settingsAtoms.ts, snackbarAtoms.ts, selection.ts, StateProvider.tsx
 │        ├─ features/
-│        │  ├─ upload/               UploadView.tsx, readDroppedFiles.ts, useFileDrop.ts, DropOverlay.tsx
+│        │  ├─ upload/               UploadView.tsx, ProjectChoice.tsx, readDroppedFiles.ts, useFileDrop.ts, DropOverlay.tsx
 │        │  ├─ analysis/             runAnalysis.ts (später worker/)
 │        │  ├─ graph/                GraphView.tsx, GraphCanvas.tsx, GraphNode.tsx, GraphLink.tsx,
-│        │  │                        PreviewCircles.tsx, Legend.tsx, GraphActions.tsx,
-│        │  │                        usePanZoom.ts, useNodeDrag.ts, useFade.ts, useLabelCollision.ts,
-│        │  │                        buildViewGraph.ts, useLayout.ts, graph.css,
-│        │  │                        layout/ (types.ts, colaLayout.ts, forceLayout.ts)
+│        │  │                        PreviewCircles.tsx, GraphDefs.tsx, graphDefsContext.ts,
+│        │  │                        Legend.tsx, GraphActions.tsx, usePanZoom.ts, zoomMath.ts,
+│        │  │                        useNodeDrag.ts, pointerGesture.ts, useFade.ts,
+│        │  │                        useLabelCollision.ts, labelCollision.ts, useElementSize.ts,
+│        │  │                        selectViewGraph.ts, useLayout.ts, graph.css,
+│        │  │                        layout/ (types.ts, createLayout.ts, colaLayout.ts, forceLayout.ts)
 │        │  ├─ file-tree/            FileTree.tsx, useTreeState.ts
 │        │  ├─ code-quality/         CodeQualityPanel.tsx, QualityMetricBar.tsx, IconDescription.tsx
 │        │  ├─ source-code/          SourceCodeView.tsx, neoTheme.ts
@@ -86,11 +92,12 @@ e2e/ (@qualivis/e2e, Playwright, separat installierbar) · tools/ (Node-Skripte 
 │        └─ styles/                  tokens.css, global.css, fonts.css
 ├─ e2e/                              (ab P09)
 ├─ tools/
-│  ├─ legacy/                        extract-legacy-build.mjs, serve-legacy.mjs, capture.browser.js
+│  ├─ legacy/                        extract-legacy-build.mjs, serve-legacy.mjs, capture.browser.js,
+│  │                                 capture-cluster-colors.browser.js
 │  └─ golden/                        diff-json.mjs
 ├─ testdata/
 │  ├─ README.md
-│  ├─ fixtures/{mini,realworld}/
+│  ├─ fixtures/{mini,realworld,monorepo}/   monorepo ohne Goldens (P05.5)
 │  └─ golden/{mini,realworld}/
 ├─ legacy/angular/                   altes Projekt (nur Referenz, wird nicht gebaut)
 └─ docs/
@@ -121,11 +128,13 @@ e2e/ (@qualivis/e2e, Playwright, separat installierbar) · tools/ (Node-Skripte 
 ## 4. Datenfluss
 
 ```
-Upload/Drop ─► readDroppedFiles() ─► SourceFile[] {path, code}
-          ─► runAnalysis() ─► core.analyzeProjectAsync(files, {onProgress})
+Upload/Drop ─► readDroppedFiles() ─► ProjectFiles {sources, configs} (ab P05.5)
+          ─► ab 2 Paketen: Auswahl des App-Ordners (P05.5, ADR-019)
+          ─► runAnalysis() ─► core.analyzeProjectAsync(sources, {onProgress})
+                             bzw. core.analyzeWorkspaceAsync(project, {appDir}, {onProgress})
           ─► analysisAtom = { status, progress, result, error }
-GraphView ─► viewGraphAtom (abgeleitet aus analysisAtom + componentIdAtom) ─► Graph der Ansicht
-          ─► core.rules.*(graph, settings, view) ─► VisualNode[] (Größen, Icons, Cluster, …)
+GraphView ─► viewGraphAtom (abgeleitet aus analysisAtom + componentIdAtom) ─► Graph der Ansicht + view
+          ─► core.buildViewModel(graph, {view, sizeMetric, …}) ─► VisualNode[] (Größen, Icons, Cluster, …)
           ─► layout.start(VisualNode[], links, size, constraints) ─► Positionen (Tick-Ereignisse)
           ─► <GraphCanvas> rendert SVG; Interaktionen ─► selectionAtom / componentIdAtom
 Panels    ─► lesen selectionAtom + analysisAtom
@@ -141,7 +150,10 @@ Settings  ─► settingsAtom (persistiert) ─► GraphView startet Layout neu
 - Atome (je Datei in `state/`):
   - `analysisAtom` – `{ status: 'idle' | 'running' | 'done' | 'error'; progress?; result?; error? }`
   - `viewModeAtom` (`'upload' | 'graph'`), `componentIdAtom` (`string | undefined`, synchron mit URL)
-  - `viewGraphAtom` – abgeleitet: Graph der aktuellen Ansicht (AV/KV) aus Analyse + `componentIdAtom`
+  - `viewGraphAtom` – abgeleitet: Graph der aktuellen Ansicht (AV/KV) aus Analyse + `componentIdAtom`,
+    keine Kopie. Das Ansichtsmodell (`buildViewModel`, eine Kopie) baut `GraphView` per `useMemo`,
+    weil das Layout Positionen in Knoten und Kanten schreibt; der Wert eines Atoms bliebe sonst
+    nicht unverändert.
   - `selectionAtom` – `NodeSelection[] | null` (wie im Altsystem)
   - `settingsAtom` – `atomWithStorage('qualivis.settings', defaultSettings, validierender Storage)`
   - `snackbarAtom` – aktuelle Meldung
@@ -217,7 +229,8 @@ Speichern werden einmal als Snackbar gemeldet, nie als Absturz.
 
 ## 10. Fehlerbehandlung
 
-- Kern: wirft wie das Altsystem (z. B. Syntaxfehler beim Parsen). Ab P08-S05 zusätzlich
+- Kern: wirft wie das Altsystem (z. B. Syntaxfehler beim Parsen) und loggt dabei den Pfad der
+  Datei (`Parsing failed:`). Ab P08-S05 zusätzlich
   `analyzeProject` mit `onFileError`-Option (Datei überspringen statt Abbruch) – Standard bleibt
   das alte Verhalten, damit Goldens stabil bleiben.
 - Web: `runAnalysis` fängt alle Fehler und setzt `analysisAtom` auf `status: 'error'` mit Meldung;

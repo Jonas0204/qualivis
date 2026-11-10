@@ -31,17 +31,18 @@ Grundlagen und `STATUS.md`.
 | [05-konventionen.md](00-grundlagen/05-konventionen.md) | Code-Stil, TypeScript, React, CSS, Commits, Aufbau der Schritt-Karten |
 | [06-teststrategie.md](00-grundlagen/06-teststrategie.md) | Testebenen, Golden-Konzept G1–G6 („God-Test“) |
 | [07-entscheidungen.md](00-grundlagen/07-entscheidungen.md) | offene Architekturentscheidungen (ADRs) |
-| [08-risiken-und-offene-punkte.md](00-grundlagen/08-risiken-und-offene-punkte.md) | Nutzerentscheidungen ohne ADR (O2, O5, O14), Risiken RI1–RI13 |
+| [08-risiken-und-offene-punkte.md](00-grundlagen/08-risiken-und-offene-punkte.md) | Nutzerentscheidungen ohne ADR (O2, O5, O14, O16–O19), Risiken RI1–RI16 |
 | **01-referenz-altsystem/** | |
 | [01-funktionsinventar.md](01-referenz-altsystem/01-funktionsinventar.md) | Jedes sichtbare Verhalten des Altsystems (Abnahmegrundlage) |
-| [02-analyse-kern.md](01-referenz-altsystem/02-analyse-kern.md) | Analyse-Pipeline, Dateien, Datenstrukturen, Eigenheiten K1–K11 |
+| [02-analyse-kern.md](01-referenz-altsystem/02-analyse-kern.md) | Analyse-Pipeline, Dateien, Datenstrukturen, Eigenheiten K1–K12 |
 | [03-visuelle-regeln.md](01-referenz-altsystem/03-visuelle-regeln.md) | Formeln und Regeln des Graphen, Eigenheiten V1–V7 |
 | [04-stil-referenz.md](01-referenz-altsystem/04-stil-referenz.md) | Gemessene Farben, Schriften, Maße |
 | **phasen/** | |
 | P01, P02 | **erledigt** (M0): Repo-Umbau, Workspace, Golden-Infrastruktur; Karten entfernt |
 | P03 | **erledigt** (M1, Teil 1): CI, `@qualivis/core` mit Golden G1; Karten entfernt |
 | P04 | **erledigt** (M1, Teil 2): Web-MVP, GitHub Pages; Karten entfernt |
-| [P05-graph-paritaet](phasen/P05-graph-paritaet/README.md) | Graph wie im Original (M2) |
+| P05 | **erledigt** (M2): Graph wie im Original; Karten entfernt |
+| [P05.5-monorepo](phasen/P05.5-monorepo/README.md) | eingeschoben: eine App aus einem Monorepo analysieren (ADR-019, ohne Meilenstein) |
 | [P06-panels-navigation](phasen/P06-panels-navigation/README.md) | Panels, Auswahl, Drill-down (M3) |
 | [P07-einstellungen-persistenz](phasen/P07-einstellungen-persistenz/README.md) | Einstellungen, Persistenz, Hinweise (M4) |
 | [P08-haertung](phasen/P08-haertung/README.md) | Typen, Worker, A11y, Sicherheit, Performance (M5) |
@@ -133,7 +134,7 @@ Anmeldung macht **der Nutzer selbst** (`gh auth login`); der Assistent fasst kei
 
 ## Vorlage: Arbeitsauftrag für ein ausführendes Modell
 
-In Claude Code reicht `/schritt-umsetzen P05-S01` (ohne ID: nächster offener Schritt). GitHub Copilot
+In Claude Code reicht `/schritt-umsetzen P06-S01` (ohne ID: nächster offener Schritt). GitHub Copilot
 in VS Code wählt den Skill anhand seiner Beschreibung. Für andere Werkzeuge diesen Text verwenden:
 
 ```

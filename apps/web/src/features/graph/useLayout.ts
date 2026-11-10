@@ -1,11 +1,20 @@
-import { type DependencyList, useEffect, useState } from 'react';
+import { type DependencyList, useCallback, useEffect, useRef, useState } from 'react';
 import type { LayoutEngine } from './layout/types';
 
 export type LayoutState = {
     /** Grows with the ticks, at most once per animation frame, so React draws the new positions. */
     version: number;
+    /** Counts the engines started: a new value means the layout restarted. */
+    run: number;
     /** True once the current engine has come to rest. */
     ended: boolean;
+    /** Counts the ends the engines reported, also those after dragging. */
+    ends: number;
+};
+
+export type Layout = LayoutState & {
+    /** The running engine (for dragging); undefined without one. */
+    getEngine: () => LayoutEngine | undefined;
 };
 
 /**
@@ -15,8 +24,14 @@ export type LayoutState = {
 export const useLayout = (
     createEngine: () => LayoutEngine | undefined,
     deps: DependencyList
-): LayoutState => {
-    const [state, setState] = useState<LayoutState>({ version: 0, ended: false });
+): Layout => {
+    const [state, setState] = useState<LayoutState>({
+        version: 0,
+        run: 0,
+        ended: false,
+        ends: 0,
+    });
+    const engineRef = useRef<LayoutEngine>(undefined);
 
     // The caller names the deps, as with useEffect itself.
     useEffect(() => {
@@ -33,21 +48,30 @@ export const useLayout = (
             });
         });
         const offEnd = engine.onEnd(() => {
-            setState(current => ({ version: current.version + 1, ended: true }));
+            setState(current => ({
+                ...current,
+                version: current.version + 1,
+                ended: true,
+                ends: current.ends + 1,
+            }));
         });
 
-        setState(current => (current.ended ? { ...current, ended: false } : current));
+        setState(current => ({ ...current, run: current.run + 1, ended: false }));
+        engineRef.current = engine;
         engine.start();
 
         return () => {
             offTick();
             offEnd();
             engine.stop();
+            engineRef.current = undefined;
             if (frame !== undefined) {
                 cancelAnimationFrame(frame);
             }
         };
     }, deps);
 
-    return state;
+    const getEngine = useCallback(() => engineRef.current, []);
+
+    return { ...state, getEngine };
 };

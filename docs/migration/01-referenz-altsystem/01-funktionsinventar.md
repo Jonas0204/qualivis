@@ -26,7 +26,7 @@ Abkürzungen: **AV** = App-Ansicht (Graph aller Komponenten), **KV** = Komponent
 | N8 | Ohne gespeicherten Graph zeigt `restoreFromLocalStorage()` **Demo-Daten** (Les-Misérables-Graph aus `constants/data.ts`). (Neue App: nicht übernommen, ADR-011.) | `data.service.ts:171-188` |
 | N9 | Graphauswahl: gültige `id` → Graph dieser Komponente; sonst bei genau **einer Datei mit genau einer Komponente** → deren Graph; sonst App-Graph. | `data.service.ts:93-115, 190-196` |
 | N10 | In der KV wird beim Öffnen die Datei der Komponente ausgewählt (`selectFile`, per `setTimeout`). | `graph.component.ts:123-130` |
-| N11 | In der KV werden „nur Komponente“-Metriken (`componentOnly`) aus der Größenauswahl entfernt; war eine davon gewählt, wird auf `sloc.physical` zurückgesetzt. | `graph.component.ts:124-134` |
+| N11 | In der KV werden „nur Komponente“-Metriken (`componentOnly`) aus der Größenauswahl entfernt; war eine davon gewählt, wird auf `sloc.physical` zurückgesetzt. (Neue App: nach der Ansicht, auch in der KV eines Projekts mit nur einer Komponente, ADR-011 A16.) | `graph.component.ts:124-134` |
 | N12 | Toolbar-Titel „Component Graph“ ist ein Link zur Upload-Ansicht (`routerLink=""`). (Neue App: Titel „Qualivis“, ADR-011 A10.) | `app.component.html` |
 | N13 | Zurück-Button (nur KV): setzt `id=null` (zurück zur AV). | `graph.component.ts:1122-1128` |
 
@@ -40,7 +40,7 @@ Abkürzungen: **AV** = App-Ansicht (Graph aller Komponenten), **KV** = Komponent
 | U4 | Während Drag über Zielbereich: CSS-Klasse `is-dragging-over`; Upload-Karte skaliert auf 1.05 (nicht bei ≤ 599 px Breite); Graph-Ansicht zeigt Overlay „Drop files here“ (schwarz 55 % Deckkraft, 32 px weiße Schrift). | `drop-target.directive.ts`, `graph-view.component.scss` |
 | U5 | Nach Auswahl/Drop: Analyse startet, Navigation zu `/graph?upload=1`. | `upload-view.component.ts:28`, `graph-view.component.ts:44-47` |
 | U6 | Fortschrittsbalken oben (Material, Primärfarbe) während der Analyse: 50 % für Parsen, 50 % für Traversieren, gleichmäßige Schritte pro Datei; danach ausgeblendet. | `data.service.ts:35-56, 222-229` |
-| U7 | Dateifilter: nur Endungen `tsx, jsx, ts, js`; Pfade mit `/node_modules/`, `/build/`, `/dist/` ausgeschlossen; Dateien `*.test.<ext>` ausgeschlossen (nur exakt vorletzter Namensteil `test`; `*.spec.*` wird **nicht** ausgeschlossen). | `helper/isComponentFile.ts`, `constants/files.ts` |
+| U7 | Dateifilter: nur Endungen `tsx, jsx, ts, js`; Pfade mit `/node_modules/`, `/build/`, `/dist/` ausgeschlossen; Dateien `*.test.<ext>` ausgeschlossen (nur exakt vorletzter Namensteil `test`; `*.spec.*` wird **nicht** ausgeschlossen). (Neue App: Der Upload überspringt zusätzlich Ordner `.venv`, ADR-011 A18.) | `helper/isComponentFile.ts`, `constants/files.ts` |
 | U8 | Ergebnis enthält nur Dateien mit ≥ 1 Komponente oder mit Default-Export, der ein Import (Pfad beginnt mit `/`) ist. | `data.service.ts:58-66` |
 
 ## 3. Graph-Ansicht (Mitte)
@@ -54,30 +54,30 @@ Details siehe `03-visuelle-regeln.md`. Kurzfassung:
 - Knotengröße: Fläche proportional zur gewählten Metrik relativ zum Schwellenwert.
 - Unter dem Label: Material-Icons (Warnung/Fehler, Löschen, Schere, Vererbung, veraltet).
 - Kanten mit Pfeilspitze; Vererbung gestrichelt (`4 2`).
-- Legende unten rechts (zwei Varianten AV/KV).
+- Legende unten rechts (zwei Varianten AV/KV; neue App: nach der Ansicht, ADR-011 A16).
 
 ### 3.2 Interaktionen
 
 | # | Eingabe | Wirkung | Quelle |
 |---|---|---|---|
-| G1 | Klick auf Knotenkreis oder Label | Knoten auswählen (Panels rechts füllen sich); bei Einstellung „fade“: nicht verbundene Knoten/Kanten auf 10 % Deckkraft. | `graph.component.ts:717-720, 1030-1048` |
+| G1 | Klick auf den Knotenkreis | Knoten auswählen (Panels rechts füllen sich); bei Einstellung „fade“: nicht verbundene Knoten/Kanten auf 10 % Deckkraft. Das Label ist nicht klickbar (`pointer-events: none`); ein Klick darauf trifft den Kreis darunter oder den Hintergrund. (Neue App: helle Füllung nur beim aktuellen Fokus, ADR-011 A14.) | `graph.component.ts:717-720, 1030-1048`, `graph.component.scss:152-153` |
 | G2 | Erster Klick auf Komponente mit inneren Funktionen | Einmaliger Hinweis (Snackbar 8 s): „Tip: You can double click a component that has inner functions to open it!“ (pro Browser nur einmal). | `graph.component.ts:1036-1046` |
 | G3 | Doppelklick auf Komponentenknoten (AV) mit ≥ 1 innerer Funktion | KV öffnen (`?id=`). | `graph.component.ts:693-701` |
 | G4 | Klick auf Vorschaukreis (AV) | Diese innere Funktion auswählen (Code-Panel springt zur Funktion). | `graph.component.ts:825-827` |
 | G5 | Strg + Klick auf Knoten | Knoten samt Kanten aus der aktuellen Darstellung entfernen und Layout neu starten (nicht persistent). | `graph.component.ts:1031-1035, 1050-1056` |
-| G6 | Strg + Maus über Knoten / Strg + Maus verlassen | Ausblenden wie bei Klick / wieder einblenden. | `graph.component.ts:721-731` |
+| G6 | Strg + Maus über Knoten / Strg + Maus verlassen | Ausblenden wie bei Klick / wieder einblenden. (Neue App: wie G1; Strg wirkt beim Betreten des Knotens, ADR-011 A14.) | `graph.component.ts:721-731` |
 | G7 | Klick auf leeren Hintergrund | Alles einblenden, Auswahl aufheben. | `graph.component.ts:1172-1177` |
-| G8 | Ziehen eines Knotens | Knoten verschieben, Layout reagiert. Kraft-Layout: Shift beim Loslassen fixiert den Knoten. WebCola: Knoten wird beim Ziehen fixiert und danach freigegeben. | `graph.component.ts:703-708, 1091-1120` |
-| G9 | Mausrad | Zoom (mit 0,1 s Übergang); Doppelklick-Zoom deaktiviert. | `graph.component.ts:472-510` |
+| G8 | Ziehen eines Knotens | Knoten verschieben, Layout reagiert. Kraft-Layout: Shift beim Loslassen fixiert den Knoten. WebCola: Knoten wird beim Ziehen fixiert und danach freigegeben. (Neue App: Der Drag beginnt mit der ersten Bewegung und blendet in beiden Layouts nicht aus, ADR-011 A13.) | `graph.component.ts:703-708, 1091-1120` |
+| G9 | Mausrad | Zoom (mit 0,1 s Übergang); Doppelklick-Zoom deaktiviert. (Neue App: Pinch und Strg+Mausrad zoomen den Graph, ADR-011 A12.) | `graph.component.ts:472-510` |
 | G10 | Ziehen auf Hintergrund | Verschieben (Pan). | ebd. |
-| G11 | Button „{Zoom}%“ (Tooltip „Zoom to 100%“) | Auf 100 % zoomen, zentriert. | `graph.component.html:199-206` |
+| G11 | Button „{Zoom}%“ (Tooltip „Zoom to 100%“) | Auf 100 % zoomen, zentriert. (Neue App: Tooltips verschwinden beim Klicken, ADR-011 A17.) | `graph.component.html:199-206` |
 | G12 | Button `all_out` (Tooltip „Zoom to fit“) | Alles einpassen (95 % Rand, max. Faktor 3). | `graph.component.ts:1058-1089` |
 | G13 | Button `fullscreen`/`fullscreen_exit` (Tooltip „Enter fullscreen“/„Exit fullscreen“) | Seitenpanels aus-/einblenden; danach „Zoom to fit“. | `graph.component.html:210-217`, `graph.component.ts:90-93` |
-| G14 | Auswahl „Node size metric“ (Material-Select, ohne Label) | Größenmetrik wechseln, Layout neu starten. Optionen = Namen der Metriken (AV alle 7, KV ohne `componentOnly`). | `graph.component.html:186-198` |
+| G14 | Auswahl „Node size metric“ (Material-Select, ohne Label) | Größenmetrik wechseln, Layout neu starten. Optionen = Namen der Metriken (AV alle 7, KV ohne `componentOnly`). (Neue App: Optionen nach der Ansicht, ADR-011 A16; die Liste öffnet unter dem Feld, A17.) | `graph.component.html:186-198` |
 | G15 | Button „Toggle cluster“ (nur KV und nur wenn Cluster gefunden) | Färbung nach Louvain-Cluster an/aus; aktiv: Hintergrund `#e6e6e6`. | `graph.component.html:177-185` |
 | G16 | KV mit > 30 Knoten und WebCola aktiv | Einmaliger Hinweis „Tip: Try out disabling flow layout on large graphs“ mit Aktion „Change now“ (8 s) → schaltet WebCola aus und zeigt „Disabled flow layout (can be changed via settings)“ mit Aktion „Undo“ (8 s). | `graph.component.ts:145-164` |
 | G17 | Nach erstem Layout-Ende (bei „Auto zoom“) | Automatisch einpassen. | `graph.component.ts:643-649` |
-| G18 | Nach Layout-Ende und nach Zoomänderung | Überlappende Labels ausblenden (250 ms entprellt), ausgeblendete bekommen Tooltip. | `graph.component.ts:486-491, 650-652, 952-982` |
+| G18 | Nach Layout-Ende und nach Zoomänderung | Überlappende Labels ausblenden (250 ms entprellt), ausgeblendete bekommen Tooltip. (Neue App: Tooltip genau bei ausgeblendetem Label, ADR-011 A15.) | `graph.component.ts:486-491, 650-652, 952-982` |
 
 ## 4. Dateibaum (links)
 

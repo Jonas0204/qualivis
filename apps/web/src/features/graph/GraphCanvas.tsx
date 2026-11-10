@@ -1,75 +1,180 @@
-import { graphSettings } from '@qualivis/core';
-import type { ViewLink, ViewNode } from './buildViewGraph';
-import { shortenToTarget } from './geometry';
+import {
+    clusterPaint,
+    graphSettings,
+    type View,
+    type VisualLink,
+    type VisualNode,
+} from '@qualivis/core';
+import {
+    type MouseEvent as ReactMouseEvent,
+    type ReactNode,
+    type PointerEvent as ReactPointerEvent,
+    type Ref,
+    type RefCallback,
+    useId,
+    useMemo,
+} from 'react';
+import { GraphDefs } from './GraphDefs';
+import { GraphLink } from './GraphLink';
+import { GraphNode, type GraphNodeSettings, type NodeEvents } from './GraphNode';
+import { GraphDefsContext } from './graphDefsContext';
+import type { GraphFade } from './useFade';
+import {
+    identityTransform,
+    transformAttribute,
+    type ZoomStyle,
+    type ZoomTransform,
+} from './zoomMath';
 
-type GraphCanvasProps = {
-    nodes: readonly ViewNode[];
-    links: readonly ViewLink[];
-    viewBox: string;
+/** Pan and zoom state (usePanZoom) and the label and link sizes it set (nextZoomStyle). */
+export type GraphZoom = ZoomStyle & {
+    transform: ZoomTransform;
+    /** Wheel zooming eases transform and label size (legacy addTransition). */
+    transition?: boolean;
 };
 
-// Until P05 every circle has the same radius (no sizes from metrics yet).
-const radius = graphSettings.circleRadius;
-// A link ends at the outer edge of the target's stroke (§8: mainRadius + 0.5).
-const linkEndRadius = radius + graphSettings.circleStrokeWidth / 2;
+/** Selection (§14) and fading (§12) of the graph. */
+export type GraphHighlight = {
+    /** Ids of the selected nodes. */
+    selected?: ReadonlySet<string>;
+    /** Undefined while nothing is faded. */
+    fade?: GraphFade<VisualLink>;
+};
 
-const position = (node: ViewNode) => ({ x: node.x ?? 0, y: node.y ?? 0 });
+/** Overlapping labels (§13, useLabelCollision). */
+export type GraphLabels = {
+    /** Ids of the nodes whose label is hidden. */
+    hidden: ReadonlySet<string>;
+    /** Ref of the label text of a node, for measuring. */
+    ref: (nodeId: string) => RefCallback<SVGTSpanElement>;
+};
+
+export type GraphEvents = {
+    /** Pointer down on the background (pan). */
+    onPointerDown?: (event: ReactPointerEvent<SVGSVGElement>) => void;
+    /** Any click in the SVG; on the background when the target is the SVG itself. */
+    onClick?: (event: ReactMouseEvent<SVGSVGElement>) => void;
+    /** The pointer down of a node has to stop the event, or the background pans too. */
+    node?: NodeEvents;
+};
+
+type GraphCanvasProps = {
+    nodes: readonly VisualNode[];
+    links: readonly VisualLink[];
+    view: View;
+    settings: GraphNodeSettings;
+    /** Cluster colours ("Toggle cluster"); off by default as in the legacy app. */
+    showCluster?: boolean;
+    /** Without it the graph is drawn unscaled. */
+    zoom?: GraphZoom;
+    svgRef?: Ref<SVGSVGElement>;
+    zoomGroupRef?: Ref<SVGGElement>;
+    events?: GraphEvents;
+    highlight?: GraphHighlight;
+    labels?: GraphLabels;
+    /** Drawn after the SVG with the ids of its defs, e.g. the legend. */
+    children?: ReactNode;
+};
+
+const unscaled: GraphZoom = { transform: identityTransform };
+
+/** Fill of indirectly connected nodes while faded (graph.component.ts:787). */
+const indirectFill = 'var(--qv-graph-indirect-fill)';
+
+/** Opacity of a node or link while faded; undefined while nothing is faded. */
+const fadeOpacity = (fade: GraphFade<VisualLink> | undefined, opaque: boolean | undefined) =>
+    fade && (opaque ? 1 : graphSettings.fadeOpacity);
 
 /** SVG of the graph at the current node positions; markup and classes as in the legacy app. */
-export const GraphCanvas = ({ nodes, links, viewBox }: GraphCanvasProps) => (
-    <svg className="qv-graph" role="img" aria-label="Component graph" viewBox={viewBox}>
-        <defs>
-            <marker
-                id="arrowhead"
-                viewBox="-0 -5 10 10"
-                refX={9}
-                refY={0}
-                orient="auto"
-                markerWidth={8}
-                markerHeight={8}
+export const GraphCanvas = ({
+    nodes,
+    links,
+    view,
+    settings,
+    showCluster = false,
+    zoom = unscaled,
+    svgRef,
+    zoomGroupRef,
+    events = {},
+    highlight = {},
+    labels,
+    children,
+}: GraphCanvasProps) => {
+    // Unique ids per graph, so that two graphs in one document do not share their defs. Only
+    // letters, digits, "_" and "-", so the ids also work in url(#…).
+    const id = useId().replace(/[^\w-]/g, '');
+    const defIds = useMemo(
+        () => ({ arrowhead: `qv-arrowhead-${id}`, hatch: `qv-hatch-${id}` }),
+        [id]
+    );
+    const { fade, selected } = highlight;
+
+    return (
+        <GraphDefsContext value={defIds}>
+            {/* biome-ignore lint/a11y/useKeyWithClickEvents: mouse only like the legacy graph; keyboard access follows in P08-S07 */}
+            <svg
+                ref={svgRef}
+                className="qv-graph"
+                role="img"
+                aria-label="Component graph"
+                onPointerDown={events.onPointerDown}
+                onClick={events.onClick}
             >
-                <path d="M 0,-5 L 10 ,0 L 0,5" fill={graphSettings.linkColor} stroke="none" />
-            </marker>
-        </defs>
-        <g
-            className="links"
-            stroke={graphSettings.linkColor}
-            strokeOpacity={graphSettings.linkOpacity}
-        >
-            {links.map((link, index) => {
-                const start = position(link.source);
-                const end = shortenToTarget(start, position(link.target), linkEndRadius);
-                return (
-                    <line
-                        // Index as key: links keep their order, and the same pair can occur twice.
-                        key={index}
-                        x1={start.x}
-                        y1={start.y}
-                        x2={end.x}
-                        y2={end.y}
-                        strokeWidth={graphSettings.linkStrokeWidth}
-                        strokeDasharray={link.inherits ? '4 2' : undefined}
-                        markerEnd="url(#arrowhead)"
-                    />
-                );
-            })}
-        </g>
-        <g className="nodes">
-            {nodes.map(node => {
-                const { x, y } = position(node);
-                return (
-                    <g key={node.id} className="node" transform={`translate(${x}, ${y})`}>
-                        <circle className="circle-node component" r={radius} />
-                        <circle
-                            className="circle-overlay component"
-                            r={radius}
-                            fill="transparent"
-                            strokeWidth={graphSettings.circleStrokeWidth}
-                        />
-                        <text className="node-label">{node.label || node.id}</text>
+                <GraphDefs />
+                {/* legacy #zoomGroup */}
+                <g
+                    ref={zoomGroupRef}
+                    className={zoom.transition ? 'zoom-group zoom-transition' : 'zoom-group'}
+                    transform={transformAttribute(zoom.transform)}
+                >
+                    <g
+                        className="links"
+                        stroke={graphSettings.linkColor}
+                        strokeOpacity={graphSettings.linkOpacity}
+                    >
+                        {links.map((link, index) => (
+                            // Index as key: links keep their order, and the same pair can occur twice.
+                            <GraphLink
+                                key={index}
+                                link={link}
+                                view={view}
+                                strokeWidth={zoom.linkStrokeWidth}
+                                opacity={fadeOpacity(fade, fade?.opaqueLinks.has(link))}
+                            />
+                        ))}
                     </g>
-                );
-            })}
-        </g>
-    </svg>
-);
+                    <g className="nodes">
+                        {nodes.map(node => {
+                            const paint = clusterPaint(node.cluster, view, showCluster);
+                            return (
+                                <GraphNode
+                                    key={node.id}
+                                    node={node}
+                                    view={view}
+                                    settings={settings}
+                                    selected={selected?.has(node.id)}
+                                    inlineStyle={{
+                                        fill: fade?.indirectNodes.has(node.id)
+                                            ? indirectFill
+                                            : paint?.fill,
+                                        stroke: paint?.stroke,
+                                        opacity: fadeOpacity(fade, fade?.opaqueNodes.has(node.id)),
+                                        labelFontSize: zoom.labelFontSize,
+                                    }}
+                                    label={
+                                        labels && {
+                                            hidden: labels.hidden.has(node.id),
+                                            ref: labels.ref(node.id),
+                                        }
+                                    }
+                                    events={events.node}
+                                />
+                            );
+                        })}
+                    </g>
+                </g>
+            </svg>
+            {children}
+        </GraphDefsContext>
+    );
+};

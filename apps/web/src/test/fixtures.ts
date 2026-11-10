@@ -27,3 +27,13 @@ export const loadFixture = (fixture: string): SourceFile[] => {
             }))
     );
 };
+
+/** A golden file of the legacy build, `testdata/golden/<fixture>/<file>`. */
+export const readGolden = (fixture: string, file: string): unknown =>
+    JSON.parse(readFileSync(join(repoRoot, 'testdata', 'golden', fixture, file), 'utf8'));
+
+/** Names of the golden files of a fixture that start with `prefix`, sorted. */
+export const goldenFiles = (fixture: string, prefix: string): string[] =>
+    readdirSync(join(repoRoot, 'testdata', 'golden', fixture))
+        .filter(file => file.startsWith(prefix))
+        .sort();

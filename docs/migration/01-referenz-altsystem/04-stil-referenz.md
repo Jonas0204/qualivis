@@ -37,6 +37,8 @@ bzw. aus `getComputedStyle` im laufenden Build (Fenster 1024 × 768). Sie sind d
 | Füllung Vorschaukreis `function.jsx` | `#3ad5a2` | `#8d94e7` | `#4cbbd9` |
 
 Kanten `#999` mit Deckkraft 0.6; Pfeil `#999`. Indirekt verbundene Knoten beim Ausblenden: `#fafafa`.
+Legende: Rahmen `--qv-legend-border` `rgba(200,200,200,.9)`, Hintergrund `--qv-legend-bg`
+`rgba(250,250,250,.9)`.
 
 ### Material-Theme „deeppurple-amber“ (nur benötigte Teile)
 | Token | Wert | Verwendung |
@@ -50,11 +52,18 @@ Kanten `#999` mit Deckkraft 0.6; Pfeil `#999`. Indirekt verbundene Knoten beim A
 | `--qv-toggle-track-off` | `rgba(0,0,0,.38)` | Schalter aus (Bahn) |
 | `--qv-snackbar-bg` | `#323232` | Snackbar |
 | `--qv-snackbar-text` | `hsla(0,0%,100%,.7)` | Snackbar-Text |
-| `--qv-tooltip-bg` | `rgba(97,97,97,.9)` | Tooltip (Schrift 10 px, weiß) |
+| `--qv-tooltip-bg` | `rgba(97,97,97,.9)` | Tooltip (Schrift 10 px) |
+| `--qv-tooltip-text` | `#ffffff` | Tooltip-Text |
 | `--qv-dialog-shadow` | `0 11px 15px -7px rgba(0,0,0,.2), 0 24px 38px 3px rgba(0,0,0,.14), 0 9px 46px 8px rgba(0,0,0,.12)` | Dialog |
 | `--qv-snackbar-shadow` | `0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12)` | Snackbar |
 | `--qv-option-hover` | `rgba(0,0,0,.04)` | Auswahl-Optionen Hover |
 | `--qv-option-selected` | `rgba(0,0,0,.12)` | gewählte Option |
+| `--qv-select-underline` | `rgba(0,0,0,.42)` | Linie unter dem Select |
+| `--qv-select-arrow` | `rgba(0,0,0,.54)` | Pfeil des Select |
+| `--qv-select-panel-shadow` | `0 2px 4px -1px rgba(0,0,0,.2), 0 4px 5px 0 rgba(0,0,0,.14), 0 1px 10px 0 rgba(0,0,0,.12)` | Liste des Select |
+| `--qv-stroked-border` | `rgba(0,0,0,.12)` | Rand `mat-stroked-button` |
+| `--qv-raised-shadow` | `0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12)` | `mat-raised-button` |
+| `--qv-raised-shadow-active` | `0 5px 5px -3px rgba(0,0,0,.2), 0 8px 10px 1px rgba(0,0,0,.14), 0 3px 14px 2px rgba(0,0,0,.12)` | `mat-raised-button` gedrückt |
 
 Clusterfarben (`constants/cluster-colors.ts`): `#8321d9 #6ad921 #d92121 #1d5ebf #bf731d #158c35
 #734511 #381173 #731111 #5f7311 #731152 #d9bf57 #d957bf #bf6b4d #bf4d6b #abd98d #977cbf #5b828c

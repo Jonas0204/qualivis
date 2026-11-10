@@ -16,19 +16,26 @@ Dateibaum öffnet sie, Zurück-Button und Browser-Zurück schließen sie, Neulad
 `apps/web/src/app/App.tsx`, `GraphView.tsx`, `FileTree.tsx`.
 
 ## Schritte
+Schon vorhanden (P05): Der Doppelklick im Graph setzt `componentIdAtom` (`GraphView`), der
+Zurück-Button erscheint nur bei gesetzter ID (`GraphActions`), ein Projekt mit einer Komponente
+zeigt deren KV (`selectViewGraph`), und die Größenmetrik wird beim Wechsel zurückgesetzt
+(`useSizeMetric` in `GraphView`). Neu sind die URL, `selectFile` nach dem Drill-down und der
+Dateibaum.
+
 1. `useUrlState()` synchronisiert `componentIdAtom` ⇄ URL: `componentId` ⇄ URL-Suchparameter `id`:
    - Atom → URL: `history.pushState` (neuer Eintrag) bei Drill-down/Zurück; `replaceState` beim Start.
    - URL → Atom: `popstate` (Browser-Zurück/Vor).
    - Pfad bleibt erhalten (Basis `./`); nur `?id=` ändert sich. Ohne `id`: Suchparameter entfernen.
 2. Drill-down (AV): Doppelklick auf Knoten mit `id.startsWith('/')` und `functions.length >= 1` →
-   `componentId = id`. Danach (wie Altsystem) die Datei der Komponente auswählen (`selectFile`).
-3. Zurück-Button (`arrow_back`, nur KV) → `componentId = undefined`.
+   `componentId = id` (vorhanden). Danach (wie Altsystem) die Datei der Komponente auswählen (`selectFile`).
+3. Zurück-Button (`arrow_back`, nur KV) → `componentId = undefined` (vorhanden; geht jetzt über die URL).
 4. Dateibaum: Klick → nach 500 ms `componentId = undefined`; Doppelklick (eine Komponente) →
    `componentId = file#comp`.
 5. Ungültige `id` (Datei/Komponente unbekannt) → AV (Altsystem N9), URL bereinigen.
 6. Einzelkomponenten-Projekt: immer KV-Graph (N9), Zurück-Button nicht anzeigen (Altsystem zeigt ihn
    nur bei gesetztem `id`).
-7. Größenmetrik beim Wechsel in die KV ggf. auf `sloc.physical` zurücksetzen (N11).
+7. Größenmetrik beim Wechsel in die KV ggf. auf `sloc.physical` zurücksetzen (N11, vorhanden; Test
+   für den Weg über die URL).
 8. Tests (jsdom, `window.history`): Drill-down setzt `?id=` (URL-kodiert), `popstate` zurück leert
    `componentId`; Start mit `?id=…` und vorhandener Analyse öffnet KV; unbekannte `id` → AV.
 

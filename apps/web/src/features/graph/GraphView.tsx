@@ -1,47 +1,322 @@
-import { useAtomValue } from 'jotai';
-import { useRef } from 'react';
-import { viewGraphAtom } from '../../state/viewAtoms';
-import { GraphCanvas } from './GraphCanvas';
-import { fitViewBox } from './geometry';
-import { createForceLayout, type ForceLayoutOptions } from './layout/forceLayout';
-import type { LayoutEngine } from './layout/types';
+import {
+    buildViewModel,
+    defaultSettings,
+    graphSettings,
+    qualityMetrics,
+    type Settings,
+    type View,
+    type VisualLink,
+    type VisualNode,
+    withoutNodes,
+} from '@qualivis/core';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { selectGraphNodeAtom, selectionAtom } from '../../state/selectionAtoms';
+import { componentIdAtom, fullScreenAtom, viewGraphAtom } from '../../state/viewAtoms';
+import { GraphActions } from './GraphActions';
+import { GraphCanvas, type GraphEvents } from './GraphCanvas';
+import { Legend } from './Legend';
+import { createLayout as createDefaultLayout, type LayoutFactory } from './layout/createLayout';
+import type { LayoutNode } from './layout/types';
+import type { ViewGraph } from './selectViewGraph';
 import { useElementSize } from './useElementSize';
+import { useFade } from './useFade';
+import { type LabelMeasure, useLabelCollision } from './useLabelCollision';
 import { useLayout } from './useLayout';
+import { useNodeDrag } from './useNodeDrag';
+import { browserMeasure, type PanZoomMeasure, usePanZoom } from './usePanZoom';
+import { nextZoomStyle, type ZoomStyle, type ZoomTransform, zoomLevel } from './zoomMath';
 import './graph.css';
-
-export type LayoutFactory = (options: ForceLayoutOptions) => LayoutEngine;
 
 type GraphViewProps = {
     /** Builds the layout engine; tests pass a fake one. */
     createLayout?: LayoutFactory;
+    /** The legacy defaults until the settings come in P07. */
+    settings?: Settings;
+    /** Measurements for zoom to fit; tests pass fixed ones, since jsdom has no layout. */
+    measure?: PanZoomMeasure;
+    /** Measures a label for hiding overlapping labels; tests pass fixed values, as for `measure`. */
+    measureLabel?: LabelMeasure;
 };
 
-/** Graph of the current view, laid out with the force layout and fitted into the area. */
-export const GraphView = ({ createLayout = createForceLayout }: GraphViewProps) => {
-    const graph = useAtomValue(viewGraphAtom);
+const noNodeIds: readonly string[] = [];
+const noLinks: readonly VisualLink[] = [];
+
+/** Nodes removed with Ctrl+click (G5), for the graph they were removed from. */
+type Removal = { viewGraph: ViewGraph; nodeIds: readonly string[] };
+
+/** Gives the nodes the position (and pin) of the node with the same id before the restart. */
+const placeLike = (nodes: readonly LayoutNode[], before: ReadonlyMap<string, LayoutNode>) => {
+    for (const node of nodes) {
+        const old = before.get(node.id);
+        if (old) {
+            node.x = old.x;
+            node.y = old.y;
+            node.fx = old.fx;
+            node.fy = old.fy;
+        }
+    }
+};
+
+/**
+ * G14: the size metric of the select; as in the legacy app it stays when the view changes. N11
+ * (legacy graph.component.ts:124-134): the component view offers no component-only metric, so it
+ * goes back to "Lines of Code" there.
+ */
+const useSizeMetric = (view: View | undefined) => {
+    const [sizeMetric, setSizeMetric] = useState(graphSettings.defaultSizeMetric);
+    if (view === 'component' && qualityMetrics[sizeMetric]?.componentOnly) {
+        setSizeMetric('sloc.physical');
+    }
+    return [sizeMetric, setSizeMetric] as const;
+};
+
+/**
+ * Graph of the current view, laid out by the engine of the settings, with pan, zoom, drag,
+ * selection, fading, hiding of overlapping labels, the legend and the action bars.
+ */
+export const GraphView = ({
+    createLayout = createDefaultLayout,
+    settings = defaultSettings,
+    measure = browserMeasure,
+    measureLabel,
+}: GraphViewProps) => {
+    const viewGraph = useAtomValue(viewGraphAtom);
+    const [componentId, setComponentId] = useAtom(componentIdAtom);
+    const [fullScreen, setFullScreen] = useAtom(fullScreenAtom);
+    const selection = useAtomValue(selectionAtom);
+    const setSelection = useSetAtom(selectionAtom);
+    const selectGraphNode = useSetAtom(selectGraphNodeAtom);
     const areaRef = useRef<HTMLDivElement>(null);
     const size = useElementSize(areaRef);
+    const nodeSizesBasedOnMetrics = settings.nodeSizesBasedOnMetrics ?? true;
+    const colaLayout = settings.colaLayout ?? true;
+    const autoZoom = settings.autoZoom ?? true;
+    const hideOverlappingLabels = settings.hideOverlappingLabels ?? true;
 
-    // Like the legacy app, the layout takes the area size when it starts and does not restart when
-    // the area is resized; hence `size !== undefined` instead of `size` in the deps.
-    useLayout(
+    const [sizeMetric, setSizeMetric] = useSizeMetric(viewGraph?.view);
+    // G15: cluster colours; the legacy app kept them on when the view changed.
+    const [showCluster, setShowCluster] = useState(false);
+
+    // G5: Ctrl+click removes a node from this graph only (legacy removeNode,
+    // graph.component.ts:1050-1056), not from the analysis. Restarts keep the removal as in the
+    // legacy app; another graph (other view, new analysis) shows all nodes again.
+    const [removal, setRemoval] = useState<Removal>();
+    const removedIds = removal && removal.viewGraph === viewGraph ? removal.nodeIds : noNodeIds;
+    // The legacy restart (after a removal or another size metric) kept the node objects, so the
+    // layout went on from where the nodes were.
+    const nodesBeforeRestartRef = useRef<ReadonlyMap<string, LayoutNode>>(undefined);
+
+    // A new copy for every graph: the layout writes positions into its nodes and links, so they
+    // must not be the value of an atom (architecture §5; the legacy app copied on every graph,
+    // graph.component.ts:166-171). Clusters and constraints leave out the removed nodes, as the
+    // legacy restart computed them again (createSimulation, 563-574).
+    const model = useMemo(
         () =>
-            graph && size
-                ? createLayout({ nodes: graph.nodes, links: graph.links, ...size })
-                : undefined,
-        [graph, size !== undefined, createLayout]
+            viewGraph &&
+            buildViewModel(withoutNodes(viewGraph.graph, removedIds), {
+                view: viewGraph.view,
+                sizeMetric,
+                nodeSizesBasedOnMetrics,
+            }),
+        [viewGraph, removedIds, sizeMetric, nodeSizesBasedOnMetrics]
     );
 
-    // Nodes get their first position when the engine is created; draw them only from then on.
-    const placed = graph?.nodes.every(node => node.x !== undefined && node.y !== undefined);
+    // Like the legacy app, the layout takes the area size when it starts and does not restart when
+    // the area is resized; hence `size !== undefined` instead of `size` in the deps. A new engine
+    // for the same model starts from the positions of the old one, as the legacy restartGraph did.
+    const layout = useLayout(() => {
+        if (!model || !size) {
+            return undefined;
+        }
+        if (nodesBeforeRestartRef.current) {
+            placeLike(model.nodes, nodesBeforeRestartRef.current);
+            nodesBeforeRestartRef.current = undefined;
+        }
+        return createLayout(colaLayout, {
+            nodes: model.nodes,
+            links: model.links,
+            constraints: model.constraints,
+            ...size,
+        });
+    }, [model, size !== undefined, colaLayout, createLayout]);
+
+    // G18: measure the labels again at every end of the layout (also after dragging) and when the
+    // zoom level changes (legacy lastZoomValue); panning moves all labels alike.
+    const labelCollision = useLabelCollision({
+        enabled: hideOverlappingLabels,
+        run: layout.run,
+        measure: measureLabel,
+    });
+    const { update: updateLabels } = labelCollision;
+    useEffect(() => {
+        if (layout.ends > 0) {
+            updateLabels();
+        }
+    }, [layout.ends, updateLabels]);
+
+    const [zoomStyle, setZoomStyle] = useState<ZoomStyle>({});
+    const lastZoomRef = useRef<number>(undefined);
+    const handleZoom = useCallback(
+        (transform: ZoomTransform) => {
+            setZoomStyle(current => nextZoomStyle(current, transform.k));
+            if (transform.k !== lastZoomRef.current) {
+                lastZoomRef.current = transform.k;
+                updateLabels();
+            }
+        },
+        [updateLabels]
+    );
+    const panZoom = usePanZoom({ measure, onZoom: handleZoom });
+
+    // A restart draws new labels and links, which the legacy app gave the default sizes again.
+    const [styleRun, setStyleRun] = useState(layout.run);
+    if (styleRun !== layout.run) {
+        setStyleRun(layout.run);
+        setZoomStyle({});
+    }
+
+    // G17: fit the graph in after the first end of every layout run (legacy firstSimulation); later
+    // ends, e.g. after dragging, leave the zoom alone.
+    const { zoomToFit } = panZoom;
+    const fittedRun = useRef<number>(undefined);
+    useEffect(() => {
+        if (layout.ended && fittedRun.current !== layout.run) {
+            fittedRun.current = layout.run;
+            if (autoZoom) {
+                zoomToFit();
+            }
+        }
+    }, [layout.run, layout.ended, autoZoom, zoomToFit]);
+
+    // G13: switching full screen fits the graph in, also without "Auto zoom" (legacy settings
+    // subscription, graph.component.ts:90-93).
+    const fullScreenRef = useRef(fullScreen);
+    useEffect(() => {
+        if (fullScreenRef.current !== fullScreen) {
+            fullScreenRef.current = fullScreen;
+            zoomToFit();
+        }
+    }, [fullScreen, zoomToFit]);
+
+    const fade = useFade(model?.links ?? noLinks, layout.run, settings);
+    const drag = useNodeDrag({
+        getEngine: layout.getEngine,
+        getTransform: panZoom.getTransform,
+        onDraggingChange: fade.onDraggingChange,
+    });
+
+    const selectedIds = useMemo(() => new Set(selection?.map(node => node.id)), [selection]);
+
+    const keepPositions = () => {
+        if (model) {
+            nodesBeforeRestartRef.current = new Map(model.nodes.map(each => [each.id, each]));
+        }
+    };
+
+    const removeNode = (node: VisualNode) => {
+        if (!viewGraph) {
+            return;
+        }
+        keepPositions();
+        setRemoval({ viewGraph, nodeIds: [...removedIds, node.id] });
+    };
+
+    // Legacy onMetricSelectionChange (graph.component.ts:1167-1170): restart the layout.
+    const changeSizeMetric = (metric: string) => {
+        keepPositions();
+        setSizeMetric(metric);
+    };
+
+    const events: GraphEvents = {
+        onPointerDown: panZoom.onPointerDown,
+        // G7 (legacy deselectNodes, graph.component.ts:1172-1177): a click on the background itself.
+        onClick: event => {
+            if (event.target === event.currentTarget) {
+                fade.fadeIn();
+                setSelection(null);
+            }
+        },
+        node: {
+            onPointerDown: drag.onPointerDown,
+            // G1 and G5 (legacy onNodeClick, graph.component.ts:1030-1048).
+            onCircleClick: (node, event) => {
+                if (event.ctrlKey) {
+                    // The legacy fading of this click reached only the nodes drawn before the
+                    // restart, so it does not fade here.
+                    event.stopPropagation();
+                    removeNode(node);
+                    return;
+                }
+                selectGraphNode(node);
+            },
+            onClick: node => fade.fadeTo(node.id),
+            // G3 (legacy createNodeGroup, graph.component.ts:693-701): a component of the app graph
+            // with inner functions opens its component view; until the URL in P06-S06 only the
+            // component id goes. Components without a graph have no functions; there the legacy
+            // handler threw on `functions.length`, here nothing happens.
+            onDoubleClick: node => {
+                if (node.id.startsWith('/') && (node.functions?.length ?? 0) >= 1) {
+                    setComponentId(node.id);
+                }
+            },
+            // G6: fade while the pointer is over a node with Ctrl held.
+            onPointerEnter: (node, event) => {
+                if (event.ctrlKey) {
+                    fade.fadeTo(node.id);
+                }
+            },
+            onPointerLeave: (_node, event) => {
+                if (event.ctrlKey) {
+                    fade.fadeIn();
+                }
+            },
+        },
+    };
+
+    // Nodes get their first position when the engine starts; draw them only from then on.
+    const placed = model?.nodes.every(node => node.x !== undefined && node.y !== undefined);
 
     return (
         <div ref={areaRef} className="qv-graph-area">
-            {graph && placed && (
+            {viewGraph && model && (
                 <GraphCanvas
-                    nodes={graph.nodes}
-                    links={graph.links}
-                    viewBox={fitViewBox(graph.nodes)}
+                    nodes={placed ? model.nodes : []}
+                    links={placed ? model.links : []}
+                    view={viewGraph.view}
+                    settings={settings}
+                    zoom={{
+                        ...zoomStyle,
+                        transform: panZoom.transform,
+                        transition: panZoom.transition,
+                    }}
+                    svgRef={panZoom.svgRef}
+                    zoomGroupRef={panZoom.zoomGroupRef}
+                    events={events}
+                    highlight={{ selected: selectedIds, fade: fade.faded }}
+                    labels={{ hidden: labelCollision.hidden, ref: labelCollision.labelRef }}
+                    showCluster={showCluster}
+                >
+                    <Legend view={viewGraph.view} />
+                </GraphCanvas>
+            )}
+            {viewGraph && (
+                <GraphActions
+                    view={viewGraph.view}
+                    // N13: until the URL in P06-S06 only the component id goes.
+                    onBack={componentId === undefined ? undefined : () => setComponentId(undefined)}
+                    cluster={{
+                        hasCluster: model?.hasCluster ?? false,
+                        show: showCluster,
+                        onToggle: () => setShowCluster(show => !show),
+                    }}
+                    sizeMetric={{ value: sizeMetric, onChange: changeSizeMetric }}
+                    zoom={{
+                        level: zoomLevel(panZoom.transform.k),
+                        onZoomTo100: panZoom.zoomTo100,
+                        onZoomToFit: panZoom.zoomToFit,
+                    }}
+                    fullScreen={{ on: fullScreen, onToggle: () => setFullScreen(on => !on) }}
                 />
             )}
         </div>

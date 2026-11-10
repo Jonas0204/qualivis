@@ -82,7 +82,7 @@ Ordner der Altcode-Kopie (`packages/core/src/legacy/`) behalten die **alten Date
 
 ## 7. Kommentare
 
-- Kommentieren **warum**, nicht was. Jede übernommene Eigenheit (K1–K11, V1–V7) bekommt an der
+- Kommentieren **warum**, nicht was. Jede übernommene Eigenheit (K1–K12, V1–V7) bekommt an der
   Stelle einen Kommentar `// Legacy quirk K3: ... (see docs/migration/01-referenz-altsystem/...)`.
 - Keine auskommentierten Codeblöcke (Altcode-Kommentare in `legacy/` bleiben, wie sie sind).
 
@@ -94,8 +94,9 @@ Ordner der Altcode-Kopie (`packages/core/src/legacy/`) behalten die **alten Date
 - **Keine** `Co-Authored-By`-Zeilen, keine Hinweise auf Claude, keine Session-Links.
 - Autor/Committer und Push-Regeln stehen in der **lokalen** `CLAUDE.md` im Repo-Root (nicht
   versioniert, siehe `.gitignore`). Ist sie nicht vorhanden: vor dem Commit den Nutzer fragen.
-- Ein Schritt = ein Commit (Ausnahme: sehr große Schritte nach Absprache). Vor dem Commit prüft
-  der Nutzer die uncommitteten Änderungen in seiner IDE (README R3).
+- Ein Schritt = ein Commit. Ausnahmen: kleine Schritte dürfen zusammen in einen Commit (Body mit
+  `Plan: Pnn-Syy, Pnn-Syz`; Nutzer, 09.11.2026), sehr große Schritte nach Absprache auf mehrere.
+  Vor dem Commit prüft der Nutzer die uncommitteten Änderungen in seiner IDE (README R3).
 - Branches: ein Branch pro Phase (`rewrite/pNN-<name>`) mit Abzweig von `rewrite/react`; am Ende der
   Phase ein Pull Request nach `rewrite/react`, den der Nutzer per Merge-Commit übernimmt (Details:
   README, „Branches und Pull Requests“). Review-Korrekturen als neue Commits, nie `--amend` oder

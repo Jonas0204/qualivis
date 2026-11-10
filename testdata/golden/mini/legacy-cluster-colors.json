@@ -1,0 +1,60 @@
+{
+  "fixture": "mini",
+  "componentId": "/mini/src/App.js#App",
+  "colors": [
+    {
+      "id": "constructor",
+      "cluster": 0,
+      "fill": "rgb(224, 199, 246)",
+      "stroke": "rgb(150, 63, 226)"
+    },
+    {
+      "id": "helper",
+      "cluster": 1,
+      "fill": "rgb(218, 246, 199)",
+      "stroke": "rgb(128, 226, 63)"
+    },
+    {
+      "id": "componentDidMount",
+      "cluster": 2,
+      "fill": "rgb(246, 199, 199)",
+      "stroke": "rgb(226, 63, 63)"
+    },
+    {
+      "id": "componentWillMount",
+      "cluster": 3,
+      "fill": "rgb(192, 213, 245)",
+      "stroke": "rgb(41, 114, 223)"
+    },
+    {
+      "id": "handleIncrement",
+      "cluster": 0,
+      "fill": "rgb(224, 199, 246)",
+      "stroke": "rgb(150, 63, 226)"
+    },
+    {
+      "id": "loadTodos",
+      "cluster": 2,
+      "fill": "rgb(246, 199, 199)",
+      "stroke": "rgb(226, 63, 63)"
+    },
+    {
+      "id": "computeTotal",
+      "cluster": 4,
+      "fill": "rgb(245, 220, 192)",
+      "stroke": "rgb(223, 137, 41)"
+    },
+    {
+      "id": "emptyMethod",
+      "cluster": 5,
+      "fill": "rgb(179, 244, 196)",
+      "stroke": "rgb(28, 186, 70)"
+    },
+    {
+      "id": "renderTitle",
+      "cluster": 6,
+      "fill": "rgb(243, 210, 173)",
+      "stroke": "rgb(164, 99, 24)"
+    }
+  ]
+}

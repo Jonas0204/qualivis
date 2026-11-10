@@ -3,13 +3,14 @@ import { createStore } from 'jotai';
 import { describe, expect, it } from 'vitest';
 import { loadFixture } from '../test/fixtures';
 import { analysisAtom, initialAnalysisState } from './analysisAtoms';
-import { componentIdAtom, viewGraphAtom, viewModeAtom } from './viewAtoms';
+import { componentIdAtom, fullScreenAtom, viewGraphAtom, viewModeAtom } from './viewAtoms';
 
 describe('viewAtoms', () => {
-    it('starts on the upload view with no component selected', () => {
+    it('starts on the upload view with no component selected and not in full screen', () => {
         const store = createStore();
         expect(store.get(viewModeAtom)).toBe('upload');
         expect(store.get(componentIdAtom)).toBeUndefined();
+        expect(store.get(fullScreenAtom)).toBe(false);
     });
 
     it('stores the view mode and component id', () => {
@@ -33,12 +34,12 @@ describe('viewGraphAtom', () => {
 
         const appGraph = store.get(viewGraphAtom);
         expect(appGraph?.view).toBe('app');
-        expect(appGraph?.nodes).toHaveLength(8);
+        expect(appGraph?.graph.nodes).toHaveLength(8);
 
         store.set(componentIdAtom, '/mini/src/App.js#App');
         const componentGraph = store.get(viewGraphAtom);
         expect(componentGraph?.view).toBe('component');
-        expect(componentGraph?.nodes.map(node => node.id)).toEqual(
+        expect(componentGraph?.graph.nodes.map(node => node.id)).toEqual(
             result.fileMap['/mini/src/App.js']?.components?.App?.graph?.nodes.map(node => node.id)
         );
     });

@@ -1,8 +1,57 @@
-/* Graph styles (global, the SVG classes match the legacy app). Colours: style reference §1. */
+/* Graph styles (global, the SVG classes match the legacy app): legacy graph.component.scss
+   (#d3-root). Colours: style reference §1, docs/migration/01-referenz-altsystem/04-stil-referenz.md */
 .qv-graph-area {
     position: relative;
     height: 100%;
     background: var(--qv-background);
+}
+
+/* legacy .action-buttons (graph.component.scss:11-37); two classes, so they win over the modules */
+.qv-graph-area .qv-graph-actions {
+    position: absolute;
+    top: 8px;
+    display: flex;
+    align-items: center;
+    color: var(--qv-graph-button);
+
+    &.left {
+        left: 8px;
+    }
+
+    &.right {
+        right: 8px;
+    }
+
+    > * {
+        height: 40px;
+    }
+
+    .show-cluster-button {
+        margin-right: 16px;
+
+        &.on {
+            background: var(--qv-cluster-button-on);
+        }
+    }
+}
+
+/* legacy #legend (graph.component.scss:167-183) */
+.qv-legend {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    border-top: 1px solid;
+    border-left: 1px solid;
+    border-color: var(--qv-legend-border);
+    border-top-left-radius: 8px;
+    background: var(--qv-legend-bg);
+    cursor: default;
+
+    .description {
+        dominant-baseline: central;
+        font-size: 12px;
+        font-weight: 300;
+    }
 }
 
 /* legacy graph.component.html: inline style of the SVG */
@@ -12,19 +61,146 @@
     width: 100%;
     height: 100%;
     user-select: none;
+    /* d3-zoom and d3-drag set this, so touch input pans and drags instead of scrolling */
+    touch-action: none;
 }
 
-.qv-graph .circle-node.component {
-    fill: var(--qv-graph-component-fill);
-}
+/* legacy ::ng-deep #d3-root: the node classes style the graph and the legend alike */
+:is(.qv-graph, .qv-legend) {
+    /* legacy createNodeGroup: inline style of every node group */
+    .node {
+        cursor: pointer;
+        outline: none;
+    }
 
-.qv-graph .circle-overlay.component {
-    stroke: var(--qv-graph-component);
-}
+    /* Fading (createFading) eases the opacity like a d3 transition: 250 ms, d3.easeCubicInOut */
+    .node {
+        transition: opacity 250ms cubic-bezier(0.65, 0, 0.35, 1);
+    }
 
-.qv-graph .node-label {
-    font-size: 14px;
-    dominant-baseline: central;
-    text-anchor: middle;
-    pointer-events: none;
+    .icon {
+        font-family: var(--qv-font-icons), monospace;
+        text-anchor: middle;
+        dominant-baseline: central;
+
+        &.warn {
+            fill: var(--qv-warn);
+        }
+
+        &.error {
+            fill: var(--qv-error);
+        }
+    }
+
+    .diagonal-hatch line {
+        stroke: var(--qv-graph-component);
+    }
+
+    /* Same order as the legacy rules: warn and error come last and win. */
+    :is(.circle-overlay, .inner-circle, .function) {
+        &.component {
+            stroke: var(--qv-graph-component);
+        }
+
+        &.innerFunction {
+            stroke: var(--qv-graph-function);
+        }
+
+        &.innerFunction.special {
+            stroke: var(--qv-graph-special);
+        }
+
+        &.warn.warn {
+            stroke: var(--qv-warn);
+        }
+
+        &.error.error {
+            stroke: var(--qv-error);
+        }
+    }
+
+    .circle-node {
+        &.component {
+            fill: var(--qv-graph-component-fill);
+        }
+
+        &.innerFunction {
+            fill: var(--qv-graph-function-fill);
+        }
+
+        &.innerFunction.special {
+            fill: var(--qv-graph-special-fill);
+        }
+    }
+
+    .circle-node.selected {
+        &.component {
+            fill: var(--qv-graph-component-selected);
+        }
+
+        &.innerFunction {
+            fill: var(--qv-graph-function-selected);
+        }
+
+        &.innerFunction.special {
+            fill: var(--qv-graph-special-selected);
+        }
+    }
+
+    .function {
+        &.component {
+            fill: var(--qv-graph-component-preview);
+        }
+
+        &.innerFunction {
+            fill: var(--qv-graph-function-preview);
+        }
+
+        &.innerFunction.special {
+            fill: var(--qv-graph-special-preview);
+        }
+    }
+
+    .function.jsx {
+        &.component {
+            fill: var(--qv-graph-component-preview-jsx);
+        }
+
+        &.innerFunction {
+            fill: var(--qv-graph-function-preview-jsx);
+        }
+
+        &.innerFunction.special {
+            fill: var(--qv-graph-special-preview-jsx);
+        }
+    }
+
+    .dots {
+        font-size: 8px;
+        text-anchor: middle;
+    }
+
+    /* legacy createLinks: transition of the line width (zoom); opacity as for .node */
+    .links line {
+        transition:
+            stroke-width 0.1s ease-out,
+            opacity 250ms cubic-bezier(0.65, 0, 0.35, 1);
+    }
+
+    /* legacy createLabels: inline style of the label */
+    .node-label {
+        font-size: 14px;
+        dominant-baseline: central;
+        text-anchor: middle;
+        pointer-events: none;
+    }
+
+    /* legacy addTransition while wheel zooming (graphSettings.zoomTransition) */
+    .zoom-transition {
+        transition: transform 0.1s ease-out;
+
+        .node-label {
+            transition: font-size 0.1s ease-out;
+        }
+    }
 }

@@ -18,7 +18,8 @@
         "jotai": "catalog:",
         "path-browserify": "catalog:",
         "react": "catalog:",
-        "react-dom": "catalog:"
+        "react-dom": "catalog:",
+        "webcola": "catalog:"
     },
     "devDependencies": {
         "@testing-library/dom": "catalog:",

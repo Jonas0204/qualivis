@@ -1,0 +1,31 @@
+/* .mat-tooltip of Angular Material 8: style reference §1, docs/migration/01-referenz-altsystem/
+   04-stil-referenz.md (--qv-tooltip-bg, --qv-tooltip-text, 10 px). */
+.tooltip {
+    position: fixed;
+    z-index: 1000;
+    max-width: 250px;
+    padding: 6px 8px;
+    overflow: hidden;
+    border-radius: 4px;
+    background: var(--qv-tooltip-bg);
+    color: var(--qv-tooltip-text);
+    font-family: var(--qv-font);
+    font-size: 10px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    pointer-events: none;
+    transform-origin: center top;
+    animation: show 150ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+@keyframes show {
+    from {
+        opacity: 0;
+        transform: scale(0);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}

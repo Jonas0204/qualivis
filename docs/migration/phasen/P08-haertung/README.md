@@ -41,6 +41,8 @@ Erkenntnisse aus `STATUS.md` (Abweichungen, offene Punkte) einarbeiten, mit dem 
 - `features/analysis/analysis.worker.ts` (`new Worker(new URL('./analysis.worker.ts', import.meta.url), { type: 'module' })`),
   Nachrichten `{ type: 'analyze', files }` → `{ type: 'progress', percent }` / `{ type: 'done', result }` /
   `{ type: 'error', message }`. `runAnalysis` nutzt den Worker, Fallback ohne Worker (Tests/jsdom).
+  Der Monorepo-Weg (P05.5, `analyzeWorkspaceAsync` mit `ProjectFiles` und `appDir`) läuft ebenfalls
+  im Worker, samt Auswahl und Umschreiben; Messwerte aus P05.5-S08 als Ausgangswert (RI14).
 - Kern nur im Worker laden → Haupt-Bundle deutlich kleiner (Spike: 1,72 MB gesamt). Ziel: Haupt-Chunk
   < 300 KB gzip (Ausgangswert nach P04: ein Chunk, 1,31 MB, gzip 329,7 kB; Vite warnt ab 500 kB).
   Ergebnis messen und notieren.
@@ -50,6 +52,8 @@ Erkenntnisse aus `STATUS.md` (Abweichungen, offene Punkte) einarbeiten, mit dem 
 ## S05 – Fehlerbehandlung (S)
 - Kern: Option `onFileError?: (path, error) => 'skip' | 'throw'` (Standard `'throw'` = Altverhalten),
   Tests. Web: übersprungene Dateien als Snackbar-Liste („3 files could not be parsed: …“).
+  Schon vorhanden: `analyzeProject.ts` loggt einen Parsefehler mit dem Pfad der Datei und wirft
+  ihn weiter; `onFileError` setzt an dieser Stelle an.
 - `app/ErrorBoundary.tsx` um `GraphPage` mit Hinweis und Button „Back to upload“.
 - ADR-011 A5 als umgesetzt markieren.
 
@@ -61,9 +65,11 @@ Erkenntnisse aus `STATUS.md` (Abweichungen, offene Punkte) einarbeiten, mit dem 
 - Aufräumen (Nutzer, 08.11.2026): Quelltext-Eingaben in Kern-Tests stehen als Zeilenliste mit
   `[…].join('\n')` (z. B. `packages/core/src/analysis/analyzeProject.test.ts`). Lesbarer machen:
   Template-String mit kleinem Helfer, der den ersten Zeilenumbruch entfernt, oder Fixture-Dateien.
-- Aufräumen (Nutzer, 09.11.2026): Bei unbekannter Komponenten-ID zeigt `buildViewGraph` den
+- Aufräumen (Nutzer, 09.11.2026): Bei unbekannter Komponenten-ID zeigt `selectViewGraph` den
   App-Graph als App-Ansicht (wie P06-S06; das Altsystem rechnete ihn als Komponentenansicht). Prüfen,
   ob der Fall nach dem Bereinigen der URL (P06-S06) noch eintreten kann; sonst vereinfachen.
+- Aufräumen (Review P05, 10.11.2026): `GraphCanvas` hat 12 Props, `GraphNode` 7 (Konventionen §5:
+  höchstens 6). Zusammengehörige Props zu Objekten bündeln, ohne das Verhalten zu ändern.
 
 ## S07 – Barrierefreiheit (M)
 - Tastaturbedienung: Toolbar, Aktionsleiste, Dateibaum, Dialog, Select, Split-Trenner vollständig.

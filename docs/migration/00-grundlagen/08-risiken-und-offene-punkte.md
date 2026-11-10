@@ -9,8 +9,12 @@ Alle anderen Entscheidungen stehen als ADR in `07-entscheidungen.md`. IDs werden
 | O2 | Lizenz / Veröffentlichung | **keine Lizenz**, keine npm-Veröffentlichung. Das Repo selbst ist öffentlich (GitHub-Fork, O14) | alle Pakete `"private": true`; Veröffentlichungs-Schritt in P10 entfällt; keine personenbezogenen Daten im Repo (RI13) |
 | O5 | `legacy/angular/` | **bleibt im Repo** | Altsystem-Schritt in P11 entfällt |
 | O14 | Repo privat machen? | **offen.** Das Repo ist ein Fork und lässt sich so nicht privat stellen. Möglich: Settings → Danger Zone → „Leave fork network“, danach als eigenständiges Repo privat stellen (Issues, PRs und Kommentare gehen dabei verloren, die Commits bleiben). Folgen von privat: begrenzte Actions-Minuten (Windows und macOS zählen mehrfach), Pages nur mit Bezahl-Abo und trotzdem öffentlich | bis zur Entscheidung: als öffentlich behandeln (RI13) |
+| O16 | Barrel-Dateien (`index.ts` mit `export … from`) und `exports`-Tabellen der `package.json` auflösen? | **offen.** Das Ziel-Monorepo braucht es nicht (ADR-019) | bei Bedarf eigener Schritt nach P05.5; die Vorstufe `workspace/` ist die Stelle dafür |
+| O17 | Bibliothekskomponenten im Graphen anders darstellen als App-Komponenten? | **offen**, nach der Abnahme von P05.5 entscheiden | neue Darstellung, also Abweichung von der Stil-Referenz (ADR nötig) |
+| O18 | Testdateien mit Suffix `Test` außerhalb von `__tests__/` erkennen? | **offen.** Ein Suffix-Muster träfe auch Komponenten wie `Contest.tsx` | bis dahin nur `__tests__/`, `__mocks__/`, `.test.`, `.spec.`, `.stories.` (P05.5-S05) |
+| O19 | App-Auswahl speichern und beim Drop auf den Graphen erneut fragen? | **offen**, in P07-S05 klären | P07-S05 (Hinweis in der Karte) |
 
-Neue offene Fragen bekommen die nächste freie ID (O16 …).
+Neue offene Fragen bekommen die nächste freie ID (O20 …).
 
 ## 2. Risiken
 
@@ -29,3 +33,6 @@ Neue offene Fragen bekommen die nächste freie ID (O16 …).
 | RI11 | Unterschiede Windows/macOS (Pfade, Dateiüberwachung, Browser-Kanal) | mittel | gering | `path-browserify`, `.gitattributes eol=lf`, plattformneutrale Befehle, `tar` mit relativen Pfaden (M0); `pnpm dev` auf dem Mac prüft der Nutzer (offen) |
 | RI12 | Jotai 3 ist neu (09/2026); Beispiele im Netz meist v2 | mittel | gering | nur Grund-API nutzen (`atom`, `useAtom*`, `atomWithStorage`, `createStore`, `Provider`); Doku der installierten Version |
 | RI13 | Öffentliches Repo: personenbezogene Daten oder Secrets gelangen in Dateien, Commits oder PRs | mittel | hoch | Regel in `AGENTS.md` und README R2; Commits mit noreply-Adresse; vor jedem Commit den Diff auf Klarnamen, private E-Mail-Adressen und lokale Pfade mit Benutzernamen prüfen. Was einmal gepusht ist, bleibt in der Historie (keine History-Umschreibung) |
+| RI14 | Große Bibliotheken (mehrere hundert Dateien) machen Auswahl und Analyse im Browser langsam | mittel | mittel | nur erreichbare Dateien analysieren; Import-Scan nur mit Parse, ohne `traverse` (P05.5-S05); Zeit in der Abnahme messen (P05.5-S08); Worker in P08-S04 |
+| RI15 | Die Dateiauswahl des Browsers zählt bei einem Monorepo-Ordner auch `node_modules` auf (langsam, viel Speicher) | hoch | mittel | Ordner hineinziehen: Dabei werden ausgeschlossene Ordner übersprungen (P05.5-S02); so in der Abnahme anleiten |
+| RI16 | tsconfig-Regeln (`extends`, `baseUrl`, `paths` ersetzt statt mischt, `references`) falsch nachgebaut → fehlende Kanten | mittel | mittel | Regeln nach der TypeScript-Doku in P05.5-S03 einzeln testen; Unauflösbares melden statt raten |

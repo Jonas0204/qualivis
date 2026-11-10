@@ -16,3 +16,29 @@ export type * from './model/report';
 export * from './model/settings';
 export * from './model/specialMethods';
 export type * from './model/types';
+export type { ClusterResult } from './rules/cluster';
+export { computeClusters } from './rules/cluster';
+export type { ClusterPaint } from './rules/color';
+export { brightenColor, clusterColor, clusterPaint } from './rules/color';
+export type { Connections, LinkEnds } from './rules/connectivity';
+export { connectedNodes, isLinkHighlighted, withoutNodes } from './rules/connectivity';
+export type { IconDescription, VisualIcon } from './rules/icons';
+export { describeIconText, getNodeIcons } from './rules/icons';
+export type { Point } from './rules/linkGeometry';
+export { linkEnd } from './rules/linkGeometry';
+export type { NodeVisual, View, VisualOptions } from './rules/nodeVisuals';
+export { computeNodeVisual } from './rules/nodeVisuals';
+export type { PreviewCircle, PreviewDots } from './rules/previewGeometry';
+export {
+    indexAngle,
+    mainRadius,
+    outerRadius,
+    previewCircles,
+    previewDots,
+    previewWidth,
+} from './rules/previewGeometry';
+export type { ReactConstraint } from './rules/reactConstraints';
+export { reactConstraints } from './rules/reactConstraints';
+export { resolveThreshold } from './rules/thresholds';
+export type { ViewModel, VisualLink, VisualNode } from './rules/viewModel';
+export { buildViewModel } from './rules/viewModel';

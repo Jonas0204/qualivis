@@ -65,7 +65,13 @@ const pipeline = function* (files: readonly SourceFile[]): Generator<number, Ana
     const progressPercent = (1 / componentFiles.length) * 50;
 
     for (const file of componentFiles) {
-        asts.push({ ast: parse(file.code, file.path), srcPath: file.path });
+        try {
+            asts.push({ ast: parse(file.code, file.path), srcPath: file.path });
+        } catch (error) {
+            // biome-ignore lint/suspicious/noConsole: the parser error does not name the file
+            console.error('Parsing failed:', file.path, error);
+            throw error;
+        }
         fileMap[file.path] = { code: file.code };
         yield progressPercent;
     }
@@ -90,7 +96,8 @@ const pipeline = function* (files: readonly SourceFile[]): Generator<number, Ana
 
 /**
  * Analyses a project like the legacy app: file map with component graphs, app graph and
- * escomplex report. Input order does not matter (ADR-006). Throws on syntax errors.
+ * escomplex report. Input order does not matter (ADR-006). Throws on syntax errors and logs the
+ * path of the file.
  */
 export const analyzeProject = (files: readonly SourceFile[]): AnalysisResult => {
     const steps = pipeline(files);

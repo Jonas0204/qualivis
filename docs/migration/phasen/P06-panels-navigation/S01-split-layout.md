@@ -1,6 +1,6 @@
 # P06-S01 – SplitPane und Panel-Layout
 
-Meilenstein M3 · Abhängig von: M2 · Umfang M
+Meilenstein M3 · Abhängig von: M2, P05.5-S08 · Umfang M
 
 ## Ziel
 Die Graph-Seite ist in drei verschiebbare Spalten (275 px | Rest | 575 px) geteilt, die rechte
@@ -27,7 +27,8 @@ vertikal (363 px | Rest), Trenner 8 px `#eee`. Vollbild blendet linke und rechte
    - Bereiche `overflow: hidden auto`; Hintergrund weiß (`.as-split-area { background: white }`).
 2. `GraphPage`: horizontal `[fileTree 275, graph *, right 575]`, rechts vertikal
    `[codeQuality 363, sourceCode *]`. Platzhalter für Panels, die in S03–S05 entstehen. Vollbild-Flag
-   steuert `visible`; bei Änderung `zoomToFit()` im Graph auslösen (über Callback/Ereignis).
+   (`fullScreenAtom`, `state/viewAtoms.ts`) steuert `visible`; das Einpassen nach dem Wechsel macht
+   `GraphView` schon (G13).
    Drop auf die ganze Seite und Overlay folgen in P07-S05.
 3. Tests: Größen werden als Stil gesetzt; Ziehen um +50 px vergrößert linken Bereich um 50, verkleinert
    den Stern-Bereich; Pfeiltaste ändert um 10; unsichtbarer Bereich hat Breite 0, Trenner entfällt.
@@ -42,6 +43,8 @@ vertikal (363 px | Rest), Trenner 8 px `#eee`. Vollbild blendet linke und rechte
   `.as-split-gutter-icon`). Aus `.cache/legacy-build/main-es2015.*.js` die zwei `data:image/png`-URLs
   (horizontal/vertikal) übernehmen.
 - Nach Größenänderung der Graph-Spalte startet das Altsystem das Layout **nicht** neu.
+- Das Einpassen nach dem Vollbild-Wechsel muss die neue Breite der Graph-Spalte nutzen (das
+  Altsystem wartete mit `setTimeout(…, 0)`); im Browser prüfen.
 
 ## Commit-Vorschlag
 `feat(web): add split layout with resizable panels`

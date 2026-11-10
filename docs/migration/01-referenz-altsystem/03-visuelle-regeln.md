@@ -33,7 +33,9 @@ Für jeden Knoten:
    (Achtung: Vergleich `!== undefined`, nicht Truthiness).
 6. `warn = error = false`; wenn `metricValue >= threshold * 0.8 && metricValue < threshold` →
    `warn = true`; sonst wenn `metricValue >= threshold` → `error = true`.
-7. `width = height = Math.sqrt((16000 / threshold) * metricValue / Math.PI)`.
+7. `width = height = Math.sqrt((16000 / threshold) * metricValue / Math.PI)`. Ohne Schwelle (eine
+   Metrik nur für Komponenten bei einem Funktionsknoten) ergibt das `NaN`. **Neue App (ADR-011
+   A11):** feste Größe 48, keine Warnstufe, Icons wie sonst.
 8. Nur AV: `width += 14` und `height += 14` (Vorschau-Breite, siehe Abschnitt 5).
 
 `warn`/`error` färben den Rand **nur**, wenn `settings.currentSizeMetricErrorHighlighting` aktiv
@@ -59,8 +61,8 @@ ist (Klassen `warn`/`error` an `circle-overlay` und `inner-circle`).
 6. KV **und** `deprecatedMethods.includes(id)` → `{ 'report', 'warn', 'Deprecated React lifecycle method (see <Link https://reactjs.org/docs/react-component.html#legacy-lifecycle-methods>)' }`.
 
 Im Altsystem enthalten 5 und 6 HTML (`<a href target=_blank>`), gerendert per `innerHTML`. Neu:
-Icon-Beschreibung als Datenstruktur `{ text: string; link?: { href: string; label: string } }`
-(ADR-011, kein `innerHTML`). Golden G2 vergleicht den **normalisierten Text**
+Icon-Beschreibung als Datenstruktur `{ text: string; link?: { href: string } }`; der Linktext ist
+wie im Altsystem die URL (ADR-011, kein `innerHTML`). Golden G2 vergleicht den **normalisierten Text**
 (Tags entfernt, Leerraum zusammengefasst).
 
 ## 4. Cluster (`generateCluster`, Z. 323-368) – nur KV
@@ -80,7 +82,10 @@ Aufhellen (`calculateBrightenedColor`, Z. 317-321): Farbe nach HSL, `l = l + (1 
 Füllung `b = 0.75`, Ränder (`inner-circle`, `circle-overlay`) `b = 0.15`; nur wenn
 `showCluster && view === 'component' && cluster !== undefined`. Der d3-color-Ersatz muss für
 alle 20 Farben × 2 Helligkeiten dieselben Strings liefern wie `d3.hsl(...).toString()`
-(Format `rgb(r, g, b)`) – Referenzwerte werden in P05-S02 einmalig aus dem Legacy-Build erfasst.
+(Format `rgb(r, g, b)`). Referenzwerte: `testdata/golden/mini/legacy-cluster-colors.json`, erfasst mit
+`tools/legacy/capture-cluster-colors.browser.js`. Es belegt nur die Cluster 0–6 der KV `App`
+(`mini`); für die übrigen 13 Farben gibt es kein Testprojekt, sie hängen am 1:1 übernommenen
+Algorithmus.
 
 ## 5. Geometrie der Vorschaukreise (AV)
 
