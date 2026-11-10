@@ -11,10 +11,12 @@ import {
 } from '@qualivis/core';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useStableHandlers } from '../../lib/useStableHandlers';
 import { selectGraphNodeAtom, selectionAtom } from '../../state/selectionAtoms';
 import { componentIdAtom, fullScreenAtom, viewGraphAtom } from '../../state/viewAtoms';
 import { GraphActions } from './GraphActions';
 import { GraphCanvas, type GraphEvents } from './GraphCanvas';
+import type { NodeEvents } from './GraphNode';
 import { Legend } from './Legend';
 import { createLayout as createDefaultLayout, type LayoutFactory } from './layout/createLayout';
 import type { LayoutNode } from './layout/types';
@@ -25,6 +27,7 @@ import { type LabelMeasure, useLabelCollision } from './useLabelCollision';
 import { useLayout } from './useLayout';
 import { useNodeDrag } from './useNodeDrag';
 import { browserMeasure, type PanZoomMeasure, usePanZoom } from './usePanZoom';
+import { writePositions } from './writePositions';
 import { nextZoomStyle, type ZoomStyle, type ZoomTransform, zoomLevel } from './zoomMath';
 import './graph.css';
 
@@ -40,6 +43,7 @@ type GraphViewProps = {
 };
 
 const noNodeIds: readonly string[] = [];
+const noNodes: readonly VisualNode[] = [];
 const noLinks: readonly VisualLink[] = [];
 
 /** Nodes removed with Ctrl+click (G5), for the graph they were removed from. */
@@ -125,21 +129,29 @@ export const GraphView = ({
     // Like the legacy app, the layout takes the area size when it starts and does not restart when
     // the area is resized; hence `size !== undefined` instead of `size` in the deps. A new engine
     // for the same model starts from the positions of the old one, as the legacy restartGraph did.
-    const layout = useLayout(() => {
-        if (!model || !size) {
-            return undefined;
-        }
-        if (nodesBeforeRestartRef.current) {
-            placeLike(model.nodes, nodesBeforeRestartRef.current);
-            nodesBeforeRestartRef.current = undefined;
-        }
-        return createLayout(colaLayout, {
-            nodes: model.nodes,
-            links: model.links,
-            constraints: model.constraints,
-            ...size,
-        });
-    }, [model, size !== undefined, colaLayout, createLayout]);
+    // While the engine ticks, the frames move the drawn graph without React (P08-S09).
+    const layout = useLayout(
+        () => {
+            if (!model || !size) {
+                return undefined;
+            }
+            if (nodesBeforeRestartRef.current) {
+                placeLike(model.nodes, nodesBeforeRestartRef.current);
+                nodesBeforeRestartRef.current = undefined;
+            }
+            return createLayout(colaLayout, {
+                nodes: model.nodes,
+                links: model.links,
+                constraints: model.constraints,
+                ...size,
+            });
+        },
+        [model, size !== undefined, colaLayout, createLayout],
+        () =>
+            model !== undefined &&
+            viewGraph !== undefined &&
+            writePositions(panZoom.zoomGroupRef.current, model.nodes, model.links, viewGraph.view)
+    );
 
     // G18: measure the labels again at every end of the layout (also after dragging) and when the
     // zoom level changes (legacy lastZoomValue); panning moves all labels alike.
@@ -228,6 +240,43 @@ export const GraphView = ({
         setSizeMetric(metric);
     };
 
+    // The same object on every render, so that the memoized nodes keep their props.
+    const nodeEvents = useStableHandlers<NodeEvents>({
+        onPointerDown: drag.onPointerDown,
+        // G1 and G5 (legacy onNodeClick, graph.component.ts:1030-1048).
+        onCircleClick: (node, event) => {
+            if (event.ctrlKey) {
+                // The legacy fading of this click reached only the nodes drawn before the
+                // restart, so it does not fade here.
+                event.stopPropagation();
+                removeNode(node);
+                return;
+            }
+            selectGraphNode(node);
+        },
+        onClick: node => fade.fadeTo(node.id),
+        // G3 (legacy createNodeGroup, graph.component.ts:693-701): a component of the app graph
+        // with inner functions opens its component view; until the URL in P06-S06 only the
+        // component id goes. Components without a graph have no functions; there the legacy
+        // handler threw on `functions.length`, here nothing happens.
+        onDoubleClick: node => {
+            if (node.id.startsWith('/') && (node.functions?.length ?? 0) >= 1) {
+                setComponentId(node.id);
+            }
+        },
+        // G6: fade while the pointer is over a node with Ctrl held.
+        onPointerEnter: (node, event) => {
+            if (event.ctrlKey) {
+                fade.fadeTo(node.id);
+            }
+        },
+        onPointerLeave: (_node, event) => {
+            if (event.ctrlKey) {
+                fade.fadeIn();
+            }
+        },
+    });
+
     const events: GraphEvents = {
         onPointerDown: panZoom.onPointerDown,
         // G7 (legacy deselectNodes, graph.component.ts:1172-1177): a click on the background itself.
@@ -237,41 +286,7 @@ export const GraphView = ({
                 setSelection(null);
             }
         },
-        node: {
-            onPointerDown: drag.onPointerDown,
-            // G1 and G5 (legacy onNodeClick, graph.component.ts:1030-1048).
-            onCircleClick: (node, event) => {
-                if (event.ctrlKey) {
-                    // The legacy fading of this click reached only the nodes drawn before the
-                    // restart, so it does not fade here.
-                    event.stopPropagation();
-                    removeNode(node);
-                    return;
-                }
-                selectGraphNode(node);
-            },
-            onClick: node => fade.fadeTo(node.id),
-            // G3 (legacy createNodeGroup, graph.component.ts:693-701): a component of the app graph
-            // with inner functions opens its component view; until the URL in P06-S06 only the
-            // component id goes. Components without a graph have no functions; there the legacy
-            // handler threw on `functions.length`, here nothing happens.
-            onDoubleClick: node => {
-                if (node.id.startsWith('/') && (node.functions?.length ?? 0) >= 1) {
-                    setComponentId(node.id);
-                }
-            },
-            // G6: fade while the pointer is over a node with Ctrl held.
-            onPointerEnter: (node, event) => {
-                if (event.ctrlKey) {
-                    fade.fadeTo(node.id);
-                }
-            },
-            onPointerLeave: (_node, event) => {
-                if (event.ctrlKey) {
-                    fade.fadeIn();
-                }
-            },
-        },
+        node: nodeEvents,
     };
 
     // Nodes get their first position when the engine starts; draw them only from then on.
@@ -281,8 +296,8 @@ export const GraphView = ({
         <div ref={areaRef} className="qv-graph-area">
             {viewGraph && model && (
                 <GraphCanvas
-                    nodes={placed ? model.nodes : []}
-                    links={placed ? model.links : []}
+                    nodes={placed ? model.nodes : noNodes}
+                    links={placed ? model.links : noLinks}
                     view={viewGraph.view}
                     settings={settings}
                     zoom={{

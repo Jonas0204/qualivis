@@ -126,6 +126,52 @@ describe('GraphView', () => {
         expect(getByRole('button', { name: 'Zoom to 100%' }).textContent).toBe('50%');
     });
 
+    it('draws the first frame of a running layout with React and moves the graph after that', () => {
+        const ticks = new Set<() => void>();
+        let layoutNodes: LayoutOptions['nodes'] = [];
+        const tick = (x: number) => {
+            layoutNodes.forEach((node, index) => {
+                node.x = x + index;
+                node.y = 0;
+            });
+            act(() => {
+                for (const listener of ticks) {
+                    listener();
+                }
+                vi.advanceTimersByTime(20);
+            });
+        };
+        const createLayout: LayoutFactory = (_cola, options) => {
+            layoutNodes = options.nodes;
+            return {
+                start: () => undefined,
+                stop: () => undefined,
+                onTick: listener => {
+                    ticks.add(listener);
+                    return () => ticks.delete(listener);
+                },
+                onEnd: () => () => undefined,
+                dragStart: () => undefined,
+                drag: () => undefined,
+                dragEnd: () => undefined,
+            };
+        };
+        const { container } = drawView(createLayout);
+        const firstTransform = () =>
+            container.querySelector('g.zoom-group g.node')?.getAttribute('transform');
+
+        expect(container.querySelectorAll('g.zoom-group g.node')).toHaveLength(0);
+        tick(10);
+        expect(container.querySelectorAll('g.zoom-group g.node')).toHaveLength(8);
+        expect(firstTransform()).toBe('translate(10, 0)');
+
+        tick(500);
+        expect(firstTransform()).toBe('translate(500, 0)');
+        expect(container.querySelector('g.zoom-group g.links line')?.getAttribute('x1')).not.toBe(
+            null
+        );
+    });
+
     it('zooms to 100 %, centred on the graph, and back to fit with the buttons', () => {
         const { createLayout } = createFakeLayout();
         const { container, getByRole } = drawView(createLayout);
@@ -178,19 +224,21 @@ describe('GraphView', () => {
         const settings = { ...defaultSettings, autoZoom: false };
         const { container, getByRole, rerender } = drawView(createLayout, settings);
         const svg = getByRole('img', { name: 'Component graph' });
-        const labelStyle = () => container.querySelector('.node-label')?.getAttribute('style');
-        const linkStyle = () => container.querySelector('g.links line')?.getAttribute('style');
+        // The zoom group passes them on as CSS variables (graph.css).
+        const zoomGroupStyle = () => container.querySelector<SVGGElement>('g.zoom-group')?.style;
+        const labelStyle = () => zoomGroupStyle()?.getPropertyValue('--qv-label-font-size');
+        const linkStyle = () => zoomGroupStyle()?.getPropertyValue('--qv-link-stroke-width');
 
         // 2 ** (600 * 0.002) = 2.297…: labels 20 / k px, links 1.6 / k.
         fireEvent.wheel(svg, { deltaY: -600, deltaMode: 0 });
         const k = 2 ** 1.2;
-        expect(labelStyle()).toBe(`font-size: ${20 / k}px;`);
-        expect(linkStyle()).toBe(`stroke-width: ${1.6 / k};`);
+        expect(labelStyle()).toBe(`${20 / k}px`);
+        expect(linkStyle()).toBe(`${1.6 / k}`);
 
         fireEvent.wheel(svg, { deltaY: 600, deltaMode: 0 });
         expect(getByRole('button', { name: 'Zoom to 100%' }).textContent).toBe('100%');
-        expect(labelStyle()).toBe(`font-size: ${20 / k}px;`);
-        expect(linkStyle()).toBe(`stroke-width: ${1.6 / k};`);
+        expect(labelStyle()).toBe(`${20 / k}px`);
+        expect(linkStyle()).toBe(`${1.6 / k}`);
 
         // A restart draws the labels and links with the default sizes again.
         rerender(
@@ -200,8 +248,8 @@ describe('GraphView', () => {
                 measure={measure}
             />
         );
-        expect(labelStyle()).toBeNull();
-        expect(linkStyle()).toBeNull();
+        expect(labelStyle()).toBe('14px');
+        expect(linkStyle()).toBe('0.8');
     });
 
     it('pans when dragging the background and drags a node without panning', () => {

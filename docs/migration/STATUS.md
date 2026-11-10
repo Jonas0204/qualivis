@@ -84,6 +84,17 @@ Karten oder Grundlagen oder wird gestrichen; Erledigtes steht in der Git-Histori
   `ButtonWrapper`), die drei Kanten bleiben. Die Erwartung „Whole project“ in `monorepo.NOTES.md`
   gilt weiter für den Kern mit allen Dateien (S06). Betrifft S07 (Prüfung im Browser) und S08
   („Whole project“ verhält sich wie vorher, nur ohne Testordner).
+- **Teil von P08-S09 vorgezogen (10.11.2026, Nutzer):** Große Graphen waren beim Ausrichten und
+  Zoomen zäh, weil React jeden Layoutschritt und jeden Zoomschritt den ganzen Graphen neu zeichnete.
+  Jetzt schreibt `writePositions` die Positionen pro Frame direkt ins DOM (`useLayout` mit
+  `onFrame`, React rendert nur das erste Bild und das Ende), `GraphNode` und `GraphLink` haben
+  `React.memo` (stabile Handler über `useStableHandlers`), und Schriftgröße und Linienbreite beim
+  Zoomen sind CSS-Variablen der Zoom-Gruppe statt Inline-Styles an jeder Beschriftung und Linie
+  (Abweichung nur im DOM, die Optik bleibt). Eine Linie mit Quelle und Ziel an derselben Stelle
+  bleibt als Element erhalten, mit `display: none`. Messung mit 400 Komponenten und 817 Kanten im
+  Dev-Modus: Frame ohne WebCola 1,8 ms statt etwa 70 ms, Zoomschritt 4–24 ms statt etwa 70 ms. Offen
+  für S09: WebCola selbst braucht dabei etwa 38 ms pro Schritt und kam im Testgraphen auch nach
+  1.500 Schritten nicht zur Ruhe (vorher genauso); Optionen: Layout im Worker, Schrittgrenze.
 - **Offen: escomplex bricht bei neuerer Syntax ab (10.11.2026):** Sein Code-Generator, den es nur
   für Schleifenköpfe, Parameter, berechnete Schlüssel und `extends` aufruft, kennt viele Babel- und
   TS-Knoten nicht. Beispiele: `for (const m of s.matchAll(/x/g))` (`reading 'pattern'`),

@@ -6,6 +6,7 @@ import {
     type VisualNode,
 } from '@qualivis/core';
 import {
+    type CSSProperties,
     type MouseEvent as ReactMouseEvent,
     type ReactNode,
     type PointerEvent as ReactPointerEvent,
@@ -81,6 +82,17 @@ const unscaled: GraphZoom = { transform: identityTransform };
 /** Fill of indirectly connected nodes while faded (graph.component.ts:787). */
 const indirectFill = 'var(--qv-graph-indirect-fill)';
 
+/**
+ * Label size and link width set by zooming as CSS variables of the zoom group (graph.css): one
+ * style change instead of one per label and link, so zooming does not render every node again.
+ * Without a size from zooming the defaults (14 px, 0.8).
+ */
+const zoomGroupStyle = (zoom: GraphZoom) =>
+    ({
+        '--qv-label-font-size': `${zoom.labelFontSize ?? graphSettings.normalTextSize}px`,
+        '--qv-link-stroke-width': zoom.linkStrokeWidth ?? graphSettings.linkStrokeWidth,
+    }) as CSSProperties;
+
 /** Opacity of a node or link while faded; undefined while nothing is faded. */
 const fadeOpacity = (fade: GraphFade<VisualLink> | undefined, opaque: boolean | undefined) =>
     fade && (opaque ? 1 : graphSettings.fadeOpacity);
@@ -126,6 +138,7 @@ export const GraphCanvas = ({
                     ref={zoomGroupRef}
                     className={zoom.transition ? 'zoom-group zoom-transition' : 'zoom-group'}
                     transform={transformAttribute(zoom.transform)}
+                    style={zoomGroupStyle(zoom)}
                 >
                     <g
                         className="links"
@@ -138,7 +151,6 @@ export const GraphCanvas = ({
                                 key={index}
                                 link={link}
                                 view={view}
-                                strokeWidth={zoom.linkStrokeWidth}
                                 opacity={fadeOpacity(fade, fade?.opaqueLinks.has(link))}
                             />
                         ))}
@@ -159,7 +171,6 @@ export const GraphCanvas = ({
                                             : paint?.fill,
                                         stroke: paint?.stroke,
                                         opacity: fadeOpacity(fade, fade?.opaqueNodes.has(node.id)),
-                                        labelFontSize: zoom.labelFontSize,
                                     }}
                                     label={
                                         labels && {

@@ -195,6 +195,18 @@
         pointer-events: none;
     }
 
+    /* Label size and link width set by zooming: CSS variables of the zoom group (GraphCanvas),
+       where the legacy app set an inline style on every label and link */
+    .zoom-group {
+        .node-label {
+            font-size: var(--qv-label-font-size);
+        }
+
+        .links line {
+            stroke-width: var(--qv-link-stroke-width);
+        }
+    }
+
     /* legacy addTransition while wheel zooming (graphSettings.zoomTransition) */
     .zoom-transition {
         transition: transform 0.1s ease-out;

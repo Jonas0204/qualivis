@@ -53,7 +53,25 @@ describe('GraphLink', () => {
         expect(line?.getAttribute('stroke-dasharray')).toBe('4 2');
     });
 
-    it('draws nothing when source and target are on the same spot', () => {
-        expect(drawLine({ source: node('a', 5, 5, 48), target: node('b', 5, 5, 48) })).toBeNull();
+    it('hides the line when source and target are on the same spot', () => {
+        // The legacy line got NaN coordinates and did not show; the element stays for the layout.
+        const line = drawLine({ source: node('a', 5, 5, 48), target: node('b', 5, 5, 48) });
+
+        expect(line?.getAttribute('style')).toBe('display: none;');
+        expect(line?.hasAttribute('x1')).toBe(false);
+    });
+
+    it('keeps the opacity of the fading on a hidden line', () => {
+        const line = renderWithState(
+            <svg role="img" aria-label="Test graph">
+                <GraphLink
+                    link={{ source: node('a', 5, 5, 48), target: node('b', 5, 5, 48) }}
+                    view="component"
+                    opacity={0.1}
+                />
+            </svg>
+        ).container.querySelector('line');
+
+        expect(line?.getAttribute('style')).toBe('display: none; opacity: 0.1;');
     });
 });

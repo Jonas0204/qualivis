@@ -41,6 +41,15 @@ const drawCanvas = (
         />
     );
 
+/** Label size and link width that the zoom group passes on as CSS variables. */
+const zoomStyle = (container: HTMLElement) => {
+    const style = container.querySelector<SVGGElement>('g.zoom-group')?.style;
+    return {
+        labelFontSize: style?.getPropertyValue('--qv-label-font-size'),
+        linkStrokeWidth: style?.getPropertyValue('--qv-link-stroke-width'),
+    };
+};
+
 describe('GraphCanvas', () => {
     it('draws one group per node with its label, or its id without a label', () => {
         const { container } = drawCanvas();
@@ -105,12 +114,20 @@ describe('GraphCanvas', () => {
         const zoomGroup = container.querySelector('g.zoom-group');
         expect(zoomGroup?.getAttribute('transform')).toBe('translate(10,-20) scale(2.5)');
         expect(zoomGroup?.getAttribute('class')).toBe('zoom-group zoom-transition');
+        // One style on the zoom group instead of one per label and link (graph.css uses them).
+        expect(zoomStyle(container)).toEqual({ labelFontSize: '8px', linkStrokeWidth: '0.64' });
         for (const label of container.querySelectorAll('.node-label')) {
-            expect(label.getAttribute('style')).toBe('font-size: 8px;');
+            expect(label.getAttribute('style')).toBeNull();
         }
         for (const line of container.querySelectorAll('g.links line')) {
-            expect(line.getAttribute('style')).toBe('stroke-width: 0.64;');
+            expect(line.getAttribute('style')).toBeNull();
         }
+    });
+
+    it('gives the zoom group the default label size and link width without zooming', () => {
+        const { container } = drawCanvas();
+
+        expect(zoomStyle(container)).toEqual({ labelFontSize: '14px', linkStrokeWidth: '0.8' });
     });
 
     it('gives two graphs in one document their own defs', () => {
