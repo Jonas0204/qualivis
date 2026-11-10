@@ -46,5 +46,7 @@ export type { WorkspacePackage } from './workspace/packages';
 export { findPackages } from './workspace/packages';
 export type { ProjectFiles } from './workspace/projectFiles';
 export { findPythonFolders, isConfigFile, isExcludedFolder } from './workspace/projectFiles';
+export type { ImportResolver } from './workspace/resolveImport';
+export { createImportResolver } from './workspace/resolveImport';
 export type { PathMapping } from './workspace/tsconfig';
 export { pathMappingFor } from './workspace/tsconfig';
