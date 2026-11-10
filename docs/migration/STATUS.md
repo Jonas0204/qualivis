@@ -47,7 +47,7 @@ Ablauf: README, „Branches und Pull Requests“. Ziel aller PRs: `rewrite/react
 | P05.5-S02 | Upload: Konfiguration, Ordner überspringen | ☑ | 10.11.2026 | Beide Lesewege liefern `ProjectFiles`; `isExcludedFolder` deckt auch `.venv` ab (A18) und gilt für Ordner und alle Pfade darin. `sources` für `mini` und `realworld` unverändert (geprüft) |
 | P05.5-S03 | Kern: Pakete, tsconfig | ☑ | 10.11.2026 | `parseJsonc`, `findPackages`, `pathMappingFor`. Warnung bei ungültiger Konfiguration, bei `extends` außerhalb des Uploads (Paketname oder fehlende Datei) und bei Zyklen; eine fehlende Referenz wird still übergangen. `parseJsonc` bleibt intern (nicht in `index.ts`) |
 | P05.5-S04 | Kern: Importe auflösen | ☑ | 10.11.2026 | `createImportResolver`, die tsconfig-Zuordnung wird pro Ordner einmal gelesen. Wie TypeScript gelten `paths` und Paketnamen nie für relative Angaben (sonst träfe `./Fehlt` über ein Muster `*` eine falsche Datei), und ein Muster ohne `*` geht dem längsten Präfix vor |
-| P05.5-S05 | Kern: erreichbare Dateien | ☐ | | |
+| P05.5-S05 | Kern: erreichbare Dateien | ☑ | 10.11.2026 | `scanImports` (nur Parse, `program.body`), `isTestFile`, `selectAppFiles` (Breitensuche). Für `web-a` genau die 11 Dateien aus `monorepo.NOTES.md`, für `web-b` `Other` und `Swatch` |
 | P05.5-S06 | Kern: umschreiben, analysieren | ☐ | | |
 | P05.5-S07 | Upload: App-Ordner wählen | ☐ | | |
 | P05.5-S08 | Abnahme am echten Monorepo | ☐ | | |
