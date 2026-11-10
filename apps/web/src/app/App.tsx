@@ -1,4 +1,4 @@
-import type { SourceFile } from '@qualivis/core';
+import type { ProjectFiles } from '@qualivis/core';
 import { useAtomValue, useStore } from 'jotai';
 import { runAnalysis } from '../features/analysis/runAnalysis';
 import { GraphView } from '../features/graph/GraphView';
@@ -14,8 +14,8 @@ export const App = () => {
     const progress = useAtomValue(analysisProgressAtom);
     const error = useAtomValue(analysisErrorAtom);
 
-    const handleFiles = (files: SourceFile[]) => {
-        void runAnalysis(files, store);
+    const handleFiles = (project: ProjectFiles) => {
+        void runAnalysis(project.sources, store);
     };
 
     return (

@@ -26,8 +26,8 @@ Ablauf: README, „Branches und Pull Requests“. Ziel aller PRs: `rewrite/react
 | P01 Fundament + P02 Golden-Infrastruktur | `rewrite/m0-fundament` | [#1](https://github.com/Jonas0204/qualivis/pull/1) | ☑ |
 | P03 Kern-MVP | `rewrite/p03-kern-mvp` | | ☑ |
 | P04 Web-MVP | `rewrite/p04-web-mvp` | [#2](https://github.com/Jonas0204/qualivis/pull/2) | ☑ |
-| P05 Graph-Parität | `rewrite/p05-graph-paritaet` | | ☑ |
-| P05.5 Monorepo-Unterstützung (eingeschoben, ADR-019) | `rewrite/p05.5-monorepo` | | ☐ |
+| P05 Graph-Parität | `rewrite/p05-graph-paritaet` | [#3](https://github.com/Jonas0204/qualivis/pull/3) | ☑ |
+| P05.5 Monorepo-Unterstützung (eingeschoben, ADR-019) | `rewrite/p05.5-monorepo` | | ◐ |
 | P06 Panels, Navigation | `rewrite/p06-panels-navigation` | | ☐ |
 | P07 Einstellungen, Persistenz | `rewrite/p07-einstellungen-persistenz` | | ☐ |
 | P08 Härtung | `rewrite/p08-haertung` | | ☐ |
@@ -43,8 +43,8 @@ Ablauf: README, „Branches und Pull Requests“. Ziel aller PRs: `rewrite/react
 | P03 | M1 (Teil 1): CI, Kern `@qualivis/core`, Golden G1 | ☑ | 08.11.2026 | Commits `5e54b41`–`1bd11f9` |
 | P04 | M1 (Teil 2): Web-MVP, GitHub Pages | ☑ | 09.11.2026 | Commits `5ac8732`–`317cc37`, PR #2. Nach dem Merge: Pages-Workflow grün, Seite vom Nutzer geprüft, `origin/gh-pages` unverändert `5f0155e`. `pnpm dev` auf macOS bleibt offen (RI11) |
 | P05 | M2: Graph-Parität | ☑ | 10.11.2026 | Commits `2b24c84`–`7cdd942` (dazu `2867e6e`, Plan P05.5), danach `31d8777` (Review-Korrektur), Aufräumen und ein Fix für `.venv` beim Upload. `pnpm test:parity` prüft G1–G3 (Kern und Web). Bewusste Abweichungen: ADR-011 A12–A18. Offen: Ein Klick auf einen Vorschaukreis wählt die Funktion noch nicht aus (G4, folgt in P06-S02); das Golden der Clusterfarben belegt nur 7 der 20 Farben (visuelle Regeln §4) |
-| P05.5-S01 | Testprojekt `monorepo` | ☐ | | |
-| P05.5-S02 | Upload: Konfiguration, Ordner überspringen | ☐ | | |
+| P05.5-S01 | Testprojekt `monorepo` | ☑ | 10.11.2026 | 26 Dateien, Erwartungen in `monorepo.NOTES.md`. „Whole project“ gegen den Kern geprüft: 11 Knoten, 3 Kanten, Page → Header fehlt wegen K12. Die Hilfskomponenten heißen `PageWrapper` und `ButtonWrapper` statt zweimal `Wrapper`, damit jeder Name eindeutig ist (Akzeptanzkriterium) |
+| P05.5-S02 | Upload: Konfiguration, Ordner überspringen | ☑ | 10.11.2026 | Beide Lesewege liefern `ProjectFiles`; `isExcludedFolder` deckt auch `.venv` ab (A18) und gilt für Ordner und alle Pfade darin. `sources` für `mini` und `realworld` unverändert (geprüft) |
 | P05.5-S03 | Kern: Pakete, tsconfig | ☐ | | |
 | P05.5-S04 | Kern: Importe auflösen | ☐ | | |
 | P05.5-S05 | Kern: erreichbare Dateien | ☐ | | |
@@ -74,3 +74,8 @@ Ablauf: README, „Branches und Pull Requests“. Ziel aller PRs: `rewrite/react
 Hier jede Abweichung vom Plan mit Begründung und Verweis (ADR bzw. Nutzerentscheidung) eintragen,
 solange sie für kommende Schritte wichtig ist. Vor dem PR der Phase wandert sie in die betroffenen
 Karten oder Grundlagen oder wird gestrichen; Erledigtes steht in der Git-Historie.
+
+- **Branch von P05.5 (10.11.2026):** `rewrite/p05.5-monorepo` zweigt von
+  `rewrite/p05-graph-paritaet` (`f14c8ca`) ab, weil PR #3 beim Start noch nicht gemergt war
+  (README, „Branches und Pull Requests“, Punkt 5). Im PR der Phase vermerken; neue Commits auf
+  dem P05-Branch vorher per Merge übernehmen.

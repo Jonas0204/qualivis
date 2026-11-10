@@ -11,6 +11,7 @@
 |---|---|---|
 | `mini` | 8 | own test project covering the important detection cases: class component, inheritance from an own base class, `React.Component` as member, lifecycle incl. a deprecated method, `bind` alias, function in the constructor, arrow class property, pipe alias, getter (ignored), empty method, method without `this`, method returning JSX, function component in TSX with hooks and inner functions, arrow component with fragment, `connect()(X)`, function expression component, `React.lazy(() => import())`, default export variants, `*.test.js` (must be ignored) |
 | `realworld` | 38 | `src/` of gothinkster/react-redux-realworld-example-app, MIT ([realworld.SOURCE.md](fixtures/realworld.SOURCE.md)) |
+| `monorepo` | 26 | own test project with monorepo patterns: pnpm workspace with two apps and two libraries, tsconfig `paths` with `extends` and JSONC, imports via package names, `memo`/`forwardRef`, K12 neighbour files, tests in `__tests__/`, an unused component. No goldens: the legacy app cannot analyse monorepos ([monorepo.NOTES.md](fixtures/monorepo.NOTES.md)) |
 
 ## Rules
 

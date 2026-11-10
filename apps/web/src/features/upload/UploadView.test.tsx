@@ -37,15 +37,19 @@ describe('UploadView', () => {
         expect(input.hasAttribute('webkitdirectory')).toBe(true);
 
         await user.upload(input, [
+            fileWithRelativePath('my-app/package.json', '{}'),
             fileWithRelativePath('my-app/src/App.js', 'const App = 1;'),
             fileWithRelativePath('my-app/src/index.js', 'render(App);'),
         ]);
 
         await waitFor(() =>
-            expect(onFiles).toHaveBeenCalledWith([
-                { path: '/my-app/src/App.js', code: 'const App = 1;' },
-                { path: '/my-app/src/index.js', code: 'render(App);' },
-            ])
+            expect(onFiles).toHaveBeenCalledWith({
+                sources: [
+                    { path: '/my-app/src/App.js', code: 'const App = 1;' },
+                    { path: '/my-app/src/index.js', code: 'render(App);' },
+                ],
+                configs: [{ path: '/my-app/package.json', code: '{}' }],
+            })
         );
     });
 

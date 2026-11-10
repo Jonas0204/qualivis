@@ -1,0 +1,6 @@
+{
+  "name": "web-a",
+  "dependencies": {
+    "@demo/ui": "workspace:*"
+  }
+}

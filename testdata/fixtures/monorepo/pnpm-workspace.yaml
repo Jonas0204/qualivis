@@ -1,0 +1,5 @@
+packages:
+  - apps/web-a
+  - apps/web-b
+  - shared/ui
+  - shared/tokens

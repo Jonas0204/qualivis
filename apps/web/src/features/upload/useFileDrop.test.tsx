@@ -1,4 +1,4 @@
-import type { SourceFile } from '@qualivis/core';
+import type { ProjectFiles } from '@qualivis/core';
 import { fireEvent, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
@@ -10,7 +10,7 @@ import {
 import { renderWithState } from '../../test/renderWithState';
 import { useFileDrop } from './useFileDrop';
 
-type DropProbeProps = { onFiles: (files: SourceFile[]) => void };
+type DropProbeProps = { onFiles: (project: ProjectFiles) => void };
 
 const DropProbe = ({ onFiles }: DropProbeProps) => {
     const { isDraggingOver, handlers } = useFileDrop(onFiles);
@@ -52,7 +52,10 @@ describe('useFileDrop', () => {
 
         expect(getByRole('status').textContent).toBe('idle');
         await waitFor(() =>
-            expect(onFiles).toHaveBeenCalledWith([{ path: '/my-app/App.js', code: 'code' }])
+            expect(onFiles).toHaveBeenCalledWith({
+                sources: [{ path: '/my-app/App.js', code: 'code' }],
+                configs: [],
+            })
         );
     });
 

@@ -1,4 +1,4 @@
-import type { SourceFile } from '@qualivis/core';
+import type { ProjectFiles } from '@qualivis/core';
 import type { ChangeEvent } from 'react';
 import { Icon } from '../../ui/Icon';
 import { logReadError } from './logReadError';
@@ -7,7 +7,7 @@ import styles from './UploadView.module.css';
 import { useFileDrop } from './useFileDrop';
 
 type UploadViewProps = {
-    onFiles: (files: SourceFile[]) => void;
+    onFiles: (project: ProjectFiles) => void;
     /** Shown below the card until the snackbar exists (P07). */
     error?: string | undefined;
 };

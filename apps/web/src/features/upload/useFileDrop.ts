@@ -1,10 +1,10 @@
-import type { SourceFile } from '@qualivis/core';
+import type { ProjectFiles } from '@qualivis/core';
 import { type DragEvent, useState } from 'react';
 import { logReadError } from './logReadError';
 import { readDroppedFiles } from './readDroppedFiles';
 
 /** Drag-and-drop target like the legacy `appDropTarget` directive; spread `handlers` on the element. */
-export const useFileDrop = (onFiles: (files: SourceFile[]) => void) => {
+export const useFileDrop = (onFiles: (project: ProjectFiles) => void) => {
     const [isDraggingOver, setIsDraggingOver] = useState(false);
 
     const handlers = {

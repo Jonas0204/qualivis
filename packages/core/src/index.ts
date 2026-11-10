@@ -42,3 +42,5 @@ export { reactConstraints } from './rules/reactConstraints';
 export { resolveThreshold } from './rules/thresholds';
 export type { ViewModel, VisualLink, VisualNode } from './rules/viewModel';
 export { buildViewModel } from './rules/viewModel';
+export type { ProjectFiles } from './workspace/projectFiles';
+export { isConfigFile, isExcludedFolder } from './workspace/projectFiles';

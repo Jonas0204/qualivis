@@ -1,5 +1,5 @@
-import { isComponentFile, type SourceFile } from '@qualivis/core';
-import { isIgnoredUploadPath } from './isIgnoredUploadPath';
+import { isExcludedFolder, type ProjectFiles, type SourceFile } from '@qualivis/core';
+import { isUploadFile, toProjectFiles } from './toProjectFiles';
 
 const isFileEntry = (entry: FileSystemEntry): entry is FileSystemFileEntry => entry.isFile;
 
@@ -25,17 +25,17 @@ const readAllEntries = async (reader: FileSystemDirectoryReader) => {
 };
 
 const readEntry = async (entry: FileSystemEntry): Promise<SourceFile[]> => {
-    if (isIgnoredUploadPath(entry.fullPath)) {
-        return [];
-    }
     if (isFileEntry(entry)) {
-        if (!isComponentFile({ path: entry.fullPath })) {
+        if (!isUploadFile(entry.fullPath)) {
             return [];
         }
         const file = await getFile(entry);
         return [{ path: entry.fullPath, code: await file.text() }];
     }
     if (isDirectoryEntry(entry)) {
+        if (isExcludedFolder(entry.fullPath)) {
+            return [];
+        }
         const children = await readAllEntries(entry.createReader());
         const nested = await Promise.all(children.map(readEntry));
         return nested.flat();
@@ -52,11 +52,10 @@ const readFile = async (file: File, path: string): Promise<SourceFile> => ({
  * Reads dropped files and folders (recursively) like the legacy `getFilesAsync`: entry paths are
  * `entry.fullPath`, the fallback without `webkitGetAsEntry` uses `file.webkitRelativePath`.
  * Fallback files come first, then the entries in item order; the core sorts them later.
- * Like the legacy app (data.service.ts:31), only files that `isComponentFile` accepts are read; the
- * core filters with the same function. Unlike the legacy app, `.venv` folders are not entered
- * (ADR-011 A18).
+ * Only source and config files are read, and excluded folders (node_modules, build, dist, .venv)
+ * are not entered (ADR-019, ADR-011 A18).
  */
-export const readDroppedFiles = async (dataTransfer: DataTransfer): Promise<SourceFile[]> => {
+export const readDroppedFiles = async (dataTransfer: DataTransfer): Promise<ProjectFiles> => {
     // Items are only readable during the drop event, so collect everything before the first await.
     const fallbackReads: Promise<SourceFile>[] = [];
     const entryReads: Promise<SourceFile[]>[] = [];
@@ -73,16 +72,12 @@ export const readDroppedFiles = async (dataTransfer: DataTransfer): Promise<Sour
             continue;
         }
         const file = item.getAsFile();
-        if (
-            file &&
-            !isIgnoredUploadPath(file.webkitRelativePath) &&
-            isComponentFile({ path: file.webkitRelativePath })
-        ) {
+        if (file && isUploadFile(file.webkitRelativePath)) {
             fallbackReads.push(readFile(file, file.webkitRelativePath));
         }
     }
 
     const fallbackFiles = await Promise.all(fallbackReads);
     const entryFiles = await Promise.all(entryReads);
-    return [...fallbackFiles, ...entryFiles.flat()];
+    return toProjectFiles([...fallbackFiles, ...entryFiles.flat()]);
 };
