@@ -12,7 +12,7 @@ Einstellungen liegen in einem Atom, starten mit den Altsystem-Standardwerten, we
 ## Dateien
 `apps/web/src/lib/storage.ts` (+ Test), `apps/web/src/state/settingsAtoms.ts` (+ Test),
 `apps/web/src/test/setup.ts`; alle Stellen, die bisher `defaultSettings` oder das vorläufige
-Vollbild-Atom direkt nutzen.
+Vollbild-Atom `fullScreenAtom` (`state/viewAtoms.ts`) direkt nutzen.
 
 ## Schritte
 1. `storage.ts`: `readJson<T>(key, validate)`, `writeJson(key, value): boolean`, `remove(key)` – alle
@@ -29,7 +29,7 @@ Vollbild-Atom direkt nutzen.
      Option in der Doku der installierten Jotai-Version prüfen).
    - Schreib-Atom `updateSettingsAtom` (Teilwerte zusammenführen, wie `settings.service.ts:34-38`).
 3. Alle Verwender (`GraphView`, `GraphActions`, Vollbild) auf `settingsAtom` umstellen; das vorläufige
-   Vollbild-Atom aus P05-S11 entfällt (`settings.fullScreen`).
+   `fullScreenAtom` entfällt (`settings.fullScreen`).
 4. `apps/web/src/test/setup.ts`: im vorhandenen `afterEach` zusätzlich `localStorage.clear()`
    (`atomWithStorage` schreibt auch beim Hydrieren durch den `TestProvider`, Teststrategie §2,
    Regel 5).

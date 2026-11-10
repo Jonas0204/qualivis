@@ -82,7 +82,7 @@ Ordner der Altcode-Kopie (`packages/core/src/legacy/`) behalten die **alten Date
 
 ## 7. Kommentare
 
-- Kommentieren **warum**, nicht was. Jede übernommene Eigenheit (K1–K11, V1–V7) bekommt an der
+- Kommentieren **warum**, nicht was. Jede übernommene Eigenheit (K1–K12, V1–V7) bekommt an der
   Stelle einen Kommentar `// Legacy quirk K3: ... (see docs/migration/01-referenz-altsystem/...)`.
 - Keine auskommentierten Codeblöcke (Altcode-Kommentare in `legacy/` bleiben, wie sie sind).
 

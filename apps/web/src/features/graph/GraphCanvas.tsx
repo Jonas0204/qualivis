@@ -63,7 +63,7 @@ type GraphCanvasProps = {
     links: readonly VisualLink[];
     view: View;
     settings: GraphNodeSettings;
-    /** Cluster colours ("Toggle cluster", P05-S11); off by default as in the legacy app. */
+    /** Cluster colours ("Toggle cluster"); off by default as in the legacy app. */
     showCluster?: boolean;
     /** Without it the graph is drawn unscaled. */
     zoom?: GraphZoom;

@@ -72,7 +72,7 @@ const fitDuration = 250;
  * no double click or double tap zoom. As in
  * d3-zoom, a pointer down with Ctrl or with another button than the left one does nothing.
  * Deviation: Ctrl+wheel (a pinch on the touchpad) zooms the graph like in d3-zoom 3; d3-zoom 1.x
- * left it to the browser, which zoomed the whole page (docs/migration/STATUS.md, notes).
+ * left it to the browser, which zoomed the whole page (ADR-011 A12).
  */
 export const usePanZoom = ({ measure = browserMeasure, onZoom }: PanZoomOptions = {}): PanZoom => {
     const [transform, setTransform] = useState(identityTransform);

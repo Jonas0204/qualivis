@@ -49,6 +49,11 @@ Altsystems (inkl. Code und Zeilenbereich), damit Panels und Quelltext korrekt re
 - [ ] `pnpm check` grün.
 
 ## Fallstricke
+- Grundform aus P05 (`state/selectionAtoms.ts`): `SelectedNode` sind die Felder `id`, `label`,
+  `type`, `report`, `icons` des Ansichtsmodells; die Icons sind also `VisualIcon` (Beschreibung
+  als Objekt) statt `NodeIcon` (HTML-Text). `selectGraphNodeAtom` nimmt noch keine `componentId`.
+- Ein Klick auf einen Vorschaukreis hat noch keinen Handler (`PreviewCircles.tsx`): Er blendet nur
+  auf die Komponente aus, die alte Auswahl bleibt. Schritt 3 ergänzt ihn (Funktionsinventar G4).
 - Die Zeilen von `App` vorher im Fixture nachzählen (Klasse beginnt bei `export default class`).
   Im Spike war die CodeMirror-Auswahl des Altsystems `head.line 7`, `anchor.line 72` (0-basiert,
   `setSelection({line: lineEnd}, {line: lineStart - 1})`) → `lineStart 8`, `lineEnd 72`.

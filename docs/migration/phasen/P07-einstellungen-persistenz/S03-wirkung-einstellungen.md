@@ -16,7 +16,7 @@ Vollbild-Wechsel → nur „Zoom to fit“).
 |---|---|---|
 | `colaLayout` | WebCola (an) / Kraft-Layout (aus) | Komponententest mit Engine-Spion |
 | `hideOverlappingLabels` | Label-Kollision an/aus | Test `useLabelCollision` |
-| `fade` | Ausblenden bei Klick/Strg+Hover an/aus | Test aus P05-S09 |
+| `fade` | Ausblenden bei Klick/Strg+Hover an/aus | `useFade.test.tsx` |
 | `highlightIndirectNodes` | Indirekte Knoten bleiben sichtbar + `#fafafa`-Füllung | Test |
 | `currentSizeMetricErrorHighlighting` | Klassen `warn`/`error` an Overlay/innerem Kreis | Test |
 | `autoZoom` | Einpassen nach erstem Layout-Ende | Test (Fake-Engine) |
@@ -28,7 +28,9 @@ Vollbild-Wechsel → nur „Zoom to fit“).
 1. `GraphView` liest `settingsAtom`. Änderung **nur** von `fullScreen` → `zoomToFit()` nach
    dem nächsten Frame; jede andere Änderung → Graph neu aufbauen und Layout neu starten
    (`firstSimulation` zurücksetzen → `autoZoom` greift erneut).
-2. Fehlende Wirkungen nachziehen (falls in P05 nur mit Konstanten gearbeitet wurde).
+2. `GraphView` bekommt die Einstellungen bisher als Prop `settings` (Standard `defaultSettings`)
+   und reicht sie an `GraphCanvas` und `useFade` weiter. Die Prop durch `settingsAtom` ersetzen und
+   fehlende Wirkungen nachziehen.
 3. Je Zeile der Tabelle ein Verhaltenstest (jsdom, Fake-Engine; Einstellung per
    `initial(settingsAtom, { ...defaultSettings, <schalter>: … })`, Änderung während des Tests per
    `act(() => store.set(settingsAtom, …))`).
@@ -36,6 +38,14 @@ Vollbild-Wechsel → nur „Zoom to fit“).
 ## Akzeptanzkriterien
 - [ ] Alle Zeilen der Tabelle getestet und im Browser nachvollzogen.
 - [ ] `pnpm check` grün.
+
+## Fallstricke
+- Das Altsystem ruft bei jeder Änderung außer reinem Vollbild `restartGraph` auf und rechnet mit
+  denselben Knotenobjekten, also von den bisherigen Positionen weiter. Neu behalten
+  Engine-Wechsel, Größenmetrik und Entfernen die Positionen schon (`keepPositions` und
+  `placeLike` in `GraphView`). „Node sizes based on metrics“ baut ein neues Ansichtsmodell und
+  startet heute von vorn; beim Anschluss an `settingsAtom` wie bei der Größenmetrik vorher
+  `keepPositions()` aufrufen.
 
 ## Commit-Vorschlag
 `feat(web): apply all settings like the legacy app`

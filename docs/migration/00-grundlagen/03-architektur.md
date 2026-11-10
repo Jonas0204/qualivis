@@ -51,7 +51,8 @@ e2e/ (@qualivis/e2e, Playwright, separat installierbar) · tools/ (Node-Skripte 
 │  │  │  ├─ legacy/                  parser.ts, traverse*.ts, findReport.ts, generateAppGraph.ts,
 │  │  │  │                           extractFileTree.ts, isComponentFile.ts, nestedStringAccess.ts
 │  │  │  ├─ rules/                   nodeVisuals.ts, icons.ts, cluster.ts, reactConstraints.ts,
-│  │  │  │                           previewGeometry.ts, linkGeometry.ts, color.ts, thresholds.ts
+│  │  │  │                           previewGeometry.ts, linkGeometry.ts, color.ts, thresholds.ts,
+│  │  │  │                           connectivity.ts, viewModel.ts
 │  │  │  ├─ workspace/               (P05.5, ADR-019) projectFiles.ts, jsonc.ts, packages.ts,
 │  │  │  │                           tsconfig.ts, resolveImport.ts, scanImports.ts, selectFiles.ts,
 │  │  │  │                           rewriteImports.ts, analyzeWorkspace.ts, appCandidates.ts
@@ -75,10 +76,12 @@ e2e/ (@qualivis/e2e, Playwright, separat installierbar) · tools/ (Node-Skripte 
 │        │  ├─ upload/               UploadView.tsx, ProjectChoice.tsx, readDroppedFiles.ts, useFileDrop.ts, DropOverlay.tsx
 │        │  ├─ analysis/             runAnalysis.ts (später worker/)
 │        │  ├─ graph/                GraphView.tsx, GraphCanvas.tsx, GraphNode.tsx, GraphLink.tsx,
-│        │  │                        PreviewCircles.tsx, Legend.tsx, GraphActions.tsx,
-│        │  │                        usePanZoom.ts, useNodeDrag.ts, useFade.ts, useLabelCollision.ts,
+│        │  │                        PreviewCircles.tsx, GraphDefs.tsx, graphDefsContext.ts,
+│        │  │                        Legend.tsx, GraphActions.tsx, usePanZoom.ts, zoomMath.ts,
+│        │  │                        useNodeDrag.ts, pointerGesture.ts, useFade.ts,
+│        │  │                        useLabelCollision.ts, labelCollision.ts, useElementSize.ts,
 │        │  │                        selectViewGraph.ts, useLayout.ts, graph.css,
-│        │  │                        layout/ (types.ts, colaLayout.ts, forceLayout.ts)
+│        │  │                        layout/ (types.ts, createLayout.ts, colaLayout.ts, forceLayout.ts)
 │        │  ├─ file-tree/            FileTree.tsx, useTreeState.ts
 │        │  ├─ code-quality/         CodeQualityPanel.tsx, QualityMetricBar.tsx, IconDescription.tsx
 │        │  ├─ source-code/          SourceCodeView.tsx, neoTheme.ts
@@ -89,7 +92,8 @@ e2e/ (@qualivis/e2e, Playwright, separat installierbar) · tools/ (Node-Skripte 
 │        └─ styles/                  tokens.css, global.css, fonts.css
 ├─ e2e/                              (ab P09)
 ├─ tools/
-│  ├─ legacy/                        extract-legacy-build.mjs, serve-legacy.mjs, capture.browser.js
+│  ├─ legacy/                        extract-legacy-build.mjs, serve-legacy.mjs, capture.browser.js,
+│  │                                 capture-cluster-colors.browser.js
 │  └─ golden/                        diff-json.mjs
 ├─ testdata/
 │  ├─ README.md

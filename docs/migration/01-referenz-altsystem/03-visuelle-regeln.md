@@ -82,7 +82,10 @@ Aufhellen (`calculateBrightenedColor`, Z. 317-321): Farbe nach HSL, `l = l + (1 
 Füllung `b = 0.75`, Ränder (`inner-circle`, `circle-overlay`) `b = 0.15`; nur wenn
 `showCluster && view === 'component' && cluster !== undefined`. Der d3-color-Ersatz muss für
 alle 20 Farben × 2 Helligkeiten dieselben Strings liefern wie `d3.hsl(...).toString()`
-(Format `rgb(r, g, b)`) – Referenzwerte werden in P05-S02 einmalig aus dem Legacy-Build erfasst.
+(Format `rgb(r, g, b)`). Referenzwerte: `testdata/golden/mini/legacy-cluster-colors.json`, erfasst mit
+`tools/legacy/capture-cluster-colors.browser.js`. Es belegt nur die Cluster 0–6 der KV `App`
+(`mini`); für die übrigen 13 Farben gibt es kein Testprojekt, sie hängen am 1:1 übernommenen
+Algorithmus.
 
 ## 5. Geometrie der Vorschaukreise (AV)
 

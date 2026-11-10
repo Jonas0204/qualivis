@@ -1,6 +1,6 @@
 // The SVG markup of every node and link against the DOM of the legacy graph (testdata/golden,
 // format: snapshot() in tools/legacy/capture.browser.js). Positions come from the golden, because
-// only the markup is compared here; colours and layout need the visual comparison (P05-S12).
+// only the markup is compared here; colours and layout need the visual comparison.
 import {
     type AnalysisResult,
     analyzeProject,

@@ -7,7 +7,7 @@ export type NodeDragOptions = {
     /** The running layout engine; dragging does nothing without one. */
     getEngine: () => LayoutEngine | undefined;
     getTransform: () => ZoomTransform;
-    /** Reports when a drag starts and ends; no fading while dragging (P05-S09). */
+    /** Reports when a drag starts and ends; no fading while dragging. */
     onDraggingChange?: (dragging: boolean) => void;
 };
 
@@ -38,7 +38,7 @@ export const useNodeDrag = ({
 
     const onPointerDown = useCallback(
         (node: LayoutNode, event: ReactPointerEvent<SVGGElement>) => {
-            // d3-drag default filter: left button only, without Ctrl (Ctrl+click removes, P05-S09).
+            // d3-drag default filter: left button only, without Ctrl (Ctrl+click removes the node).
             const svg = event.currentTarget.ownerSVGElement;
             if (event.ctrlKey || event.button !== 0 || !svg) {
                 return;

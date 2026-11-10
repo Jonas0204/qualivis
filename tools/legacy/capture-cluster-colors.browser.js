@@ -1,6 +1,6 @@
 // tools/legacy/capture-cluster-colors.browser.js
 // Captures the cluster colours of the legacy build: ground truth for
-// packages/core/src/rules/color.ts (P05-S02). Run in the browser console on
+// packages/core/src/rules/color.ts. Run in the browser console on
 // http://127.0.0.1:4300/component-graph/ after localStorage.clear() + reload, then
 // `await qvCaptureClusterColors('mini')`. It loads the fixture itself and writes only
 // legacy-cluster-colors.json; capture.browser.js would rewrite all goldens, and their positions

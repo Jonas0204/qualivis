@@ -10,7 +10,7 @@ Uploads mit nur einem Paket laufen wie bisher.
 ## Kontext
 - ADR-019; Architektur §4 (Datenfluss), §5 (Zustand)
 - `apps/web/src/features/upload/UploadView.tsx`, `apps/web/src/features/analysis/runAnalysis.ts`
-- UI-Bausteine aus P05-S11: `ui/Select.tsx`, `ui/Button.tsx`; Stil-Referenz §1/§3 (Farben,
+- UI-Bausteine `ui/Select.tsx`, `ui/Button.tsx`; Stil-Referenz §1/§3 (Farben,
   Schrift, Karte der Upload-Ansicht)
 
 ## Dateien

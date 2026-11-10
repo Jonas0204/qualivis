@@ -37,7 +37,7 @@ overridden with `QV_LEGACY_BUILD_DIR`, `QV_FIXTURES_DIR` and `QV_CAPTURE_DIR`.
    Expected result for `mini`: `{ fixture: 'mini', files: 8, componentViews: 4 }`.
 4. Start again at step 2 for the next fixture.
 
-Cluster colours (`capture-cluster-colors.browser.js`, P05-S02): after step 2 paste the script and
+Cluster colours (`capture-cluster-colors.browser.js`): after step 2 paste the script and
 run `await qvCaptureClusterColors('mini')`. It loads the fixture itself, opens the component view
 of `App`, switches the cluster colours on and writes only `legacy-cluster-colors.json`. Expected
 result: 9 nodes with clusters 0–6. Do not run `qvCapture` for it: that rewrites all goldens, and
@@ -55,6 +55,6 @@ Golden files are never edited by hand; see [testdata/README.md](../../testdata/R
   base path (functional inventory N4).
 - A click on a node shows a one-time snackbar; this does not disturb the capture.
 - Only default settings are captured. Variants (e.g. another size metric) are covered by unit
-  tests of the rules (P05-S01).
+  tests of the rules (`packages/core/src/rules/`).
 - Positions (`x`, `y`) depend on the container size (1024 × 768 window → container 158 × 704 px);
-  they are only used for the optional layout comparison G3.
+  the layout comparison G3 uses them (`colaLayout.golden.test.ts`).
