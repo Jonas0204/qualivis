@@ -7,6 +7,7 @@ import {
     EventType,
     Layout,
 } from 'webcola/dist/src/layout';
+import { timed } from '../../../lib/perfStats';
 import type { LayoutEngine, LayoutLink, LayoutNode, LayoutRestore } from './types';
 
 export type ColaLayoutOptions = {
@@ -77,7 +78,7 @@ class AnimatedColaLayout extends Layout {
         const step = () => {
             this.frame = undefined;
             // tick() is true once the layout has converged; it has reported the end then.
-            if (!this.tick()) {
+            if (!timed('layout.colaTick', () => this.tick())) {
                 this.frame ??= requestAnimationFrame(step);
             }
         };
@@ -126,7 +127,7 @@ export const createColaLayout = ({
                     .flowLayout('y', graphSettings.nodeGap)
                     .symmetricDiffLinkLengths(40, 0.7);
                 if (!restore) {
-                    layout.start(40, 20, 20);
+                    timed('layout.colaStart', () => layout.start(40, 20, 20));
                     return;
                 }
                 // ADR-011 A22: no initial iterations, no packing of unconnected parts and no

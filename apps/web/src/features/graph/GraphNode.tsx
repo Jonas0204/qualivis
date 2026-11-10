@@ -14,6 +14,7 @@ import {
     type Ref,
     useContext,
 } from 'react';
+import { countEvent } from '../../lib/perfStats';
 import { propsEqualOneLevel } from '../../lib/propsEqualOneLevel';
 import { GraphDefsContext } from './graphDefsContext';
 import { PreviewCircles } from './PreviewCircles';
@@ -128,6 +129,7 @@ const GraphNodeView = ({
     label = {},
     events = {},
 }: GraphNodeProps) => {
+    countEvent('render.GraphNode');
     const { hatch } = useContext(GraphDefsContext);
     const radius = mainRadius(node.width, view);
     const strokeStyle = styleOf({ stroke: inlineStyle.stroke });

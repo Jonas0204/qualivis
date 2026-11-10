@@ -11,6 +11,7 @@ import {
 } from '@qualivis/core';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { countEvent } from '../../lib/perfStats';
 import { useStableHandlers } from '../../lib/useStableHandlers';
 import { analysisAtom } from '../../state/analysisAtoms';
 import {
@@ -88,6 +89,7 @@ export const GraphView = ({
     measure = browserMeasure,
     measureLabel,
 }: GraphViewProps) => {
+    countEvent('render.GraphView');
     const analysis = useAtomValue(analysisAtom);
     const viewGraph = useAtomValue(viewGraphAtom);
     const [componentId, setComponentId] = useAtom(componentIdAtom);

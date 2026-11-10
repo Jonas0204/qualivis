@@ -1,5 +1,6 @@
 import { graphSettings, linkEnd, mainRadius, type View, type VisualLink } from '@qualivis/core';
 import { memo, useContext } from 'react';
+import { countEvent } from '../../lib/perfStats';
 import { GraphDefsContext } from './graphDefsContext';
 
 type GraphLinkProps = {
@@ -35,6 +36,7 @@ export const linkCoordinates = (link: VisualLink, view: View): LineCoordinates |
  * change; the positions come from writePositions in between.
  */
 export const GraphLink = memo(({ link, view, opacity }: GraphLinkProps) => {
+    countEvent('render.GraphLink');
     const { arrowhead } = useContext(GraphDefsContext);
     const coordinates = linkCoordinates(link, view);
     const display = coordinates ? undefined : 'none';

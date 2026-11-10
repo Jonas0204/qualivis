@@ -1,4 +1,5 @@
 import { analyzeProjectAsync, analyzeWorkspaceAsync, type ProjectFiles } from '@qualivis/core';
+import { recordDuration } from '../../lib/perfStats';
 import { analysisAtom } from '../../state/analysisAtoms';
 import type { StateStore } from '../../state/StateProvider';
 import { componentIdAtom, viewModeAtom } from '../../state/viewAtoms';
@@ -43,10 +44,12 @@ export const runAnalysis = async (
         onProgress: (progress: number) =>
             store.set(analysisAtom, state => ({ ...state, progress })),
     };
+    const startedAt = performance.now();
     try {
         const result = await (appDir === undefined
             ? analyzeProject(project.sources, options)
             : analyzeWorkspace(project, { appDir }, options));
+        recordDuration('analysis', performance.now() - startedAt);
         store.set(analysisAtom, { status: 'done', progress: undefined, result, error: undefined });
     } catch (error) {
         store.set(analysisAtom, {

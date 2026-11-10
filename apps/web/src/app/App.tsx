@@ -7,6 +7,7 @@ import { analysisErrorAtom, analysisProgressAtom } from '../state/analysisAtoms'
 import { viewModeAtom } from '../state/viewAtoms';
 import { ProgressBar } from '../ui/ProgressBar';
 import { AppShell } from './AppShell';
+import { useDebugConsole } from './useDebugConsole';
 import { useUrlState } from './useUrlState';
 
 export const App = () => {
@@ -15,6 +16,7 @@ export const App = () => {
     const progress = useAtomValue(analysisProgressAtom);
     const error = useAtomValue(analysisErrorAtom);
     useUrlState();
+    useDebugConsole();
 
     const handleFiles = (project: ProjectFiles, appDir?: string) => {
         void runAnalysis(project, appDir, store);

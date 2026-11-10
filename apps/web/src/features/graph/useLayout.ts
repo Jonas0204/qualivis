@@ -1,4 +1,5 @@
 import { type DependencyList, useCallback, useEffect, useRef, useState } from 'react';
+import { countEvent, recordDuration, timed } from '../../lib/perfStats';
 import type { LayoutEngine } from './layout/types';
 
 export type LayoutState = {
@@ -63,20 +64,34 @@ export const useLayout = (
 
         let frame: number | undefined;
         let running = false;
+        // For qualivis.info(): time from the start to the first end, and between frames.
+        const startedAt = performance.now();
+        let firstEnd = true;
+        let lastFrameAt: number | undefined;
         const offTick = engine.onTick(() => {
             if (!running) {
                 running = true;
                 setState(current => ({ ...current, running: true }));
             }
-            frame ??= requestAnimationFrame(() => {
+            frame ??= requestAnimationFrame(now => {
                 frame = undefined;
-                if (!onFrameRef.current?.()) {
+                if (lastFrameAt !== undefined) {
+                    recordDuration('layout.frameGap', now - lastFrameAt);
+                }
+                lastFrameAt = now;
+                if (!timed('layout.frameWrite', () => onFrameRef.current?.() ?? false)) {
+                    countEvent('layout.frameRender');
                     setState(current => ({ ...current, version: current.version + 1 }));
                 }
             });
         });
         const offEnd = engine.onEnd(() => {
             running = false;
+            lastFrameAt = undefined;
+            if (firstEnd) {
+                firstEnd = false;
+                recordDuration('layout.startToEnd', performance.now() - startedAt);
+            }
             setState(current => ({
                 ...current,
                 version: current.version + 1,

@@ -18,6 +18,7 @@ import {
     useMemo,
     useRef,
 } from 'react';
+import { countEvent } from '../../lib/perfStats';
 import { GraphDefs } from './GraphDefs';
 import { GraphLink } from './GraphLink';
 import { GraphNode, type GraphNodeSettings, type NodeEvents } from './GraphNode';
@@ -131,52 +132,57 @@ const GraphContent = memo(
         hiddenLabels,
         labelRef,
         nodeEvents,
-    }: GraphContentProps) => (
-        <>
-            <g
-                className="links"
-                stroke={graphSettings.linkColor}
-                strokeOpacity={graphSettings.linkOpacity}
-            >
-                {links.map((link, index) => (
-                    // Index as key: links keep their order, and the same pair can occur twice.
-                    <GraphLink
-                        key={index}
-                        link={link}
-                        view={view}
-                        opacity={fadeOpacity(fade, fade?.opaqueLinks.has(link))}
-                    />
-                ))}
-            </g>
-            <g className="nodes">
-                {nodes.map(node => {
-                    const paint = clusterPaint(node.cluster, view, showCluster);
-                    return (
-                        <GraphNode
-                            key={node.id}
-                            node={node}
+    }: GraphContentProps) => {
+        countEvent('render.GraphContent');
+        return (
+            <>
+                <g
+                    className="links"
+                    stroke={graphSettings.linkColor}
+                    strokeOpacity={graphSettings.linkOpacity}
+                >
+                    {links.map((link, index) => (
+                        // Index as key: links keep their order, and the same pair can occur twice.
+                        <GraphLink
+                            key={index}
+                            link={link}
                             view={view}
-                            settings={settings}
-                            selected={selected?.has(node.id)}
-                            inlineStyle={{
-                                fill: fade?.indirectNodes.has(node.id) ? indirectFill : paint?.fill,
-                                stroke: paint?.stroke,
-                                opacity: fadeOpacity(fade, fade?.opaqueNodes.has(node.id)),
-                            }}
-                            label={
-                                hiddenLabels &&
-                                labelRef && {
-                                    hidden: hiddenLabels.has(node.id),
-                                    ref: labelRef(node.id),
-                                }
-                            }
-                            events={nodeEvents}
+                            opacity={fadeOpacity(fade, fade?.opaqueLinks.has(link))}
                         />
-                    );
-                })}
-            </g>
-        </>
-    )
+                    ))}
+                </g>
+                <g className="nodes">
+                    {nodes.map(node => {
+                        const paint = clusterPaint(node.cluster, view, showCluster);
+                        return (
+                            <GraphNode
+                                key={node.id}
+                                node={node}
+                                view={view}
+                                settings={settings}
+                                selected={selected?.has(node.id)}
+                                inlineStyle={{
+                                    fill: fade?.indirectNodes.has(node.id)
+                                        ? indirectFill
+                                        : paint?.fill,
+                                    stroke: paint?.stroke,
+                                    opacity: fadeOpacity(fade, fade?.opaqueNodes.has(node.id)),
+                                }}
+                                label={
+                                    hiddenLabels &&
+                                    labelRef && {
+                                        hidden: hiddenLabels.has(node.id),
+                                        ref: labelRef(node.id),
+                                    }
+                                }
+                                events={nodeEvents}
+                            />
+                        );
+                    })}
+                </g>
+            </>
+        );
+    }
 );
 
 /** SVG of the graph at the current node positions; markup and classes as in the legacy app. */

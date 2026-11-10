@@ -1,6 +1,7 @@
 import { type RefCallback, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { debounce } from '../../lib/debounce';
 import type { Rect } from '../../lib/isColliding';
+import { timed } from '../../lib/perfStats';
 import { hiddenLabels, type LabelRect } from './labelCollision';
 
 /** Measures a label text; jsdom has no layout, so tests pass fixed values. */
@@ -77,10 +78,9 @@ export const useLabelCollision = ({
                 for (const [, label] of labels) {
                     label.style.display = '';
                 }
-                const rects: LabelRect[] = labels.map(([id, label]) => ({
-                    id,
-                    rect: current.measure(label),
-                }));
+                const rects: LabelRect[] = timed('labels.measure', () =>
+                    labels.map(([id, label]) => ({ id, rect: current.measure(label) }))
+                );
                 labels.forEach(([, label], index) => {
                     label.style.display = displays[index] ?? '';
                 });
