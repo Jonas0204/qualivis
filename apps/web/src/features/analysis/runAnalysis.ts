@@ -1,19 +1,34 @@
-import { analyzeProjectAsync, type SourceFile } from '@qualivis/core';
+import { analyzeProjectAsync, analyzeWorkspaceAsync, type ProjectFiles } from '@qualivis/core';
 import { analysisAtom } from '../../state/analysisAtoms';
 import type { StateStore } from '../../state/StateProvider';
 import { componentIdAtom, viewModeAtom } from '../../state/viewAtoms';
 
+export type Analyzers = {
+    /** The old way: all source files to the legacy core. */
+    analyzeProject: typeof analyzeProjectAsync;
+    /** One app of a monorepo and the files it reaches (ADR-019). */
+    analyzeWorkspace: typeof analyzeWorkspaceAsync;
+};
+
+const defaultAnalyzers: Analyzers = {
+    analyzeProject: analyzeProjectAsync,
+    analyzeWorkspace: analyzeWorkspaceAsync,
+};
+
 const errorText = (error: unknown) => (error instanceof Error ? error.message : String(error));
 
 /**
- * Analyses the files and keeps the store up to date: progress while running, then the result or
- * an error message (ADR-011 A5: the legacy app stopped silently). Never rejects.
+ * Analyses the upload and keeps the store up to date: progress while running, then the result or
+ * an error message (ADR-011 A5: the legacy app stopped silently). With an app folder only that
+ * app and what it uses, else all source files as before. Never rejects.
  */
 export const runAnalysis = async (
-    files: SourceFile[],
+    project: ProjectFiles,
+    appDir: string | undefined,
     store: StateStore,
-    analyze = analyzeProjectAsync
+    analyzers: Partial<Analyzers> = {}
 ): Promise<void> => {
+    const { analyzeProject, analyzeWorkspace } = { ...defaultAnalyzers, ...analyzers };
     store.set(analysisAtom, {
         status: 'running',
         progress: 0,
@@ -24,10 +39,14 @@ export const runAnalysis = async (
     store.set(viewModeAtom, 'graph');
     store.set(componentIdAtom, undefined);
 
+    const options = {
+        onProgress: (progress: number) =>
+            store.set(analysisAtom, state => ({ ...state, progress })),
+    };
     try {
-        const result = await analyze(files, {
-            onProgress: progress => store.set(analysisAtom, state => ({ ...state, progress })),
-        });
+        const result = await (appDir === undefined
+            ? analyzeProject(project.sources, options)
+            : analyzeWorkspace(project, { appDir }, options));
         store.set(analysisAtom, { status: 'done', progress: undefined, result, error: undefined });
     } catch (error) {
         store.set(analysisAtom, {

@@ -1,17 +1,20 @@
 import {
     graphSettings,
     mainRadius,
+    type Node,
     type Settings,
     type View,
     type VisualNode,
 } from '@qualivis/core';
 import {
     type CSSProperties,
+    memo,
     type MouseEvent as ReactMouseEvent,
     type PointerEvent as ReactPointerEvent,
     type Ref,
     useContext,
 } from 'react';
+import { propsEqualOneLevel } from '../../lib/propsEqualOneLevel';
 import { GraphDefsContext } from './graphDefsContext';
 import { PreviewCircles } from './PreviewCircles';
 
@@ -26,8 +29,6 @@ export type NodeInlineStyle = {
     stroke?: string;
     /** Opacity while the graph is faded (useFade). */
     opacity?: number;
-    /** Label size in px set by zooming (zoomMath nextZoomStyle); without it the CSS 14 px. */
-    labelFontSize?: number;
 };
 
 /** What a node reports to the graph view; every handler gets the node. */
@@ -39,6 +40,11 @@ export type NodeEvents = {
      * fired, since `.node-label` has `pointer-events: none`; a click there hits what lies below.
      */
     onCircleClick?: (node: VisualNode, event: ReactMouseEvent<SVGCircleElement>) => void;
+    /**
+     * Click on a preview circle of an app view node (G4, legacy createPreviewCircles): the
+     * function and its component. The click goes on to the node (`onClick`).
+     */
+    onPreviewClick?: (fn: Node, node: VisualNode, event: ReactMouseEvent<SVGCircleElement>) => void;
     /** Click anywhere on the node, preview circles too (legacy click.fade). */
     onClick?: (node: VisualNode, event: ReactMouseEvent<SVGGElement>) => void;
     /** Double click anywhere on the node (legacy dblclick of the node group). */
@@ -66,6 +72,10 @@ type GraphNodeProps = {
 };
 
 const hiddenLabelStyle: CSSProperties = { display: 'none' };
+
+/** `transform` of a node group at the node position. */
+export const nodeTransform = (node: { x?: number; y?: number }): string =>
+    `translate(${node.x ?? 0}, ${node.y ?? 0})`;
 
 /** A node handler of the graph view as a React handler for this node. */
 const bind = <E,>(node: VisualNode, handler?: (node: VisualNode, event: E) => void) =>
@@ -106,9 +116,10 @@ const ringClass = (base: string, node: VisualNode, highlight: boolean | undefine
  * One node of the graph in the order of the legacy createNodes (graph.component.ts:673-950):
  * main circle, overlay, inner circle for JSX, preview circles (app view) and label with icons.
  * Selection and cluster colours as in updateGraph (graph.component.ts:206-243), fading as in
- * createFading (711-804), hidden labels as in hideOverlappingLabels (952-982).
+ * createFading (711-804), hidden labels as in hideOverlappingLabels (952-982). The label size
+ * set by zooming comes from the zoom group (GraphCanvas).
  */
-export const GraphNode = ({
+const GraphNodeView = ({
     node,
     view,
     settings,
@@ -128,7 +139,7 @@ export const GraphNode = ({
         // biome-ignore lint/a11y/noStaticElementInteractions: mouse only like the legacy graph; keyboard access to the nodes follows in P08-S07
         <g
             className="node"
-            transform={`translate(${node.x ?? 0}, ${node.y ?? 0})`}
+            transform={nodeTransform(node)}
             style={styleOf({ opacity: inlineStyle.opacity })}
             onPointerDown={bind(node, events.onPointerDown)}
             onClick={bind(node, events.onClick)}
@@ -167,17 +178,17 @@ export const GraphNode = ({
                     style={strokeStyle}
                 />
             )}
-            {view === 'app' && node.functions && <PreviewCircles node={node} />}
+            {view === 'app' && node.functions && (
+                <PreviewCircles
+                    node={node}
+                    onClick={
+                        events.onPreviewClick &&
+                        ((fn, event) => events.onPreviewClick?.(fn, node, event))
+                    }
+                />
+            )}
             {settings.text && (
-                <text
-                    className="node-label"
-                    style={styleOf({
-                        fontSize:
-                            inlineStyle.labelFontSize === undefined
-                                ? undefined
-                                : `${inlineStyle.labelFontSize}px`,
-                    })}
-                >
+                <text className="node-label">
                     <tspan
                         ref={label.ref}
                         className="label-text"
@@ -200,3 +211,12 @@ export const GraphNode = ({
         </g>
     );
 };
+
+/**
+ * Renders again only when a prop changes; `inlineStyle` and `label` count by their values. The node
+ * object stays the same while the layout runs, so its position comes from writePositions then.
+ */
+export const GraphNode = memo(
+    GraphNodeView,
+    propsEqualOneLevel<GraphNodeProps>('inlineStyle', 'label')
+);

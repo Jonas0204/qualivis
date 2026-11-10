@@ -108,6 +108,52 @@ describe('createForceLayout', () => {
         layout.stop();
     });
 
+    it('halts without a further tick and reports the end once', async () => {
+        const options = chain(3);
+        const layout = createForceLayout(options);
+        const ended = vi.fn();
+        layout.onEnd(ended);
+        const ticked = new Promise<void>(resolve => layout.onTick(resolve));
+        layout.start();
+        await ticked;
+        const ticks = vi.fn();
+        layout.onTick(ticks);
+        const halted = options.nodes.map(({ x, y }) => [x, y]);
+
+        layout.halt();
+        layout.halt();
+        await new Promise(resolve => setTimeout(resolve, 50));
+
+        expect(ended).toHaveBeenCalledTimes(1);
+        expect(ticks).not.toHaveBeenCalled();
+        expect(options.nodes.map(({ x, y }) => [x, y])).toEqual(halted);
+        layout.stop();
+    });
+
+    it('keeps restored positions at rest and ends at once (ADR-011 A22)', async () => {
+        const options = chain(3);
+        for (const [index, each] of options.nodes.entries()) {
+            Object.assign(each, { x: index * 100, y: 50 });
+        }
+        const layout = createForceLayout({ ...options, restore: { running: false } });
+        const ended = vi.fn();
+        const ticks = vi.fn();
+        layout.onEnd(ended);
+        layout.onTick(ticks);
+
+        layout.start();
+        await new Promise(resolve => setTimeout(resolve, 50));
+
+        expect(ended).toHaveBeenCalledTimes(1);
+        expect(ticks).not.toHaveBeenCalled();
+        expect(options.nodes.map(({ x, y }) => [x, y])).toEqual([
+            [0, 50],
+            [100, 50],
+            [200, 50],
+        ]);
+        layout.stop();
+    });
+
     it('reports ticks to its listeners after start', async () => {
         const layout = createForceLayout(chain(3));
         const removed = vi.fn();

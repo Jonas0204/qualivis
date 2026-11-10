@@ -10,6 +10,7 @@ type Overrides = Partial<{
     showCluster: boolean;
     fullScreen: boolean;
     zoomLevel: number;
+    layoutRunning: boolean;
 }>;
 
 const draw = (view: View, overrides: Overrides = {}) => {
@@ -19,11 +20,16 @@ const draw = (view: View, overrides: Overrides = {}) => {
         onZoomTo100: vi.fn(),
         onZoomToFit: vi.fn(),
         onToggleFullScreen: vi.fn(),
+        onStopLayout: vi.fn(),
     };
     const rendered = renderWithState(
         <GraphActions
             view={view}
             onBack={overrides.onBack}
+            layout={{
+                running: overrides.layoutRunning ?? false,
+                onStop: callbacks.onStopLayout,
+            }}
             cluster={{
                 hasCluster: overrides.hasCluster ?? true,
                 show: overrides.showCluster ?? false,
@@ -93,6 +99,17 @@ describe('GraphActions', () => {
             draw('app', { onBack }).queryByRole('button', { name: 'Back to app graph' })
         ).toBeNull();
         expect(draw('component').queryByRole('button', { name: 'Back to app graph' })).toBeNull();
+    });
+
+    it('shows the stop button only while the layout runs', () => {
+        const { getByRole, onStopLayout } = draw('app', { layoutRunning: true });
+
+        const stop = getByRole('button', { name: 'Stop layout' });
+        expect(tooltipOf(stop)).toBe('Stop layout');
+        fireEvent.click(stop);
+        expect(onStopLayout).toHaveBeenCalledTimes(1);
+
+        expect(draw('app').queryByRole('button', { name: 'Stop layout' })).toBeNull();
     });
 
     it('shows the cluster button only in the component view with clusters', () => {

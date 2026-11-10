@@ -53,6 +53,8 @@ export type PanZoom = {
     zoomToFit: () => void;
     /** Zoom to 100 %, centred on the graph (legacy zoomToFit(null, 1)). */
     zoomTo100: () => void;
+    /** Shows `transform` at once, e.g. the zoom of a view shown before (ADR-011 A22). */
+    restore: (transform: ZoomTransform) => void;
     /**
      * Pointer down on the SVG starts a pan, a second finger turns it into a pinch zoom; node groups
      * stop the event (dragging).
@@ -252,6 +254,14 @@ export const usePanZoom = ({ measure = browserMeasure, onZoom }: PanZoomOptions 
     const zoomToFit = useCallback(() => fit(), [fit]);
     const zoomTo100 = useCallback(() => fit(1), [fit]);
     const getTransform = useCallback(() => transformRef.current, []);
+    const restore = useCallback(
+        (next: ZoomTransform) => {
+            stopAnimation();
+            setTransition(false);
+            apply(next);
+        },
+        [apply, stopAnimation]
+    );
 
     return {
         svgRef,
@@ -261,6 +271,7 @@ export const usePanZoom = ({ measure = browserMeasure, onZoom }: PanZoomOptions 
         getTransform,
         zoomToFit,
         zoomTo100,
+        restore,
         onPointerDown,
     };
 };

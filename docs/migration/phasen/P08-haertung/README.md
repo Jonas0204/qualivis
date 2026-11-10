@@ -66,8 +66,8 @@ Erkenntnisse aus `STATUS.md` (Abweichungen, offene Punkte) einarbeiten, mit dem 
   `[…].join('\n')` (z. B. `packages/core/src/analysis/analyzeProject.test.ts`). Lesbarer machen:
   Template-String mit kleinem Helfer, der den ersten Zeilenumbruch entfernt, oder Fixture-Dateien.
 - Aufräumen (Nutzer, 09.11.2026): Bei unbekannter Komponenten-ID zeigt `selectViewGraph` den
-  App-Graph als App-Ansicht (wie P06-S06; das Altsystem rechnete ihn als Komponentenansicht). Prüfen,
-  ob der Fall nach dem Bereinigen der URL (P06-S06) noch eintreten kann; sonst vereinfachen.
+  App-Graph als App-Ansicht (das Altsystem rechnete ihn als Komponentenansicht). Prüfen, ob der
+  Fall nach dem Bereinigen der URL (`useUrlState`) noch eintreten kann; sonst vereinfachen.
 - Aufräumen (Review P05, 10.11.2026): `GraphCanvas` hat 12 Props, `GraphNode` 7 (Konventionen §5:
   höchstens 6). Zusammengehörige Props zu Objekten bündeln, ohne das Verhalten zu ändern.
 
@@ -92,5 +92,21 @@ Erkenntnisse aus `STATUS.md` (Abweichungen, offene Punkte) einarbeiten, mit dem 
 - `tools/golden/generate-large-fixture.mjs`: deterministisch (fester Seed), 300 Komponenten-Dateien in
   Ordnern, mit Importen und Klassen/Funktionen; nach `.cache/fixtures/large/` (nicht ins Repo).
 - Messen: Analysezeit, Zeit bis Layout-Ende, Frame-Zeit beim Rendern (Performance-Panel), Speicher.
-- Ziel: Frame ≤ 16 ms bei 300 Knoten; sonst Positionsupdates per Ref statt React-Render (Architektur §6),
-  `React.memo` für `GraphNode`.
+- Ziel: Frame ≤ 16 ms bei 300 Knoten.
+- **Schon erledigt** (in P06 vorgezogen, Nutzer 10.11.2026):
+  - `writePositions` schreibt die Positionen pro Frame direkt ins DOM; React rendert nur das erste
+    Bild und das Ende.
+  - `GraphNode` und `GraphLink` haben `React.memo`; Knoten und Kanten liegen in einer
+    memoisierten Ebene, Zoomen und Verschieben rendern nur die Zoom-Gruppe.
+  - Schriftgröße und Linienbreite beim Zoomen sind CSS-Variablen der Zoom-Gruppe.
+  - Knopf „Stop layout“ und Zoom-Übergang per `requestAnimationFrame` (ADR-011 A24); gespeicherte
+    Ansichten (A22).
+  - Messung mit 400 Komponenten und 817 Kanten im Dev-Modus: Frame ohne WebCola 1,8 ms statt etwa
+    70 ms, Zoomschritt 4–24 ms statt etwa 70 ms.
+- **Offen:**
+  - WebCola im Worker: Der Start (`start(40, 20, 20)`, etwa 2,2 s bei 400 Komponenten) und die
+    Schritte von etwa 35 ms blockieren beim ersten Aufbau einer Ansicht die Seite; im Testgraphen
+    kam WebCola auch nach 1.500 Schritten nicht zur Ruhe (im Altsystem genauso). Optionen: Worker,
+    Schrittgrenze.
+  - Das Kräfte-Layout (`forceLayout.ts`) startet eine wiederhergestellte, noch laufende Ansicht mit
+    alpha 1 neu statt mit dem alten Wert (WebCola, der Standard, ist nicht betroffen).

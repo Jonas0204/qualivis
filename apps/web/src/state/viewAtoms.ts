@@ -9,7 +9,7 @@ export const viewModeAtom = atom<ViewMode>('upload');
 export const componentIdAtom = atom<string | undefined>(undefined);
 
 /**
- * Setting "fullScreen" (G13): the graph without the side panels (P06). Its own atom until the
+ * Setting "fullScreen" (G13): the graph without the side panels. Its own atom until the
  * settings come in P07.
  */
 export const fullScreenAtom = atom(false);

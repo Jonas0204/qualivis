@@ -1,5 +1,5 @@
-import type { SourceFile } from '@qualivis/core';
-import { isIgnoredUploadPath, uploadFileFilter } from './isIgnoredUploadPath';
+import { isExcludedFolder, type ProjectFiles, type SourceFile } from '@qualivis/core';
+import { toProjectFiles, uploadFileFilter } from './toProjectFiles';
 
 const isFileEntry = (entry: FileSystemEntry): entry is FileSystemFileEntry => entry.isFile;
 
@@ -24,15 +24,15 @@ const readAllEntries = async (reader: FileSystemDirectoryReader) => {
     return entries;
 };
 
-/** All file entries below a dropped entry, without entering ignored folders. */
+/** All file entries below a dropped entry, without entering excluded folders. */
 const listFiles = async (entry: FileSystemEntry): Promise<FileSystemFileEntry[]> => {
-    if (isIgnoredUploadPath(entry.fullPath)) {
-        return [];
-    }
     if (isFileEntry(entry)) {
         return [entry];
     }
     if (isDirectoryEntry(entry)) {
+        if (isExcludedFolder(entry.fullPath)) {
+            return [];
+        }
         const children = await readAllEntries(entry.createReader());
         const nested = await Promise.all(children.map(listFiles));
         return nested.flat();
@@ -54,12 +54,11 @@ const readFile = async (file: File, path: string): Promise<SourceFile> => ({
  * Reads dropped files and folders (recursively) like the legacy `getFilesAsync`: entry paths are
  * `entry.fullPath`, the fallback without `webkitGetAsEntry` uses `file.webkitRelativePath`.
  * Fallback files come first, then the entries in item order; the core sorts them later.
- * Like the legacy app (data.service.ts:31), only files that `isComponentFile` accepts are read; the
- * core filters with the same function. Unlike the legacy app, `.venv` and `__tests__` folders
- * are not entered, and a python folder with a Python project is listed but nothing in it is read
- * (ADR-011 A18, A19).
+ * Only source and config files are read. Excluded folders (node_modules, build, dist, .venv,
+ * __tests__) are not entered; a python folder with a Python project is listed but nothing in it is
+ * read (ADR-019, ADR-011 A18, A19).
  */
-export const readDroppedFiles = async (dataTransfer: DataTransfer): Promise<SourceFile[]> => {
+export const readDroppedFiles = async (dataTransfer: DataTransfer): Promise<ProjectFiles> => {
     // Items are only readable during the drop event, so collect everything before the first await.
     const fallbackFiles: File[] = [];
     const entryLists: Promise<FileSystemFileEntry[]>[] = [];
@@ -87,10 +86,11 @@ export const readDroppedFiles = async (dataTransfer: DataTransfer): Promise<Sour
         ...fallbackFiles.map(file => file.webkitRelativePath),
         ...entries.map(entry => entry.fullPath),
     ]);
-    return Promise.all([
+    const files = await Promise.all([
         ...fallbackFiles
             .filter(file => isRead(file.webkitRelativePath))
             .map(file => readFile(file, file.webkitRelativePath)),
         ...entries.filter(entry => isRead(entry.fullPath)).map(readEntryFile),
     ]);
+    return toProjectFiles(files);
 };

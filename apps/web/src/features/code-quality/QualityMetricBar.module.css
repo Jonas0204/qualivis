@@ -1,0 +1,131 @@
+/* legacy quality-metric.component.scss on a Material progress bar (style reference §1, §3) */
+.metric {
+    position: relative;
+    height: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 8px;
+    margin-bottom: 8px;
+    cursor: default;
+}
+
+.name,
+.value {
+    font-size: 13px;
+    z-index: 1;
+}
+
+.value {
+    font-weight: 500;
+    color: var(--qv-text);
+}
+
+/* The progress bar spans the whole row; its buffer is white. */
+.bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border: 1px solid var(--qv-metric-border);
+    background-color: white;
+}
+
+.fill {
+    height: 100%;
+    transition: width 250ms ease;
+}
+
+.ok .fill {
+    background-color: var(--qv-success-muted);
+}
+
+.warn .fill {
+    background-color: var(--qv-warn-muted);
+}
+
+.error .fill {
+    background-color: var(--qv-error-muted);
+}
+
+/* ADR-011 A23: the name opens an explanation of the metric below the bar. */
+.item {
+    margin-bottom: 8px;
+}
+
+.item > .metric {
+    margin-bottom: 0;
+}
+
+.toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+}
+
+/* The icon comes from CSS, so that the name stays the only text of the button. */
+.toggle::after {
+    content: "info_outline";
+    font-family: var(--qv-font-icons);
+    font-size: 15px;
+    line-height: 1;
+    color: var(--qv-text-light-grey);
+    font-feature-settings: "liga";
+}
+
+.toggle[aria-expanded="true"]::after,
+.toggle:hover::after {
+    color: var(--qv-primary);
+}
+
+.toggle:focus-visible {
+    outline: 2px solid var(--qv-primary);
+    outline-offset: 2px;
+}
+
+.explanation {
+    margin-top: 4px;
+    padding: 8px 10px;
+    border: 1px solid var(--qv-metric-border);
+    border-top: 0;
+    background-color: var(--qv-surface);
+    font-size: 12px;
+    line-height: 1.45;
+    color: var(--qv-text);
+    cursor: default;
+}
+
+.explanation p {
+    margin: 0 0 6px;
+}
+
+.formula {
+    margin: 0 0 6px;
+    padding: 6px 8px;
+    background-color: var(--qv-background);
+    border-left: 3px solid var(--qv-primary-light);
+    font-family: ui-monospace, Consolas, monospace;
+    font-size: 11.5px;
+    white-space: pre-wrap;
+}
+
+.notes {
+    margin: 0 0 6px;
+    padding-left: 18px;
+}
+
+.thresholds {
+    color: var(--qv-text-light-grey);
+}
+
+.explanation .thresholds {
+    margin: 0;
+}

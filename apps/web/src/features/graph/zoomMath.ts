@@ -147,3 +147,29 @@ export const interpolateTransform = (
     x: from.x + (to.x - from.x) * t,
     y: from.y + (to.y - from.y) * t,
 });
+
+/** Duration of the wheel transition (graphSettings.zoomTransition, "0.1s ease-out"). */
+export const wheelTransitionDuration = 100;
+
+/**
+ * CSS `ease-out`, cubic-bezier(0, 0, 0.58, 1), of the legacy wheel transition: the curve point
+ * whose x is `t`, found by bisection (x grows with the curve parameter).
+ */
+export const easeOut = (t: number): number => {
+    if (t <= 0 || t >= 1) {
+        return t <= 0 ? 0 : 1;
+    }
+    const x = (u: number) => 3 * (1 - u) * u * u * 0.58 + u ** 3;
+    let low = 0;
+    let high = 1;
+    for (let i = 0; i < 30; i++) {
+        const mid = (low + high) / 2;
+        if (x(mid) < t) {
+            low = mid;
+        } else {
+            high = mid;
+        }
+    }
+    const u = (low + high) / 2;
+    return 3 * (1 - u) * u * u + u ** 3;
+};

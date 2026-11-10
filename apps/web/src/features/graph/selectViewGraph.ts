@@ -11,7 +11,7 @@ import {
 export type ViewGraph = { graph: Graph; view: View };
 
 /** The component `<file>#<component>`; own keys only, so URL ids like `#constructor` find nothing. */
-const findComponent = (fileMap: FileMap, componentId: string): Component | undefined => {
+export const findComponent = (fileMap: FileMap, componentId: string): Component | undefined => {
     const [fileName = '', componentName = ''] = componentId.split('#');
     const components = Object.hasOwn(fileMap, fileName) ? fileMap[fileName]?.components : undefined;
     return components && Object.hasOwn(components, componentName)
@@ -22,8 +22,9 @@ const findComponent = (fileMap: FileMap, componentId: string): Component | undef
 /**
  * The graph that data.service.ts setComponentGraph (lines 93-115) shows, and its view: the component
  * graph for `componentId`, the only component's graph, or the app graph. An unknown componentId
- * shows the app graph as app view (P06-S06). The legacy app showed the app graph too, but counted
- * it as component view (graph.component.ts:120), so the component view rules applied.
+ * shows the app graph as app view (useUrlState also removes it from the URL). The legacy app
+ * showed the app graph too, but counted it as component view (graph.component.ts:120), so the
+ * component view rules applied.
  */
 export const selectViewGraph = (
     { fileMap, appGraph }: AnalysisResult,

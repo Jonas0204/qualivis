@@ -1,0 +1,56 @@
+/* legacy file-tree.component.scss on a dense Material action list (style reference §2, §3) */
+.tree {
+    padding-top: 4px;
+    font-size: 13px;
+    color: var(--qv-text);
+}
+
+.row {
+    display: block;
+    height: 32px;
+    cursor: pointer;
+    user-select: none;
+    outline: none;
+
+    &:hover,
+    &:focus-visible {
+        background: var(--qv-option-hover);
+    }
+
+    &:focus-visible {
+        box-shadow: inset 0 0 0 2px var(--qv-primary);
+    }
+}
+
+.selected,
+.selected:focus-visible {
+    background-color: var(--qv-selected);
+
+    &:hover {
+        background-color: var(--qv-selected-hover);
+    }
+}
+
+.content {
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    height: 100%;
+    padding: 0 16px;
+}
+
+.icon {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    padding: 4px;
+    box-sizing: content-box;
+    color: var(--qv-file-tree-icon);
+}
+
+.name {
+    padding-left: 4px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}

@@ -59,6 +59,9 @@ const createFakeLayout = () => {
             stop: () => {
                 record.stopped = true;
             },
+            halt: () => {
+                record.calls.push('halt');
+            },
             onTick: () => () => undefined,
             onEnd: listener => {
                 endListeners.add(listener);
@@ -126,6 +129,98 @@ describe('GraphView', () => {
         expect(getByRole('button', { name: 'Zoom to 100%' }).textContent).toBe('50%');
     });
 
+    it('draws the first frame of a running layout with React and moves the graph after that', () => {
+        const ticks = new Set<() => void>();
+        let layoutNodes: LayoutOptions['nodes'] = [];
+        const tick = (x: number) => {
+            layoutNodes.forEach((node, index) => {
+                node.x = x + index;
+                node.y = 0;
+            });
+            act(() => {
+                for (const listener of ticks) {
+                    listener();
+                }
+                vi.advanceTimersByTime(20);
+            });
+        };
+        const createLayout: LayoutFactory = (_cola, options) => {
+            layoutNodes = options.nodes;
+            return {
+                start: () => undefined,
+                stop: () => undefined,
+                halt: () => undefined,
+                onTick: listener => {
+                    ticks.add(listener);
+                    return () => ticks.delete(listener);
+                },
+                onEnd: () => () => undefined,
+                dragStart: () => undefined,
+                drag: () => undefined,
+                dragEnd: () => undefined,
+            };
+        };
+        const { container } = drawView(createLayout);
+        const firstTransform = () =>
+            container.querySelector('g.zoom-group g.node')?.getAttribute('transform');
+
+        expect(container.querySelectorAll('g.zoom-group g.node')).toHaveLength(0);
+        tick(10);
+        expect(container.querySelectorAll('g.zoom-group g.node')).toHaveLength(8);
+        expect(firstTransform()).toBe('translate(10, 0)');
+
+        tick(500);
+        expect(firstTransform()).toBe('translate(500, 0)');
+        expect(container.querySelector('g.zoom-group g.links line')?.getAttribute('x1')).not.toBe(
+            null
+        );
+    });
+
+    it('stops a running layout with the stop button and fits the graph in', () => {
+        const ticks = new Set<() => void>();
+        const ends = new Set<() => void>();
+        const notify = (listeners: Set<() => void>) => {
+            act(() => {
+                for (const listener of listeners) {
+                    listener();
+                }
+                vi.advanceTimersByTime(20);
+            });
+        };
+        const halt = vi.fn(() => notify(ends));
+        const createLayout: LayoutFactory = (_cola, { nodes }) => ({
+            start: () => {
+                nodes.forEach((node, index) => {
+                    node.x = index * 100;
+                    node.y = 0;
+                });
+            },
+            stop: () => undefined,
+            halt,
+            onTick: listener => {
+                ticks.add(listener);
+                return () => ticks.delete(listener);
+            },
+            onEnd: listener => {
+                ends.add(listener);
+                return () => ends.delete(listener);
+            },
+            dragStart: () => undefined,
+            drag: () => undefined,
+            dragEnd: () => undefined,
+        });
+        const { container, getByRole, queryByRole } = drawView(createLayout);
+        expect(queryByRole('button', { name: 'Stop layout' })).toBeNull();
+
+        notify(ticks);
+        fireEvent.click(getByRole('button', { name: 'Stop layout' }));
+        finishZoom();
+
+        expect(halt).toHaveBeenCalledTimes(1);
+        expect(queryByRole('button', { name: 'Stop layout' })).toBeNull();
+        expect(zoomGroupTransform(container)).toBe('translate(25,150) scale(0.5)');
+    });
+
     it('zooms to 100 %, centred on the graph, and back to fit with the buttons', () => {
         const { createLayout } = createFakeLayout();
         const { container, getByRole } = drawView(createLayout);
@@ -178,19 +273,24 @@ describe('GraphView', () => {
         const settings = { ...defaultSettings, autoZoom: false };
         const { container, getByRole, rerender } = drawView(createLayout, settings);
         const svg = getByRole('img', { name: 'Component graph' });
-        const labelStyle = () => container.querySelector('.node-label')?.getAttribute('style');
-        const linkStyle = () => container.querySelector('g.links line')?.getAttribute('style');
+        // The zoom group passes them on as CSS variables (graph.css).
+        const zoomGroupStyle = () => container.querySelector<SVGGElement>('g.zoom-group')?.style;
+        const labelStyle = () => zoomGroupStyle()?.getPropertyValue('--qv-label-font-size');
+        const linkStyle = () => zoomGroupStyle()?.getPropertyValue('--qv-link-stroke-width');
 
         // 2 ** (600 * 0.002) = 2.297…: labels 20 / k px, links 1.6 / k.
+        // The wheel transition eases them for 100 ms (useZoomTransition).
         fireEvent.wheel(svg, { deltaY: -600, deltaMode: 0 });
+        finishZoom();
         const k = 2 ** 1.2;
-        expect(labelStyle()).toBe(`font-size: ${20 / k}px;`);
-        expect(linkStyle()).toBe(`stroke-width: ${1.6 / k};`);
+        expect(labelStyle()).toBe(`${20 / k}px`);
+        expect(linkStyle()).toBe(`${1.6 / k}`);
 
         fireEvent.wheel(svg, { deltaY: 600, deltaMode: 0 });
+        finishZoom();
         expect(getByRole('button', { name: 'Zoom to 100%' }).textContent).toBe('100%');
-        expect(labelStyle()).toBe(`font-size: ${20 / k}px;`);
-        expect(linkStyle()).toBe(`stroke-width: ${1.6 / k};`);
+        expect(labelStyle()).toBe(`${20 / k}px`);
+        expect(linkStyle()).toBe(`${1.6 / k}`);
 
         // A restart draws the labels and links with the default sizes again.
         rerender(
@@ -200,8 +300,8 @@ describe('GraphView', () => {
                 measure={measure}
             />
         );
-        expect(labelStyle()).toBeNull();
-        expect(linkStyle()).toBeNull();
+        expect(labelStyle()).toBe('14px');
+        expect(linkStyle()).toBe('0.8');
     });
 
     it('pans when dragging the background and drags a node without panning', () => {
@@ -417,6 +517,45 @@ describe('GraphView selection and fading', () => {
         expect(linkOpacities(container)).toEqual(['1', '0.1', '0.1', '0.1', '1', '0.1', '0.1']);
     });
 
+    it('selects the function of a preview circle with the lines in its file (G4)', () => {
+        const { createLayout } = createFakeLayout();
+        const { container, store } = drawView(createLayout);
+        const circle = Array.from(
+            node(container, 'Counter').querySelectorAll('circle.function')
+        ).find(each => each.querySelector('title')?.textContent === 'handleClick#11');
+        if (!circle) {
+            throw new Error('no preview circle handleClick#11');
+        }
+
+        fireEvent.click(circle);
+
+        // const handleClick = useCallback(…) spans lines 11 to 14 of Counter.tsx.
+        expect(store.get(selectionAtom)).toEqual([
+            expect.objectContaining({ id: 'handleClick#11', lineStart: 11, lineEnd: 14 }),
+        ]);
+        expect(store.get(selectionAtom)?.[0]?.code).toBe(
+            mini.fileMap['/mini/src/components/Counter.tsx']?.code
+        );
+        // The click goes on to the node, which fades to Counter as in the legacy app.
+        expect(nodeOpacities(container).Counter).toBe('1');
+        expect(nodeOpacities(container).Header).toBe('0.1');
+    });
+
+    it('selects a function of the component view with its lines (componentId of the view)', () => {
+        const { createLayout } = createFakeLayout();
+        const { container, store } = renderWithState(
+            <GraphView createLayout={createLayout} measure={measure} />,
+            { initialValues: [done, initial(componentIdAtom, app)] }
+        );
+
+        fireEvent.click(overlay(container, 'render'));
+
+        // render() { … } spans lines 59 to 71 of App.js.
+        expect(store.get(selectionAtom)).toEqual([
+            expect.objectContaining({ id: 'render', lineStart: 59, lineEnd: 71 }),
+        ]);
+    });
+
     it('opens the component view on a double click on a component with inner functions (G3)', () => {
         const { createLayout } = createFakeLayout();
         const { container, store } = drawView(createLayout);
@@ -429,6 +568,9 @@ describe('GraphView selection and fading', () => {
         fireEvent.doubleClick(node(container, 'App'));
         expect(store.get(componentIdAtom)).toBe(app);
         expect(container.querySelector('svg.qv-legend')?.getAttribute('height')).toBe('270');
+        // N10: the component view selects the file of its component.
+        expect(store.get(selectionAtom)?.map(selected => selected.id)).toEqual([app]);
+        expect(console.log).toHaveBeenCalledWith('Select file -> nodes: ', expect.any(Array));
     });
 
     it('keeps the nodes reached from the clicked one and fills them lightly', () => {
@@ -778,6 +920,51 @@ describe('GraphView legend and actions', () => {
         fireEvent.click(getByRole('button', { name: 'Back to app graph' }));
         expect(store.get(componentIdAtom)).toBeUndefined();
         expect(select().textContent).toBe('Lines of Code');
+    });
+
+    it('shows the app view again as it was left, without a new layout (ADR-011 A22)', () => {
+        const { createLayout, engines } = createFakeLayout();
+        const { container, getByRole, store } = drawView(createLayout);
+        finishZoom();
+        fireEvent.click(getByRole('button', { name: 'Zoom to 100%' }));
+        finishZoom();
+        expect(engines[0]?.options.restore).toBeUndefined();
+
+        act(() => store.set(componentIdAtom, app));
+        finishZoom();
+        expect(engines.at(-1)?.options.restore).toBeUndefined();
+        fireEvent.click(getByRole('button', { name: 'Back to app graph' }));
+
+        const engine = engines.at(-1);
+        expect(engine?.options.restore).toEqual({ running: false });
+        // The nodes start where the first layout left them, not from scratch.
+        expect(engine?.positions.map(({ x, y }) => [x, y])).toEqual(
+            engines[0]?.options.nodes.map((_node, index) => [index * 100, 0])
+        );
+        finishZoom();
+        expect(zoomGroupTransform(container)).toBe('translate(-150,150) scale(1)');
+    });
+
+    it('lays a view out again for a new analysis and with another size metric', () => {
+        const { createLayout, engines } = createFakeLayout();
+        const { getByRole, store } = drawView(createLayout);
+        const leaveAndComeBack = () => {
+            act(() => store.set(componentIdAtom, app));
+            act(() => store.set(componentIdAtom, undefined));
+        };
+
+        act(() => store.set(analysisAtom, { ...store.get(analysisAtom) }));
+        leaveAndComeBack();
+        expect(engines.at(-1)?.options.restore).toEqual({ running: false });
+
+        act(() => store.set(analysisAtom, { ...store.get(analysisAtom) }));
+        expect(engines.at(-1)?.options.restore).toBeUndefined();
+
+        act(() => store.set(componentIdAtom, app));
+        fireEvent.click(getByRole('combobox', { name: 'Node size metric' }));
+        fireEvent.click(getByRole('option', { name: 'Cyclomatic Complexity' }));
+        act(() => store.set(componentIdAtom, undefined));
+        expect(engines.at(-1)?.options.restore).toBeUndefined();
     });
 
     it('toggles full screen and fits the graph in, also without "Auto zoom"', () => {

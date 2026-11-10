@@ -1,0 +1,6 @@
+{
+  "name": "web-b",
+  "dependencies": {
+    "@demo/tokens": "workspace:*"
+  }
+}

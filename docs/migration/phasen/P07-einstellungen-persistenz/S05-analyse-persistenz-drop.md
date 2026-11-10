@@ -21,13 +21,15 @@ neuer Ordner gezogen werden („Drop files here“).
      Bei `false` → Snackbar (S04-Text), nur einmal pro Sitzung.
    - `loadAnalysis()` → validiert `version === 1` und Grundstruktur; sonst `undefined`.
 2. Start (`App`): gespeicherte Analyse vorhanden → `analysisAtom` = `done` mit Ergebnis,
-   `view = 'graph'`, `componentId` aus der URL (S06 aus P06). Keine gespeicherte Analyse → Upload-Ansicht
+   `view = 'graph'`, `componentId` aus der URL (`useUrlState`). Keine gespeicherte Analyse → Upload-Ansicht
    (keine Demo-Daten, A2). Toolbar-Titel → Upload-Ansicht, Analyse bleibt.
 3. `DropOverlay`: Graph-Seite nutzt `useFileDrop`; während des Ziehens Overlay („Drop files here“,
    `rgba(0,0,0,.55)`, 32 px weiß, zentriert, `pointer-events: none`, `z-index 999`). Drop → `runAnalysis`
    (setzt Auswahl zurück: `deselect()`). Monorepo (P05.5, ADR-019): Hat der Drop mindestens zwei
-   App-Kandidaten, braucht es dieselbe App-Auswahl wie in der Upload-Ansicht (P05.5-S07), hier mit
-   dem `Dialog` aus S02. Ob die Auswahl gespeichert wird, vorher mit dem Nutzer klären (O19).
+   App-Kandidaten, braucht es dieselbe App-Auswahl wie in der Upload-Ansicht (`ProjectChoice`),
+   hier mit dem `Dialog` aus S02. Der Nutzer wünschte sich die Auswahl als Pop-up; in P05.5 gab es
+   noch keinen Dialog, deshalb ist sie dort ein Schritt der Upload-Ansicht. Vorher mit dem Nutzer
+   klären: ob sie mit dem Dialog auch dort ein Pop-up wird und ob sie gespeichert wird (O19).
 4. Neue Analyse ersetzt die gespeicherte.
 5. Tests: Speichern/Laden-Rundlauf (`toEqual`); defekte/alte Daten → `undefined`; Start mit gespeicherter
    Analyse und `?id=` öffnet KV; Drop auf Graph-Seite startet Analyse; Overlay sichtbar nur beim Ziehen.

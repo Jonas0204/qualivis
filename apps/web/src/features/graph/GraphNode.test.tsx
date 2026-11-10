@@ -338,4 +338,39 @@ describe('GraphNode', () => {
           </g>
         `);
     });
+
+    it('renders again only when a prop changes, styles and label by their values', () => {
+        const node = visual();
+        const events = { onClick: vi.fn() };
+        const drawNode = (props: { selected?: boolean; fill?: string }) => (
+            <svg role="img" aria-label="Test graph">
+                <GraphNode
+                    node={node}
+                    view="app"
+                    settings={settings}
+                    selected={props.selected}
+                    inlineStyle={{ fill: props.fill, opacity: undefined }}
+                    label={{ hidden: false }}
+                    events={events}
+                />
+            </svg>
+        );
+        const { container, rerender } = renderWithState(drawNode({}));
+        const group = () => container.querySelector('g.node');
+
+        // The layout moves the node without React (writePositions).
+        node.x = 99;
+        group()?.setAttribute('transform', 'moved by the layout');
+        rerender(drawNode({}));
+        expect(group()?.getAttribute('transform')).toBe('moved by the layout');
+
+        rerender(drawNode({ fill: 'red' }));
+        expect(group()?.getAttribute('transform')).toBe('translate(99, 20)');
+        expect(container.querySelector('.circle-node')?.getAttribute('style')).toBe('fill: red;');
+
+        rerender(drawNode({ fill: 'red', selected: true }));
+        expect(container.querySelector('.circle-node')?.getAttribute('class')).toContain(
+            'selected'
+        );
+    });
 });

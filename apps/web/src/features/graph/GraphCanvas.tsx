@@ -6,19 +6,24 @@ import {
     type VisualNode,
 } from '@qualivis/core';
 import {
+    type CSSProperties,
+    memo,
     type MouseEvent as ReactMouseEvent,
     type ReactNode,
     type PointerEvent as ReactPointerEvent,
     type Ref,
     type RefCallback,
+    useCallback,
     useId,
     useMemo,
+    useRef,
 } from 'react';
 import { GraphDefs } from './GraphDefs';
 import { GraphLink } from './GraphLink';
 import { GraphNode, type GraphNodeSettings, type NodeEvents } from './GraphNode';
 import { GraphDefsContext } from './graphDefsContext';
 import type { GraphFade } from './useFade';
+import { useZoomTransition, type ZoomFrame } from './useZoomTransition';
 import {
     identityTransform,
     transformAttribute,
@@ -29,7 +34,7 @@ import {
 /** Pan and zoom state (usePanZoom) and the label and link sizes it set (nextZoomStyle). */
 export type GraphZoom = ZoomStyle & {
     transform: ZoomTransform;
-    /** Wheel zooming eases transform and label size (legacy addTransition). */
+    /** Wheel zooming eases transform, label size and link width (useZoomTransition). */
     transition?: boolean;
 };
 
@@ -81,9 +86,98 @@ const unscaled: GraphZoom = { transform: identityTransform };
 /** Fill of indirectly connected nodes while faded (graph.component.ts:787). */
 const indirectFill = 'var(--qv-graph-indirect-fill)';
 
+/**
+ * Transform and the label size and link width set by zooming, without a size from zooming the
+ * defaults (14 px, 0.8). The sizes are CSS variables of the zoom group (graph.css): one style
+ * change instead of one per label and link, so zooming does not render every node again.
+ */
+const zoomFrame = (zoom: GraphZoom): ZoomFrame => ({
+    transform: zoom.transform,
+    labelFontSize: zoom.labelFontSize ?? graphSettings.normalTextSize,
+    linkStrokeWidth: zoom.linkStrokeWidth ?? graphSettings.linkStrokeWidth,
+});
+
+const zoomGroupStyle = ({ labelFontSize, linkStrokeWidth }: ZoomFrame) =>
+    ({
+        '--qv-label-font-size': `${labelFontSize}px`,
+        '--qv-link-stroke-width': linkStrokeWidth,
+    }) as CSSProperties;
+
 /** Opacity of a node or link while faded; undefined while nothing is faded. */
 const fadeOpacity = (fade: GraphFade<VisualLink> | undefined, opaque: boolean | undefined) =>
     fade && (opaque ? 1 : graphSettings.fadeOpacity);
+
+type GraphContentProps = Pick<GraphCanvasProps, 'nodes' | 'links' | 'view' | 'settings'> &
+    Pick<GraphHighlight, 'selected' | 'fade'> & {
+        showCluster: boolean;
+        hiddenLabels?: GraphLabels['hidden'];
+        labelRef?: GraphLabels['ref'];
+        nodeEvents?: NodeEvents;
+    };
+
+/**
+ * Links and nodes of the graph. Memoized on props that pan and zoom leave alone, so that a wheel
+ * step or a pan move renders only the zoom group, not every node and link (P08-S09).
+ */
+const GraphContent = memo(
+    ({
+        nodes,
+        links,
+        view,
+        settings,
+        showCluster,
+        selected,
+        fade,
+        hiddenLabels,
+        labelRef,
+        nodeEvents,
+    }: GraphContentProps) => (
+        <>
+            <g
+                className="links"
+                stroke={graphSettings.linkColor}
+                strokeOpacity={graphSettings.linkOpacity}
+            >
+                {links.map((link, index) => (
+                    // Index as key: links keep their order, and the same pair can occur twice.
+                    <GraphLink
+                        key={index}
+                        link={link}
+                        view={view}
+                        opacity={fadeOpacity(fade, fade?.opaqueLinks.has(link))}
+                    />
+                ))}
+            </g>
+            <g className="nodes">
+                {nodes.map(node => {
+                    const paint = clusterPaint(node.cluster, view, showCluster);
+                    return (
+                        <GraphNode
+                            key={node.id}
+                            node={node}
+                            view={view}
+                            settings={settings}
+                            selected={selected?.has(node.id)}
+                            inlineStyle={{
+                                fill: fade?.indirectNodes.has(node.id) ? indirectFill : paint?.fill,
+                                stroke: paint?.stroke,
+                                opacity: fadeOpacity(fade, fade?.opaqueNodes.has(node.id)),
+                            }}
+                            label={
+                                hiddenLabels &&
+                                labelRef && {
+                                    hidden: hiddenLabels.has(node.id),
+                                    ref: labelRef(node.id),
+                                }
+                            }
+                            events={nodeEvents}
+                        />
+                    );
+                })}
+            </g>
+        </>
+    )
+);
 
 /** SVG of the graph at the current node positions; markup and classes as in the legacy app. */
 export const GraphCanvas = ({
@@ -108,6 +202,20 @@ export const GraphCanvas = ({
         [id]
     );
     const { fade, selected } = highlight;
+    const frame = zoomFrame(zoom);
+    const groupRef = useRef<SVGGElement>(null);
+    useZoomTransition(groupRef, frame, zoom.transition ?? false);
+    const setGroup = useCallback(
+        (group: SVGGElement | null) => {
+            groupRef.current = group;
+            if (typeof zoomGroupRef === 'function') {
+                zoomGroupRef(group);
+            } else if (zoomGroupRef) {
+                zoomGroupRef.current = group;
+            }
+        },
+        [zoomGroupRef]
+    );
 
     return (
         <GraphDefsContext value={defIds}>
@@ -123,55 +231,23 @@ export const GraphCanvas = ({
                 <GraphDefs />
                 {/* legacy #zoomGroup */}
                 <g
-                    ref={zoomGroupRef}
-                    className={zoom.transition ? 'zoom-group zoom-transition' : 'zoom-group'}
-                    transform={transformAttribute(zoom.transform)}
+                    ref={setGroup}
+                    className="zoom-group"
+                    transform={transformAttribute(frame.transform)}
+                    style={zoomGroupStyle(frame)}
                 >
-                    <g
-                        className="links"
-                        stroke={graphSettings.linkColor}
-                        strokeOpacity={graphSettings.linkOpacity}
-                    >
-                        {links.map((link, index) => (
-                            // Index as key: links keep their order, and the same pair can occur twice.
-                            <GraphLink
-                                key={index}
-                                link={link}
-                                view={view}
-                                strokeWidth={zoom.linkStrokeWidth}
-                                opacity={fadeOpacity(fade, fade?.opaqueLinks.has(link))}
-                            />
-                        ))}
-                    </g>
-                    <g className="nodes">
-                        {nodes.map(node => {
-                            const paint = clusterPaint(node.cluster, view, showCluster);
-                            return (
-                                <GraphNode
-                                    key={node.id}
-                                    node={node}
-                                    view={view}
-                                    settings={settings}
-                                    selected={selected?.has(node.id)}
-                                    inlineStyle={{
-                                        fill: fade?.indirectNodes.has(node.id)
-                                            ? indirectFill
-                                            : paint?.fill,
-                                        stroke: paint?.stroke,
-                                        opacity: fadeOpacity(fade, fade?.opaqueNodes.has(node.id)),
-                                        labelFontSize: zoom.labelFontSize,
-                                    }}
-                                    label={
-                                        labels && {
-                                            hidden: labels.hidden.has(node.id),
-                                            ref: labels.ref(node.id),
-                                        }
-                                    }
-                                    events={events.node}
-                                />
-                            );
-                        })}
-                    </g>
+                    <GraphContent
+                        nodes={nodes}
+                        links={links}
+                        view={view}
+                        settings={settings}
+                        showCluster={showCluster}
+                        selected={selected}
+                        fade={fade}
+                        hiddenLabels={labels?.hidden}
+                        labelRef={labels?.ref}
+                        nodeEvents={events.node}
+                    />
                 </g>
             </svg>
             {children}

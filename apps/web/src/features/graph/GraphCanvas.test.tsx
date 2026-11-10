@@ -1,5 +1,6 @@
 import type { VisualLink, VisualNode } from '@qualivis/core';
-import { describe, expect, it } from 'vitest';
+import { act } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
 import { renderWithState } from '../../test/renderWithState';
 import { GraphCanvas, type GraphZoom } from './GraphCanvas';
 import type { GraphNodeSettings } from './GraphNode';
@@ -40,6 +41,15 @@ const drawCanvas = (
             zoom={props.zoom}
         />
     );
+
+/** Label size and link width that the zoom group passes on as CSS variables. */
+const zoomStyle = (container: HTMLElement) => {
+    const style = container.querySelector<SVGGElement>('g.zoom-group')?.style;
+    return {
+        labelFontSize: style?.getPropertyValue('--qv-label-font-size'),
+        linkStrokeWidth: style?.getPropertyValue('--qv-link-stroke-width'),
+    };
+};
 
 describe('GraphCanvas', () => {
     it('draws one group per node with its label, or its id without a label', () => {
@@ -92,7 +102,7 @@ describe('GraphCanvas', () => {
         expect(container.querySelector('g.links line')?.getAttribute('style')).toBeNull();
     });
 
-    it('applies the zoom transform, the wheel transition and the sizes set by zooming', () => {
+    it('applies the zoom transform and the sizes set by zooming', () => {
         const { container } = drawCanvas({
             zoom: {
                 transform: { k: 2.5, x: 10, y: -20 },
@@ -103,14 +113,83 @@ describe('GraphCanvas', () => {
         });
 
         const zoomGroup = container.querySelector('g.zoom-group');
+        // The first frame shows at once, also with the wheel transition.
         expect(zoomGroup?.getAttribute('transform')).toBe('translate(10,-20) scale(2.5)');
-        expect(zoomGroup?.getAttribute('class')).toBe('zoom-group zoom-transition');
+        expect(zoomGroup?.getAttribute('class')).toBe('zoom-group');
+        // One style on the zoom group instead of one per label and link (graph.css uses them).
+        expect(zoomStyle(container)).toEqual({ labelFontSize: '8px', linkStrokeWidth: '0.64' });
         for (const label of container.querySelectorAll('.node-label')) {
-            expect(label.getAttribute('style')).toBe('font-size: 8px;');
+            expect(label.getAttribute('style')).toBeNull();
         }
         for (const line of container.querySelectorAll('g.links line')) {
-            expect(line.getAttribute('style')).toBe('stroke-width: 0.64;');
+            expect(line.getAttribute('style')).toBeNull();
         }
+    });
+
+    it('eases transform and sizes for 100 ms with the wheel transition, from where they are', () => {
+        vi.useFakeTimers({ toFake: ['requestAnimationFrame', 'cancelAnimationFrame'] });
+        try {
+            const canvas = (zoom: GraphZoom) => (
+                <GraphCanvas
+                    nodes={nodes}
+                    links={links}
+                    view="component"
+                    settings={settings}
+                    zoom={zoom}
+                />
+            );
+            const { container, rerender } = renderWithState(
+                canvas({ transform: { k: 1, x: 0, y: 0 } })
+            );
+            const transform = () =>
+                container.querySelector('g.zoom-group')?.getAttribute('transform');
+            const frames = (count: number) => {
+                act(() => {
+                    for (let i = 0; i < count; i++) {
+                        vi.advanceTimersToNextFrame();
+                    }
+                });
+            };
+            const zoomed = { k: 3, x: -100, y: -50 };
+
+            rerender(
+                canvas({
+                    transform: zoomed,
+                    transition: true,
+                    labelFontSize: 8,
+                    linkStrokeWidth: 0.4,
+                })
+            );
+            // Before the first frame the old values are still on screen.
+            expect(transform()).toBe('translate(0,0) scale(1)');
+            expect(zoomStyle(container)).toEqual({ labelFontSize: '14px', linkStrokeWidth: '0.8' });
+
+            frames(4);
+            const k = Number(/scale\((.*)\)/.exec(transform() ?? '')?.[1]);
+            expect(k).toBeGreaterThan(1);
+            expect(k).toBeLessThan(3);
+            const size = Number.parseFloat(zoomStyle(container).labelFontSize ?? '');
+            expect(size).toBeGreaterThan(8);
+            expect(size).toBeLessThan(14);
+
+            frames(10);
+            expect(transform()).toBe('translate(-100,-50) scale(3)');
+            expect(zoomStyle(container)).toEqual({ labelFontSize: '8px', linkStrokeWidth: '0.4' });
+
+            // Without the transition (pan, zoom to fit) the next transform shows at once.
+            rerender(
+                canvas({ transform: { k: 3, x: 0, y: 0 }, labelFontSize: 8, linkStrokeWidth: 0.4 })
+            );
+            expect(transform()).toBe('translate(0,0) scale(3)');
+        } finally {
+            vi.useRealTimers();
+        }
+    });
+
+    it('gives the zoom group the default label size and link width without zooming', () => {
+        const { container } = drawCanvas();
+
+        expect(zoomStyle(container)).toEqual({ labelFontSize: '14px', linkStrokeWidth: '0.8' });
     });
 
     it('gives two graphs in one document their own defs', () => {

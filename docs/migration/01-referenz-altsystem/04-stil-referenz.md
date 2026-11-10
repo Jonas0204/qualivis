@@ -116,7 +116,7 @@ Gutter: kein Rand, 10 px transparenter Abstand rechts, Hintergrund transparent
 Zeilennummer #e0e2e5 (sehr hell!), Innenabstand 0 · Cursor #676767
 ```
 CodeMirror-6-Umsetzung: `EditorView.theme(...)` + `HighlightStyle.define(...)` mit diesen Farben
-(P06-S05). Schrift: Monospace-Standard des Browsers (wie CodeMirror 5), Höhe 100 % des Panels.
+(`neoTheme.ts`). Schrift: Monospace-Standard des Browsers (wie CodeMirror 5), Höhe 100 % des Panels.
 
 ## 5. Verwendete Material-Icon-Namen
 

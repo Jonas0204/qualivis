@@ -38,6 +38,9 @@ const noIds: ReadonlySet<string> = new Set();
 
 type Measured = { run: number; ids: ReadonlySet<string> };
 
+const sameIds = (a: ReadonlySet<string>, b: ReadonlySet<string>) =>
+    a.size === b.size && [...a].every(id => b.has(id));
+
 const byDocumentOrder = ([, a]: [string, Element], [, b]: [string, Element]) =>
     a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1;
 
@@ -81,7 +84,14 @@ export const useLabelCollision = ({
                 labels.forEach(([, label], index) => {
                     label.style.display = displays[index] ?? '';
                 });
-                setMeasured({ run: current.run, ids: hiddenLabels(rects) });
+                const ids = hiddenLabels(rects);
+                // The same set when nothing changed, so that the memoized graph does not render
+                // again after every zoom (P08-S09).
+                setMeasured(previous =>
+                    previous?.run === current.run && sameIds(previous.ids, ids)
+                        ? previous
+                        : { run: current.run, ids }
+                );
             }, wait),
         []
     );

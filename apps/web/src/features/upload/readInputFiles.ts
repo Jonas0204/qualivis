@@ -1,18 +1,19 @@
-import type { SourceFile } from '@qualivis/core';
-import { uploadFileFilter } from './isIgnoredUploadPath';
+import type { ProjectFiles } from '@qualivis/core';
+import { toProjectFiles, uploadFileFilter } from './toProjectFiles';
 
 /**
- * Reads the component files of a folder selection; paths are `'/' + webkitRelativePath` like the
- * legacy app. Like the legacy app (data.service.ts:31), only files that `isComponentFile` accepts
- * are read; the core filters with the same function. Unlike the legacy app, files in `.venv` and
- * `__tests__` folders and in python folders with a Python project are skipped (ADR-011 A18, A19).
+ * Reads the source and config files of a folder selection; paths are `'/' + webkitRelativePath`
+ * like the legacy app. Other files are not read. The browser lists the files of excluded folders
+ * anyway; that cannot be prevented here (RI15).
  */
-export const readInputFiles = (files: FileList | File[]): Promise<SourceFile[]> => {
+export const readInputFiles = async (files: FileList | File[]): Promise<ProjectFiles> => {
     const selection = Array.from(files, file => ({ file, path: `/${file.webkitRelativePath}` }));
     const isRead = uploadFileFilter(selection.map(({ path }) => path));
-    return Promise.all(
-        selection
-            .filter(({ path }) => isRead(path))
-            .map(async ({ file, path }) => ({ path, code: await file.text() }))
+    return toProjectFiles(
+        await Promise.all(
+            selection
+                .filter(({ path }) => isRead(path))
+                .map(async ({ file, path }) => ({ path, code: await file.text() }))
+        )
     );
 };

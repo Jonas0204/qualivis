@@ -1,0 +1,4 @@
+export const sampleItems = [
+  { id: 1, title: 'First item' },
+  { id: 2, title: 'Second item' },
+];

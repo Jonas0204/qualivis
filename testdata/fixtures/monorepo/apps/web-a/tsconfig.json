@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "paths": {
+      "@demo/ui/*": ["../../shared/ui/src/*"],
+      "@data/*": ["../../dev-data/*"]
+    }
+  },
+  "include": ["src", "components"]
+}

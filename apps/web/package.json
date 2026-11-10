@@ -11,8 +11,14 @@
         "test": "vitest run"
     },
     "dependencies": {
+        "@codemirror/lang-javascript": "catalog:",
+        "@codemirror/language": "catalog:",
+        "@codemirror/search": "catalog:",
+        "@codemirror/state": "catalog:",
+        "@codemirror/view": "catalog:",
         "@fontsource/material-icons": "catalog:",
         "@fontsource/roboto": "catalog:",
+        "@lezer/highlight": "catalog:",
         "@qualivis/core": "workspace:*",
         "d3-force": "catalog:",
         "jotai": "catalog:",

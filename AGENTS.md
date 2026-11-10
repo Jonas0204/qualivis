@@ -76,8 +76,8 @@ Alle Plan-Dateien liegen unter `docs/migration/`.
 | Architektur §n, Konventionen §n, Teststrategie §n | `00-grundlagen/03-architektur.md`, `05-konventionen.md`, `06-teststrategie.md` |
 | G1–G6 (Golden-Stufen) | `00-grundlagen/06-teststrategie.md` §3 |
 | M0–M8 (Meilensteine) | `00-grundlagen/01-ziele-und-scope.md` §4 |
-| ADR-nnn, ADR-011 A1–A19 (Korrekturen) | `00-grundlagen/07-entscheidungen.md` |
-| O2, O5, O14, O16–O19 (Nutzerentscheidungen ohne ADR), RI1–RI16 (Risiken) | `00-grundlagen/08-risiken-und-offene-punkte.md` |
+| ADR-nnn, ADR-011 A1–A24 (Korrekturen) | `00-grundlagen/07-entscheidungen.md` |
+| O2, O5, O14, O16–O19 (Nutzerentscheidungen ohne ADR), RI1–RI17 (Risiken) | `00-grundlagen/08-risiken-und-offene-punkte.md` |
 | R1–R10 (Regeln) | `README.md`, Abschnitt „Regeln für die Umsetzung“ |
 | Goldens `legacy-*.json` | `testdata/golden/<fixture>/` (Fixtures `mini`, `realworld`) |
 
@@ -100,6 +100,7 @@ gekürzt. Die Zeilenangaben gelten unverändert, denn die Dateien wurden nur ver
 | `pnpm format` | formatieren und automatisch behebbare Lint-Fehler beheben |
 | `pnpm test:parity` | nur die Golden-Tests von Kern und Web |
 | `pnpm dev`, `pnpm build` | App starten bzw. bauen |
+| `pnpm start` | App bauen und den fertigen Build lokal starten (schneller als `pnpm dev`, z. B. für Vorführungen) |
 | `pnpm legacy:extract`, `pnpm legacy:serve` | alten Build entpacken und lokal starten, nur für Golden-Erfassung (`tools/legacy/README.md`) |
 | `node tools/golden/diff-json.mjs <erwartet.json> <ist.json> [n]` | zeigt die ersten n (Standard 60) Pfade, an denen zwei JSON-Dateien abweichen; Exit 0 gleich, 1 verschieden, 2 Aufruffehler |
 

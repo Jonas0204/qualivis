@@ -10,6 +10,7 @@
         "dev": "pnpm --filter @qualivis/web dev",
         "build": "pnpm --filter @qualivis/web build",
         "preview": "pnpm --filter @qualivis/web preview",
+        "start": "pnpm build && pnpm preview",
         "lint": "biome check .",
         "format": "biome check --write .",
         "typecheck": "pnpm -r --if-present run typecheck",
