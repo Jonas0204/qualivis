@@ -14,8 +14,8 @@ export const App = () => {
     const progress = useAtomValue(analysisProgressAtom);
     const error = useAtomValue(analysisErrorAtom);
 
-    const handleFiles = (project: ProjectFiles) => {
-        void runAnalysis(project.sources, store);
+    const handleFiles = (project: ProjectFiles, appDir?: string) => {
+        void runAnalysis(project, appDir, store);
     };
 
     return (

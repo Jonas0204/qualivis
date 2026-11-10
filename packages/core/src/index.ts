@@ -44,6 +44,7 @@ export type { ViewModel, VisualLink, VisualNode } from './rules/viewModel';
 export { buildViewModel } from './rules/viewModel';
 export type { WorkspaceChoice } from './workspace/analyzeWorkspace';
 export { analyzeWorkspaceAsync } from './workspace/analyzeWorkspace';
+export { findAppCandidates } from './workspace/appCandidates';
 export type { WorkspacePackage } from './workspace/packages';
 export { findPackages } from './workspace/packages';
 export type { ProjectFiles } from './workspace/projectFiles';
