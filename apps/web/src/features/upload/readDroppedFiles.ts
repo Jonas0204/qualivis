@@ -1,5 +1,5 @@
 import { isExcludedFolder, type ProjectFiles, type SourceFile } from '@qualivis/core';
-import { isUploadFile, toProjectFiles } from './toProjectFiles';
+import { toProjectFiles, uploadFileFilter } from './toProjectFiles';
 
 const isFileEntry = (entry: FileSystemEntry): entry is FileSystemFileEntry => entry.isFile;
 
@@ -24,24 +24,26 @@ const readAllEntries = async (reader: FileSystemDirectoryReader) => {
     return entries;
 };
 
-const readEntry = async (entry: FileSystemEntry): Promise<SourceFile[]> => {
+/** All file entries below a dropped entry, without entering excluded folders. */
+const listFiles = async (entry: FileSystemEntry): Promise<FileSystemFileEntry[]> => {
     if (isFileEntry(entry)) {
-        if (!isUploadFile(entry.fullPath)) {
-            return [];
-        }
-        const file = await getFile(entry);
-        return [{ path: entry.fullPath, code: await file.text() }];
+        return [entry];
     }
     if (isDirectoryEntry(entry)) {
         if (isExcludedFolder(entry.fullPath)) {
             return [];
         }
         const children = await readAllEntries(entry.createReader());
-        const nested = await Promise.all(children.map(readEntry));
+        const nested = await Promise.all(children.map(listFiles));
         return nested.flat();
     }
     return [];
 };
+
+const readEntryFile = async (entry: FileSystemFileEntry): Promise<SourceFile> => ({
+    path: entry.fullPath,
+    code: await (await getFile(entry)).text(),
+});
 
 const readFile = async (file: File, path: string): Promise<SourceFile> => ({
     path,
@@ -52,13 +54,14 @@ const readFile = async (file: File, path: string): Promise<SourceFile> => ({
  * Reads dropped files and folders (recursively) like the legacy `getFilesAsync`: entry paths are
  * `entry.fullPath`, the fallback without `webkitGetAsEntry` uses `file.webkitRelativePath`.
  * Fallback files come first, then the entries in item order; the core sorts them later.
- * Only source and config files are read, and excluded folders (node_modules, build, dist, .venv)
- * are not entered (ADR-019, ADR-011 A18).
+ * Only source and config files are read. Excluded folders (node_modules, build, dist, .venv,
+ * __tests__) are not entered; a python folder with a Python project is listed but nothing in it is
+ * read (ADR-019, ADR-011 A18, A19).
  */
 export const readDroppedFiles = async (dataTransfer: DataTransfer): Promise<ProjectFiles> => {
     // Items are only readable during the drop event, so collect everything before the first await.
-    const fallbackReads: Promise<SourceFile>[] = [];
-    const entryReads: Promise<SourceFile[]>[] = [];
+    const fallbackFiles: File[] = [];
+    const entryLists: Promise<FileSystemFileEntry[]>[] = [];
 
     for (const item of Array.from(dataTransfer.items)) {
         if (item.kind !== 'file') {
@@ -67,17 +70,27 @@ export const readDroppedFiles = async (dataTransfer: DataTransfer): Promise<Proj
         if (typeof item.webkitGetAsEntry === 'function') {
             const entry = item.webkitGetAsEntry();
             if (entry) {
-                entryReads.push(readEntry(entry));
+                entryLists.push(listFiles(entry));
             }
             continue;
         }
         const file = item.getAsFile();
-        if (file && isUploadFile(file.webkitRelativePath)) {
-            fallbackReads.push(readFile(file, file.webkitRelativePath));
+        if (file) {
+            fallbackFiles.push(file);
         }
     }
 
-    const fallbackFiles = await Promise.all(fallbackReads);
-    const entryFiles = await Promise.all(entryReads);
-    return toProjectFiles([...fallbackFiles, ...entryFiles.flat()]);
+    const entries = (await Promise.all(entryLists)).flat();
+    // Python folders are known only once every path is listed, so reading starts afterwards.
+    const isRead = uploadFileFilter([
+        ...fallbackFiles.map(file => file.webkitRelativePath),
+        ...entries.map(entry => entry.fullPath),
+    ]);
+    const files = await Promise.all([
+        ...fallbackFiles
+            .filter(file => isRead(file.webkitRelativePath))
+            .map(file => readFile(file, file.webkitRelativePath)),
+        ...entries.filter(entry => isRead(entry.fullPath)).map(readEntryFile),
+    ]);
+    return toProjectFiles(files);
 };

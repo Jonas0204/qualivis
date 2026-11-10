@@ -45,6 +45,6 @@ export { buildViewModel } from './rules/viewModel';
 export type { WorkspacePackage } from './workspace/packages';
 export { findPackages } from './workspace/packages';
 export type { ProjectFiles } from './workspace/projectFiles';
-export { isConfigFile, isExcludedFolder } from './workspace/projectFiles';
+export { findPythonFolders, isConfigFile, isExcludedFolder } from './workspace/projectFiles';
 export type { PathMapping } from './workspace/tsconfig';
 export { pathMappingFor } from './workspace/tsconfig';

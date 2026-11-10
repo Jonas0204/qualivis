@@ -70,6 +70,43 @@ describe('readInputFiles', () => {
         });
     });
 
+    it('skips files in __tests__ folders (ADR-011 A19)', async () => {
+        const files = [
+            fileWithRelativePath('my-app/src/App.js', 'const App = 1;'),
+            unreadableFile('my-app/src/components/__tests__/SliderTest.tsx'),
+        ];
+
+        // Reading the unreadable file would reject the whole result.
+        expect(await readInputFiles(files)).toEqual({
+            sources: [{ path: '/my-app/src/App.js', code: 'const App = 1;' }],
+            configs: [],
+        });
+    });
+
+    it('skips a python folder with a Python project and everything in it (ADR-011 A19)', async () => {
+        const files = [
+            fileWithRelativePath('repo/web/src/App.tsx', 'const App = 1;'),
+            unreadableFile('repo/python/server/main.py'),
+            unreadableFile('repo/python/server/app/assets/FileLoaderWorker-1a2b3c4d.js'),
+            unreadableFile('repo/python/server/package.json'),
+        ];
+
+        // Reading one of the unreadable files would reject the whole result.
+        expect(await readInputFiles(files)).toEqual({
+            sources: [{ path: '/repo/web/src/App.tsx', code: 'const App = 1;' }],
+            configs: [],
+        });
+    });
+
+    it('reads a python folder without a Python project', async () => {
+        const files = [fileWithRelativePath('repo/python/Widget.js', 'const Widget = 1;')];
+
+        expect(await readInputFiles(files)).toEqual({
+            sources: [{ path: '/repo/python/Widget.js', code: 'const Widget = 1;' }],
+            configs: [],
+        });
+    });
+
     it('returns empty lists for an empty selection', async () => {
         expect(await readInputFiles([])).toEqual({ sources: [], configs: [] });
     });

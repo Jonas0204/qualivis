@@ -79,3 +79,14 @@ Karten oder Grundlagen oder wird gestrichen; Erledigtes steht in der Git-Histori
   `rewrite/p05-graph-paritaet` (`f14c8ca`) ab, weil PR #3 beim Start noch nicht gemergt war
   (README, „Branches und Pull Requests“, Punkt 5). Im PR der Phase vermerken; neue Commits auf
   dem P05-Branch vorher per Merge übernehmen.
+- **Upload ohne `__tests__` und Python-Ordner (10.11.2026, ADR-011 A19):** gilt auch für „Whole
+  project“. Das Testprojekt `monorepo` ergibt im Browser 9 statt 11 Knoten (ohne `PageWrapper`,
+  `ButtonWrapper`), die drei Kanten bleiben. Die Erwartung „Whole project“ in `monorepo.NOTES.md`
+  gilt weiter für den Kern mit allen Dateien (S06). Betrifft S07 (Prüfung im Browser) und S08
+  („Whole project“ verhält sich wie vorher, nur ohne Testordner).
+- **Offen: escomplex bricht bei neuerer Syntax ab (10.11.2026):** Sein Code-Generator, den es nur
+  für Schleifenköpfe, Parameter, berechnete Schlüssel und `extends` aufruft, kennt viele Babel- und
+  TS-Knoten nicht. Beispiele: `for (const m of s.matchAll(/x/g))` (`reading 'pattern'`),
+  `function f(p = { ...d })` (`reading 'type'`), JSX, `as` oder `?.` im Schleifenkopf. Dann bricht
+  die ganze Analyse ab, wie im Altsystem. A19 umgeht das nur für Test- und Python-Ordner;
+  Vorschlag: den Patch für `typhonjs-escomplex-commons` (Technologie-Stack §4) erweitern.
