@@ -45,7 +45,7 @@ Ablauf: README, „Branches und Pull Requests“. Ziel aller PRs: `rewrite/react
 | P05 | M2: Graph-Parität | ☑ | 10.11.2026 | Commits `2b24c84`–`7cdd942` (dazu `2867e6e`, Plan P05.5), danach `31d8777` (Review-Korrektur), Aufräumen und ein Fix für `.venv` beim Upload. `pnpm test:parity` prüft G1–G3 (Kern und Web). Bewusste Abweichungen: ADR-011 A12–A18. Offen: Ein Klick auf einen Vorschaukreis wählt die Funktion noch nicht aus (G4, folgt in P06-S02); das Golden der Clusterfarben belegt nur 7 der 20 Farben (visuelle Regeln §4) |
 | P05.5-S01 | Testprojekt `monorepo` | ☑ | 10.11.2026 | 26 Dateien, Erwartungen in `monorepo.NOTES.md`. „Whole project“ gegen den Kern geprüft: 11 Knoten, 3 Kanten, Page → Header fehlt wegen K12. Die Hilfskomponenten heißen `PageWrapper` und `ButtonWrapper` statt zweimal `Wrapper`, damit jeder Name eindeutig ist (Akzeptanzkriterium) |
 | P05.5-S02 | Upload: Konfiguration, Ordner überspringen | ☑ | 10.11.2026 | Beide Lesewege liefern `ProjectFiles`; `isExcludedFolder` deckt auch `.venv` ab (A18) und gilt für Ordner und alle Pfade darin. `sources` für `mini` und `realworld` unverändert (geprüft) |
-| P05.5-S03 | Kern: Pakete, tsconfig | ☐ | | |
+| P05.5-S03 | Kern: Pakete, tsconfig | ☑ | 10.11.2026 | `parseJsonc`, `findPackages`, `pathMappingFor`. Warnung bei ungültiger Konfiguration, bei `extends` außerhalb des Uploads (Paketname oder fehlende Datei) und bei Zyklen; eine fehlende Referenz wird still übergangen. `parseJsonc` bleibt intern (nicht in `index.ts`) |
 | P05.5-S04 | Kern: Importe auflösen | ☐ | | |
 | P05.5-S05 | Kern: erreichbare Dateien | ☐ | | |
 | P05.5-S06 | Kern: umschreiben, analysieren | ☐ | | |
