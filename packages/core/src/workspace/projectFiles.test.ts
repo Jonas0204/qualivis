@@ -35,16 +35,22 @@ describe('isExcludedFolder', () => {
         '/a/src/__tests__',
         '/a/src/components/__tests__/SliderTest.tsx',
         'a/node_modules',
+        'a/__tests__/x.js',
     ])('skips %s', path => {
         expect(isExcludedFolder(path)).toBe(true);
     });
 
-    it.each(['/a', '/a/src', '/a/distribution', '/a/venv', '/a/src/build.js', '/a/src/tests'])(
-        'enters %s',
-        path => {
-            expect(isExcludedFolder(path)).toBe(false);
-        }
-    );
+    it.each([
+        '/a',
+        '/a/src',
+        '/a/distribution',
+        '/a/venv',
+        '/a/src/build.js',
+        '/a/src/tests',
+        '/a/src/my__tests__/x.js',
+    ])('enters %s', path => {
+        expect(isExcludedFolder(path)).toBe(false);
+    });
 });
 
 describe('findPythonFolders', () => {
