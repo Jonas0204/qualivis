@@ -95,6 +95,7 @@ export const SourceCodeView = ({
         };
     }, [createEditor]);
 
+    // createEditor: a new editor starts empty and needs the code again.
     useEffect(() => {
         const editor = editorRef.current;
         if (!editor) {
@@ -106,7 +107,7 @@ export const SourceCodeView = ({
         } else {
             editor.select({ lineStart, lineEnd });
         }
-    }, [code, lineStart, lineEnd]);
+    }, [createEditor, code, lineStart, lineEnd]);
 
     return <div ref={parentRef} className={styles.editor} />;
 };

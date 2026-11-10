@@ -49,6 +49,20 @@ describe('SourceCodeView', () => {
         expect(calls).toEqual(['create DIV', 'show a 2-4', 'select 5-6', 'show b 1-3', 'destroy']);
     });
 
+    it('shows the code again in a new editor', () => {
+        const first = createFakeEditor();
+        const second = createFakeEditor();
+        const { rerender } = render(
+            <SourceCodeView code="a" lineStart={2} lineEnd={4} createEditor={first.createEditor} />
+        );
+
+        rerender(
+            <SourceCodeView code="a" lineStart={2} lineEnd={4} createEditor={second.createEditor} />
+        );
+
+        expect(second.calls).toEqual(['create DIV', 'show a 2-4']);
+    });
+
     it('shows the code only for exactly one selected element (S1)', () => {
         const { calls, createEditor } = createFakeEditor();
         const one = selected('render', 'code', 59, 71);

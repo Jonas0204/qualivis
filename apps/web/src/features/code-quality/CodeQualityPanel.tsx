@@ -44,9 +44,10 @@ export const CodeQualityContent = ({ selectedNode }: CodeQualityContentProps) =>
                         <QualityMetricBar key={row.id} row={row} />
                     ))}
                     <div className={styles.iconDescriptions}>
-                        {selectedNode.icons?.map(icon => (
+                        {selectedNode.icons?.map((icon, index) => (
                             <IconDescription
-                                key={`${icon.icon} ${icon.description.text}`}
+                                // Two icons of a node can have the same kind and text.
+                                key={`${index} ${icon.icon} ${icon.description.text}`}
                                 icon={icon}
                             />
                         ))}

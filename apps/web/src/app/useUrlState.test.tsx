@@ -83,6 +83,28 @@ describe('useUrlState', () => {
         expect(window.history.length).toBe(length);
     });
 
+    it('leaves the URL and the history for a view change to an id without a graph', () => {
+        const { store } = drawHook();
+        window.history.replaceState({ view: 'app' }, '', '/qualivis/');
+        const length = window.history.length;
+
+        act(() => store.set(componentIdAtom, '/mini/src/Nope.js#Nope'));
+
+        expect(store.get(componentIdAtom)).toBeUndefined();
+        expect(window.location.search).toBe('');
+        expect(window.history.state).toEqual({ view: 'app' });
+        expect(window.history.length).toBe(length);
+    });
+
+    it('still writes the next view change after a back or forward that keeps the id', () => {
+        const { store } = drawHook();
+
+        goTo('');
+        act(() => store.set(componentIdAtom, app));
+
+        expect(window.location.search).toBe(`?id=${encodedApp}`);
+    });
+
     it('keeps an id without an analysis, for the analysis to come (P07-S05)', () => {
         window.history.replaceState(null, '', `/qualivis/?id=${encodedApp}`);
 

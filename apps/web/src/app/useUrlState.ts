@@ -1,4 +1,4 @@
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtom, useAtomValue, useStore } from 'jotai';
 import { useEffect, useLayoutEffect, useRef } from 'react';
 import { findComponent } from '../features/graph/selectViewGraph';
 import { analysisAtom } from '../state/analysisAtoms';
@@ -32,6 +32,7 @@ const urlWith = (componentId: string | undefined) => {
  */
 export const useUrlState = () => {
     const [componentId, setComponentId] = useAtom(componentIdAtom);
+    const store = useStore();
     const fileMap = useAtomValue(analysisAtom).result?.fileMap;
     // Removing an unknown id replaces the history entry instead of adding one.
     const replaceNextRef = useRef(false);
@@ -42,6 +43,11 @@ export const useUrlState = () => {
     useLayoutEffect(() => {
         const takeUrl = () => {
             const id = componentIdFromUrl();
+            // A popstate that keeps the id (a change of the fragment only) renders nothing, so the
+            // mark would stay and stop the next view change from reaching the URL.
+            if (id === store.get(componentIdAtom)) {
+                return;
+            }
             fromUrlRef.current = { id };
             setComponentId(id);
         };
@@ -49,7 +55,7 @@ export const useUrlState = () => {
         const handlePopState = takeUrl;
         window.addEventListener('popstate', handlePopState);
         return () => window.removeEventListener('popstate', handlePopState);
-    }, [setComponentId]);
+    }, [store, setComponentId]);
 
     // An id of a component the analysis does not have (or one without a graph) goes.
     useEffect(() => {
@@ -68,15 +74,21 @@ export const useUrlState = () => {
             }
             fromUrlRef.current = undefined;
         }
+        // An id without a graph goes at once (effect above); it must not reach the URL, or it would
+        // take the place of the entry of the view before.
+        if (fileMap && componentId !== undefined && !findComponent(fileMap, componentId)?.graph) {
+            return;
+        }
+        const replace = replaceNextRef.current;
+        replaceNextRef.current = false;
         if (componentIdFromUrl() === componentId) {
             return;
         }
         const url = urlWith(componentId);
-        if (replaceNextRef.current) {
+        if (replace) {
             window.history.replaceState(window.history.state, '', url);
         } else {
             window.history.pushState(null, '', url);
         }
-        replaceNextRef.current = false;
-    }, [componentId]);
+    }, [fileMap, componentId]);
 };
