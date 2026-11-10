@@ -75,6 +75,52 @@ describe('readDroppedFiles', () => {
         expect(files).toEqual([{ path: '/my-app/App.js', code: 'const App = 1;' }]);
     });
 
+    it('does not enter __tests__ folders and skips files in them (ADR-011 A19)', async () => {
+        const folder = fakeDirectoryEntry('/my-app', [
+            unreadableDirectoryEntry('/my-app/src/__tests__'),
+            fakeFileEntry('/my-app/App.js', 'const App = 1;'),
+        ]);
+        const fallbackFile = unreadableFile('my-app/lib/__tests__/SliderTest.tsx');
+
+        // Reading the folder or the file would reject the whole result.
+        const files = await readDroppedFiles(
+            fakeDataTransfer([fileItem(fallbackFile), entryItem(folder)])
+        );
+
+        expect(files).toEqual([{ path: '/my-app/App.js', code: 'const App = 1;' }]);
+    });
+
+    it('reads nothing in a python folder with a Python project (ADR-011 A19)', async () => {
+        const folder = fakeDirectoryEntry('/repo', [
+            fakeDirectoryEntry('/repo/python', [
+                fakeDirectoryEntry('/repo/python/server', [
+                    fakeDirectoryEntry('/repo/python/server/app/assets', [
+                        unreadableFileEntry(
+                            '/repo/python/server/app/assets/FileLoaderWorker-1a2b3c4d.js'
+                        ),
+                    ]),
+                    unreadableFileEntry('/repo/python/server/main.py'),
+                ]),
+            ]),
+            fakeFileEntry('/repo/web/App.js', 'const App = 1;'),
+        ]);
+
+        // Reading one of the unreadable files would reject the whole result.
+        const files = await readDroppedFiles(fakeDataTransfer([entryItem(folder)]));
+
+        expect(files).toEqual([{ path: '/repo/web/App.js', code: 'const App = 1;' }]);
+    });
+
+    it('reads a python folder without a Python project', async () => {
+        const folder = fakeDirectoryEntry('/repo/python', [
+            fakeFileEntry('/repo/python/Widget.js', 'const Widget = 1;'),
+        ]);
+
+        const files = await readDroppedFiles(fakeDataTransfer([entryItem(folder)]));
+
+        expect(files).toEqual([{ path: '/repo/python/Widget.js', code: 'const Widget = 1;' }]);
+    });
+
     it('keeps reading a folder until the reader returns no more entries (ADR-011 A7)', async () => {
         const children = Array.from({ length: 250 }, (_, index) =>
             fakeFileEntry(`/big/file${index}.js`, `// ${index}`)
