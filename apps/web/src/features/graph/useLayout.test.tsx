@@ -22,7 +22,6 @@ const createEngine = () => {
             ends.add(listener);
             return () => ends.delete(listener);
         },
-        dragStart: () => undefined,
         drag: () => undefined,
         dragEnd: () => undefined,
     };

@@ -103,10 +103,18 @@ Erkenntnisse aus `STATUS.md` (Abweichungen, offene Punkte) einarbeiten, mit dem 
     Ansichten (A22).
   - Messung mit 400 Komponenten und 817 Kanten im Dev-Modus: Frame ohne WebCola 1,8 ms statt etwa
     70 ms, Zoomschritt 4–24 ms statt etwa 70 ms.
+  - WebCola ersetzt (Branch `rewrite/replace-webcola`): Das Fluss-Layout ist jetzt d3-force mit
+    eigenen Fluss-Regeln nach jedem Schritt (`flow.ts`). Testgraph mit 400 Komponenten und 1.530
+    Kanten aus 32 Bereichen: Schritt 1,1 ms statt 69,5 ms, kein Start mehr (WebCola 3,1 s), Ruhe
+    nach 300 Schritten (WebCola nach 860 noch nicht), keine Kante gegen den Fluss, keine
+    Überlappung, Kreuzungen 98.500 statt 102.400.
 - **Offen:**
-  - WebCola im Worker: Der Start (`start(40, 20, 20)`, etwa 2,2 s bei 400 Komponenten) und die
-    Schritte von etwa 35 ms blockieren beim ersten Aufbau einer Ansicht die Seite; im Testgraphen
-    kam WebCola auch nach 1.500 Schritten nicht zur Ruhe (im Altsystem genauso). Optionen: Worker,
-    Schrittgrenze.
-  - Das Kräfte-Layout (`forceLayout.ts`) startet eine wiederhergestellte, noch laufende Ansicht mit
-    alpha 1 neu statt mit dem alten Wert (WebCola, der Standard, ist nicht betroffen).
+  - d3-force noch schneller (gemessen 10.11.2026 in Node, 300 Schritte): Die Kollision braucht
+    60 % der Schrittzeit, die Abstoßung 38 %, Kanten, Zentrieren und die Schleife zusammen unter
+    2 %. Eine eigene Kollision mit Gitter statt Quadtree (etwa 35 Zeilen, gleiche Regel) war
+    3,3-mal so schnell, der ganze Schritt 1,7-mal (700 Knoten: 2,3 statt 3,8 ms), bei gleichen
+    Überlappungen. Die Abstoßung (Barnes-Hut) selbst zu schreiben lohnt nicht: etwa 100 Zeilen für
+    etwa doppelte Geschwindigkeit. Angehen, wenn 700+ Knoten es brauchen.
+  - Das Layout (`forceLayout.ts`) startet eine wiederhergestellte, noch laufende Ansicht mit
+    alpha 1 neu statt mit dem alten Wert; seit dem Ersatz von WebCola gilt das auch für das
+    Fluss-Layout.

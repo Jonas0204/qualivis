@@ -116,7 +116,7 @@ describe('useUrlState', () => {
 });
 
 /** Fake engine: puts the nodes in a row at once and reports the end. */
-const createLayout: LayoutFactory = (_colaLayout, { nodes }) => {
+const createLayout: LayoutFactory = (_flowLayout, { nodes }) => {
     const ends = new Set<() => void>();
     return {
         start: () => {
@@ -135,7 +135,6 @@ const createLayout: LayoutFactory = (_colaLayout, { nodes }) => {
             ends.add(listener);
             return () => ends.delete(listener);
         },
-        dragStart: () => {},
         drag: () => {},
         dragEnd: () => {},
     };

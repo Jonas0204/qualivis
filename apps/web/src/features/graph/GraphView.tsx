@@ -101,7 +101,7 @@ export const GraphView = ({
     const areaRef = useRef<HTMLDivElement>(null);
     const size = useElementSize(areaRef);
     const nodeSizesBasedOnMetrics = settings.nodeSizesBasedOnMetrics ?? true;
-    const colaLayout = settings.colaLayout ?? true;
+    const flowLayout = settings.colaLayout ?? true;
     const autoZoom = settings.autoZoom ?? true;
     const hideOverlappingLabels = settings.hideOverlappingLabels ?? true;
 
@@ -160,7 +160,7 @@ export const GraphView = ({
                 placeLike(model.nodes, nodesBeforeRestartRef.current);
                 nodesBeforeRestartRef.current = undefined;
             }
-            return createLayout(colaLayout, {
+            return createLayout(flowLayout, {
                 nodes: model.nodes,
                 links: model.links,
                 constraints: model.constraints,
@@ -168,7 +168,7 @@ export const GraphView = ({
                 restore: layoutRestore(restored),
             });
         },
-        [built, size !== undefined, colaLayout, createLayout],
+        [built, size !== undefined, flowLayout, createLayout],
         () =>
             model !== undefined &&
             viewGraph !== undefined &&

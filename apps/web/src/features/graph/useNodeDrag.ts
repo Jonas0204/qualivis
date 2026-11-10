@@ -78,7 +78,6 @@ export const useNodeDrag = ({
                         if (!engine) {
                             return;
                         }
-                        engine.dragStart(node);
                         onDraggingChange?.(true);
                     }
                     const pointer = invert(getTransform(), svgPoint(svg, move));
