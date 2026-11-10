@@ -1,0 +1,88 @@
+/* angular-split 4 with unit="pixel" as compiled into the legacy build (style reference §3) */
+.split {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: stretch;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+.horizontal {
+    flex-direction: row;
+}
+
+.vertical {
+    flex-direction: column;
+}
+
+.area {
+    flex-grow: 0;
+    flex-shrink: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background: var(--qv-surface);
+}
+
+.horizontal > .area {
+    height: 100%;
+}
+
+.vertical > .area {
+    width: 100%;
+}
+
+/* The area without a size takes the rest. */
+.rest {
+    flex: 1 1 0;
+    min-width: 0;
+    min-height: 0;
+}
+
+.hidden {
+    flex: 0 1 0;
+    overflow: hidden;
+}
+
+.vertical > .hidden {
+    max-width: 0;
+}
+
+.gutter {
+    flex-grow: 0;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--qv-gutter);
+    touch-action: none;
+}
+
+.horizontal > .gutter {
+    flex-direction: row;
+    height: 100%;
+    cursor: col-resize;
+}
+
+.vertical > .gutter {
+    flex-direction: column;
+    width: 100%;
+    cursor: row-resize;
+}
+
+.gutterIcon {
+    width: 100%;
+    height: 100%;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+
+/* The two grip images of angular-split (.as-split-gutter-icon in the legacy bundle). */
+.horizontal > .gutter > .gutterIcon {
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==);
+}
+
+.vertical > .gutter > .gutterIcon {
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFCAMAAABl/6zIAAAABlBMVEUAAADMzMzIT8AyAAAAAXRSTlMAQObYZgAAABRJREFUeAFjYGRkwIMJSeMHlBkOABP7AEGzSuPKAAAAAElFTkSuQmCC);
+}

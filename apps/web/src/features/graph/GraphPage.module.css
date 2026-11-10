@@ -1,0 +1,5 @@
+/* legacy graph-view.component.scss (:host, .container) */
+.page {
+    height: 100%;
+    overflow: hidden;
+}

@@ -11,7 +11,7 @@ import {
 export type ViewGraph = { graph: Graph; view: View };
 
 /** The component `<file>#<component>`; own keys only, so URL ids like `#constructor` find nothing. */
-const findComponent = (fileMap: FileMap, componentId: string): Component | undefined => {
+export const findComponent = (fileMap: FileMap, componentId: string): Component | undefined => {
     const [fileName = '', componentName = ''] = componentId.split('#');
     const components = Object.hasOwn(fileMap, fileName) ? fileMap[fileName]?.components : undefined;
     return components && Object.hasOwn(components, componentName)

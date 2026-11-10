@@ -27,8 +27,8 @@ Ablauf: README, „Branches und Pull Requests“. Ziel aller PRs: `rewrite/react
 | P03 Kern-MVP | `rewrite/p03-kern-mvp` | | ☑ |
 | P04 Web-MVP | `rewrite/p04-web-mvp` | [#2](https://github.com/Jonas0204/qualivis/pull/2) | ☑ |
 | P05 Graph-Parität | `rewrite/p05-graph-paritaet` | [#3](https://github.com/Jonas0204/qualivis/pull/3) | ☑ |
-| P05.5 Monorepo-Unterstützung (eingeschoben, ADR-019) | `rewrite/p05.5-monorepo` | | ◐ |
-| P06 Panels, Navigation | `rewrite/p06-panels-navigation` | | ☐ |
+| P05.5 Monorepo-Unterstützung (eingeschoben, ADR-019) | `rewrite/p05.5-monorepo` | | ◐ (S08 und Abschluss aufgeschoben) |
+| P06 Panels, Navigation | `rewrite/p06-panels-navigation` | | ◐ |
 | P07 Einstellungen, Persistenz | `rewrite/p07-einstellungen-persistenz` | | ☐ |
 | P08 Härtung | `rewrite/p08-haertung` | | ☐ |
 | P09 E2E-Parität | `rewrite/p09-e2e-paritaet` | | ☐ |
@@ -50,14 +50,14 @@ Ablauf: README, „Branches und Pull Requests“. Ziel aller PRs: `rewrite/react
 | P05.5-S05 | Kern: erreichbare Dateien | ☑ | 10.11.2026 | `scanImports` (nur Parse, `program.body`), `isTestFile`, `selectAppFiles` (Breitensuche). Für `web-a` genau die 11 Dateien aus `monorepo.NOTES.md`, für `web-b` `Other` und `Swatch` |
 | P05.5-S06 | Kern: umschreiben, analysieren | ☑ | 10.11.2026 | `rewriteImports`, `analyzeWorkspaceAsync`. `web-a` und `web-b` geben genau die Knoten und Kanten aus `monorepo.NOTES.md`, „Whole project“ über den alten Weg unverändert (11 Knoten, 3 Kanten). Halstead-Werte können minimal abweichen, wenn zwei Angaben nach dem Umschreiben gleich lauten (ein Operand weniger) |
 | P05.5-S07 | Upload: App-Ordner wählen | ☑ | 10.11.2026 | `findAppCandidates`, `ProjectChoice` ersetzt die Upload-Karte ab zwei Kandidaten, `runAnalysis(project, appDir, store)`. Im Browser mit `monorepo` geprüft: vier Kandidaten, Graph von `web-a` mit 6 Knoten und 6 Kanten. Die Auswahlliste ist bis 400 px breit statt 180 px, weil die Einträge Name und Ordner zeigen |
-| P05.5-S08 | Abnahme am echten Monorepo | ☐ | | |
-| P06-S01 | Split-Layout | ☐ | | |
-| P06-S02 | Auswahlmodell | ☐ | | |
-| P06-S03 | Dateibaum | ☐ | | |
-| P06-S04 | Code-Quality-Panel, G4 | ☐ | | |
-| P06-S05 | Quelltext (CodeMirror 6) | ☐ | | |
-| P06-S06 | Drill-down, URL | ☐ | | |
-| P06-S07 | M3-Abnahme | ☐ | | |
+| P05.5-S08 | Abnahme am echten Monorepo | ☐ | | Aufgeschoben (Nutzer, 10.11.2026), siehe Notizen |
+| P06-S01 | Split-Layout | ☑ | 10.11.2026 | `SplitPane` (Pixelgrößen, ein `*`-Bereich, Ziehen und Pfeiltasten ±10 px, kein Bereich unter 0) und `GraphPage`. Im Browser bei 1280 × 800: Spalten 275, 414 und 575 px, rechts oben 363 px, Trenner 8 px `#eee` mit den Griffbildern aus dem alten Bundle. Vollbild passt mit der neuen Breite ein (1280 px), Ziehen startet das Layout nicht neu. Ausgeblendete Bereiche sind `inert` |
+| P06-S02 | Auswahlmodell | ☑ | 10.11.2026 | `state/selection.ts` mit `selectNodeAtom`, `selectFileAtom`, `deselectAtom`. Werte aus `mini` (App 8–72, `render` 59–71, `handleClick#11` 11–14). Ein Klick auf einen Vorschaukreis wählt jetzt die Funktion (G4, offen aus P05). Auswahl außerhalb der Dateien ohne Code und Zeilen (A20) |
+| P06-S03 | Dateibaum | ☑ | 10.11.2026 | `FileTree`, `useTreeState`, Tastatur wie in der Karte. Eine Auswahl klappt die Ordner auf dem Pfad der Datei auf, nicht nach Name und Ebene (A21) |
+| P06-S04 | Code-Quality-Panel, G4 | ☑ | 10.11.2026 | Kern `metricRows`, Panel mit Balken und Icon-Hinweisen. G4 grün: App-Ansicht und alle 26 Komponenten-Ansichten beider Fixtures (`pnpm test:parity`). Knoten ohne Report zeigen keine Balken (A20, betrifft im Golden `ConnectedTodoList`) |
+| P06-S05 | Quelltext (CodeMirror 6) | ☑ | 10.11.2026 | 16 Pakete installiert (die fünf aus dem Catalog, dazu `@codemirror/autocomplete`, `lint`, `streamparser`, die `@lezer`-Pakete u. a.), dazu nach Rückfrage `@lezer/highlight` 1.2.5 als direkte Abhängigkeit für die Farben. Im Browser: Zeilen markiert, die Zeile über dem Start oben, Strg+F öffnet die Suche oben, Schrift 13 px monospace |
+| P06-S06 | Drill-down, URL | ☑ | 10.11.2026 | `useUrlState`: `?id=` kodiert, neuer Verlaufseintrag beim Öffnen und Schließen, Zurück und Vor im Browser, unbekannte ID ersetzt den Eintrag ohne `id`. Die KV wählt ihre Datei (N10). Im Browser mit `realworld` geprüft (Graph, Dateibaum, Zurück-Button, Zurück und Vor) |
+| P06-S07 | M3-Abnahme | ☑ | 10.11.2026 | `pnpm check`, `pnpm test:parity`, `pnpm build` grün; vom Nutzer abgenommen. Phasenabschluss (Review, PR) folgt nach P05.5 |
 | P07-S01 | Settings-Atom | ☐ | | |
 | P07-S02 | Einstellungsdialog | ☐ | | |
 | P07-S03 | Wirkung der Einstellungen | ☐ | | |
@@ -79,6 +79,11 @@ Karten oder Grundlagen oder wird gestrichen; Erledigtes steht in der Git-Histori
   `rewrite/p05-graph-paritaet` (`f14c8ca`) ab, weil PR #3 beim Start noch nicht gemergt war
   (README, „Branches und Pull Requests“, Punkt 5). Im PR der Phase vermerken; neue Commits auf
   dem P05-Branch vorher per Merge übernehmen.
+- **P05.5 aufgeschoben, P06 vorgezogen (10.11.2026, Nutzer):** P06 wird für eine Präsentation
+  dringender gebraucht. Die Abnahme P05.5-S08 und der Phasenabschluss von P05.5 (Doku aufräumen, PR)
+  folgen später; P06-S01 beginnt ohne S08. `rewrite/p06-panels-navigation` zweigt deshalb von
+  `rewrite/p05.5-monorepo` (`84cc779`) ab (README, „Branches und Pull Requests“, Punkt 5). Im PR von
+  P06 vermerken; den PR von P05.5 vorher anlegen und mergen lassen.
 - **Upload ohne `__tests__` und Python-Ordner (10.11.2026, ADR-011 A19):** gilt auch für „Whole
   project“. Das Testprojekt `monorepo` ergibt im Browser 9 statt 11 Knoten (ohne `PageWrapper`,
   `ButtonWrapper`), die drei Kanten bleiben. Die Erwartung „Whole project“ in `monorepo.NOTES.md`

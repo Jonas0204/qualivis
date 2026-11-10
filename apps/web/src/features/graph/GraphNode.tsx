@@ -1,6 +1,7 @@
 import {
     graphSettings,
     mainRadius,
+    type Node,
     type Settings,
     type View,
     type VisualNode,
@@ -39,6 +40,11 @@ export type NodeEvents = {
      * fired, since `.node-label` has `pointer-events: none`; a click there hits what lies below.
      */
     onCircleClick?: (node: VisualNode, event: ReactMouseEvent<SVGCircleElement>) => void;
+    /**
+     * Click on a preview circle of an app view node (G4, legacy createPreviewCircles): the
+     * function and its component. The click goes on to the node (`onClick`).
+     */
+    onPreviewClick?: (fn: Node, node: VisualNode, event: ReactMouseEvent<SVGCircleElement>) => void;
     /** Click anywhere on the node, preview circles too (legacy click.fade). */
     onClick?: (node: VisualNode, event: ReactMouseEvent<SVGGElement>) => void;
     /** Double click anywhere on the node (legacy dblclick of the node group). */
@@ -172,7 +178,15 @@ const GraphNodeView = ({
                     style={strokeStyle}
                 />
             )}
-            {view === 'app' && node.functions && <PreviewCircles node={node} />}
+            {view === 'app' && node.functions && (
+                <PreviewCircles
+                    node={node}
+                    onClick={
+                        events.onPreviewClick &&
+                        ((fn, event) => events.onPreviewClick?.(fn, node, event))
+                    }
+                />
+            )}
             {settings.text && (
                 <text className="node-label">
                     <tspan

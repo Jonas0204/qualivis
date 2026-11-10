@@ -1,0 +1,4 @@
+/* legacy: editor.setSize(null, '100%') */
+.editor {
+    height: 100%;
+}

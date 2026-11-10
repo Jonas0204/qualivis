@@ -1,0 +1,25 @@
+/* legacy code-quality.component.scss with the Material typography classes mat-h3 and mat-h4
+   (style reference §2, §3) */
+.panel {
+    display: block;
+    padding: 8px;
+}
+
+.headerContainer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.header {
+    margin: 0 0 16px;
+    font: 500 16px / 28px var(--qv-font);
+    cursor: default;
+}
+
+.name {
+    font: 400 15px / 24px var(--qv-font);
+}
+
+.iconDescriptions {
+    margin-top: 16px;
+}

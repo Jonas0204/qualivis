@@ -12,7 +12,12 @@ import {
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useStableHandlers } from '../../lib/useStableHandlers';
-import { selectGraphNodeAtom, selectionAtom } from '../../state/selectionAtoms';
+import {
+    deselectAtom,
+    selectFileAtom,
+    selectionAtom,
+    selectNodeAtom,
+} from '../../state/selectionAtoms';
 import { componentIdAtom, fullScreenAtom, viewGraphAtom } from '../../state/viewAtoms';
 import { GraphActions } from './GraphActions';
 import { GraphCanvas, type GraphEvents } from './GraphCanvas';
@@ -31,7 +36,7 @@ import { writePositions } from './writePositions';
 import { nextZoomStyle, type ZoomStyle, type ZoomTransform, zoomLevel } from './zoomMath';
 import './graph.css';
 
-type GraphViewProps = {
+export type GraphViewProps = {
     /** Builds the layout engine; tests pass a fake one. */
     createLayout?: LayoutFactory;
     /** The legacy defaults until the settings come in P07. */
@@ -89,8 +94,9 @@ export const GraphView = ({
     const [componentId, setComponentId] = useAtom(componentIdAtom);
     const [fullScreen, setFullScreen] = useAtom(fullScreenAtom);
     const selection = useAtomValue(selectionAtom);
-    const setSelection = useSetAtom(selectionAtom);
-    const selectGraphNode = useSetAtom(selectGraphNodeAtom);
+    const selectNode = useSetAtom(selectNodeAtom);
+    const deselect = useSetAtom(deselectAtom);
+    const selectFile = useSetAtom(selectFileAtom);
     const areaRef = useRef<HTMLDivElement>(null);
     const size = useElementSize(areaRef);
     const nodeSizesBasedOnMetrics = settings.nodeSizesBasedOnMetrics ?? true;
@@ -218,6 +224,17 @@ export const GraphView = ({
         onDraggingChange: fade.onDraggingChange,
     });
 
+    // The component of the view; an unknown id shows the app view (selectViewGraph).
+    const viewComponentId = viewGraph?.view === 'component' ? componentId : undefined;
+
+    // N10 (legacy graph.component.ts:123-130): opening a component view selects its file, also
+    // when the view comes from the file tree or the URL.
+    useEffect(() => {
+        if (viewComponentId !== undefined) {
+            selectFile(viewComponentId.split('#')[0] ?? '');
+        }
+    }, [viewComponentId, selectFile]);
+
     const selectedIds = useMemo(() => new Set(selection?.map(node => node.id)), [selection]);
 
     const keepPositions = () => {
@@ -252,13 +269,18 @@ export const GraphView = ({
                 removeNode(node);
                 return;
             }
-            selectGraphNode(node);
+            selectNode(node, viewComponentId);
         },
+        // G4 (legacy createPreviewCircles, graph.component.ts:825-827): the function with its
+        // component as componentId. The click goes on to the node, which fades to it.
+        // Raw graph nodes have no icons, so neither has the selection (Q5).
+        onPreviewClick: ({ id, label, type, report }, parent) =>
+            selectNode({ id, label, type, report }, parent.id),
         onClick: node => fade.fadeTo(node.id),
         // G3 (legacy createNodeGroup, graph.component.ts:693-701): a component of the app graph
-        // with inner functions opens its component view; until the URL in P06-S06 only the
-        // component id goes. Components without a graph have no functions; there the legacy
-        // handler threw on `functions.length`, here nothing happens.
+        // with inner functions opens its component view (useUrlState adds `?id=`). Components
+        // without a graph have no functions; there the legacy handler threw on
+        // `functions.length`, here nothing happens.
         onDoubleClick: node => {
             if (node.id.startsWith('/') && (node.functions?.length ?? 0) >= 1) {
                 setComponentId(node.id);
@@ -283,7 +305,7 @@ export const GraphView = ({
         onClick: event => {
             if (event.target === event.currentTarget) {
                 fade.fadeIn();
-                setSelection(null);
+                deselect();
             }
         },
         node: nodeEvents,
@@ -318,7 +340,7 @@ export const GraphView = ({
             {viewGraph && (
                 <GraphActions
                     view={viewGraph.view}
-                    // N13: until the URL in P06-S06 only the component id goes.
+                    // N13: back to the app view (useUrlState removes `?id=`).
                     onBack={componentId === undefined ? undefined : () => setComponentId(undefined)}
                     layout={{ running: layout.running, onStop: layout.halt }}
                     cluster={{

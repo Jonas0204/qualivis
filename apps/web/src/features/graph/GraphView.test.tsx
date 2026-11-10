@@ -517,6 +517,45 @@ describe('GraphView selection and fading', () => {
         expect(linkOpacities(container)).toEqual(['1', '0.1', '0.1', '0.1', '1', '0.1', '0.1']);
     });
 
+    it('selects the function of a preview circle with the lines in its file (G4)', () => {
+        const { createLayout } = createFakeLayout();
+        const { container, store } = drawView(createLayout);
+        const circle = Array.from(
+            node(container, 'Counter').querySelectorAll('circle.function')
+        ).find(each => each.querySelector('title')?.textContent === 'handleClick#11');
+        if (!circle) {
+            throw new Error('no preview circle handleClick#11');
+        }
+
+        fireEvent.click(circle);
+
+        // const handleClick = useCallback(…) spans lines 11 to 14 of Counter.tsx.
+        expect(store.get(selectionAtom)).toEqual([
+            expect.objectContaining({ id: 'handleClick#11', lineStart: 11, lineEnd: 14 }),
+        ]);
+        expect(store.get(selectionAtom)?.[0]?.code).toBe(
+            mini.fileMap['/mini/src/components/Counter.tsx']?.code
+        );
+        // The click goes on to the node, which fades to Counter as in the legacy app.
+        expect(nodeOpacities(container).Counter).toBe('1');
+        expect(nodeOpacities(container).Header).toBe('0.1');
+    });
+
+    it('selects a function of the component view with its lines (componentId of the view)', () => {
+        const { createLayout } = createFakeLayout();
+        const { container, store } = renderWithState(
+            <GraphView createLayout={createLayout} measure={measure} />,
+            { initialValues: [done, initial(componentIdAtom, app)] }
+        );
+
+        fireEvent.click(overlay(container, 'render'));
+
+        // render() { … } spans lines 59 to 71 of App.js.
+        expect(store.get(selectionAtom)).toEqual([
+            expect.objectContaining({ id: 'render', lineStart: 59, lineEnd: 71 }),
+        ]);
+    });
+
     it('opens the component view on a double click on a component with inner functions (G3)', () => {
         const { createLayout } = createFakeLayout();
         const { container, store } = drawView(createLayout);
@@ -529,6 +568,9 @@ describe('GraphView selection and fading', () => {
         fireEvent.doubleClick(node(container, 'App'));
         expect(store.get(componentIdAtom)).toBe(app);
         expect(container.querySelector('svg.qv-legend')?.getAttribute('height')).toBe('270');
+        // N10: the component view selects the file of its component.
+        expect(store.get(selectionAtom)?.map(selected => selected.id)).toEqual([app]);
+        expect(console.log).toHaveBeenCalledWith('Select file -> nodes: ', expect.any(Array));
     });
 
     it('keeps the nodes reached from the clicked one and fills them lightly', () => {

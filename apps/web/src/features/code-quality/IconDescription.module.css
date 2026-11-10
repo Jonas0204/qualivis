@@ -1,0 +1,29 @@
+/* legacy icon-description.component.scss (style reference §2) */
+.container {
+    display: flex;
+    align-items: center;
+    margin-top: 12px;
+}
+
+.icon {
+    font-family: var(--qv-font-icons);
+    font-size: 20px;
+    line-height: 1;
+    font-feature-settings: "liga";
+    margin-right: 8px;
+    cursor: default;
+    user-select: none;
+}
+
+.warn .icon {
+    color: var(--qv-warn);
+}
+
+.error .icon {
+    color: var(--qv-error);
+}
+
+.description {
+    font-size: 14px;
+    cursor: default;
+}

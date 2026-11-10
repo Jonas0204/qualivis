@@ -26,6 +26,8 @@ export type { IconDescription, VisualIcon } from './rules/icons';
 export { describeIconText, getNodeIcons } from './rules/icons';
 export type { Point } from './rules/linkGeometry';
 export { linkEnd } from './rules/linkGeometry';
+export type { MetricLevel, MetricRow } from './rules/metricRows';
+export { metricRows } from './rules/metricRows';
 export type { NodeVisual, View, VisualOptions } from './rules/nodeVisuals';
 export { computeNodeVisual } from './rules/nodeVisuals';
 export type { PreviewCircle, PreviewDots } from './rules/previewGeometry';

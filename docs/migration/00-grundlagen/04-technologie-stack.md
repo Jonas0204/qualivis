@@ -30,6 +30,7 @@ wird auf **Windows und macOS**; alle Befehle sind auf beiden gleich.
 | `react`, `react-dom` | web | UI |
 | `jotai` | web | Zustandsverwaltung (ADR-013) |
 | `@codemirror/state`, `/view`, `/language`, `/lang-javascript`, `/search` | web | Quelltext-Anzeige mit Suche (Strg/Cmd+F) |
+| `@lezer/highlight` | web | Tags für die Farben des Themes „neo“; ohnehin Unterabhängigkeit von CodeMirror (Nutzer, 10.11.2026) |
 | `@fontsource/roboto`, `@fontsource/material-icons` | web | Schrift und Icons lokal (ADR-009) |
 
 Die Entwicklungs-Abhängigkeiten (TypeScript, Biome, Vite, Vitest, jsdom, Testing Library, Typen,
