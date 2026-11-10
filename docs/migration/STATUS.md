@@ -10,7 +10,7 @@ Bestätigung durch den Nutzer. Vor dem PR einer Phase werden ihre Zeilen zu eine
 | M0 Fundament | ☑ (08.11.2026) | 08.11.2026 (Merge von PR #1) |
 | M1 Erstes Produkt | ☑ (09.11.2026) | 09.11.2026 (Nutzer, Sichtvergleich mit dem Altsystem) |
 | M2 Graph-Parität | ☑ (09.11.2026) | 09.11.2026 (Nutzer, Sichtvergleich mit dem Altsystem) |
-| M3 Analyse-UI | ☐ | |
+| M3 Analyse-UI | ☑ (10.11.2026) | 10.11.2026 (Nutzer, Abnahme im Browser) |
 | M4 Funktionsparität | ☐ | |
 | M5 Härtung | ☐ | |
 | M6 Parität E2E | ☐ | |
@@ -27,8 +27,8 @@ Ablauf: README, „Branches und Pull Requests“. Ziel aller PRs: `rewrite/react
 | P03 Kern-MVP | `rewrite/p03-kern-mvp` | | ☑ |
 | P04 Web-MVP | `rewrite/p04-web-mvp` | [#2](https://github.com/Jonas0204/qualivis/pull/2) | ☑ |
 | P05 Graph-Parität | `rewrite/p05-graph-paritaet` | [#3](https://github.com/Jonas0204/qualivis/pull/3) | ☑ |
-| P05.5 Monorepo-Unterstützung (eingeschoben, ADR-019) | `rewrite/p05.5-monorepo` | | ◐ (S08 und Abschluss aufgeschoben) |
-| P06 Panels, Navigation | `rewrite/p06-panels-navigation` | | ◐ |
+| P05.5 Monorepo-Unterstützung (eingeschoben, ADR-019) | `rewrite/p05.5-monorepo` | mit P06 | ◐ (S08 aufgeschoben) |
+| P06 Panels, Navigation | `rewrite/p06-panels-navigation` | | ☑ |
 | P07 Einstellungen, Persistenz | `rewrite/p07-einstellungen-persistenz` | | ☐ |
 | P08 Härtung | `rewrite/p08-haertung` | | ☐ |
 | P09 E2E-Parität | `rewrite/p09-e2e-paritaet` | | ☐ |
@@ -42,22 +42,9 @@ Ablauf: README, „Branches und Pull Requests“. Ziel aller PRs: `rewrite/react
 | P01, P02 | M0: Fundament, Golden-Infrastruktur | ☑ | 08.11.2026 | Commit `5647a06`, PR #1 |
 | P03 | M1 (Teil 1): CI, Kern `@qualivis/core`, Golden G1 | ☑ | 08.11.2026 | Commits `5e54b41`–`1bd11f9` |
 | P04 | M1 (Teil 2): Web-MVP, GitHub Pages | ☑ | 09.11.2026 | Commits `5ac8732`–`317cc37`, PR #2. Nach dem Merge: Pages-Workflow grün, Seite vom Nutzer geprüft, `origin/gh-pages` unverändert `5f0155e`. `pnpm dev` auf macOS bleibt offen (RI11) |
-| P05 | M2: Graph-Parität | ☑ | 10.11.2026 | Commits `2b24c84`–`7cdd942` (dazu `2867e6e`, Plan P05.5), danach `31d8777` (Review-Korrektur), Aufräumen und ein Fix für `.venv` beim Upload. `pnpm test:parity` prüft G1–G3 (Kern und Web). Bewusste Abweichungen: ADR-011 A12–A18. Offen: Ein Klick auf einen Vorschaukreis wählt die Funktion noch nicht aus (G4, folgt in P06-S02); das Golden der Clusterfarben belegt nur 7 der 20 Farben (visuelle Regeln §4) |
-| P05.5-S01 | Testprojekt `monorepo` | ☑ | 10.11.2026 | 26 Dateien, Erwartungen in `monorepo.NOTES.md`. „Whole project“ gegen den Kern geprüft: 11 Knoten, 3 Kanten, Page → Header fehlt wegen K12. Die Hilfskomponenten heißen `PageWrapper` und `ButtonWrapper` statt zweimal `Wrapper`, damit jeder Name eindeutig ist (Akzeptanzkriterium) |
-| P05.5-S02 | Upload: Konfiguration, Ordner überspringen | ☑ | 10.11.2026 | Beide Lesewege liefern `ProjectFiles`; `isExcludedFolder` deckt auch `.venv` ab (A18) und gilt für Ordner und alle Pfade darin. `sources` für `mini` und `realworld` unverändert (geprüft) |
-| P05.5-S03 | Kern: Pakete, tsconfig | ☑ | 10.11.2026 | `parseJsonc`, `findPackages`, `pathMappingFor`. Warnung bei ungültiger Konfiguration, bei `extends` außerhalb des Uploads (Paketname oder fehlende Datei) und bei Zyklen; eine fehlende Referenz wird still übergangen. `parseJsonc` bleibt intern (nicht in `index.ts`) |
-| P05.5-S04 | Kern: Importe auflösen | ☑ | 10.11.2026 | `createImportResolver`, die tsconfig-Zuordnung wird pro Ordner einmal gelesen. Wie TypeScript gelten `paths` und Paketnamen nie für relative Angaben (sonst träfe `./Fehlt` über ein Muster `*` eine falsche Datei), und ein Muster ohne `*` geht dem längsten Präfix vor |
-| P05.5-S05 | Kern: erreichbare Dateien | ☑ | 10.11.2026 | `scanImports` (nur Parse, `program.body`), `isTestFile`, `selectAppFiles` (Breitensuche). Für `web-a` genau die 11 Dateien aus `monorepo.NOTES.md`, für `web-b` `Other` und `Swatch` |
-| P05.5-S06 | Kern: umschreiben, analysieren | ☑ | 10.11.2026 | `rewriteImports`, `analyzeWorkspaceAsync`. `web-a` und `web-b` geben genau die Knoten und Kanten aus `monorepo.NOTES.md`, „Whole project“ über den alten Weg unverändert (11 Knoten, 3 Kanten). Halstead-Werte können minimal abweichen, wenn zwei Angaben nach dem Umschreiben gleich lauten (ein Operand weniger) |
-| P05.5-S07 | Upload: App-Ordner wählen | ☑ | 10.11.2026 | `findAppCandidates`, `ProjectChoice` ersetzt die Upload-Karte ab zwei Kandidaten, `runAnalysis(project, appDir, store)`. Im Browser mit `monorepo` geprüft: vier Kandidaten, Graph von `web-a` mit 6 Knoten und 6 Kanten. Die Auswahlliste ist bis 400 px breit statt 180 px, weil die Einträge Name und Ordner zeigen |
-| P05.5-S08 | Abnahme am echten Monorepo | ☐ | | Aufgeschoben (Nutzer, 10.11.2026), siehe Notizen |
-| P06-S01 | Split-Layout | ☑ | 10.11.2026 | `SplitPane` (Pixelgrößen, ein `*`-Bereich, Ziehen und Pfeiltasten ±10 px, kein Bereich unter 0) und `GraphPage`. Im Browser bei 1280 × 800: Spalten 275, 414 und 575 px, rechts oben 363 px, Trenner 8 px `#eee` mit den Griffbildern aus dem alten Bundle. Vollbild passt mit der neuen Breite ein (1280 px), Ziehen startet das Layout nicht neu. Ausgeblendete Bereiche sind `inert` |
-| P06-S02 | Auswahlmodell | ☑ | 10.11.2026 | `state/selection.ts` mit `selectNodeAtom`, `selectFileAtom`, `deselectAtom`. Werte aus `mini` (App 8–72, `render` 59–71, `handleClick#11` 11–14). Ein Klick auf einen Vorschaukreis wählt jetzt die Funktion (G4, offen aus P05). Auswahl außerhalb der Dateien ohne Code und Zeilen (A20) |
-| P06-S03 | Dateibaum | ☑ | 10.11.2026 | `FileTree`, `useTreeState`, Tastatur wie in der Karte. Eine Auswahl klappt die Ordner auf dem Pfad der Datei auf, nicht nach Name und Ebene (A21) |
-| P06-S04 | Code-Quality-Panel, G4 | ☑ | 10.11.2026 | Kern `metricRows`, Panel mit Balken und Icon-Hinweisen. G4 grün: App-Ansicht und alle 26 Komponenten-Ansichten beider Fixtures (`pnpm test:parity`). Knoten ohne Report zeigen keine Balken (A20, betrifft im Golden `ConnectedTodoList`) |
-| P06-S05 | Quelltext (CodeMirror 6) | ☑ | 10.11.2026 | 16 Pakete installiert (die fünf aus dem Catalog, dazu `@codemirror/autocomplete`, `lint`, `streamparser`, die `@lezer`-Pakete u. a.), dazu nach Rückfrage `@lezer/highlight` 1.2.5 als direkte Abhängigkeit für die Farben. Im Browser: Zeilen markiert, die Zeile über dem Start oben, Strg+F öffnet die Suche oben, Schrift 13 px monospace |
-| P06-S06 | Drill-down, URL | ☑ | 10.11.2026 | `useUrlState`: `?id=` kodiert, neuer Verlaufseintrag beim Öffnen und Schließen, Zurück und Vor im Browser, unbekannte ID ersetzt den Eintrag ohne `id`. Die KV wählt ihre Datei (N10). Im Browser mit `realworld` geprüft (Graph, Dateibaum, Zurück-Button, Zurück und Vor) |
-| P06-S07 | M3-Abnahme | ☑ | 10.11.2026 | `pnpm check`, `pnpm test:parity`, `pnpm build` grün; vom Nutzer abgenommen. Phasenabschluss (Review, PR) folgt nach P05.5 |
+| P05 | M2: Graph-Parität | ☑ | 10.11.2026 | Commits `2b24c84`–`7cdd942` (dazu `2867e6e`, Plan P05.5), danach `31d8777` (Review-Korrektur), Aufräumen und ein Fix für `.venv` beim Upload. `pnpm test:parity` prüft G1–G3 (Kern und Web). Bewusste Abweichungen: ADR-011 A12–A18. Offen: Das Golden der Clusterfarben belegt nur 7 der 20 Farben (visuelle Regeln §4) |
+| P05.5, P06 | Monorepo-Unterstützung (S01–S07); M3: Panels, Navigation | ☑ | 10.11.2026 | Commits `d0065bc`–`25ccc11`, ein PR für beide Phasen (P06 zweigte von P05.5 ab, weil P05.5 für eine Präsentation aufgeschoben wurde). `pnpm test:parity` prüft G1–G4. Teile von P08-S09 vorgezogen (P08-README). Bewusste Abweichungen: ADR-011 A19–A24 |
+| P05.5-S08 | Abnahme am echten Monorepo | ☐ | | Aufgeschoben (Nutzer, 10.11.2026) |
 | P07-S01 | Settings-Atom | ☐ | | |
 | P07-S02 | Einstellungsdialog | ☐ | | |
 | P07-S03 | Wirkung der Einstellungen | ☐ | | |
@@ -75,55 +62,4 @@ Hier jede Abweichung vom Plan mit Begründung und Verweis (ADR bzw. Nutzerentsch
 solange sie für kommende Schritte wichtig ist. Vor dem PR der Phase wandert sie in die betroffenen
 Karten oder Grundlagen oder wird gestrichen; Erledigtes steht in der Git-Historie.
 
-- **Branch von P05.5 (10.11.2026):** `rewrite/p05.5-monorepo` zweigt von
-  `rewrite/p05-graph-paritaet` (`f14c8ca`) ab, weil PR #3 beim Start noch nicht gemergt war
-  (README, „Branches und Pull Requests“, Punkt 5). Im PR der Phase vermerken; neue Commits auf
-  dem P05-Branch vorher per Merge übernehmen.
-- **P05.5 aufgeschoben, P06 vorgezogen (10.11.2026, Nutzer):** P06 wird für eine Präsentation
-  dringender gebraucht. Die Abnahme P05.5-S08 und der Phasenabschluss von P05.5 (Doku aufräumen, PR)
-  folgen später; P06-S01 beginnt ohne S08. `rewrite/p06-panels-navigation` zweigt deshalb von
-  `rewrite/p05.5-monorepo` (`84cc779`) ab (README, „Branches und Pull Requests“, Punkt 5). Im PR von
-  P06 vermerken; den PR von P05.5 vorher anlegen und mergen lassen.
-- **Upload ohne `__tests__` und Python-Ordner (10.11.2026, ADR-011 A19):** gilt auch für „Whole
-  project“. Das Testprojekt `monorepo` ergibt im Browser 9 statt 11 Knoten (ohne `PageWrapper`,
-  `ButtonWrapper`), die drei Kanten bleiben. Die Erwartung „Whole project“ in `monorepo.NOTES.md`
-  gilt weiter für den Kern mit allen Dateien (S06). Betrifft S07 (Prüfung im Browser) und S08
-  („Whole project“ verhält sich wie vorher, nur ohne Testordner).
-- **Teil von P08-S09 vorgezogen (10.11.2026, Nutzer):** Große Graphen waren beim Ausrichten und
-  Zoomen zäh, weil React jeden Layoutschritt und jeden Zoomschritt den ganzen Graphen neu zeichnete.
-  Jetzt schreibt `writePositions` die Positionen pro Frame direkt ins DOM (`useLayout` mit
-  `onFrame`, React rendert nur das erste Bild und das Ende), `GraphNode` und `GraphLink` haben
-  `React.memo` (stabile Handler über `useStableHandlers`), und Schriftgröße und Linienbreite beim
-  Zoomen sind CSS-Variablen der Zoom-Gruppe statt Inline-Styles an jeder Beschriftung und Linie
-  (Abweichung nur im DOM, die Optik bleibt). Eine Linie mit Quelle und Ziel an derselben Stelle
-  bleibt als Element erhalten, mit `display: none`. Messung mit 400 Komponenten und 817 Kanten im
-  Dev-Modus: Frame ohne WebCola 1,8 ms statt etwa 70 ms, Zoomschritt 4–24 ms statt etwa 70 ms. Offen
-  für S09: WebCola selbst braucht dabei etwa 38 ms pro Schritt und kam im Testgraphen auch nach
-  1.500 Schritten nicht zur Ruhe (vorher genauso); Optionen: Layout im Worker, Schrittgrenze.
-  Dazu auf Wunsch des Nutzers ein Knopf „Stop layout“ links über dem Graphen, den das Altsystem
-  nicht hat: sichtbar, solange das Layout läuft (auch wieder nach dem Ziehen eines Knotens), beendet
-  es wie ein normales Ende (`LayoutEngine.halt`), also mit Zoom to fit beim ersten Ende eines Laufs
-  und neuer Messung der Beschriftungen. Ziehen startet das Layout wieder wie bisher.
-  Außerdem flackerte bei großen Graphen in Chrome beim Zoomen mit dem Mausrad alles, auch die
-  Kopfleiste (vom Nutzer bestätigt: ohne die CSS-Übergänge war es weg). Den Übergang von 0,1 s
-  (ease-out) für Transform, Schriftgröße und Linienbreite animiert jetzt `useZoomTransition` per
-  `requestAnimationFrame`, nicht mehr CSS. Sichtbare Abweichung: Die Linienbreite gleitet nur noch
-  beim Zoomen mit dem Mausrad, nicht mehr bei Zoom to fit und Zwei-Finger-Zoom (dort ändert sie sich
-  ohnehin mit jedem Frame).
-  Zweiter Teil (10.11.2026, Nutzer): Zoomen und Verschieben rendern nur noch die Zoom-Gruppe;
-  Knoten und Kanten liegen in einer memoisierten Ebene (`GraphContent`), und
-  `useLabelCollision` behält die Menge der ausgeblendeten Labels, wenn sie gleich bleibt. Eine schon
-  gezeigte Ansicht kommt mit ihren Positionen und ihrem Zoom zurück (ADR-011 A22). Neu ist auch
-  `pnpm start` (Build und `vite preview`) für Vorführungen. Offen für S09 bleibt: WebCola im
-  Worker, der Start (`start(40, 20, 20)`, etwa 2,2 s bei 400 Komponenten) und die Schritte von
-  etwa 35 ms blockieren beim ersten Aufbau einer Ansicht weiter die Seite.
-- **Erklärung der Metriken (10.11.2026, Nutzer, ADR-011 A23):** Die Texte stehen in
-  `apps/web/src/features/code-quality/metricExplanations.ts`; sie wurden mit escomplex an
-  Beispielen nachgeprüft (z. B. zählen `??`, `catch` und `for … of` nicht als Verzweigung,
-  JSX-Tags nicht für Halstead).
-- **Offen: escomplex bricht bei neuerer Syntax ab (10.11.2026):** Sein Code-Generator, den es nur
-  für Schleifenköpfe, Parameter, berechnete Schlüssel und `extends` aufruft, kennt viele Babel- und
-  TS-Knoten nicht. Beispiele: `for (const m of s.matchAll(/x/g))` (`reading 'pattern'`),
-  `function f(p = { ...d })` (`reading 'type'`), JSX, `as` oder `?.` im Schleifenkopf. Dann bricht
-  die ganze Analyse ab, wie im Altsystem. A19 umgeht das nur für Test- und Python-Ordner;
-  Vorschlag: den Patch für `typhonjs-escomplex-commons` (Technologie-Stack §4) erweitern.
+Zurzeit keine.
