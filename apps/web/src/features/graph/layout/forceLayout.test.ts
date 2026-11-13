@@ -68,6 +68,28 @@ describe('createForceSimulation', () => {
         expect([firstLink.source, firstLink.target]).toEqual([first, second]);
     });
 
+    it('takes the grid collision with the same radius when asked to', () => {
+        const options = { ...chain(8), gridCollide: true };
+        const d3Collide = createForceSimulation(chain(8)).stop().force('collide');
+
+        const collide = createForceSimulation(options).stop().force('collide');
+
+        expect(collide).toBeDefined();
+        expect(collide).not.toHaveProperty('radius');
+        expect(d3Collide).toHaveProperty('radius');
+        // Two nodes of width 48 on the same spot end 2 * 28.8 apart or more.
+        const [first, second] = options.nodes as [LayoutNode, LayoutNode];
+        const pair = [
+            { ...first, x: 0, y: 0 },
+            { ...second, x: 1, y: 0 },
+        ];
+        const simulation = createForceSimulation({ ...options, nodes: pair, links: [] }).stop();
+        simulation.force('charge', null).force('center', null).tick(300);
+        expect(
+            Math.hypot((pair[1]?.x ?? 0) - (pair[0]?.x ?? 0), (pair[1]?.y ?? 0) - (pair[0]?.y ?? 0))
+        ).toBeGreaterThan(57);
+    });
+
     it('limits the charge to -400 for large graphs', () => {
         expect(chargeOf(chain(25))).toBe(-400);
     });

@@ -114,13 +114,33 @@ Erkenntnisse aus `STATUS.md` (Abweichungen, offene Punkte) einarbeiten, mit dem 
   - `qualivis.info()` nennt keine Datei-, Pfad- oder Komponentennamen mehr, und
     `qualivis.info().export()` speichert das Ergebnis als JSON-Datei. Bei langen Frames zeigt es
     auch die Zeit für Style, Layout und Paint (`styleAndLayoutMs`).
+  - Große, verwobene Graphen (Nutzer, 13.11.2026; gemessen am gebauten Stand in Chromium ohne
+    Grafikkarte, Testprojekte mit etwa 3 Kanten pro Knoten). Zeit vom Start des Layouts bis zur
+    Ruhe: 700 Knoten 142 s → 1,4 s, 1.500 Knoten nach dem ersten Punkt 35 s → 3,0 s, bei etwa
+    30 Bildern pro Sekunde statt 1 bis 10.
+    - Ursache der langen Bilder: die globale Regel `box-sizing: inherit`. Sie macht jedes Element
+      vom Stil seines Elternelements abhängig, also rechnete der Browser bei jedem bewegten Knoten
+      den Stil aller Kinder neu (480 ms statt 3 ms pro Bild bei 700 Knoten). `graph.css` setzt im
+      Graph einen festen Wert.
+    - Große Graphen (`layout/largeGraph.ts`) laufen anders als kleine; kleine bleiben wie bisher.
+      - Ab 300 Knoten rechnet das Layout in einem Web Worker (`layoutHost.ts`, `workerLayout.ts`):
+        Die Schritte warten nicht mehr auf die Bilder der Seite, vorher lief bei langsamen Bildern
+        ein Schritt pro Bild. Der Worker nutzt eine eigene Kollision mit Gitter statt Quadtree
+        (`gridCollide.ts`, gleiche Regel wie d3, Schritt bei 1.500 Knoten 10,9 statt 15,2 ms).
+      - Ab 500 Kanten sind alle Kanten wenige SVG-Pfade statt je einer Linie mit Marker
+        (`GraphLinkBundles.tsx`). Pfeilspitzen und Linien liegen pixelgleich. **Abweichung:** Wo
+        sich Linien eines Pfads kreuzen, wird die Kreuzung nicht dunkler; in dichten Bereichen
+        wirkt das Geflecht etwas heller. Noch nicht als ADR-011-Eintrag festgehalten.
+      - Solange das Layout eines großen Graphen läuft, werden Knoten außerhalb des sichtbaren
+        Ausschnitts (mit Rand) ausgeblendet statt bewegt und Kanten dort ausgelassen
+        (`writePositions.ts`). Am Ende steht alles da; Verschieben und Zoomen in Ruhe sind
+        unverändert.
 - **Offen:**
-  - d3-force noch schneller (gemessen 10.11.2026 in Node, 300 Schritte): Die Kollision braucht
-    60 % der Schrittzeit, die Abstoßung 38 %, Kanten, Zentrieren und die Schleife zusammen unter
-    2 %. Eine eigene Kollision mit Gitter statt Quadtree (etwa 35 Zeilen, gleiche Regel) war
-    3,3-mal so schnell, der ganze Schritt 1,7-mal (700 Knoten: 2,3 statt 3,8 ms), bei gleichen
-    Überlappungen. Die Abstoßung (Barnes-Hut) selbst zu schreiben lohnt nicht: etwa 100 Zeilen für
-    etwa doppelte Geschwindigkeit. Angehen, wenn 700+ Knoten es brauchen.
+  - Schritt noch schneller: Nach der Gitter-Kollision braucht die Abstoßung (Barnes-Hut von d3)
+    den größten Teil der Schrittzeit. Sie selbst zu schreiben wären etwa 100 Zeilen für etwa
+    doppelte Geschwindigkeit. Angehen, wenn 2.000+ Knoten es brauchen.
+  - Vor dem Graph steht die Seite bei 1.500 Dateien einmal etwa 20 s (ein langes Bild);
+    vermutlich die Analyse im Haupt-Thread (S04), nicht geprüft.
   - Das Layout (`forceLayout.ts`) startet eine wiederhergestellte, noch laufende Ansicht mit
     alpha 1 neu statt mit dem alten Wert; seit dem Ersatz von WebCola gilt das auch für das
     Fluss-Layout.

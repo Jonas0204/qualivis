@@ -27,14 +27,16 @@ export type Layout = LayoutState & {
 
 /**
  * Moves the drawn graph to the new positions without React (writePositions); false when React has
- * to render them, e.g. before the graph is drawn.
+ * to render them, e.g. before the graph is drawn. `running` is false for the positions at the end
+ * of the layout.
  */
-export type FrameHandler = () => boolean;
+export type FrameHandler = (frame: { running: boolean }) => boolean;
 
 /**
  * Runs the engine that `createEngine` builds and builds a new one when `deps` change. The engine
  * stops on cleanup, so React's StrictMode double effect never leaves two simulations running.
- * After ticks it calls `onFrame` once per animation frame and renders only if that returns false.
+ * After ticks it calls `onFrame` once per animation frame and renders only if that returns false;
+ * at the end it calls it at once.
  */
 export const useLayout = (
     createEngine: () => LayoutEngine | undefined,
@@ -79,7 +81,11 @@ export const useLayout = (
                     recordDuration('layout.frameGap', now - lastFrameAt);
                 }
                 lastFrameAt = now;
-                if (!timed('layout.frameWrite', () => onFrameRef.current?.() ?? false)) {
+                const drawn = timed(
+                    'layout.frameWrite',
+                    () => onFrameRef.current?.({ running: true }) ?? false
+                );
+                if (!drawn) {
                     countEvent('layout.frameRender');
                     setState(current => ({ ...current, version: current.version + 1 }));
                 }
@@ -88,6 +94,13 @@ export const useLayout = (
         const offEnd = engine.onEnd(() => {
             running = false;
             lastFrameAt = undefined;
+            // The final positions at once, not in the next frame: what reacts to the end (zoom to
+            // fit, the labels) measures the drawn graph. React renders them below if that fails.
+            if (frame !== undefined) {
+                cancelAnimationFrame(frame);
+                frame = undefined;
+            }
+            onFrameRef.current?.({ running: false });
             if (firstEnd) {
                 firstEnd = false;
                 recordDuration('layout.startToEnd', performance.now() - startedAt);

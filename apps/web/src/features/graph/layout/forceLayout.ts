@@ -9,6 +9,7 @@ import {
 } from 'd3-force';
 import { timed } from '../../../lib/perfStats';
 import { createFlowRules } from './flow';
+import { forceGridCollide } from './gridCollide';
 import type { LayoutEngine, LayoutLink, LayoutNode, LayoutRestore } from './types';
 
 export type ForceLayoutOptions = {
@@ -24,6 +25,8 @@ export type ForceLayoutOptions = {
      * a component view (core `reactConstraints`, empty in the app view).
      */
     flow?: { constraints: readonly ReactConstraint[] };
+    /** The collision force with a grid (gridCollide.ts) instead of d3's: for large graphs. */
+    gridCollide?: boolean;
 };
 
 type ForceSimulation = Simulation<LayoutNode, LayoutLink>;
@@ -48,11 +51,13 @@ export const createForceSimulation = ({
     width,
     height,
     flow,
+    gridCollide = false,
 }: ForceLayoutOptions): ForceSimulation => {
     // The flow layout takes half the legacy minimum: about as compact as WebCola was.
     const charge = flow
         ? graphSettings.minChargeForce / 2
         : Math.min(-4000 + nodes.length * 200, graphSettings.minChargeForce);
+    const collisionRadius = (node: LayoutNode) => (node.width / 2) * 1.2;
 
     return (
         forceSimulation(nodes)
@@ -65,7 +70,9 @@ export const createForceSimulation = ({
             .force('center', forceCenter(width / 2, height / 2))
             .force(
                 'collide',
-                forceCollide<LayoutNode>().radius(node => (node.width / 2) * 1.2)
+                gridCollide
+                    ? forceGridCollide(collisionRadius)
+                    : forceCollide<LayoutNode>().radius(collisionRadius)
             )
     );
 };

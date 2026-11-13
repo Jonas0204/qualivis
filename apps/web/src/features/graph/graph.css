@@ -65,6 +65,14 @@
     touch-action: none;
 }
 
+/* The global `box-sizing: inherit` makes every element depend on the style of its parent: when the
+   layout moves a node (its transform), the browser would compute the style of all its children
+   again, in every frame (P08-S09: 480 ms instead of 3 ms per frame with 700 nodes). A fixed value
+   ends that; box-sizing has no effect on SVG shapes and text. */
+.qv-graph :not(svg) {
+    box-sizing: content-box;
+}
+
 /* legacy ::ng-deep #d3-root: the node classes style the graph and the legend alike */
 :is(.qv-graph, .qv-legend) {
     /* legacy createNodeGroup: inline style of every node group */
@@ -182,7 +190,7 @@
 
     /* Opacity as for .node; the legacy transition of the line width while zooming is animated by
        useZoomTransition */
-    .links line {
+    .links :is(line, .link-bundle) {
         transition: opacity 250ms cubic-bezier(0.65, 0, 0.35, 1);
     }
 
@@ -201,7 +209,7 @@
             font-size: var(--qv-label-font-size);
         }
 
-        .links line {
+        .links :is(line, .link-lines) {
             stroke-width: var(--qv-link-stroke-width);
         }
     }
