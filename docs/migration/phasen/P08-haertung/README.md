@@ -135,7 +135,15 @@ Erkenntnisse aus `STATUS.md` (Abweichungen, offene Punkte) einarbeiten, mit dem 
         Ausschnitts (mit Rand) ausgeblendet statt bewegt und Kanten dort ausgelassen
         (`writePositions.ts`). Am Ende steht alles da; Verschieben und Zoomen in Ruhe sind
         unverändert.
+  - Fluss-Layout: Der Graph sank, solange ein Knoten gehalten wurde (und schwächer beim Aufbau).
+    Die Kanten-Kraft von d3 erhält den Impuls nicht, und die Fluss-Regeln nahmen nur dem Ziel die
+    Geschwindigkeit; behoben in `forceLayout.ts` (Kraft `drift`) und `flow.ts`.
+  - Ausführlich, mit Ursachen, Messwerten, verworfenen Wegen und den Möglichkeiten für einen
+    besseren Aufbau (Zusammengehöriges näher zusammen, mit Literatur):
+    [grosse-graphen-und-layout.md](grosse-graphen-und-layout.md).
 - **Offen:**
+  - Besserer Aufbau großer Graphen: Entscheidung zwischen den Möglichkeiten M1–M9 in
+    `grosse-graphen-und-layout.md`, Teil C.
   - Schritt noch schneller: Nach der Gitter-Kollision braucht die Abstoßung (Barnes-Hut von d3)
     den größten Teil der Schrittzeit. Sie selbst zu schreiben wären etwa 100 Zeilen für etwa
     doppelte Geschwindigkeit. Angehen, wenn 2.000+ Knoten es brauchen.
