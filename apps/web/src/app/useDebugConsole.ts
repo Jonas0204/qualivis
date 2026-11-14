@@ -4,12 +4,21 @@ import { useEffect } from 'react';
 import { type PerfSnapshot, perfSnapshot, resetPerfStats } from '../lib/perfStats';
 import { analysisAtom } from '../state/analysisAtoms';
 import type { StateStore } from '../state/StateProvider';
-import { componentIdAtom, viewGraphAtom } from '../state/viewAtoms';
+import { viewGraphAtom } from '../state/viewAtoms';
 
 /** Long tasks or long animation frames the browser reported. */
-type LongWork = { count: number; totalMs: number; maxMs: number };
+type LongWork = {
+    count: number;
+    totalMs: number;
+    maxMs: number;
+    /** Long animation frames only: their time in style, layout and paint; the rest is script. */
+    styleAndLayoutMs?: number;
+};
 
-/** What `qualivis.info()` returns: facts for performance and refactoring work. */
+/**
+ * What `qualivis.info()` returns: facts for performance and refactoring work. Only sizes, counts
+ * and timings, no names or paths of the project, so it can be shared.
+ */
 export type DebugInfo = {
     takenAt: string;
     mode: string;
@@ -27,18 +36,21 @@ export type DebugInfo = {
         components: number;
         appGraph: { nodes: number; links: number };
         /** The five component graphs with the most nodes. */
-        largestComponentGraphs: { id: string; nodes: number; links: number }[];
+        largestComponentGraphs: { nodes: number; links: number }[];
     };
-    view: { view: string; componentId: string | undefined; nodes: number; links: number } | null;
+    view: { view: string; nodes: number; links: number } | null;
     dom: { elements: number; graphNodes: number; graphLinks: number };
     perf: PerfSnapshot;
     longTasks: LongWork | 'unsupported';
     longAnimationFrames: LongWork | 'unsupported';
 };
 
+/** `export()` saves the facts as a JSON file. */
+export type DebugInfoWithExport = DebugInfo & { export: () => void };
+
 export type DebugConsole = {
     /** Facts about the analysis, the view, the DOM and the recorded timings. */
-    info: () => DebugInfo;
+    info: () => DebugInfoWithExport;
     /** Clears the recorded timings, e.g. before measuring one action. */
     reset: () => void;
 };
@@ -48,9 +60,8 @@ type WindowWithConsole = Window & { qualivis?: DebugConsole };
 const round = (value: number) => Math.round(value * 100) / 100;
 
 const graphSizes = (result: AnalysisResult | undefined) => {
-    const components = Object.entries(result?.fileMap ?? {}).flatMap(([fileName, file]) =>
-        Object.entries(file.components ?? {}).map(([name, component]) => ({
-            id: `${fileName}#${name}`,
+    const components = Object.values(result?.fileMap ?? {}).flatMap(file =>
+        Object.values(file.components ?? {}).map(component => ({
             nodes: component.graph?.nodes.length ?? 0,
             links: component.graph?.links.length ?? 0,
         }))
@@ -66,32 +77,72 @@ const graphSizes = (result: AnalysisResult | undefined) => {
     };
 };
 
+type LongAnimationFrame = PerformanceEntry & { styleAndLayoutStart?: number };
+
+/** Time of a long animation frame from the start of style and layout to its end. */
+const styleAndLayout = (entry: LongAnimationFrame) =>
+    entry.styleAndLayoutStart ? entry.startTime + entry.duration - entry.styleAndLayoutStart : 0;
+
 /** Watches one kind of long work; `undefined` when the browser does not report it. */
 const watchLongWork = (type: string) => {
+    const frames = type === 'long-animation-frame';
     if (
         typeof PerformanceObserver === 'undefined' ||
         !PerformanceObserver.supportedEntryTypes?.includes(type)
     ) {
         return undefined;
     }
-    let work: LongWork = { count: 0, totalMs: 0, maxMs: 0 };
+    const none = (): LongWork => ({
+        count: 0,
+        totalMs: 0,
+        maxMs: 0,
+        ...(frames && { styleAndLayoutMs: 0 }),
+    });
+    let work = none();
     const observer = new PerformanceObserver(list => {
         for (const entry of list.getEntries()) {
             work = {
                 count: work.count + 1,
                 totalMs: work.totalMs + entry.duration,
                 maxMs: Math.max(work.maxMs, entry.duration),
+                ...(work.styleAndLayoutMs !== undefined && {
+                    styleAndLayoutMs: work.styleAndLayoutMs + styleAndLayout(entry),
+                }),
             };
         }
     });
     observer.observe({ type, buffered: true });
     return {
-        read: (): LongWork => ({ ...work, totalMs: round(work.totalMs), maxMs: round(work.maxMs) }),
+        read: (): LongWork => ({
+            ...work,
+            totalMs: round(work.totalMs),
+            maxMs: round(work.maxMs),
+            ...(work.styleAndLayoutMs !== undefined && {
+                styleAndLayoutMs: round(work.styleAndLayoutMs),
+            }),
+        }),
         reset: () => {
-            work = { count: 0, totalMs: 0, maxMs: 0 };
+            work = none();
         },
         disconnect: () => observer.disconnect(),
     };
+};
+
+/** Saves `info` as a JSON file in the downloads of the browser. */
+const saveAsFile = (info: DebugInfo) => {
+    const blob = new Blob(
+        [
+            `${JSON.stringify(info, null, 2)}
+`,
+        ],
+        { type: 'application/json' }
+    );
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `qualivis-info-${info.takenAt.replace(/[:.]/g, '-')}.json`;
+    link.click();
+    setTimeout(() => URL.revokeObjectURL(url));
 };
 
 /** Builds the console helper for `store`; `dispose` stops watching long work. */
@@ -105,7 +156,7 @@ export const createDebugConsole = (store: StateStore): DebugConsole & { dispose:
             const analysis = store.get(analysisAtom);
             const viewGraph = store.get(viewGraphAtom);
             const graph = document.querySelector('.qv-graph');
-            return {
+            const info: DebugInfo = {
                 takenAt: new Date().toISOString(),
                 mode: import.meta.env.MODE,
                 browser: {
@@ -119,7 +170,6 @@ export const createDebugConsole = (store: StateStore): DebugConsole & { dispose:
                 view: viewGraph
                     ? {
                           view: viewGraph.view,
-                          componentId: store.get(componentIdAtom),
                           nodes: viewGraph.graph.nodes.length,
                           links: viewGraph.graph.links.length,
                       }
@@ -133,6 +183,10 @@ export const createDebugConsole = (store: StateStore): DebugConsole & { dispose:
                 longTasks: longTasks?.read() ?? 'unsupported',
                 longAnimationFrames: longFrames?.read() ?? 'unsupported',
             };
+            // Not enumerable: the console and JSON.stringify show the facts only.
+            return Object.defineProperty(info, 'export', {
+                value: () => saveAsFile(info),
+            }) as DebugInfoWithExport;
         },
         reset: () => {
             resetPerfStats();
@@ -147,8 +201,9 @@ export const createDebugConsole = (store: StateStore): DebugConsole & { dispose:
 };
 
 /**
- * Puts `qualivis.info()` and `qualivis.reset()` on `window`, for the browser console. In Chrome,
- * `copy(qualivis.info())` copies the result as JSON.
+ * Puts `qualivis.info()` and `qualivis.reset()` on `window`, for the browser console.
+ * `qualivis.info().export()` saves the result as a JSON file; in Chrome, `copy(qualivis.info())`
+ * copies it.
  */
 export const useDebugConsole = (): void => {
     const store = useStore();

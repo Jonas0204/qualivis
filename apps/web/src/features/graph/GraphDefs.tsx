@@ -1,6 +1,7 @@
 import { graphSettings } from '@qualivis/core';
 import { useContext } from 'react';
 import { GraphDefsContext } from './graphDefsContext';
+import { arrowMarker } from './linkPaths';
 
 /** Line of the hatch pattern: twice the circle stroke (legacy createSVG, graph.component.ts:504-506). */
 const hatchStrokeWidth = Math.max(graphSettings.circleStrokeWidth * 2, 1);
@@ -16,11 +17,11 @@ export const GraphDefs = () => {
             <marker
                 id={ids.arrowhead}
                 viewBox="-0 -5 10 10"
-                refX={9}
+                refX={arrowMarker.refX}
                 refY={0}
                 orient="auto"
-                markerWidth={8}
-                markerHeight={8}
+                markerWidth={arrowMarker.size}
+                markerHeight={arrowMarker.size}
             >
                 <path d="M 0,-5 L 10 ,0 L 0,5" fill={graphSettings.linkColor} stroke="none" />
             </marker>

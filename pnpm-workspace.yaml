@@ -27,7 +27,6 @@ catalog:
   typhonjs-escomplex-project: 0.1.0
   jlouvain: 2.0.0
   path-browserify: 1.0.1
-  webcola: 3.4.0
   d3-force: 3.0.0
   "@types/d3-force": 3.0.10
   react: 19.3.1

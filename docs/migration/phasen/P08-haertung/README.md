@@ -103,10 +103,52 @@ Erkenntnisse aus `STATUS.md` (Abweichungen, offene Punkte) einarbeiten, mit dem 
     Ansichten (A22).
   - Messung mit 400 Komponenten und 817 Kanten im Dev-Modus: Frame ohne WebCola 1,8 ms statt etwa
     70 ms, Zoomschritt 4–24 ms statt etwa 70 ms.
+  - WebCola ersetzt (Branch `rewrite/replace-webcola`): Das Fluss-Layout ist jetzt d3-force mit
+    eigenen Fluss-Regeln nach jedem Schritt (`flow.ts`). Testgraph mit 400 Komponenten und 1.530
+    Kanten aus 32 Bereichen: Schritt 1,1 ms statt 69,5 ms, kein Start mehr (WebCola 3,1 s), Ruhe
+    nach 300 Schritten (WebCola nach 860 noch nicht), keine Kante gegen den Fluss, keine
+    Überlappung, Kreuzungen 98.500 statt 102.400.
+  - Takt des Layouts (Nutzer, 10.11.2026): 240 Ticks pro Sekunde auf jedem Bildschirm, höchstens
+    120 Bilder pro Sekunde, höchstens 6 ms Rechenzeit pro Bild. Das Layout ist nach etwa 1,25 s
+    fertig; im Altsystem lief ein Tick pro Bild, also 5 s bei 60 Hz und 2,5 s bei 120 Hz.
+  - `qualivis.info()` nennt keine Datei-, Pfad- oder Komponentennamen mehr, und
+    `qualivis.info().export()` speichert das Ergebnis als JSON-Datei. Bei langen Frames zeigt es
+    auch die Zeit für Style, Layout und Paint (`styleAndLayoutMs`).
+  - Große, verwobene Graphen (Nutzer, 13.11.2026; gemessen am gebauten Stand in Chromium ohne
+    Grafikkarte, Testprojekte mit etwa 3 Kanten pro Knoten). Zeit vom Start des Layouts bis zur
+    Ruhe: 700 Knoten 142 s → 1,4 s, 1.500 Knoten nach dem ersten Punkt 35 s → 3,0 s, bei etwa
+    30 Bildern pro Sekunde statt 1 bis 10.
+    - Ursache der langen Bilder: die globale Regel `box-sizing: inherit`. Sie macht jedes Element
+      vom Stil seines Elternelements abhängig, also rechnete der Browser bei jedem bewegten Knoten
+      den Stil aller Kinder neu (480 ms statt 3 ms pro Bild bei 700 Knoten). `graph.css` setzt im
+      Graph einen festen Wert.
+    - Große Graphen (`layout/largeGraph.ts`) laufen anders als kleine; kleine bleiben wie bisher.
+      - Ab 300 Knoten rechnet das Layout in einem Web Worker (`layoutHost.ts`, `workerLayout.ts`):
+        Die Schritte warten nicht mehr auf die Bilder der Seite, vorher lief bei langsamen Bildern
+        ein Schritt pro Bild. Der Worker nutzt eine eigene Kollision mit Gitter statt Quadtree
+        (`gridCollide.ts`, gleiche Regel wie d3, Schritt bei 1.500 Knoten 10,9 statt 15,2 ms).
+      - Ab 500 Kanten sind alle Kanten wenige SVG-Pfade statt je einer Linie mit Marker
+        (`GraphLinkBundles.tsx`). Pfeilspitzen und Linien liegen pixelgleich. **Abweichung:** Wo
+        sich Linien eines Pfads kreuzen, wird die Kreuzung nicht dunkler; in dichten Bereichen
+        wirkt das Geflecht etwas heller. Noch nicht als ADR-011-Eintrag festgehalten.
+      - Solange das Layout eines großen Graphen läuft, werden Knoten außerhalb des sichtbaren
+        Ausschnitts (mit Rand) ausgeblendet statt bewegt und Kanten dort ausgelassen
+        (`writePositions.ts`). Am Ende steht alles da; Verschieben und Zoomen in Ruhe sind
+        unverändert.
+  - Fluss-Layout: Der Graph sank, solange ein Knoten gehalten wurde (und schwächer beim Aufbau).
+    Die Kanten-Kraft von d3 erhält den Impuls nicht, und die Fluss-Regeln nahmen nur dem Ziel die
+    Geschwindigkeit; behoben in `forceLayout.ts` (Kraft `drift`) und `flow.ts`.
+  - Ausführlich, mit Ursachen, Messwerten, verworfenen Wegen und den Möglichkeiten für einen
+    besseren Aufbau (Zusammengehöriges näher zusammen, mit Literatur):
+    [grosse-graphen-und-layout.md](grosse-graphen-und-layout.md).
 - **Offen:**
-  - WebCola im Worker: Der Start (`start(40, 20, 20)`, etwa 2,2 s bei 400 Komponenten) und die
-    Schritte von etwa 35 ms blockieren beim ersten Aufbau einer Ansicht die Seite; im Testgraphen
-    kam WebCola auch nach 1.500 Schritten nicht zur Ruhe (im Altsystem genauso). Optionen: Worker,
-    Schrittgrenze.
-  - Das Kräfte-Layout (`forceLayout.ts`) startet eine wiederhergestellte, noch laufende Ansicht mit
-    alpha 1 neu statt mit dem alten Wert (WebCola, der Standard, ist nicht betroffen).
+  - Besserer Aufbau großer Graphen: Entscheidung zwischen den Möglichkeiten M1–M9 in
+    `grosse-graphen-und-layout.md`, Teil C.
+  - Schritt noch schneller: Nach der Gitter-Kollision braucht die Abstoßung (Barnes-Hut von d3)
+    den größten Teil der Schrittzeit. Sie selbst zu schreiben wären etwa 100 Zeilen für etwa
+    doppelte Geschwindigkeit. Angehen, wenn 2.000+ Knoten es brauchen.
+  - Vor dem Graph steht die Seite bei 1.500 Dateien einmal etwa 20 s (ein langes Bild);
+    vermutlich die Analyse im Haupt-Thread (S04), nicht geprüft.
+  - Das Layout (`forceLayout.ts`) startet eine wiederhergestellte, noch laufende Ansicht mit
+    alpha 1 neu statt mit dem alten Wert; seit dem Ersatz von WebCola gilt das auch für das
+    Fluss-Layout.

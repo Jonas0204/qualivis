@@ -18,7 +18,7 @@ const mini = analyzeProject(loadFixture('mini'));
 const done = initial(analysisAtom, { ...initialAnalysisState, status: 'done', result: mini });
 
 type FakeEngine = {
-    colaLayout: boolean;
+    flowLayout: boolean;
     options: LayoutOptions;
     stopped: boolean;
     calls: string[];
@@ -31,7 +31,7 @@ type FakeEngine = {
 /** Fake engine: puts the nodes in a row at once and reports the end, without animation. */
 const createFakeLayout = () => {
     const engines: FakeEngine[] = [];
-    const createLayout: LayoutFactory = (colaLayout, options) => {
+    const createLayout: LayoutFactory = (flowLayout, options) => {
         const { nodes } = options;
         const endListeners = new Set<() => void>();
         const end = () => {
@@ -40,7 +40,7 @@ const createFakeLayout = () => {
             }
         };
         const record: FakeEngine = {
-            colaLayout,
+            flowLayout,
             options,
             stopped: false,
             calls: [],
@@ -66,9 +66,6 @@ const createFakeLayout = () => {
             onEnd: listener => {
                 endListeners.add(listener);
                 return () => endListeners.delete(listener);
-            },
-            dragStart: node => {
-                record.calls.push(`dragStart ${node.id}`);
             },
             drag: (node, { x, y }) => {
                 record.calls.push(`drag ${node.id} ${x} ${y}`);
@@ -144,7 +141,7 @@ describe('GraphView', () => {
                 vi.advanceTimersByTime(20);
             });
         };
-        const createLayout: LayoutFactory = (_cola, options) => {
+        const createLayout: LayoutFactory = (_flowLayout, options) => {
             layoutNodes = options.nodes;
             return {
                 start: () => undefined,
@@ -155,7 +152,6 @@ describe('GraphView', () => {
                     return () => ticks.delete(listener);
                 },
                 onEnd: () => () => undefined,
-                dragStart: () => undefined,
                 drag: () => undefined,
                 dragEnd: () => undefined,
             };
@@ -188,7 +184,7 @@ describe('GraphView', () => {
             });
         };
         const halt = vi.fn(() => notify(ends));
-        const createLayout: LayoutFactory = (_cola, { nodes }) => ({
+        const createLayout: LayoutFactory = (_flowLayout, { nodes }) => ({
             start: () => {
                 nodes.forEach((node, index) => {
                     node.x = index * 100;
@@ -205,7 +201,6 @@ describe('GraphView', () => {
                 ends.add(listener);
                 return () => ends.delete(listener);
             },
-            dragStart: () => undefined,
             drag: () => undefined,
             dragEnd: () => undefined,
         });
@@ -327,11 +322,7 @@ describe('GraphView', () => {
         fireEvent.pointerUp(window, { pointerId: 2, clientX: 150, clientY: 20, shiftKey: true });
 
         const id = engines[0]?.options.nodes[1]?.id;
-        expect(engines[0]?.calls).toEqual([
-            `dragStart ${id}`,
-            `drag ${id} 120 30`,
-            `dragEnd ${id} true`,
-        ]);
+        expect(engines[0]?.calls).toEqual([`drag ${id} 120 30`, `dragEnd ${id} true`]);
         expect(zoomGroupTransform(container)).toBe('translate(30,-10) scale(1)');
     });
 
@@ -383,12 +374,12 @@ describe('GraphView', () => {
         expect(engines.every(engine => engine.stopped)).toBe(true);
     });
 
-    it('lays out with WebCola by default, without constraints in the app view', () => {
+    it('lays out with the flow layout by default, without constraints in the app view', () => {
         const { createLayout, engines } = createFakeLayout();
         drawView(createLayout);
 
         expect(engines).toHaveLength(1);
-        expect(engines[0]?.colaLayout).toBe(true);
+        expect(engines[0]?.flowLayout).toBe(true);
         expect(engines[0]?.options.constraints).toEqual([]);
         expect(engines[0]?.options.nodes).toHaveLength(8);
         expect(engines[0]?.options.links).toHaveLength(7);
@@ -406,9 +397,9 @@ describe('GraphView', () => {
             />
         );
 
-        expect(engines.map(({ colaLayout, stopped }) => ({ colaLayout, stopped }))).toEqual([
-            { colaLayout: true, stopped: true },
-            { colaLayout: false, stopped: false },
+        expect(engines.map(({ flowLayout, stopped }) => ({ flowLayout, stopped }))).toEqual([
+            { flowLayout: true, stopped: true },
+            { flowLayout: false, stopped: false },
         ]);
         // The same view model: the new engine starts from the positions of the old one.
         expect(engines[1]?.options.nodes).toBe(engines[0]?.options.nodes);

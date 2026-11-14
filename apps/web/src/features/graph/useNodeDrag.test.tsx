@@ -19,10 +19,9 @@ const DragProbe = ({ node, options, onSvgPointerDown }: Probe) => {
 const fakeEngine = () => {
     const calls: string[] = [];
     const engine = {
-        dragStart: node => calls.push(`dragStart ${node.id}`),
         drag: (node, { x, y }) => calls.push(`drag ${node.id} ${x} ${y}`),
         dragEnd: (node, { pin }) => calls.push(`dragEnd ${node.id} ${pin}`),
-    } as Pick<LayoutEngine, 'dragStart' | 'drag' | 'dragEnd'> as LayoutEngine;
+    } as Pick<LayoutEngine, 'drag' | 'dragEnd'> as LayoutEngine;
     return { calls, engine };
 };
 
@@ -64,7 +63,7 @@ describe('useNodeDrag', () => {
         await new Promise(resolve => setTimeout(resolve, 0));
     });
 
-    it('calls dragStart, drag for every move and dragEnd, keeping the offset to the pointer', () => {
+    it('calls drag for every move and dragEnd, keeping the offset to the pointer', () => {
         const { calls, group, onDraggingChange } = setup();
 
         // Pointer (30, 60) is graph point (10, 20); the node at (5, 5) keeps the offset (-5, -15).
@@ -73,7 +72,7 @@ describe('useNodeDrag', () => {
         move(70, 100);
         up();
 
-        expect(calls).toEqual(['dragStart a', 'drag a 15 25', 'drag a 25 25', 'dragEnd a false']);
+        expect(calls).toEqual(['drag a 15 25', 'drag a 25 25', 'dragEnd a false']);
         expect(onDraggingChange.mock.calls).toEqual([[true], [false]]);
     });
 
@@ -149,7 +148,7 @@ describe('useNodeDrag', () => {
         move(50, 100);
         // A second finger touches a node while the first one still drags.
         down(group, { pointerId: 2, clientX: 40, clientY: 80, shiftKey: true });
-        expect(calls).toEqual(['dragStart a', 'drag a 15 25', 'dragEnd a false']);
+        expect(calls).toEqual(['drag a 15 25', 'dragEnd a false']);
         expect(onDraggingChange.mock.calls).toEqual([[true], [false]]);
 
         // The first finger is no longer followed; the second one drags.
@@ -159,7 +158,7 @@ describe('useNodeDrag', () => {
         up();
 
         // Pointer (40, 80) is graph point (15, 30); the node at (5, 5) keeps the offset (-10, -25).
-        expect(calls.slice(3)).toEqual(['dragStart a', 'drag a 15 5', 'dragEnd a false']);
+        expect(calls.slice(2)).toEqual(['drag a 15 5', 'dragEnd a false']);
         expect(onDraggingChange.mock.calls).toEqual([[true], [false], [true], [false]]);
     });
 

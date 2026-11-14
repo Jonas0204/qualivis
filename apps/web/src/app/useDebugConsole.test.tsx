@@ -1,5 +1,5 @@
 import { analyzeProject } from '@qualivis/core';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { countEvent, resetPerfStats } from '../lib/perfStats';
 import { analysisAtom, initialAnalysisState } from '../state/analysisAtoms';
 import { loadFixture } from '../test/fixtures';
@@ -14,6 +14,7 @@ const consoleOf = () => (window as Window & { qualivis?: DebugConsole }).qualivi
 describe('useDebugConsole', () => {
     afterEach(() => {
         resetPerfStats();
+        vi.restoreAllMocks();
     });
 
     it('puts qualivis.info() on window with the analysis, the view and the timings', () => {
@@ -28,10 +29,49 @@ describe('useDebugConsole', () => {
             appGraph: { nodes: mini.appGraph.nodes.length, links: mini.appGraph.links.length },
         });
         expect(info?.analysis.largestComponentGraphs.length).toBeGreaterThan(0);
-        expect(info?.view).toMatchObject({ view: 'app', componentId: undefined });
+        expect(info?.view).toEqual({
+            view: 'app',
+            nodes: mini.appGraph.nodes.length,
+            links: mini.appGraph.links.length,
+        });
         expect(info?.perf.counts).toEqual({ 'render.GraphNode': 1 });
         // jsdom reports no long tasks.
         expect(info?.longTasks).toBe('unsupported');
+    });
+
+    it('names no file, path or component of the project, so it can be shared', () => {
+        renderHookWithState(() => useDebugConsole(), { initialValues: [done] });
+
+        const json = JSON.stringify(consoleOf()?.info());
+
+        for (const fileName of Object.keys(mini.fileMap)) {
+            expect(json).not.toContain(fileName);
+        }
+        for (const node of mini.appGraph.nodes) {
+            expect(json).not.toContain(`"${node.id}"`);
+        }
+    });
+
+    it('saves the facts as a JSON file with info().export()', async () => {
+        renderHookWithState(() => useDebugConsole(), { initialValues: [done] });
+        let saved: Blob | undefined;
+        URL.createObjectURL = (blob: Blob) => {
+            saved = blob;
+            return 'blob:info';
+        };
+        URL.revokeObjectURL = () => undefined;
+        const click = vi
+            .spyOn(HTMLAnchorElement.prototype, 'click')
+            .mockImplementation(() => undefined);
+
+        const info = consoleOf()?.info();
+        info?.export();
+
+        const link = click.mock.contexts[0] as HTMLAnchorElement | undefined;
+        expect(link?.download).toMatch(/^qualivis-info-.+.json$/);
+        expect(JSON.parse((await saved?.text()) ?? '')).toEqual(JSON.parse(JSON.stringify(info)));
+        // export() itself is no part of the facts.
+        expect(Object.keys(info ?? {})).not.toContain('export');
     });
 
     it('clears the timings with reset() and leaves window on unmount', () => {

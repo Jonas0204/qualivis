@@ -1,4 +1,4 @@
-import { graphSettings } from '@qualivis/core';
+import { graphSettings, type ReactConstraint } from '@qualivis/core';
 import {
     forceCenter,
     forceCollide,
@@ -7,6 +7,9 @@ import {
     forceSimulation,
     type Simulation,
 } from 'd3-force';
+import { timed } from '../../../lib/perfStats';
+import { createFlowRules } from './flow';
+import { forceGridCollide } from './gridCollide';
 import type { LayoutEngine, LayoutLink, LayoutNode, LayoutRestore } from './types';
 
 export type ForceLayoutOptions = {
@@ -15,13 +18,55 @@ export type ForceLayoutOptions = {
     /** Size of the graph area; the layout centres the nodes in it. */
     width: number;
     height: number;
-    /** Charge strength; by default it depends on the node count. */
-    force?: number;
     /** Positions of an earlier layout of the graph to go on from (ADR-011 A22). */
     restore?: LayoutRestore;
+    /**
+     * "Vertical flow layout" on: the flow rules (flow.ts) with the order of the React methods in
+     * a component view (core `reactConstraints`, empty in the app view).
+     */
+    flow?: { constraints: readonly ReactConstraint[] };
+    /** The collision force with a grid (gridCollide.ts) instead of d3's: for large graphs. */
+    gridCollide?: boolean;
 };
 
-export type ForceSimulation = Simulation<LayoutNode, LayoutLink>;
+type ForceSimulation = Simulation<LayoutNode, LayoutLink>;
+
+/** Frames per second at most: a faster display moves the nodes in only some of its frames. */
+const maxFramesPerSecond = 120;
+const frameIntervalMs = 1000 / maxFramesPerSecond;
+/** A frame this much early still counts: the times of the frames vary a little. */
+const frameToleranceMs = 1;
+/** Ticks per second: two per frame at 120 frames per second, so the layout takes about 1.25 s. */
+const ticksPerSecond = 240;
+/** The ticks of one frame stop after this time; a large graph then settles slower but smoothly. */
+const frameBudgetMs = 6;
+
+/**
+ * Takes the speed that all free nodes have in common along y out of the flow layout. The link
+ * force of d3 moves the end with fewer links more, so the two pulls of a link do not cancel out.
+ * In the flow layout every link points down and is stretched, and targets tend to have more links
+ * than sources (shared components), so in sum the links push the whole graph down, the more the
+ * hotter the layout is: the graph sank while a node was held, and rose again afterwards.
+ */
+const forceNoDrift = (nodes: readonly LayoutNode[]) => () => {
+    let sum = 0;
+    let count = 0;
+    for (const node of nodes) {
+        if (node.fy == null) {
+            sum += node.vy ?? 0;
+            count++;
+        }
+    }
+    if (count === 0) {
+        return;
+    }
+    const drift = sum / count;
+    for (const node of nodes) {
+        if (node.fy == null) {
+            node.vy = (node.vy ?? 0) - drift;
+        }
+    }
+};
 
 /**
  * The d3 force simulation with the legacy parameters (graph.component.ts:587-611,
@@ -32,43 +77,119 @@ export const createForceSimulation = ({
     links,
     width,
     height,
-    force,
+    flow,
+    gridCollide = false,
 }: ForceLayoutOptions): ForceSimulation => {
-    const charge = force ?? Math.min(-4000 + nodes.length * 200, graphSettings.minChargeForce);
+    // The flow layout takes half the legacy minimum: about as compact as WebCola was.
+    const charge = flow
+        ? graphSettings.minChargeForce / 2
+        : Math.min(-4000 + nodes.length * 200, graphSettings.minChargeForce);
+    const collisionRadius = (node: LayoutNode) => (node.width / 2) * 1.2;
 
-    return (
-        forceSimulation(nodes)
-            // The links already hold node objects (generateLinkReferences), so no .id() accessor.
-            .force(
-                'link',
-                forceLink<LayoutNode, LayoutLink>(links).distance(graphSettings.linkDistance)
-            )
-            .force('charge', forceManyBody<LayoutNode>().strength(charge))
-            .force('center', forceCenter(width / 2, height / 2))
-            .force(
-                'collide',
-                forceCollide<LayoutNode>().radius(node => (node.width / 2) * 1.2)
-            )
-    );
+    const simulation = forceSimulation(nodes)
+        // The links already hold node objects (generateLinkReferences), so no .id() accessor.
+        .force(
+            'link',
+            forceLink<LayoutNode, LayoutLink>(links).distance(graphSettings.linkDistance)
+        )
+        .force('charge', forceManyBody<LayoutNode>().strength(charge))
+        .force('center', forceCenter(width / 2, height / 2))
+        .force(
+            'collide',
+            gridCollide
+                ? forceGridCollide(collisionRadius)
+                : forceCollide<LayoutNode>().radius(collisionRadius)
+        );
+    // After the other forces, so that it takes out what they added in this tick.
+    return flow ? simulation.force('drift', forceNoDrift(nodes)) : simulation;
 };
 
-/** Layout engine for the force layout ("Vertical flow layout" off), with legacy dragging (§11). */
+/**
+ * The layout engine: the legacy force layout with the legacy dragging (§11), and with `flow` the
+ * setting "Vertical flow layout" (on by default). The legacy app took WebCola for that
+ * (graph.component.ts:571-584), which needs seconds to start a large graph and seldom comes to
+ * rest; here the flow rules correct the positions after every tick. d3's own timer runs one tick
+ * per animation frame, so its layout takes twice as long on a 60 Hz display as on a 120 Hz one;
+ * here the ticks keep to `ticksPerSecond` on any display, at most `maxFramesPerSecond` frames.
+ */
 export const createForceLayout = (options: ForceLayoutOptions): LayoutEngine => {
     const simulation = createForceSimulation(options).stop();
-    const tickListeners = new Set<() => void>();
-    const endListeners = new Set<() => void>();
+    const { flow } = options;
+    const applyRules =
+        flow &&
+        createFlowRules(options.nodes, options.links, flow.constraints, graphSettings.nodeGap);
+    const listeners = { tick: new Set<() => void>(), end: new Set<() => void>() };
+    const notify = (type: keyof typeof listeners) => {
+        for (const listener of listeners[type]) {
+            listener();
+        }
+    };
+    let frame: number | undefined;
+    let lastFrameAt: number | undefined;
+    let nextFrameAt = 0;
+    /** Ticks the elapsed time asks for; the fraction carries over to the next frame. */
+    let dueTicks = 0;
+    let stopped = false;
     let dragging = false;
 
-    simulation.on('tick.qv', () => {
-        for (const listener of tickListeners) {
-            listener();
+    const settled = () => simulation.alpha() < simulation.alphaMin();
+    const step = (now: number) => {
+        frame = undefined;
+        if (lastFrameAt !== undefined && now < nextFrameAt - frameToleranceMs) {
+            scheduleStep();
+            return;
         }
-    });
-    simulation.on('end.qv', () => {
-        for (const listener of endListeners) {
-            listener();
+        if (lastFrameAt === undefined) {
+            dueTicks = 1;
+            nextFrameAt = now + frameIntervalMs;
+        } else {
+            dueTicks += ((now - lastFrameAt) * ticksPerSecond) / 1000;
+            nextFrameAt = Math.max(nextFrameAt + frameIntervalMs, now);
         }
-    });
+        lastFrameAt = now;
+        const deadline = performance.now() + frameBudgetMs;
+        let ticked = false;
+        while (dueTicks >= 1) {
+            timed('layout.tick', () => {
+                simulation.tick();
+                applyRules?.();
+            });
+            dueTicks--;
+            ticked = true;
+            if (settled() || performance.now() > deadline) {
+                break;
+            }
+        }
+        if (ticked) {
+            notify('tick');
+        }
+        if (ticked && settled()) {
+            resetClock();
+            notify('end');
+        } else {
+            // Ticks left over from a frame over budget are dropped, not caught up with.
+            dueTicks = Math.min(dueTicks, 1);
+            scheduleStep();
+        }
+    };
+    /** The next run (after the end, a halt or dragging) starts with one tick in its first frame. */
+    const resetClock = () => {
+        lastFrameAt = undefined;
+        nextFrameAt = 0;
+        dueTicks = 0;
+    };
+    const scheduleStep = () => {
+        if (!stopped) {
+            frame ??= requestAnimationFrame(step);
+        }
+    };
+    const cancelStep = () => {
+        if (frame !== undefined) {
+            cancelAnimationFrame(frame);
+            frame = undefined;
+        }
+        resetClock();
+    };
 
     return {
         start: () => {
@@ -76,17 +197,17 @@ export const createForceLayout = (options: ForceLayoutOptions): LayoutEngine => 
             // dragging heats it up the same way (ADR-011 A22).
             if (options.restore && !options.restore.running) {
                 simulation.alpha(0);
-                for (const listener of endListeners) {
-                    listener();
-                }
+                notify('end');
                 return;
             }
-            simulation.restart();
+            scheduleStep();
         },
+        // For good: dragging does not start it again.
         stop: () => {
-            simulation.stop().on('tick.qv', null).on('end.qv', null);
-            tickListeners.clear();
-            endListeners.clear();
+            stopped = true;
+            cancelStep();
+            listeners.tick.clear();
+            listeners.end.clear();
         },
         // Without a further tick, which would still move the nodes by their velocity. Alpha 0, as
         // after a normal end, so that dragging heats the simulation up the same way.
@@ -94,33 +215,33 @@ export const createForceLayout = (options: ForceLayoutOptions): LayoutEngine => 
             if (simulation.alpha() < simulation.alphaMin()) {
                 return;
             }
-            simulation.stop().alpha(0);
-            for (const listener of endListeners) {
-                listener();
-            }
+            cancelStep();
+            simulation.alpha(0);
+            notify('end');
         },
         onTick: listener => {
-            tickListeners.add(listener);
-            return () => tickListeners.delete(listener);
+            listeners.tick.add(listener);
+            return () => listeners.tick.delete(listener);
         },
         onEnd: listener => {
-            endListeners.add(listener);
-            return () => endListeners.delete(listener);
+            listeners.end.add(listener);
+            return () => listeners.end.delete(listener);
         },
         // The legacy drag handler has no start event: the simulation reheats on the first move.
-        dragStart: () => {},
         drag: (node, { x, y }) => {
             if (!dragging) {
-                simulation.alphaTarget(graphSettings.dragAlphaTarget).restart();
+                simulation.alphaTarget(graphSettings.dragAlphaTarget);
                 dragging = true;
             }
+            scheduleStep();
             node.fx = x;
             node.fy = y;
         },
         dragEnd: (node, { pin }) => {
             simulation.alphaTarget(0);
-            // stick node at the position if the shift key is pressed
-            if (!pin) {
+            // Stick the node at the position if the Shift key is pressed. Legacy behaviour: in the
+            // flow layout (WebCola there) Shift did not pin the node.
+            if (!pin || flow) {
                 node.fx = null;
                 node.fy = null;
             }

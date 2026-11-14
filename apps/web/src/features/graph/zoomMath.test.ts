@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+    drawnArea,
     easeCubicInOut,
     easeOut,
     fitTransform,
@@ -23,6 +24,18 @@ const screen = (
 ) => ({
     x: point.x * transform.k + transform.x,
     y: point.y * transform.k + transform.y,
+});
+
+describe('drawnArea', () => {
+    it('is the part of the graph in the viewport with 300 graph units around it', () => {
+        // The viewport shows the graph from (100, 50) to (500, 250) at twice its size.
+        expect(drawnArea({ k: 2, x: -200, y: -100 }, { width: 800, height: 400 })).toEqual({
+            x: -200,
+            y: -250,
+            width: 1000,
+            height: 800,
+        });
+    });
 });
 
 describe('fitTransform', () => {

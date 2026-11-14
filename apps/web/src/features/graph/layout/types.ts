@@ -7,6 +7,8 @@ export type LayoutNode = {
     height: number;
     x?: number;
     y?: number;
+    vx?: number;
+    vy?: number;
     fx?: number | null;
     fy?: number | null;
     index?: number;
@@ -35,7 +37,6 @@ export type LayoutEngine = {
     /** Returns a function that removes the listener. */
     onTick(listener: () => void): () => void;
     onEnd(listener: () => void): () => void;
-    dragStart(node: LayoutNode): void;
     drag(node: LayoutNode, position: { x: number; y: number }): void;
     dragEnd(node: LayoutNode, options: { pin: boolean }): void;
 };
