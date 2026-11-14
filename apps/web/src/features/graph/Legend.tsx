@@ -1,6 +1,6 @@
 import { graphSettings, type View } from '@qualivis/core';
 import { useContext, useId } from 'react';
-import { GraphDefsContext } from './graphDefsContext';
+import { GraphDefsContext } from './canvas/graphDefsContext';
 
 type LegendProps = { view: View };
 

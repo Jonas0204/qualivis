@@ -22,10 +22,13 @@ import {
 } from '../../state/selectionAtoms';
 import type { ViewGraph } from '../../state/selectViewGraph';
 import { componentIdAtom, fullScreenAtom, viewGraphAtom } from '../../state/viewAtoms';
+import { GraphCanvas, type GraphEvents } from './canvas/GraphCanvas';
+import type { NodeEvents } from './canvas/GraphNode';
+import { useFade } from './canvas/useFade';
+import { writePositions } from './canvas/writePositions';
 import { GraphActions } from './GraphActions';
-import { GraphCanvas, type GraphEvents } from './GraphCanvas';
-import type { NodeEvents } from './GraphNode';
 import { Legend } from './Legend';
+import { type LabelMeasure, useLabelCollision } from './labels/useLabelCollision';
 import { createLayout as createDefaultLayout, type LayoutFactory } from './layout/createLayout';
 import { runsInWorker } from './layout/largeGraph';
 import type { LayoutNode } from './layout/types';
@@ -40,19 +43,16 @@ import {
     useSaveView,
 } from './savedViews';
 import { useElementSize } from './useElementSize';
-import { useFade } from './useFade';
-import { type LabelMeasure, useLabelCollision } from './useLabelCollision';
 import { useLayout } from './useLayout';
 import { useNodeDrag } from './useNodeDrag';
-import { browserMeasure, type PanZoomMeasure, usePanZoom } from './usePanZoom';
-import { writePositions } from './writePositions';
+import { browserMeasure, type PanZoomMeasure, usePanZoom } from './zoom/usePanZoom';
 import {
     drawnArea,
     nextZoomStyle,
     type ZoomStyle,
     type ZoomTransform,
     zoomLevel,
-} from './zoomMath';
+} from './zoom/zoomMath';
 import './graph.css';
 
 export type GraphViewProps = {

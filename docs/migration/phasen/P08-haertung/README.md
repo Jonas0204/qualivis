@@ -63,7 +63,7 @@ Erkenntnisse aus `STATUS.md` (Abweichungen, offene Punkte) einarbeiten, mit dem 
   jedes Modul ohne Test einen **Verhaltenstest** ergänzen; keine Tests, die nur Zeilen abdecken.
 - Eigenprüfung (ab M7) zeigt zusätzlich Funktionen über den Schwellenwerten des Tools.
 - Aufräumen (Nutzer, 08.11.2026): Quelltext-Eingaben in Kern-Tests stehen als Zeilenliste mit
-  `[…].join('\n')` (z. B. `packages/core/src/analysis/analyzeProject.test.ts`). Lesbarer machen:
+  `[…].join('\n')` (z. B. `packages/core/src/analysis/__tests__/analyzeProject.test.ts`). Lesbarer machen:
   Template-String mit kleinem Helfer, der den ersten Zeilenumbruch entfernt, oder Fixture-Dateien.
 - Aufräumen (Nutzer, 09.11.2026): Bei unbekannter Komponenten-ID zeigt `selectViewGraph` den
   App-Graph als App-Ansicht (das Altsystem rechnete ihn als Komponentenansicht). Prüfen, ob der

@@ -1,7 +1,7 @@
 import { type PointerEvent as ReactPointerEvent, useCallback, useEffect, useRef } from 'react';
 import type { LayoutEngine, LayoutNode } from './layout/types';
-import { suppressNextClick, svgPoint, trackPointer } from './pointerGesture';
-import { invert, type ZoomTransform } from './zoomMath';
+import { suppressNextClick, svgPoint, trackPointer } from './zoom/pointerGesture';
+import { invert, type ZoomTransform } from './zoom/zoomMath';
 
 export type NodeDragOptions = {
     /** The running layout engine; dragging does nothing without one. */

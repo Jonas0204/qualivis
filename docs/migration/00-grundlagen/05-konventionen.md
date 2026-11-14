@@ -48,7 +48,7 @@
 | Hook | `useXxx.ts` | `usePanZoom.ts` |
 | Modul/Funktion | `camelCase.ts` | `nodeVisuals.ts` |
 | CSS Module | `Komponente.module.css` | `Toolbar.module.css` |
-| Test | neben der Datei, `*.test.ts(x)` | `nodeVisuals.test.ts` |
+| Test | im Ordner `__tests__` neben der Datei, `*.test.ts(x)` | `rules/__tests__/nodeVisuals.test.ts` |
 | Golden-Test | `packages/core/test/golden/*.golden.test.ts` | `analysis.golden.test.ts` |
 | Konstanten | `camelCase` Objekte, keine `SCREAMING_CASE` (wie Altsystem) | `graphSettings.nodeGap` |
 

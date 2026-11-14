@@ -1,7 +1,7 @@
 import type { Graph } from '@qualivis/core';
 import { useLayoutEffect, useRef } from 'react';
 import type { LayoutNode, LayoutRestore } from './layout/types';
-import type { ZoomStyle, ZoomTransform } from './zoomMath';
+import type { ZoomStyle, ZoomTransform } from './zoom/zoomMath';
 
 /**
  * How a view looked when it was left (ADR-011 A22): node positions, whether the layout was still

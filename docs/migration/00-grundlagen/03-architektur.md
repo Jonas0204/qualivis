@@ -77,13 +77,15 @@ e2e/ (@qualivis/e2e, Playwright, separat installierbar) · tools/ (Node-Skripte 
 │        │  ├─ upload/               UploadView.tsx, ProjectChoice.tsx, readDroppedFiles.ts, readInputFiles.ts,
 │        │  │                        toProjectFiles.ts, logReadError.ts, useFileDrop.ts, DropOverlay.tsx
 │        │  ├─ analysis/             runAnalysis.ts (später worker/)
-│        │  ├─ graph/                GraphPage.tsx, GraphView.tsx, GraphCanvas.tsx, GraphNode.tsx, GraphLink.tsx,
-│        │  │                        GraphLinkBundles.tsx, linkPaths.ts, PreviewCircles.tsx, GraphDefs.tsx,
-│        │  │                        graphDefsContext.ts, Legend.tsx, GraphActions.tsx, usePanZoom.ts,
-│        │  │                        zoomMath.ts, useNodeDrag.ts, pointerGesture.ts, useFade.ts,
-│        │  │                        useLabelCollision.ts, labelCollision.ts, useElementSize.ts,
-│        │  │                        useLayout.ts, writePositions.ts, useZoomTransition.ts,
-│        │  │                        savedViews.ts, graph.css,
+│        │  ├─ graph/                GraphPage.tsx, GraphView.tsx, GraphActions.tsx, Legend.tsx,
+│        │  │                        useLayout.ts, useNodeDrag.ts, useElementSize.ts, savedViews.ts,
+│        │  │                        graph.css,
+│        │  │                        canvas/ (Zeichnen: GraphCanvas.tsx, GraphNode.tsx, GraphLink.tsx,
+│        │  │                          GraphLinkBundles.tsx, PreviewCircles.tsx, GraphDefs.tsx,
+│        │  │                          graphDefsContext.ts, linkPaths.ts, writePositions.ts, useFade.ts),
+│        │  │                        zoom/ (usePanZoom.ts, useZoomTransition.ts, zoomMath.ts,
+│        │  │                          pointerGesture.ts),
+│        │  │                        labels/ (useLabelCollision.ts, labelCollision.ts),
 │        │  │                        layout/ (types.ts, createLayout.ts, largeGraph.ts,
 │        │  │                          forceSolver.ts, flow.ts, gridCollide.ts, tickClock.ts,
 │        │  │                          forceLayout.ts, workerLayout.ts, layoutHost.ts, layoutWorker.ts)
