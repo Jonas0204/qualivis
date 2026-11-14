@@ -26,6 +26,7 @@ import { GraphCanvas, type GraphEvents } from './GraphCanvas';
 import type { NodeEvents } from './GraphNode';
 import { Legend } from './Legend';
 import { createLayout as createDefaultLayout, type LayoutFactory } from './layout/createLayout';
+import { runsInWorker } from './layout/largeGraph';
 import type { LayoutNode } from './layout/types';
 import {
     isRestoredAtRest,
@@ -45,7 +46,13 @@ import { useLayout } from './useLayout';
 import { useNodeDrag } from './useNodeDrag';
 import { browserMeasure, type PanZoomMeasure, usePanZoom } from './usePanZoom';
 import { writePositions } from './writePositions';
-import { nextZoomStyle, type ZoomStyle, type ZoomTransform, zoomLevel } from './zoomMath';
+import {
+    drawnArea,
+    nextZoomStyle,
+    type ZoomStyle,
+    type ZoomTransform,
+    zoomLevel,
+} from './zoomMath';
 import './graph.css';
 
 export type GraphViewProps = {
@@ -169,10 +176,19 @@ export const GraphView = ({
             });
         },
         [built, size !== undefined, flowLayout, createLayout],
-        () =>
+        ({ running }) =>
             model !== undefined &&
             viewGraph !== undefined &&
-            writePositions(panZoom.zoomGroupRef.current, model.nodes, model.links, viewGraph.view)
+            writePositions(panZoom.zoomGroupRef.current, {
+                nodes: model.nodes,
+                links: model.links,
+                view: viewGraph.view,
+                // Only a running layout of a large graph leaves out what is out of sight.
+                area:
+                    running && size && runsInWorker(model.nodes)
+                        ? drawnArea(panZoom.getTransform(), size)
+                        : undefined,
+            })
     );
 
     // G18: measure the labels again at every end of the layout (also after dragging) and when the

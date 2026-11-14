@@ -42,6 +42,24 @@ export const invert = ({ k, x, y }: ZoomTransform, point: Point): Point => ({
     y: (point.y - y) / k,
 });
 
+/** Room around the visible part of the graph, in graph units: for the size of nodes and labels. */
+const drawnMargin = 300;
+
+/**
+ * The part of the graph to draw while the layout runs (writePositions): what the viewport shows,
+ * with a margin for nodes whose centre is outside but whose circle or label reaches in.
+ */
+export const drawnArea = (transform: ZoomTransform, viewport: Viewport): Bounds => {
+    const topLeft = invert(transform, { x: 0, y: 0 });
+    const bottomRight = invert(transform, { x: viewport.width, y: viewport.height });
+    return {
+        x: topLeft.x - drawnMargin,
+        y: topLeft.y - drawnMargin,
+        width: bottomRight.x - topLeft.x + 2 * drawnMargin,
+        height: bottomRight.y - topLeft.y + 2 * drawnMargin,
+    };
+};
+
 /** Moves the transform so that the graph point lies under the screen point (pan). */
 export const translateTo = ({ k }: ZoomTransform, screen: Point, graph: Point): ZoomTransform => ({
     k,

@@ -52,7 +52,47 @@ describe('createFlowRules', () => {
 
         createFlowRules(nodes, [], [{ axis: 'x', left: 0, right: 1, gap: 100 }], 100)();
 
-        expect(nodes.map(node => node.x)).toEqual([50, 150, 0]);
+        // render is 100 to the right of the constructor, and the three stay around the same centre.
+        expect(nodes.map(node => node.x)).toEqual([0, 100, -50]);
+    });
+
+    it('does not move the graph as a whole, although it pushes the targets down', () => {
+        const nodes = [at('a', 0, 40), at('b', 0, 30), at('c', 0, 20), at('d', 0, 10)];
+        const [a, b, c, d] = nodes as [LayoutNode, LayoutNode, LayoutNode, LayoutNode];
+        const links: LayoutLink[] = [
+            { source: a, target: b },
+            { source: b, target: c },
+            { source: c, target: d },
+        ];
+        const rules = createFlowRules(nodes, links, [], 100);
+        const mean = () => nodes.reduce((sum, node) => sum + (node.y ?? 0), 0) / nodes.length;
+
+        // As the forces do in every tick of a hot layout: pull the chain together again.
+        for (let tick = 0; tick < 50; tick++) {
+            nodes.forEach((node, index) => {
+                node.y = 40 - index * 10;
+            });
+            rules();
+        }
+
+        expect(mean()).toBeCloseTo(25);
+        expect(nodes.map(node => Math.round(node.y ?? 0))).toEqual([-125, -25, 75, 175]);
+    });
+
+    it('keeps the rules next to a dragged node, which stays where it is', () => {
+        const a = at('a', 0, 0);
+        const dragged = { ...at('dragged', 0, 0), fx: 0, fy: 0 };
+        const c = at('c', 0, 0);
+        const links: LayoutLink[] = [
+            { source: a, target: dragged },
+            { source: dragged, target: c },
+        ];
+
+        createFlowRules([a, dragged, c], links, [], 100)();
+
+        expect(dragged.y).toBe(0);
+        expect(c.y).toBeGreaterThanOrEqual(100);
+        expect(a.y).toBeLessThan(0);
     });
 
     it('does not move a dragged node', () => {

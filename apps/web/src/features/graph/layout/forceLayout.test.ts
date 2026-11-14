@@ -68,6 +68,28 @@ describe('createForceSimulation', () => {
         expect([firstLink.source, firstLink.target]).toEqual([first, second]);
     });
 
+    it('takes the grid collision with the same radius when asked to', () => {
+        const options = { ...chain(8), gridCollide: true };
+        const d3Collide = createForceSimulation(chain(8)).stop().force('collide');
+
+        const collide = createForceSimulation(options).stop().force('collide');
+
+        expect(collide).toBeDefined();
+        expect(collide).not.toHaveProperty('radius');
+        expect(d3Collide).toHaveProperty('radius');
+        // Two nodes of width 48 on the same spot end 2 * 28.8 apart or more.
+        const [first, second] = options.nodes as [LayoutNode, LayoutNode];
+        const pair = [
+            { ...first, x: 0, y: 0 },
+            { ...second, x: 1, y: 0 },
+        ];
+        const simulation = createForceSimulation({ ...options, nodes: pair, links: [] }).stop();
+        simulation.force('charge', null).force('center', null).tick(300);
+        expect(
+            Math.hypot((pair[1]?.x ?? 0) - (pair[0]?.x ?? 0), (pair[1]?.y ?? 0) - (pair[0]?.y ?? 0))
+        ).toBeGreaterThan(57);
+    });
+
     it('limits the charge to -400 for large graphs', () => {
         expect(chargeOf(chain(25))).toBe(-400);
     });
@@ -342,5 +364,34 @@ describe('createForceLayout, flow rules', () => {
         expect(constraints).toHaveLength(2);
         expect(x('constructor') + 100).toBeLessThanOrEqual(x('componentDidMount') + 1e-9);
         expect(x('componentDidMount') + 100).toBeLessThanOrEqual(x('render') + 1e-9);
+    });
+
+    it('does not let the graph sink while a node is held, although all links pull down', () => {
+        // Many components that share a few: the link force of d3 moves the end with fewer links
+        // more, here the sources down, so the whole graph gained speed downwards.
+        const shared = ['s0', 's1', 's2'].map(node);
+        const users = Array.from({ length: 30 }, (_, index) => node(`u${index}`));
+        const nodes = [...users, ...shared];
+        const links = users.flatMap(source => shared.map(target => ({ source, target })));
+        const run = startLayout({ nodes, links, width: 800, height: 600, flow: flow() });
+        vi.runAllTimers();
+        const meanY = () => nodes.reduce((sum, each) => sum + (each.y ?? 0), 0) / nodes.length;
+        const atRest = meanY();
+        const [held] = users as [LayoutNode];
+
+        // Held for two seconds, hot at the alpha target of dragging.
+        run.engine.drag(held, { x: held.x ?? 0, y: held.y ?? 0 });
+        vi.advanceTimersByTime(2000);
+
+        expect(Math.abs(meanY() - atRest)).toBeLessThan(5);
+    });
+
+    it('leaves the plain force layout as it is, without the correction of the flow layout', () => {
+        expect(createForceSimulation(chain(4)).stop().force('drift')).toBeUndefined();
+        expect(
+            createForceSimulation({ ...chain(4), flow: flow() })
+                .stop()
+                .force('drift')
+        ).toBeDefined();
     });
 });

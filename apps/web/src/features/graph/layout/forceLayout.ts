@@ -9,6 +9,7 @@ import {
 } from 'd3-force';
 import { timed } from '../../../lib/perfStats';
 import { createFlowRules } from './flow';
+import { forceGridCollide } from './gridCollide';
 import type { LayoutEngine, LayoutLink, LayoutNode, LayoutRestore } from './types';
 
 export type ForceLayoutOptions = {
@@ -24,6 +25,8 @@ export type ForceLayoutOptions = {
      * a component view (core `reactConstraints`, empty in the app view).
      */
     flow?: { constraints: readonly ReactConstraint[] };
+    /** The collision force with a grid (gridCollide.ts) instead of d3's: for large graphs. */
+    gridCollide?: boolean;
 };
 
 type ForceSimulation = Simulation<LayoutNode, LayoutLink>;
@@ -39,6 +42,33 @@ const ticksPerSecond = 240;
 const frameBudgetMs = 6;
 
 /**
+ * Takes the speed that all free nodes have in common along y out of the flow layout. The link
+ * force of d3 moves the end with fewer links more, so the two pulls of a link do not cancel out.
+ * In the flow layout every link points down and is stretched, and targets tend to have more links
+ * than sources (shared components), so in sum the links push the whole graph down, the more the
+ * hotter the layout is: the graph sank while a node was held, and rose again afterwards.
+ */
+const forceNoDrift = (nodes: readonly LayoutNode[]) => () => {
+    let sum = 0;
+    let count = 0;
+    for (const node of nodes) {
+        if (node.fy == null) {
+            sum += node.vy ?? 0;
+            count++;
+        }
+    }
+    if (count === 0) {
+        return;
+    }
+    const drift = sum / count;
+    for (const node of nodes) {
+        if (node.fy == null) {
+            node.vy = (node.vy ?? 0) - drift;
+        }
+    }
+};
+
+/**
  * The d3 force simulation with the legacy parameters (graph.component.ts:587-611,
  * docs/migration/01-referenz-altsystem/03-visuelle-regeln.md §9.3). It starts running at once.
  */
@@ -48,26 +78,30 @@ export const createForceSimulation = ({
     width,
     height,
     flow,
+    gridCollide = false,
 }: ForceLayoutOptions): ForceSimulation => {
     // The flow layout takes half the legacy minimum: about as compact as WebCola was.
     const charge = flow
         ? graphSettings.minChargeForce / 2
         : Math.min(-4000 + nodes.length * 200, graphSettings.minChargeForce);
+    const collisionRadius = (node: LayoutNode) => (node.width / 2) * 1.2;
 
-    return (
-        forceSimulation(nodes)
-            // The links already hold node objects (generateLinkReferences), so no .id() accessor.
-            .force(
-                'link',
-                forceLink<LayoutNode, LayoutLink>(links).distance(graphSettings.linkDistance)
-            )
-            .force('charge', forceManyBody<LayoutNode>().strength(charge))
-            .force('center', forceCenter(width / 2, height / 2))
-            .force(
-                'collide',
-                forceCollide<LayoutNode>().radius(node => (node.width / 2) * 1.2)
-            )
-    );
+    const simulation = forceSimulation(nodes)
+        // The links already hold node objects (generateLinkReferences), so no .id() accessor.
+        .force(
+            'link',
+            forceLink<LayoutNode, LayoutLink>(links).distance(graphSettings.linkDistance)
+        )
+        .force('charge', forceManyBody<LayoutNode>().strength(charge))
+        .force('center', forceCenter(width / 2, height / 2))
+        .force(
+            'collide',
+            gridCollide
+                ? forceGridCollide(collisionRadius)
+                : forceCollide<LayoutNode>().radius(collisionRadius)
+        );
+    // After the other forces, so that it takes out what they added in this tick.
+    return flow ? simulation.force('drift', forceNoDrift(nodes)) : simulation;
 };
 
 /**

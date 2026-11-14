@@ -21,8 +21,10 @@ import {
 import { countEvent } from '../../lib/perfStats';
 import { GraphDefs } from './GraphDefs';
 import { GraphLink } from './GraphLink';
+import { GraphLinkBundles } from './GraphLinkBundles';
 import { GraphNode, type GraphNodeSettings, type NodeEvents } from './GraphNode';
 import { GraphDefsContext } from './graphDefsContext';
+import { bundlesLinks } from './layout/largeGraph';
 import type { GraphFade } from './useFade';
 import { useZoomTransition, type ZoomFrame } from './useZoomTransition';
 import {
@@ -114,6 +116,8 @@ type GraphContentProps = Pick<GraphCanvasProps, 'nodes' | 'links' | 'view' | 'se
         hiddenLabels?: GraphLabels['hidden'];
         labelRef?: GraphLabels['ref'];
         nodeEvents?: NodeEvents;
+        /** Only for bundled links (GraphLinkBundles): the width of the lines set by zooming. */
+        linkStrokeWidth?: number;
     };
 
 /**
@@ -132,25 +136,35 @@ const GraphContent = memo(
         hiddenLabels,
         labelRef,
         nodeEvents,
+        linkStrokeWidth,
     }: GraphContentProps) => {
         countEvent('render.GraphContent');
         return (
             <>
-                <g
-                    className="links"
-                    stroke={graphSettings.linkColor}
-                    strokeOpacity={graphSettings.linkOpacity}
-                >
-                    {links.map((link, index) => (
-                        // Index as key: links keep their order, and the same pair can occur twice.
-                        <GraphLink
-                            key={index}
-                            link={link}
-                            view={view}
-                            opacity={fadeOpacity(fade, fade?.opaqueLinks.has(link))}
-                        />
-                    ))}
-                </g>
+                {linkStrokeWidth === undefined ? (
+                    <g
+                        className="links"
+                        stroke={graphSettings.linkColor}
+                        strokeOpacity={graphSettings.linkOpacity}
+                    >
+                        {links.map((link, index) => (
+                            // Index as key: links keep their order, and the same pair can occur twice.
+                            <GraphLink
+                                key={index}
+                                link={link}
+                                view={view}
+                                opacity={fadeOpacity(fade, fade?.opaqueLinks.has(link))}
+                            />
+                        ))}
+                    </g>
+                ) : (
+                    <GraphLinkBundles
+                        links={links}
+                        view={view}
+                        fade={fade}
+                        strokeWidth={linkStrokeWidth}
+                    />
+                )}
                 <g className="nodes">
                     {nodes.map(node => {
                         const paint = clusterPaint(node.cluster, view, showCluster);
@@ -253,6 +267,8 @@ export const GraphCanvas = ({
                         hiddenLabels={labels?.hidden}
                         labelRef={labels?.ref}
                         nodeEvents={events.node}
+                        // The target width: the arrow heads do not ease with the wheel transition.
+                        linkStrokeWidth={bundlesLinks(links) ? frame.linkStrokeWidth : undefined}
                     />
                 </g>
             </svg>

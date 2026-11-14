@@ -103,4 +103,23 @@ describe('useLayout', () => {
         act(() => end());
         expect(result.current).toMatchObject({ version: before + 2, ended: true, ends: 1 });
     });
+
+    it('draws the final positions at the end itself, not in a later frame', () => {
+        const { engine, tick, end } = createEngine();
+        const onFrame = vi.fn<FrameHandler>(() => true);
+        renderHook(() => useLayout(() => engine, [], onFrame));
+
+        tick();
+        nextFrame();
+        expect(onFrame).toHaveBeenLastCalledWith({ running: true });
+
+        // The last tick and the end come together, before the frame of that tick.
+        tick();
+        act(() => end());
+        expect(onFrame).toHaveBeenCalledTimes(2);
+        expect(onFrame).toHaveBeenLastCalledWith({ running: false });
+
+        nextFrame();
+        expect(onFrame).toHaveBeenCalledTimes(2);
+    });
 });
