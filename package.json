@@ -2,7 +2,7 @@
     "name": "qualivis",
     "private": true,
     "type": "module",
-    "packageManager": "pnpm@12.16.1",
+    "packageManager": "pnpm@12.18.0",
     "engines": {
         "node": ">=24"
     },
@@ -18,11 +18,13 @@
         "test:parity": "vitest run --project core --project web golden",
         "check": "pnpm lint && pnpm typecheck && pnpm test",
         "legacy:extract": "node tools/legacy/extract-legacy-build.mjs",
-        "legacy:serve": "node tools/legacy/serve-legacy.mjs"
+        "legacy:serve": "node tools/legacy/serve-legacy.mjs",
+        "knip": "knip"
     },
     "devDependencies": {
         "@biomejs/biome": "catalog:",
         "@types/node": "catalog:",
+        "knip": "6.45.1",
         "typescript": "catalog:",
         "vitest": "catalog:"
     }

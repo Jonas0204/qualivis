@@ -1,0 +1,14 @@
+{
+    "$schema": "https://unpkg.com/knip@6/schema.json",
+    "ignore": ["legacy/**", "testdata/**", "tools/legacy/*.browser.js"],
+    "ignoreDependencies": ["@fontsource/roboto", "@fontsource/material-icons"],
+    "workspaces": {
+        ".": {
+            "entry": ["tools/**/*.mjs"]
+        },
+        "packages/core": {
+            "ignore": ["src/legacy/**"]
+        },
+        "apps/web": {}
+    }
+}
