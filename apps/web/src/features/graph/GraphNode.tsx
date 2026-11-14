@@ -23,7 +23,7 @@ import { PreviewCircles } from './PreviewCircles';
 export type GraphNodeSettings = Pick<Settings, 'text' | 'currentSizeMetricErrorHighlighting'>;
 
 /** Inline styles set at run time, where the legacy app set them with d3 style(). */
-export type NodeInlineStyle = {
+type NodeInlineStyle = {
     /** Fill of the main circle: cluster colour (clusterPaint) or the fill of an indirect node. */
     fill?: string;
     /** Border of overlay and inner circle: cluster colour. */
@@ -55,7 +55,7 @@ export type NodeEvents = {
 };
 
 /** Overlapping labels (§13, useLabelCollision). */
-export type NodeLabel = {
+type NodeLabel = {
     /** Hides the label text; the node shows it as tooltip instead. */
     hidden?: boolean;
     /** Ref of the label text, for measuring. */

@@ -19,7 +19,7 @@ type LongWork = {
  * What `qualivis.info()` returns: facts for performance and refactoring work. Only sizes, counts
  * and timings, no names or paths of the project, so it can be shared.
  */
-export type DebugInfo = {
+type DebugInfo = {
     takenAt: string;
     mode: string;
     browser: {
@@ -46,7 +46,7 @@ export type DebugInfo = {
 };
 
 /** `export()` saves the facts as a JSON file. */
-export type DebugInfoWithExport = DebugInfo & { export: () => void };
+type DebugInfoWithExport = DebugInfo & { export: () => void };
 
 export type DebugConsole = {
     /** Facts about the analysis, the view, the DOM and the recorded timings. */
@@ -146,7 +146,7 @@ const saveAsFile = (info: DebugInfo) => {
 };
 
 /** Builds the console helper for `store`; `dispose` stops watching long work. */
-export const createDebugConsole = (store: StateStore): DebugConsole & { dispose: () => void } => {
+const createDebugConsole = (store: StateStore): DebugConsole & { dispose: () => void } => {
     const longTasks = watchLongWork('longtask');
     const longFrames = watchLongWork('long-animation-frame');
     const heap = (performance as Performance & { memory?: { usedJSHeapSize: number } }).memory;

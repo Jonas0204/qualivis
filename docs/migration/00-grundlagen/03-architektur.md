@@ -9,7 +9,7 @@
 │  features/graph ──┼─► state/ (Jotai-Atome)                   ◄── lib/ (storage, …) │
 │  features/file-tree, code-quality, source-code, settings                          │
 │  ui/ (Button, Dialog, SlideToggle, Select, Snackbar, SplitPane, Tooltip, Icon)    │
-│  features/graph/layout (WebCola-Adapter, d3-force) – framework-frei, nur DOM-frei │
+│  features/graph/layout (d3-force, Fluss-Regeln, Web Worker) – ohne React und DOM  │
 └──────────────────────────────────┬────────────────────────────────────────────────┘
                                    │ importiert nur die öffentliche API
 ┌──────────────────────── packages/core (@qualivis/core) ──────────────────────────┐
@@ -71,19 +71,22 @@ e2e/ (@qualivis/e2e, Playwright, separat installierbar) · tools/ (Node-Skripte 
 │        ├─ main.tsx                 Einstieg, Provider
 │        ├─ app/                     App.tsx, AppShell.tsx, Toolbar.tsx, useUrlState.ts
 │        ├─ state/                   analysisAtoms.ts, viewAtoms.ts, selectionAtoms.ts,
-│        │                           settingsAtoms.ts, snackbarAtoms.ts, selection.ts, StateProvider.tsx
+│        │                           settingsAtoms.ts, snackbarAtoms.ts, selection.ts, selectViewGraph.ts,
+│        │                           StateProvider.tsx
 │        ├─ features/
 │        │  ├─ upload/               UploadView.tsx, ProjectChoice.tsx, readDroppedFiles.ts, readInputFiles.ts,
 │        │  │                        toProjectFiles.ts, logReadError.ts, useFileDrop.ts, DropOverlay.tsx
 │        │  ├─ analysis/             runAnalysis.ts (später worker/)
 │        │  ├─ graph/                GraphPage.tsx, GraphView.tsx, GraphCanvas.tsx, GraphNode.tsx, GraphLink.tsx,
-│        │  │                        PreviewCircles.tsx, GraphDefs.tsx, graphDefsContext.ts,
-│        │  │                        Legend.tsx, GraphActions.tsx, usePanZoom.ts, zoomMath.ts,
-│        │  │                        useNodeDrag.ts, pointerGesture.ts, useFade.ts,
+│        │  │                        GraphLinkBundles.tsx, linkPaths.ts, PreviewCircles.tsx, GraphDefs.tsx,
+│        │  │                        graphDefsContext.ts, Legend.tsx, GraphActions.tsx, usePanZoom.ts,
+│        │  │                        zoomMath.ts, useNodeDrag.ts, pointerGesture.ts, useFade.ts,
 │        │  │                        useLabelCollision.ts, labelCollision.ts, useElementSize.ts,
-│        │  │                        selectViewGraph.ts, useLayout.ts, writePositions.ts,
-│        │  │                        useZoomTransition.ts, savedViews.ts, graph.css,
-│        │  │                        layout/ (types.ts, createLayout.ts, colaLayout.ts, forceLayout.ts)
+│        │  │                        useLayout.ts, writePositions.ts, useZoomTransition.ts,
+│        │  │                        savedViews.ts, graph.css,
+│        │  │                        layout/ (types.ts, createLayout.ts, largeGraph.ts,
+│        │  │                          forceSolver.ts, flow.ts, gridCollide.ts, tickClock.ts,
+│        │  │                          forceLayout.ts, workerLayout.ts, layoutHost.ts, layoutWorker.ts)
 │        │  ├─ file-tree/            FileTree.tsx, useTreeState.ts
 │        │  ├─ code-quality/         CodeQualityPanel.tsx, QualityMetricBar.tsx, IconDescription.tsx,
 │        │  │                        metricExplanations.ts
@@ -122,8 +125,8 @@ e2e/ (@qualivis/e2e, Playwright, separat installierbar) · tools/ (Node-Skripte 
    Zyklen** (A importiert B und B importiert A ist verboten). Was mehrere Features ohne fachliche
    Zuordnung brauchen, gehört nach `lib/` oder `ui/`. (Die Bachelorarbeit fordert keine strengere
    Trennung; Ziel ist Modularität ohne Übertreibung.)
-4. `features/graph/layout/` ist frei von React (reine Klassen/Funktionen + DOM-freie Mathematik),
-   damit es testbar ist und später in einen Worker könnte.
+4. `features/graph/layout/` ist frei von React (reine Funktionen + DOM-freie Mathematik), damit es
+   testbar ist und in einem Web Worker laufen kann (große Graphen, `largeGraph.ts`).
 5. Regel 1 und 2 erzwingen TypeScript und pnpm: `core` hat `lib` ohne `dom` und kein React als
    Abhängigkeit (pnpm legt nur deklarierte Pakete in `node_modules`), und `exports` in
    `packages/core/package.json` gibt nur den Paket-Einstieg frei – tiefe Importe lösen nicht auf.
@@ -175,27 +178,35 @@ Settings  ─► settingsAtom (persistiert) ─► GraphView startet Layout neu
   (Zoom) → Kanten → Knoten. Klassen und Struktur wie im Altsystem (`circle-node`, `circle-overlay`,
   `inner-circle`, `function`, `dots`, `node-label`, `label-text`, `icon`) – das hält CSS und
   Paritätstests einfach.
-- Layout läuft **außerhalb** von React: Engine-Objekte (`ColaLayout`, `ForceLayout`) mutieren
-  `x/y` der Knoten und melden Ticks. `useLayout` zählt Ticks in einem State, der höchstens einmal
-  pro Animation-Frame erhöht wird → React rendert neu. Ziel ≤ 16 ms pro Frame bei 300 Knoten
-  (P08-S09 prüft; Fallback: Positionen per Ref direkt setzen).
-- Layout-Schnittstelle (`features/graph/layout/types.ts`):
+- Layout läuft **außerhalb** von React: Engines mutieren `x/y` der Knoten und melden Ticks.
+  `useLayout` schreibt die Positionen höchstens einmal pro Animation-Frame direkt ins SVG
+  (`writePositions.ts`); React rendert nur, wenn das nicht geht, und am Ende.
+- Zwei Ebenen (`features/graph/layout/types.ts`):
+  - **`LayoutSolver`**: ein Layout-Verfahren ohne Timer und ohne DOM (`forceSolver.ts`: d3-force
+    mit den Fluss-Regeln aus `flow.ts`). Ein neues Verfahren ist ein neuer Löser.
+  - **`LayoutEngine`**: treibt einen Löser nach der gemeinsamen Uhr (`tickClock.ts`, 240 Ticks/s)
+    an: `forceLayout.ts` in den Animation-Frames des Hauptthreads, `workerLayout.ts` +
+    `layoutHost.ts` in einem Web Worker ab `largeGraph.workerNodes` Knoten. `createLayout.ts`
+    wählt.
 
 ```ts
-export type LayoutNode = {
-  id: string; width: number; height: number;
-  x?: number; y?: number; fx?: number | null; fy?: number | null; index?: number;
+export type LayoutSolver = {
+  tick(): void;
+  atRest(): boolean;
+  hold(node: LayoutNode, x: number, y: number): void;  // Ziehen; weckt das Layout auf
+  release(node: LayoutNode, free: boolean): void;      // Ziehen endet; free = nicht angepinnt
+  freeze(): void;                                      // sofort in Ruhe, ohne weiteren Tick
 };
-export type LayoutLink = { source: LayoutNode; target: LayoutNode; inherits?: boolean };
 export type LayoutEngine = {
   start(): void;                                  // startet/animiert
-  stop(): void;                                   // hält an, gibt Ressourcen frei
+  stop(): void;                                   // endgültig, gibt Ressourcen frei
+  halt(): void;                                   // beendet die Animation, wo die Knoten sind
   onTick(listener: () => void): () => void;       // Abmelde-Funktion
   onEnd(listener: () => void): () => void;
-  dragStart(node: LayoutNode): void;
   drag(node: LayoutNode, position: { x: number; y: number }): void;
   dragEnd(node: LayoutNode, options: { pin: boolean }): void;
 };
+// Wiederherstellen einer Ansicht (ADR-011 A22): LayoutRestore = { running: boolean }
 ```
 
 - Zoom/Pan: eigener Hook `usePanZoom` (Wheel, Pointer, Übergänge, `zoomToFit`). Keine

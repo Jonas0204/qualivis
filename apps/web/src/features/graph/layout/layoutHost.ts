@@ -1,10 +1,10 @@
-import { graphSettings, type ReactConstraint } from '@qualivis/core';
-import { createFlowRules } from './flow';
-import { createForceSimulation } from './forceLayout';
-import type { LayoutLink, LayoutNode } from './types';
+import type { ReactConstraint } from '@qualivis/core';
+import { createForceSolver } from './forceSolver';
+import { createTickClock } from './tickClock';
+import type { LayoutLink, LayoutNode, LayoutSolver } from './types';
 
 /** A node as the worker gets it: its size and, if it has one, its position and pin. */
-export type HostNode = Pick<LayoutNode, 'width' | 'height' | 'x' | 'y' | 'fx' | 'fy'>;
+type HostNode = Pick<LayoutNode, 'width' | 'height' | 'x' | 'y' | 'fx' | 'fy'>;
 
 /** What the page tells the layout worker (workerLayout.ts). Nodes go by their index. */
 export type LayoutRequest =
@@ -16,7 +16,7 @@ export type LayoutRequest =
           width: number;
           height: number;
           flow?: { constraints: readonly ReactConstraint[] };
-          /** A view restored at rest: the simulation waits with alpha 0, e.g. for dragging. */
+          /** A view restored at rest: the layout waits, e.g. for dragging. */
           atRest: boolean;
       }
     | { type: 'drag'; node: number; x: number; y: number }
@@ -39,20 +39,14 @@ export type LayoutHostOptions = {
     now?: () => number;
 };
 
-type Simulation = ReturnType<typeof createForceSimulation>;
-
-const isAtRest = (simulation: Simulation) => simulation.alpha() < simulation.alphaMin();
-
-/** Ticks per second, as on the main thread (forceLayout.ts). */
-const ticksPerSecond = 240;
 /** The ticks of one slice stop after this time, so that messages (dragging, halt) get their turn. */
 const sliceMs = 8;
-/** Wait when the simulation is ahead of its clock: about one tick. */
+/** Wait when the solver is ahead of its clock: about one tick. */
 const idleMs = 4;
 
 /**
- * The layout inside the web worker: the same simulation and flow rules as on the main thread
- * (forceLayout.ts), with the grid collision. It ticks by the clock, however long the page takes to
+ * The layout inside the web worker: the same solver as on the main thread (forceSolver.ts), with
+ * the grid collision, by the same clock (tickClock.ts). It ticks however long the page takes to
  * draw a frame, and sends the positions when the page has taken the last ones, so slow frames no
  * longer slow the layout down (P08-S09). Returns the handler for the messages of the page.
  */
@@ -61,14 +55,11 @@ export const createLayoutHost = ({
     defer,
     now = () => performance.now(),
 }: LayoutHostOptions): ((request: LayoutRequest) => void) => {
+    const clock = createTickClock();
     let nodes: LayoutNode[] = [];
-    let simulation: Simulation | undefined;
-    let applyRules: (() => void) | undefined;
+    let solver: LayoutSolver | undefined;
     let scheduled = false;
     let awaitingAck = false;
-    let dragging = false;
-    let lastSliceAt: number | undefined;
-    let dueTicks = 0;
     let tickMs: number[] = [];
     let moved = false;
 
@@ -84,11 +75,6 @@ export const createLayoutHost = ({
         awaitingAck = type === 'tick';
     };
 
-    const resetClock = () => {
-        lastSliceAt = undefined;
-        dueTicks = 0;
-    };
-
     const schedule = (delayMs: number) => {
         if (!scheduled) {
             scheduled = true;
@@ -96,44 +82,29 @@ export const createLayoutHost = ({
         }
     };
 
-    /** Ticks what the clock asks for, at most for the time of a slice; true at the end. */
-    const tickDue = (simulation: Simulation): boolean => {
-        const startedAt = now();
-        dueTicks =
-            lastSliceAt === undefined
-                ? 1
-                : dueTicks + ((startedAt - lastSliceAt) * ticksPerSecond) / 1000;
-        lastSliceAt = startedAt;
-        let tickedAt = startedAt;
-        while (dueTicks >= 1) {
-            simulation.tick();
-            applyRules?.();
-            dueTicks--;
-            moved = true;
-            const endedAt = now();
-            tickMs.push(endedAt - tickedAt);
-            tickedAt = endedAt;
-            if (isAtRest(simulation) || endedAt - startedAt > sliceMs) {
-                break;
-            }
-        }
-        return moved && isAtRest(simulation);
-    };
-
     const slice = () => {
         scheduled = false;
-        if (!simulation) {
+        if (!solver) {
             return;
         }
-        if (tickDue(simulation)) {
-            resetClock();
+        const startedAt = now();
+        clock.advance(startedAt);
+        const ticks = clock.run(solver, {
+            now,
+            startedAt,
+            budgetMs: sliceMs,
+            record: ms => tickMs.push(ms),
+        });
+        moved ||= ticks > 0;
+        if (moved && solver.atRest()) {
+            clock.reset();
             send('end');
             return;
         }
         if (moved && !awaitingAck) {
             send('tick');
         }
-        schedule(dueTicks >= 1 ? 0 : idleMs);
+        schedule(clock.hasDue() ? 0 : idleMs);
     };
 
     const start = (request: Extract<LayoutRequest, { type: 'start' }>) => {
@@ -144,48 +115,12 @@ export const createLayoutHost = ({
             return from && to ? [{ source: from, target: to }] : [];
         });
         const { width, height, flow } = request;
-        simulation = createForceSimulation({
-            nodes,
-            links,
-            width,
-            height,
-            flow,
-            gridCollide: true,
-        }).stop();
-        applyRules = flow && createFlowRules(nodes, links, flow.constraints, graphSettings.nodeGap);
+        solver = createForceSolver({ nodes, links, width, height, flow, gridCollide: true });
         if (request.atRest) {
-            simulation.alpha(0);
+            solver.freeze();
         } else {
             schedule(0);
         }
-    };
-
-    const halt = (simulation: Simulation) => {
-        if (!isAtRest(simulation)) {
-            simulation.alpha(0);
-            resetClock();
-            send('end');
-        }
-    };
-
-    const drag = (simulation: Simulation, node: LayoutNode, x: number, y: number) => {
-        // As on the main thread: the simulation reheats on the first move.
-        if (!dragging) {
-            simulation.alphaTarget(graphSettings.dragAlphaTarget);
-            dragging = true;
-        }
-        node.fx = x;
-        node.fy = y;
-        schedule(0);
-    };
-
-    const dragEnd = (simulation: Simulation, node: LayoutNode, release: boolean) => {
-        simulation.alphaTarget(0);
-        if (release) {
-            node.fx = null;
-            node.fy = null;
-        }
-        dragging = false;
     };
 
     return request => {
@@ -193,7 +128,7 @@ export const createLayoutHost = ({
             start(request);
             return;
         }
-        if (!simulation) {
+        if (!solver) {
             return;
         }
         switch (request.type) {
@@ -201,19 +136,24 @@ export const createLayoutHost = ({
                 awaitingAck = false;
                 break;
             case 'halt':
-                halt(simulation);
+                if (!solver.atRest()) {
+                    solver.freeze();
+                    clock.reset();
+                    send('end');
+                }
                 break;
             case 'drag': {
                 const node = nodes[request.node];
                 if (node) {
-                    drag(simulation, node, request.x, request.y);
+                    solver.hold(node, request.x, request.y);
+                    schedule(0);
                 }
                 break;
             }
             case 'dragEnd': {
                 const node = nodes[request.node];
                 if (node) {
-                    dragEnd(simulation, node, request.release);
+                    solver.release(node, request.release);
                 }
                 break;
             }

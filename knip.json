@@ -7,7 +7,8 @@
             "entry": ["tools/**/*.mjs"]
         },
         "packages/core": {
-            "ignore": ["src/legacy/**"]
+            "ignore": ["src/legacy/**"],
+            "includeEntryExports": true
         },
         "apps/web": {}
     }

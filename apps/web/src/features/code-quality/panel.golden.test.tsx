@@ -11,8 +11,8 @@ import {
 import { cleanup, render } from '@testing-library/react';
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import { createNodeSelection } from '../../state/selection';
+import { selectViewGraph } from '../../state/selectViewGraph';
 import { goldenFiles, loadFixture, readGolden } from '../../test/fixtures';
-import { selectViewGraph } from '../graph/selectViewGraph';
 import { CodeQualityContent } from './CodeQualityPanel';
 
 type LegacyPanel = {

@@ -11,7 +11,7 @@ import {
 } from '@qualivis/core';
 
 /** A selected node: the fields the legacy NodeSelection took from the node. */
-export type SelectedNode = Pick<VisualNode, 'id' | 'label' | 'type' | 'report' | 'icons'>;
+type SelectedNode = Pick<VisualNode, 'id' | 'label' | 'type' | 'report' | 'icons'>;
 
 /** A selection as the panels need it: the node plus the code of its file and its lines. */
 export type NodeSelection = SelectedNode & {

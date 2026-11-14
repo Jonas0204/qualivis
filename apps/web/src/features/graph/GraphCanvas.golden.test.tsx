@@ -10,10 +10,10 @@ import {
     type View,
 } from '@qualivis/core';
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
+import { selectViewGraph } from '../../state/selectViewGraph';
 import { goldenFiles, loadFixture, readGolden } from '../../test/fixtures';
 import { renderWithState } from '../../test/renderWithState';
 import { GraphCanvas } from './GraphCanvas';
-import { selectViewGraph } from './selectViewGraph';
 
 type DomNode = {
     id: string;

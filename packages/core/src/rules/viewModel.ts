@@ -32,10 +32,17 @@ export type ViewModel = {
 };
 
 /** Port of helper/generateLinkReferences.ts: link ends become node objects for the layout. */
-const resolveLinks = (links: readonly Link[], nodes: readonly VisualNode[]): VisualLink[] =>
-    links.flatMap(link => {
-        const source = nodes.find(node => node.id === link.source);
-        const target = nodes.find(node => node.id === link.target);
+const resolveLinks = (links: readonly Link[], nodes: readonly VisualNode[]): VisualLink[] => {
+    // By id instead of a search per link end; the first node of an id wins, as with `find`.
+    const byId = new Map<string, VisualNode>();
+    for (const node of nodes) {
+        if (!byId.has(node.id)) {
+            byId.set(node.id, node);
+        }
+    }
+    return links.flatMap(link => {
+        const source = byId.get(link.source);
+        const target = byId.get(link.target);
 
         if (!source) {
             // biome-ignore lint/suspicious/noConsole: legacy log, kept for debugging (user, 09.11.2026)
@@ -50,6 +57,7 @@ const resolveLinks = (links: readonly Link[], nodes: readonly VisualNode[]): Vis
         // instead (user, 09.11.2026). The fixtures have no such link.
         return source && target ? [{ ...link, source, target }] : [];
     });
+};
 
 /**
  * Everything the graph view draws for one graph: nodes with size, warning level, icons and (only

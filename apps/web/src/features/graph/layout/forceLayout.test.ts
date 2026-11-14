@@ -2,7 +2,8 @@ import { type ReactConstraint, reactConstraints } from '@qualivis/core';
 import type { ForceCenter, ForceCollide, ForceLink, ForceManyBody } from 'd3-force';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { perfSnapshot, resetPerfStats } from '../../../lib/perfStats';
-import { createForceLayout, createForceSimulation, type ForceLayoutOptions } from './forceLayout';
+import { createForceLayout, type ForceLayoutOptions } from './forceLayout';
+import { createForceSimulation } from './forceSolver';
 import type { LayoutEngine, LayoutLink, LayoutNode } from './types';
 
 const node = (id: string): LayoutNode => ({ id, width: 48, height: 48 });

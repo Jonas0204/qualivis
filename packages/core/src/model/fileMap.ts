@@ -40,9 +40,3 @@ export type FileTree = {
     type: 'file' | 'folder';
     children?: FileTree[];
 };
-
-export type FlatNode = {
-    expandable: boolean;
-    name: string;
-    level: number;
-};

@@ -9,7 +9,7 @@ import { neoTheme } from './neoTheme';
 import styles from './SourceCodeView.module.css';
 import { selectionRange } from './selectionRange';
 
-export type SourceLines = { lineStart?: number; lineEnd?: number };
+type SourceLines = { lineStart?: number; lineEnd?: number };
 
 /** The editor behind the view; tests pass a fake one, since jsdom cannot measure the text. */
 export type SourceEditor = {

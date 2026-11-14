@@ -10,7 +10,9 @@ vergleicht. Ein Sichtvergleichsbericht unterstützt die menschliche Abnahme (G5)
 
 ## S01 – Paket `e2e` mit Playwright und Microsoft Edge (S)
 - `e2e/package.json` (`@qualivis/e2e`, privat, `devDependencies: { "@playwright/test": "catalog:" }` → 1.64.1),
-  in `pnpm-workspace.yaml` die Zeile `- e2e` aktivieren. Vor der Installation dem Nutzer nennen:
+  in `pnpm-workspace.yaml` die Zeile `- e2e` aktivieren und im Catalog `"@playwright/test": 1.64.1`
+  eintragen (vorher nicht, sonst meldet Knip den Eintrag als unbenutzt). Vor der Installation dem
+  Nutzer nennen:
   Paket, Version, 2 Pakete, Meldungshistorie (CVE-2025-59288, behoben 1.55.1), keine
   Browser-Downloads (ADR-008).
 - Installation nach Nachfrage mit `PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1`: macOS/bash

@@ -42,7 +42,7 @@ export type GraphZoom = ZoomStyle & {
 };
 
 /** Selection (§14) and fading (§12) of the graph. */
-export type GraphHighlight = {
+type GraphHighlight = {
     /** Ids of the selected nodes. */
     selected?: ReadonlySet<string>;
     /** Undefined while nothing is faded. */
@@ -50,7 +50,7 @@ export type GraphHighlight = {
 };
 
 /** Overlapping labels (§13, useLabelCollision). */
-export type GraphLabels = {
+type GraphLabels = {
     /** Ids of the nodes whose label is hidden. */
     hidden: ReadonlySet<string>;
     /** Ref of the label text of a node, for measuring. */

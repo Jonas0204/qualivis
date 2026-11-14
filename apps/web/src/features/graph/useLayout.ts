@@ -2,7 +2,7 @@ import { type DependencyList, useCallback, useEffect, useRef, useState } from 'r
 import { countEvent, recordDuration, timed } from '../../lib/perfStats';
 import type { LayoutEngine } from './layout/types';
 
-export type LayoutState = {
+type LayoutState = {
     /**
      * Grows when React has to draw the new positions: at most once per animation frame while the
      * engine ticks, unless `onFrame` moved the drawn graph itself, and at every end.

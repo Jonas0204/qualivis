@@ -27,7 +27,7 @@ export type SplitPaneProps = {
 };
 
 /** Pixels an arrow key moves a focused gutter. */
-export const gutterKeyStep = 10;
+const gutterKeyStep = 10;
 
 type Drag = {
     pointerId: number;

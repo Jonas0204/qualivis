@@ -1,7 +1,7 @@
 import type { AnalysisResult } from '@qualivis/core';
 import { atom } from 'jotai';
 
-export type AnalysisStatus = 'idle' | 'running' | 'done' | 'error';
+type AnalysisStatus = 'idle' | 'running' | 'done' | 'error';
 
 export type AnalysisState = {
     status: AnalysisStatus;

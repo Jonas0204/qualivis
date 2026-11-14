@@ -8,8 +8,6 @@ import {
     type SelectableNode,
 } from './selection';
 
-export type { NodeSelection, SelectedNode } from './selection';
-
 /** The selected nodes; null when nothing is selected, as in the legacy app. */
 export const selectionAtom = atom<NodeSelection[] | null>(null);
 

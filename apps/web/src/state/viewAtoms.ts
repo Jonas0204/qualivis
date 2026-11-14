@@ -1,6 +1,6 @@
 import { atom } from 'jotai';
-import { selectViewGraph } from '../features/graph/selectViewGraph';
 import { analysisAtom } from './analysisAtoms';
+import { selectViewGraph } from './selectViewGraph';
 
 export type ViewMode = 'upload' | 'graph';
 

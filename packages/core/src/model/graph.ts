@@ -2,7 +2,7 @@
 import type { NodeKind, NodeType } from './types';
 
 /** Same shape as d3-force's SimulationNodeDatum (kept local to stay dependency-free). */
-export type SimulationNodeDatum = {
+type SimulationNodeDatum = {
     index?: number;
     x?: number;
     y?: number;
@@ -10,14 +10,6 @@ export type SimulationNodeDatum = {
     vy?: number;
     fx?: number | null;
     fy?: number | null;
-};
-
-export type RefLink = SimulationNodeDatum & {
-    source: number | Node;
-    target: number | Node;
-    value?: number;
-    id?: string;
-    inherits?: boolean;
 };
 
 export type Node = SimulationNodeDatum & {
@@ -43,19 +35,7 @@ export type Node = SimulationNodeDatum & {
     cluster?: number;
 };
 
-export type NodeSelection = {
-    id: string;
-    type: NodeType;
-    label?: string;
-    // biome-ignore lint/suspicious/noExplicitAny: legacy field type kept 1:1; typed in P08-S01
-    report: any;
-    icons: NodeIcon[];
-    code?: string;
-    lineStart?: number;
-    lineEnd?: number;
-};
-
-export type NodeIcon = {
+type NodeIcon = {
     icon: string; // Material icon name
     class: 'warn' | 'error';
     description: string;
@@ -73,9 +53,4 @@ export type Link = {
 export type Graph = {
     nodes: Node[];
     links: Link[];
-};
-
-export type Selection = {
-    start: number;
-    end: number;
 };

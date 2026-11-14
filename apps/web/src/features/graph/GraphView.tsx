@@ -20,6 +20,7 @@ import {
     selectionAtom,
     selectNodeAtom,
 } from '../../state/selectionAtoms';
+import type { ViewGraph } from '../../state/selectViewGraph';
 import { componentIdAtom, fullScreenAtom, viewGraphAtom } from '../../state/viewAtoms';
 import { GraphActions } from './GraphActions';
 import { GraphCanvas, type GraphEvents } from './GraphCanvas';
@@ -38,7 +39,6 @@ import {
     useSavedViews,
     useSaveView,
 } from './savedViews';
-import type { ViewGraph } from './selectViewGraph';
 import { useElementSize } from './useElementSize';
 import { useFade } from './useFade';
 import { type LabelMeasure, useLabelCollision } from './useLabelCollision';

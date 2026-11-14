@@ -93,8 +93,9 @@ d3-Kollision).
 
 **Worker im Einzelnen.**
 
-- `layoutHost.ts` enthält die Logik ohne Worker-API (testbar): dieselbe Simulation
-  (`createForceSimulation`) und dieselben Fluss-Regeln (`createFlowRules`) wie im Haupt-Thread.
+- `layoutHost.ts` enthält die Logik ohne Worker-API (testbar): denselben Löser
+  (`createForceSolver`: Simulation und Fluss-Regeln) und dieselbe Uhr (`tickClock.ts`) wie im
+  Haupt-Thread.
 - Takt: 240 Schritte pro Sekunde nach der Uhr, in Scheiben von höchstens 8 ms, damit Nachrichten
   (Ziehen, Stoppen) drankommen. Liegt die Simulation hinter der Uhr, rechnet sie ohne Pause
   weiter; Schritte werden nicht verworfen.

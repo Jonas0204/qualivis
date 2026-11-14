@@ -23,6 +23,24 @@ export type LayoutLink = { source: LayoutNode; target: LayoutNode; inherits?: bo
  */
 export type LayoutRestore = { running: boolean };
 
+/**
+ * One layout method, without timers and without the DOM: the main thread (forceLayout.ts) and the
+ * web worker (layoutHost.ts) drive it by the same clock (tickClock.ts). It moves the nodes it was
+ * made with.
+ */
+export type LayoutSolver = {
+    /** One step of the layout. */
+    tick(): void;
+    /** Further ticks would hardly move the nodes. */
+    atRest(): boolean;
+    /** Holds a node at a position while it is dragged; the first hold wakes the layout up. */
+    hold(node: LayoutNode, x: number, y: number): void;
+    /** Ends dragging; `free` lets the node move again, otherwise it stays pinned. */
+    release(node: LayoutNode, free: boolean): void;
+    /** Comes to rest at once, without a further tick; holding wakes it up again. */
+    freeze(): void;
+};
+
 export type LayoutEngine = {
     /** Starts the animation. */
     start(): void;

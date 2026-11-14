@@ -1,14 +1,14 @@
 import { useAtom, useAtomValue, useStore } from 'jotai';
 import { useEffect, useLayoutEffect, useRef } from 'react';
-import { findComponent } from '../features/graph/selectViewGraph';
 import { analysisAtom } from '../state/analysisAtoms';
+import { findComponent } from '../state/selectViewGraph';
 import { componentIdAtom } from '../state/viewAtoms';
 
 /** The search parameter that holds the component of the component view (N5). */
-export const componentParam = 'id';
+const componentParam = 'id';
 
 /** The component id in the URL of the window, or undefined. */
-export const componentIdFromUrl = (): string | undefined =>
+const componentIdFromUrl = (): string | undefined =>
     new URLSearchParams(window.location.search).get(componentParam) ?? undefined;
 
 /** The URL of the window with `?id=` set to the component id, or without it. */

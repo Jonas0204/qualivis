@@ -7,7 +7,7 @@ import { hiddenLabels, type LabelRect } from './labelCollision';
 /** Measures a label text; jsdom has no layout, so tests pass fixed values. */
 export type LabelMeasure = (label: SVGTSpanElement) => Rect;
 
-export const browserLabelMeasure: LabelMeasure = label => label.getBoundingClientRect();
+const browserLabelMeasure: LabelMeasure = label => label.getBoundingClientRect();
 
 export type LabelCollisionOptions = {
     /** Setting hideOverlappingLabels. */

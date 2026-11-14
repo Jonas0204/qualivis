@@ -12,7 +12,7 @@ const tag = '#9c3328';
 const string = '#b35e14';
 const variable = '#047d65';
 
-export const neoEditorTheme = EditorView.theme({
+const neoEditorTheme = EditorView.theme({
     '&': {
         height: '100%',
         backgroundColor: '#ffffff',
@@ -41,7 +41,7 @@ export const neoEditorTheme = EditorView.theme({
     },
 });
 
-export const neoHighlightStyle = HighlightStyle.define([
+const neoHighlightStyle = HighlightStyle.define([
     { tag: [tags.comment, tags.lineComment, tags.blockComment], color: comment },
     {
         tag: [

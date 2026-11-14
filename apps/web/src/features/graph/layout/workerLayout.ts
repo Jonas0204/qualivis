@@ -1,6 +1,7 @@
 import { forceSimulation } from 'd3-force';
 import { recordDuration } from '../../../lib/perfStats';
 import type { ForceLayoutOptions } from './forceLayout';
+import { freedAfterDrag } from './forceSolver';
 import type { LayoutReply, LayoutRequest } from './layoutHost';
 import type { LayoutEngine, LayoutNode } from './types';
 
@@ -11,7 +12,7 @@ export type LayoutWorker = {
     onmessage: ((event: { data: LayoutReply }) => void) | null;
 };
 
-export const startLayoutWorker = (): LayoutWorker => {
+const startLayoutWorker = (): LayoutWorker => {
     const worker = new Worker(new URL('./layoutWorker.ts', import.meta.url), { type: 'module' });
     const layoutWorker: LayoutWorker = {
         postMessage: request => worker.postMessage(request),
@@ -143,8 +144,7 @@ export const createWorkerLayout = (
             if (index === undefined) {
                 return;
             }
-            // Legacy behaviour: in the flow layout (WebCola there) Shift did not pin the node.
-            const release = !pin || flow !== undefined;
+            const release = freedAfterDrag(pin, flow);
             if (release) {
                 node.fx = null;
                 node.fy = null;

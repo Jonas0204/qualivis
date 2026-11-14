@@ -1,6 +1,6 @@
 import { analyzeProject } from '@qualivis/core';
 import { describe, expect, it } from 'vitest';
-import { loadFixture } from '../../test/fixtures';
+import { loadFixture } from '../test/fixtures';
 import { selectViewGraph } from './selectViewGraph';
 
 const mini = analyzeProject(loadFixture('mini'));

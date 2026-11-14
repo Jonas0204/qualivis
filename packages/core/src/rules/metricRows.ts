@@ -3,7 +3,7 @@ import type { Node } from '../model/graph';
 import { qualityMetrics, warningThreshold } from '../model/qualityMetrics';
 import { resolveThreshold } from './thresholds';
 
-export type MetricLevel = 'ok' | 'warn' | 'error';
+type MetricLevel = 'ok' | 'warn' | 'error';
 
 /** One bar of the code quality panel. */
 export type MetricRow = {

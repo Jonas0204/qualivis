@@ -16,7 +16,7 @@ import { createPortal } from 'react-dom';
 import styles from './Tooltip.module.css';
 
 /** Props the tooltip adds to its child; the child has to pass them on to its element. */
-export type TooltipTriggerProps = {
+type TooltipTriggerProps = {
     'aria-describedby'?: string;
     ref?: Ref<HTMLElement>;
     onPointerEnter?: (event: PointerEvent<HTMLElement>) => void;
