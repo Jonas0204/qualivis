@@ -33,6 +33,7 @@ import { createLayout as createDefaultLayout, type LayoutFactory } from './layou
 import { runsInWorker } from './layout/largeGraph';
 import type { LayoutNode } from './layout/types';
 import {
+    isPlaced,
     isRestoredAtRest,
     layoutRestore,
     placeLike,
@@ -361,7 +362,7 @@ export const GraphView = ({
     };
 
     // Nodes get their first position when the engine starts; draw them only from then on.
-    const placed = model?.nodes.every(node => node.x !== undefined && node.y !== undefined);
+    const placed = model?.nodes.every(isPlaced);
 
     return (
         <div ref={areaRef} className="qv-graph-area">

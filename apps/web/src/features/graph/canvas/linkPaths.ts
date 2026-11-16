@@ -1,4 +1,5 @@
 import type { View, VisualLink } from '@qualivis/core';
+import { round } from '../../../lib/round';
 import type { Bounds } from '../zoom/zoomMath';
 import { linkCoordinates } from './GraphLink';
 
@@ -32,9 +33,6 @@ export const bundleLinks = (
     }
     return bundles;
 };
-
-/** Two decimals are far below a pixel at any zoom and keep the path short. */
-const round = (value: number) => Math.round(value * 100) / 100;
 
 const outside = (x1: number, y1: number, x2: number, y2: number, area: Bounds) =>
     Math.max(x1, x2) < area.x ||

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { metricValue, resolveThreshold } from '../thresholds';
+import { metricValue, resolveThreshold, thresholdLevel } from '../thresholds';
 
 describe('resolveThreshold', () => {
     it('uses the custom threshold for the render function', () => {
@@ -38,5 +38,19 @@ describe('metricValue', () => {
 
     it('throws like the legacy code when an intermediate object is missing', () => {
         expect(() => metricValue(report, 'foo.bar')).toThrow(TypeError);
+    });
+});
+
+describe('thresholdLevel', () => {
+    it('is error from the threshold on and warn from 80 % of it', () => {
+        expect(thresholdLevel(100, 100)).toBe('error');
+        expect(thresholdLevel(150, 100)).toBe('error');
+        expect(thresholdLevel(80, 100)).toBe('warn');
+        expect(thresholdLevel(99.9, 100)).toBe('warn');
+        expect(thresholdLevel(79.9, 100)).toBe('ok');
+    });
+
+    it('is ok for NaN, like the comparisons of the legacy code', () => {
+        expect(thresholdLevel(Number.NaN, 100)).toBe('ok');
     });
 });

@@ -46,5 +46,5 @@ byte-identical in all 13 files; for `realworld` the report, file map and app gra
 See [tools/legacy/README.md](../../tools/legacy/README.md) ("Capturing goldens"). Before every
 fixture reset the app state (`window.onbeforeunload = null; localStorage.clear(); …`). Keep the
 browser window visible: hidden tabs throttle timers and make the capture slow (the `realworld`
-capture takes a few minutes). Positions (`x`, `y`) depend on the container size and are only
-needed for the optional layout comparison G3.
+capture takes a few minutes). Positions (`x`, `y`) depend on the container size; no test
+compares them since the layout comparison G3 was dropped (WebCola replaced).

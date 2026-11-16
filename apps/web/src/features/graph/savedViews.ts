@@ -38,7 +38,9 @@ export const placeLike = (
     }
 };
 
-const isPlaced = (node: LayoutNode) => node.x !== undefined && node.y !== undefined;
+/** The node has a position: the layout engine has started, or a saved view placed it. */
+export const isPlaced = (node: Pick<LayoutNode, 'x' | 'y'>) =>
+    node.x !== undefined && node.y !== undefined;
 
 /**
  * The saved view if it has the same nodes with the same sizes; then the nodes get its positions.

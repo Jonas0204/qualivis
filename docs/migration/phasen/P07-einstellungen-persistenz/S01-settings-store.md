@@ -11,7 +11,7 @@ Einstellungen liegen in einem Atom, starten mit den Altsystem-Standardwerten, we
 
 ## Dateien
 `apps/web/src/lib/storage.ts` (+ Test), `apps/web/src/state/settingsAtoms.ts` (+ Test),
-`apps/web/src/test/setup.ts`; alle Stellen, die bisher `defaultSettings` oder das vorläufige
+`apps/web/src/test/setup.ts`, `packages/core/src/model/settings.ts`; alle Stellen, die bisher `defaultSettings` oder das vorläufige
 Vollbild-Atom `fullScreenAtom` (`state/viewAtoms.ts`) direkt nutzen.
 
 ## Schritte
@@ -29,7 +29,10 @@ Vollbild-Atom `fullScreenAtom` (`state/viewAtoms.ts`) direkt nutzen.
      Option in der Doku der installierten Jotai-Version prüfen).
    - Schreib-Atom `updateSettingsAtom` (Teilwerte zusammenführen, wie `settings.service.ts:34-38`).
 3. Alle Verwender (`GraphView`, `GraphActions`, Vollbild) auf `settingsAtom` umstellen; das vorläufige
-   `fullScreenAtom` entfällt (`settings.fullScreen`).
+   `fullScreenAtom` entfällt (`settings.fullScreen`). Weil `validateSettings` immer ein vollständiges
+   Objekt liefert, werden die Felder von `Settings` Pflicht (keine `?`), und die Ersatzwerte
+   `settings.… ?? true` in `GraphView.tsx` und `canvas/useFade.ts` entfallen; die Standardwerte stehen
+   dann nur noch in `defaultSettings`.
 4. `apps/web/src/test/setup.ts`: im vorhandenen `afterEach` zusätzlich `localStorage.clear()`
    (`atomWithStorage` schreibt auch beim Hydrieren durch den `TestProvider`, Teststrategie §2,
    Regel 5).

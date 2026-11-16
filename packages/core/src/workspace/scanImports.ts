@@ -48,12 +48,7 @@ const toReference = (statement: Statement): ImportReference | undefined => {
     }
 };
 
-/**
- * Import and re-export specifiers at the top level of a file, in source order. Only a parse with
- * the parser of the analysis, no traversal; dynamic `import()` and `require()` are not reported.
- * A parse error is logged with the path and gives an empty list (the analysis reports it later).
- */
-export const scanImports = (file: SourceFile): ImportReference[] => {
+const scan = (file: SourceFile): readonly ImportReference[] => {
     let program: Program;
     try {
         program = parse(file.code, file.path).program;
@@ -66,4 +61,22 @@ export const scanImports = (file: SourceFile): ImportReference[] => {
         const reference = toReference(statement);
         return reference ? [reference] : [];
     });
+};
+
+/** Selecting the files and rewriting their imports scan the same file objects: parse each once. */
+const scanned = new WeakMap<SourceFile, readonly ImportReference[]>();
+
+/**
+ * Import and re-export specifiers at the top level of a file, in source order. Only a parse with
+ * the parser of the analysis, no traversal; dynamic `import()` and `require()` are not reported.
+ * A parse error is logged with the path and gives an empty list (the analysis reports it later).
+ * The result is kept per file object, so a second call does not parse again.
+ */
+export const scanImports = (file: SourceFile): readonly ImportReference[] => {
+    let references = scanned.get(file);
+    if (!references) {
+        references = scan(file);
+        scanned.set(file, references);
+    }
+    return references;
 };

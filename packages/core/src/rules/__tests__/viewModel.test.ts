@@ -118,8 +118,8 @@ describe('buildViewModel', () => {
 
         // Indexes: render 1, constructor 2, componentDidMount 3; render comes last.
         expect(model.constraints).toEqual([
-            { axis: 'x', left: 2, right: 3, gap: 100 },
-            { axis: 'x', left: 3, right: 1, gap: 100 },
+            { left: 2, right: 3, gap: 100 },
+            { left: 3, right: 1, gap: 100 },
         ]);
     });
 

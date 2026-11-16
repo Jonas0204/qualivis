@@ -1,7 +1,6 @@
 // Copied from legacy/angular/src/app/constants/graph-settings.ts.
 export const graphSettings = {
     fadeOpacity: 0.1,
-    zoomTransition: '0.1s ease-out',
     selectedCircleStrokeWidth: 2,
     linkColor: '#999',
     linkOpacity: 0.6,

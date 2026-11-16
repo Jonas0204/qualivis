@@ -21,23 +21,25 @@ Darstellungsregeln liegen framework-frei in `@qualivis/core`.
 React-Code analysieren (G6).
 
 ### ADR-002 Alte Analysebibliotheken als Pakete weiterverwenden (kein Vendoring)
-**Kontext:** escomplex (0.1.0, 2018), WebCola (3.4.0, 2019), jLouvain (2.0.0, 2016) sind nicht mehr
+**Kontext:** escomplex (0.1.0, 2018) und jLouvain (2.0.0, 2016) sind nicht mehr
 gepflegt. Alternativen ändern Ergebnisse. Die App läuft lokal mit eigenen Projekten; die
 Bibliotheken haben keine bekannten ausnutzbaren Sicherheitsmeldungen.
 **Entscheidung:** Neueste verfügbare Versionen als normale Abhängigkeiten, mit den zwei
 bestehenden Patches als pnpm-Patches. Kein Kopieren des Quelltexts ins Repo.
 **Folgen:** escomplex zieht `babel-runtime@6`, `core-js@2`, `regenerator-runtime@0.11`,
 `backbone-esnext-events` nach (13 Pakete). Neubewertung, falls eine ausnutzbare Meldung bekannt
-wird (dann Vendoring als eigene ADR).
+wird (dann Vendoring als eigene ADR). WebCola fiel ursprünglich auch unter diese Entscheidung, ist
+seit P08 aber ersetzt (ADR-003).
 
 ### ADR-003 D3-DOM-Code durch React ersetzen, nur d3-force behalten
 **Kontext:** Das Altsystem nutzt d3 v5 komplett (37 Pakete) und WebCola bringt d3 v1 mit.
 **Entscheidung:** SVG rendert React; Zoom/Pan, Drag, Übergänge (CSS) und Farbumrechnung sind
-eigener Code. `d3-force` (+3 kleine d3-Pakete) bleibt für das Kraft-Layout. WebCola wird nur über
-`webcola/dist/src/layout` (ohne d3-Adapter) benutzt.
+eigener Code. `d3-force` (+3 kleine d3-Pakete) bleibt für das Layout. Das Fluss-Layout
+(Einstellung `colaLayout`) ist seit P08 kein WebCola mehr, sondern d3-force mit eigenen Fluss-Regeln
+(`apps/web/src/features/graph/layout/flow.ts`).
 **Folgen:** Layout-Positionen dürfen vom Altsystem abweichen (vom Nutzer akzeptiert); die
-Darstellungsregeln bleiben gleich (G2). WebCola installiert seine d3-v1-Abhängigkeiten trotzdem
-(nicht im Bundle, da nicht importiert).
+Darstellungsregeln bleiben gleich (G2). Positionen werden nicht mit dem Altsystem verglichen (G3
+entfallen).
 
 ### ADR-004 Babel 7.29 statt Babel 8 (vorerst)
 **Kontext:** Babel 8 ist seit 16.06.2026 stabil und ändert AST-Formen (dynamischer Import →
@@ -115,6 +117,7 @@ Umgebungsvariable `PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1`; nie `playwright install`
 | A22 | Jeder Wechsel der Ansicht (Doppelklick in eine KV, „Back to app graph“, Zurück im Browser) legt den Graphen neu aus, mit Zoom to fit. Bei einem großen App-Graphen blockiert schon der Start von WebCola (`start(40, 20, 20)`) die Seite für Sekunden, danach läuft die Animation von vorn | Eine Ansicht, die in derselben Analyse schon zu sehen war, kommt so zurück, wie sie verlassen wurde: gleiche Positionen und gleicher Zoom, ohne die ersten Iterationen. War das Layout zur Ruhe gekommen (oder angehalten), bleibt es stehen, bis ein Knoten gezogen wird; sonst läuft es von den Positionen aus weiter und passt am Ende ein. Neu ausgelegt wird wie bisher bei neuer Analyse, anderer Größenmetrik, anderer Einstellung „Node sizes based on metrics“ und wenn Knoten entfernt wurden (G5) | Bedienbarkeit bei großen Graphen (Nutzerentscheidung 10.11.2026) |
 | A23 | Das Code-Quality-Panel zeigt zu einer Metrik nur die kurze Beschreibung als Tooltip am Namen | Ein Klick auf den Namen (mit Info-Symbol) klappt unter dem Balken eine Erklärung auf: was die Metrik misst, die Formel, was zählt und was nicht (nach typhonjs-escomplex 0.1 und der JSX-Zählung der Analyse) und die Schwellen des Knotens. Tooltip, Werte und Balken bleiben wie im Altsystem | Verständlichkeit (Nutzerentscheidung 10.11.2026) |
 | A24 | Ein Layout läuft, bis es von selbst zur Ruhe kommt; bei großen Graphen kann das lange dauern. Transform, Schriftgröße und Linienbreite gleiten beim Zoomen per CSS-Übergang (0,1 s, ease-out); bei großen Graphen flackerte in Chrome dabei alles, auch die Kopfleiste | Ein Knopf „Stop layout“ links über dem Graphen ist sichtbar, solange das Layout läuft (auch nach dem Ziehen eines Knotens), und beendet es wie ein normales Ende (Zoom to fit beim ersten Ende eines Laufs, Beschriftungen neu gemessen). Den Übergang animiert `useZoomTransition` per `requestAnimationFrame`; die Linienbreite gleitet nur noch beim Zoomen mit dem Mausrad, nicht bei Zoom to fit und Zwei-Finger-Zoom | Bedienbarkeit bei großen Graphen (Nutzerentscheidung 10.11.2026) |
+| A25 | Bei einer KV mit mehr als 30 Knoten und Fluss-Layout kam einmal der Tipp „Try out disabling flow layout on large graphs“ (Aktion „Change now“), weil WebCola bei großen Graphen langsam war | Kein Tipp: Das Fluss-Layout ist seit P08 eigener Code auf d3-force und schnell (Schritt 1,1 ms statt 69,5 ms, P08-README) | Der Tipp würde etwas Falsches nahelegen (Nutzerentscheidung 16.11.2026) |
 
 Alles andere – auch die Eigenheiten K1–K12 und V2, V4–V7 – bleibt gleich. Weitere
 Abweichungen nur mit neuer ADR und Zustimmung des Nutzers. Die Golden-Tests sind von A8, A9 und

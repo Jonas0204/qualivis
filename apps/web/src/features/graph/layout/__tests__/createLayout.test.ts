@@ -8,19 +8,19 @@ import { createWorkerLayout } from '../workerLayout';
 vi.mock('../forceLayout', () => ({ createForceLayout: vi.fn(() => ({ name: 'force' })) }));
 vi.mock('../workerLayout', () => ({ createWorkerLayout: vi.fn(() => ({ name: 'worker' })) }));
 
-const a: LayoutNode = { id: 'a', width: 20, height: 20 };
-const b: LayoutNode = { id: 'b', width: 20, height: 20 };
+const a: LayoutNode = { id: 'a', width: 20 };
+const b: LayoutNode = { id: 'b', width: 20 };
 const options: LayoutOptions = {
     nodes: [a, b],
     links: [{ source: a, target: b }],
     width: 800,
     height: 600,
-    constraints: [{ axis: 'x', left: 0, right: 1, gap: 100 }],
+    constraints: [{ left: 0, right: 1, gap: 100 }],
 };
 const { constraints, ...forceOptions } = options;
 
 const manyNodes = (count: number): LayoutNode[] =>
-    Array.from({ length: count }, (_, index) => ({ id: `n${index}`, width: 20, height: 20 }));
+    Array.from({ length: count }, (_, index) => ({ id: `n${index}`, width: 20 }));
 
 describe('createLayout', () => {
     afterEach(() => {

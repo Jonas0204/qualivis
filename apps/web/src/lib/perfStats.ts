@@ -4,6 +4,8 @@
  * `performance.now()` and an array push, so it stays on in production builds.
  */
 
+import { round } from './round';
+
 /** Keeps the last values of a series for the percentiles; count, total and max cover all. */
 const keptValues = 5000;
 
@@ -25,8 +27,6 @@ export type PerfSnapshot = {
 
 const series = new Map<string, Series>();
 const counts = new Map<string, number>();
-
-const round = (ms: number) => Math.round(ms * 100) / 100;
 
 /** Adds one duration in milliseconds to the series `name`. */
 export const recordDuration = (name: string, ms: number): void => {

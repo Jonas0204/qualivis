@@ -1,11 +1,11 @@
 // Port of GraphComponent.getNodeIcons (legacy graph.component.ts:371-470). Order, conditions and
 // texts as in docs/migration/01-referenz-altsystem/03-visuelle-regeln.md §3.
 import type { Node } from '../model/graph';
-import { qualityMetrics, warningThreshold } from '../model/qualityMetrics';
+import { qualityMetrics } from '../model/qualityMetrics';
 import type { MetricReport } from '../model/report';
 import { deprecatedMethods } from '../model/specialMethods';
 import type { View } from './nodeVisuals';
-import { metricValue, resolveThreshold } from './thresholds';
+import { metricValue, resolveThreshold, thresholdLevel } from './thresholds';
 
 /** Text of an icon with an optional link; the legacy app used HTML strings (ADR-011 A3). */
 export type IconDescription = { text: string; link?: { href: string } };
@@ -38,10 +38,10 @@ const thresholdIcon = (node: Node, report: MetricReport): VisualIcon | undefined
         if (!threshold) {
             continue;
         }
-        const value = metricValue(report, id);
-        if (value >= threshold * warningThreshold && value < threshold) {
+        const level = thresholdLevel(metricValue(report, id), threshold);
+        if (level === 'warn') {
             hasWarning = true;
-        } else if (value >= threshold) {
+        } else if (level === 'error') {
             hasError = true;
             break;
         }

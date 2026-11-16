@@ -1,3 +1,4 @@
+import type { FileMap } from '@qualivis/core';
 import { useAtom, useAtomValue, useStore } from 'jotai';
 import { useEffect, useLayoutEffect, useRef } from 'react';
 import { analysisAtom } from '../state/analysisAtoms';
@@ -22,6 +23,12 @@ const urlWith = (componentId: string | undefined) => {
     }
     return url;
 };
+
+/** An id of a component the analysis does not have, or of one without a graph. */
+const lacksGraph = (fileMap: FileMap | undefined, componentId: string | undefined) =>
+    fileMap !== undefined &&
+    componentId !== undefined &&
+    !findComponent(fileMap, componentId)?.graph;
 
 /**
  * Keeps the component view and the URL in step, as the legacy router did with `?id=`
@@ -59,7 +66,7 @@ export const useUrlState = () => {
 
     // An id of a component the analysis does not have (or one without a graph) goes.
     useEffect(() => {
-        if (fileMap && componentId !== undefined && !findComponent(fileMap, componentId)?.graph) {
+        if (lacksGraph(fileMap, componentId)) {
             replaceNextRef.current = true;
             setComponentId(undefined);
         }
@@ -76,7 +83,7 @@ export const useUrlState = () => {
         }
         // An id without a graph goes at once (effect above); it must not reach the URL, or it would
         // take the place of the entry of the view before.
-        if (fileMap && componentId !== undefined && !findComponent(fileMap, componentId)?.graph) {
+        if (lacksGraph(fileMap, componentId)) {
             return;
         }
         const replace = replaceNextRef.current;

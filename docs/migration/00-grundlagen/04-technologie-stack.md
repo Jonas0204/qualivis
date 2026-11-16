@@ -25,8 +25,7 @@ wird auf **Windows und macOS**; alle Befehle sind auf beiden gleich.
 | `typhonjs-escomplex-project` | core | Metriken (+ 2 pnpm-Patches, §4) |
 | `jlouvain` | core | Louvain-Cluster |
 | `path-browserify` | core, web | Nodes `path.posix` als Paket, für escomplex in Node **und** Browser (ADR-005) |
-| `webcola` | web | geschichtetes Layout (nur `dist/src/layout`) |
-| `d3-force` | web | Kraft-Layout |
+| `d3-force` | web | Kraft- und Fluss-Layout (Fluss-Regeln sind eigener Code) |
 | `react`, `react-dom` | web | UI |
 | `jotai` | web | Zustandsverwaltung (ADR-013) |
 | `@codemirror/state`, `/view`, `/language`, `/lang-javascript`, `/search` | web | Quelltext-Anzeige mit Suche (Strg/Cmd+F) |

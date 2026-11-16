@@ -2,11 +2,11 @@
 // docs/migration/01-referenz-altsystem/03-visuelle-regeln.md §2.
 import type { Node } from '../model/graph';
 import { graphSettings } from '../model/graphSettings';
-import { sizeConstant, warningThreshold } from '../model/qualityMetrics';
+import { sizeConstant } from '../model/qualityMetrics';
 import type { MetricReport } from '../model/report';
 import { getNodeIcons, type VisualIcon } from './icons';
 import { previewWidth } from './previewGeometry';
-import { metricValue, resolveThreshold } from './thresholds';
+import { metricValue, resolveThreshold, thresholdLevel } from './thresholds';
 
 /** App view (`app`) or component view (`component`), see visual rules §1. */
 export type View = 'app' | 'component';
@@ -59,8 +59,9 @@ export const computeNodeVisual = (node: Node, options: VisualOptions): NodeVisua
     }
 
     const value = metricValue(report, options.sizeMetric);
-    const warn = value >= threshold * warningThreshold && value < threshold;
-    const error = !warn && value >= threshold;
+    const level = thresholdLevel(value, threshold);
+    const warn = level === 'warn';
+    const error = level === 'error';
 
     if (!options.nodeSizesBasedOnMetrics) {
         // ADR-011 A8 corrects legacy quirk V1: the size is fixed, icons and levels are computed anyway.

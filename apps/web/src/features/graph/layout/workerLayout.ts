@@ -3,6 +3,7 @@ import { recordDuration } from '../../../lib/perfStats';
 import type { ForceLayoutOptions } from './forceLayout';
 import { freedAfterDrag } from './forceSolver';
 import type { LayoutReply, LayoutRequest } from './layoutHost';
+import { createLayoutListeners } from './layoutListeners';
 import type { LayoutEngine, LayoutNode } from './types';
 
 /** The part of a web worker the layout uses; tests pass a fake one. */
@@ -38,12 +39,7 @@ export const createWorkerLayout = (
     // The start positions of d3, at once: the graph is drawn before the worker answers.
     forceSimulation(nodes).stop();
     const indexOf = new Map(nodes.map((node, index) => [node, index]));
-    const listeners = { tick: new Set<() => void>(), end: new Set<() => void>() };
-    const notify = (type: keyof typeof listeners) => {
-        for (const listener of listeners[type]) {
-            listener();
-        }
-    };
+    const { notify, ...listeners } = createLayoutListeners();
     let worker: LayoutWorker | undefined = startWorker();
     let atRest = false;
     let ackFrame: number | undefined;
@@ -81,9 +77,8 @@ export const createWorkerLayout = (
             atRest = restore !== undefined && !restore.running;
             worker?.postMessage({
                 type: 'start',
-                nodes: nodes.map(({ width, height, x, y, fx, fy }) => ({
+                nodes: nodes.map(({ width, x, y, fx, fy }) => ({
                     width,
-                    height,
                     x,
                     y,
                     fx,
@@ -112,8 +107,7 @@ export const createWorkerLayout = (
                 cancelAnimationFrame(ackFrame);
                 ackFrame = undefined;
             }
-            listeners.tick.clear();
-            listeners.end.clear();
+            listeners.clear();
         },
         // The worker answers with the end.
         halt: () => {
@@ -121,14 +115,8 @@ export const createWorkerLayout = (
                 worker?.postMessage({ type: 'halt' });
             }
         },
-        onTick: listener => {
-            listeners.tick.add(listener);
-            return () => listeners.tick.delete(listener);
-        },
-        onEnd: listener => {
-            listeners.end.add(listener);
-            return () => listeners.end.delete(listener);
-        },
+        onTick: listeners.onTick,
+        onEnd: listeners.onEnd,
         drag: (node, { x, y }) => {
             const index = nodeIndex(node);
             if (index === undefined) {

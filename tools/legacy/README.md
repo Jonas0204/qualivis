@@ -56,5 +56,5 @@ Golden files are never edited by hand; see [testdata/README.md](../../testdata/R
 - A click on a node shows a one-time snackbar; this does not disturb the capture.
 - Only default settings are captured. Variants (e.g. another size metric) are covered by unit
   tests of the rules (`packages/core/src/rules/`).
-- Positions (`x`, `y`) depend on the container size (1024 × 768 window → container 158 × 704 px);
-  the layout comparison G3 uses them (`colaLayout.golden.test.ts`).
+- Positions (`x`, `y`) depend on the container size (1024 × 768 window → container 158 × 704 px).
+  No test compares them: the layout comparison G3 was dropped when WebCola was replaced.

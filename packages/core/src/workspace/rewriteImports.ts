@@ -17,7 +17,7 @@ const relativeSpecifier = (fromPath: string, target: string): string => {
 export const rewriteImports = (file: SourceFile, resolve: ImportResolver): SourceFile => {
     let code = file.code;
     // Back to front, so the offsets of the earlier references stay valid.
-    for (const { specifier, start, end, typeOnly } of scanImports(file).reverse()) {
+    for (const { specifier, start, end, typeOnly } of scanImports(file).slice().reverse()) {
         const target = typeOnly ? undefined : resolve(specifier, file.path);
         if (target !== undefined) {
             code = `${code.slice(0, start + 1)}${relativeSpecifier(file.path, target)}${code.slice(end - 1)}`;

@@ -4,7 +4,7 @@ import { createTickClock } from './tickClock';
 import type { LayoutLink, LayoutNode, LayoutSolver } from './types';
 
 /** A node as the worker gets it: its size and, if it has one, its position and pin. */
-type HostNode = Pick<LayoutNode, 'width' | 'height' | 'x' | 'y' | 'fx' | 'fy'>;
+type HostNode = Pick<LayoutNode, 'width' | 'x' | 'y' | 'fx' | 'fy'>;
 
 /** What the page tells the layout worker (workerLayout.ts). Nodes go by their index. */
 export type LayoutRequest =

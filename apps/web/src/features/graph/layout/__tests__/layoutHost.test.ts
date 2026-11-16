@@ -5,7 +5,7 @@ type Start = Extract<LayoutRequest, { type: 'start' }>;
 
 const chain = (count: number, overrides: Partial<Start> = {}): Start => ({
     type: 'start',
-    nodes: Array.from({ length: count }, () => ({ width: 48, height: 48 })),
+    nodes: Array.from({ length: count }, () => ({ width: 48 })),
     links: Array.from({ length: count - 1 }, (_, index) => [index, index + 1]),
     width: 800,
     height: 600,
@@ -132,7 +132,7 @@ describe('createLayoutHost', () => {
         handle(
             chain(3, {
                 links: [[0, 1]],
-                flow: { constraints: [{ axis: 'x', left: 1, right: 2, gap: 100 }] },
+                flow: { constraints: [{ left: 1, right: 2, gap: 100 }] },
             })
         );
         runToRest();
@@ -163,8 +163,8 @@ describe('createLayoutHost', () => {
     it('waits at rest with a restored view and runs when a node is dragged', () => {
         const { handle, replies, deferred, runSlice, runToRest } = createHost();
         const nodes = [
-            { width: 48, height: 48, x: 10, y: 20 },
-            { width: 48, height: 48, x: 300, y: 20 },
+            { width: 48, x: 10, y: 20 },
+            { width: 48, x: 300, y: 20 },
         ];
 
         handle(chain(2, { nodes, atRest: true }));

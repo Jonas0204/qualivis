@@ -6,7 +6,7 @@ import { createForceLayout, type ForceLayoutOptions } from '../forceLayout';
 import { createForceSimulation } from '../forceSolver';
 import type { LayoutEngine, LayoutLink, LayoutNode } from '../types';
 
-const node = (id: string): LayoutNode => ({ id, width: 48, height: 48 });
+const node = (id: string): LayoutNode => ({ id, width: 48 });
 
 const chain = (count: number): ForceLayoutOptions => {
     const nodes = Array.from({ length: count }, (_, index) => node(`n${index}`));

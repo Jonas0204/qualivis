@@ -4,8 +4,8 @@ import type { Node } from '../model/graph';
 import { graphSettings } from '../model/graphSettings';
 import { reactMethods } from '../model/specialMethods';
 
-/** WebCola separation constraint: node `left` stays at least `gap` left of node `right`. */
-export type ReactConstraint = { axis: 'x'; left: number; right: number; gap: number };
+/** Flow rule of the layout: node `left` stays at least `gap` left of node `right`. */
+export type ReactConstraint = { left: number; right: number; gap: number };
 
 /**
  * Orders the React methods of a component view from left to right in the order of `reactMethods`
@@ -31,7 +31,7 @@ export const reactConstraints = (
         if (!nextNodeIndex) {
             continue;
         }
-        constraints.push({ axis: 'x', left: nodeIndexes[i], right: nextNodeIndex, gap });
+        constraints.push({ left: nodeIndexes[i], right: nextNodeIndex, gap });
     }
     return constraints;
 };

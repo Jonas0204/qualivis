@@ -2,6 +2,7 @@ import type { AnalysisResult } from '@qualivis/core';
 import { useStore } from 'jotai';
 import { useEffect } from 'react';
 import { type PerfSnapshot, perfSnapshot, resetPerfStats } from '../lib/perfStats';
+import { round } from '../lib/round';
 import { analysisAtom } from '../state/analysisAtoms';
 import type { StateStore } from '../state/StateProvider';
 import { viewGraphAtom } from '../state/viewAtoms';
@@ -56,8 +57,6 @@ export type DebugConsole = {
 };
 
 type WindowWithConsole = Window & { qualivis?: DebugConsole };
-
-const round = (value: number) => Math.round(value * 100) / 100;
 
 const graphSizes = (result: AnalysisResult | undefined) => {
     const components = Object.values(result?.fileMap ?? {}).flatMap(file =>

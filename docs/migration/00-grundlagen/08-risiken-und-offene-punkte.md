@@ -21,9 +21,9 @@ Neue offene Fragen bekommen die nächste freie ID (O20 …).
 | ID | Risiko | Wahrscheinlichkeit | Auswirkung | Gegenmaßnahme |
 |---|---|---|---|---|
 | RI1 | Babel 7 läuft im Juni 2027 aus | sicher | mittel | P11-S02 rechtzeitig angehen; Goldens zeigen jede Abweichung |
-| RI2 | Ausnutzbare Sicherheitsmeldung in escomplex/WebCola/jLouvain oder deren Abhängigkeiten | gering | mittel | `pnpm audit --prod` je Phase; dann Neubewertung (neue ADR) |
+| RI2 | Ausnutzbare Sicherheitsmeldung in escomplex/jLouvain oder deren Abhängigkeiten | gering | mittel | `pnpm audit --prod` je Phase; dann Neubewertung (neue ADR) |
 | RI3 | Feste Versionen + Mindestalter verzögern Sicherheitsupdates | mittel | gering | Version gezielt anheben (≥ 3 Tage alt), Nutzer fragen; später Renovate |
-| RI4 | React-Rendering pro Tick zu langsam bei großen Graphen | mittel | mittel | Positionen pro Frame direkt im DOM, `React.memo` für Knoten und Kanten (umgesetzt); WebCola selbst bleibt langsam, Worker in P08-S09 |
+| RI4 | React-Rendering pro Tick zu langsam bei großen Graphen | mittel | mittel | Positionen pro Frame direkt im DOM, `React.memo` für Knoten und Kanten (umgesetzt); Worker für große Graphen in P08-S09, WebCola in P08 ersetzt |
 | RI5 | Material-Optik ohne Material-Bibliothek weicht sichtbar ab | mittel | gering | Stil-Referenz mit Messwerten, Sichtvergleich G5 |
 | RI6 | jsdom-Grenzen (Layout, CodeMirror) verleiten zu schwachen Tests | mittel | mittel | Messfunktionen injizieren; E2E für Echtes (`06-teststrategie.md` §4) |
 | RI7 | Leichtere Modelle „verbessern“ Altcode und brechen G1 | mittel | hoch | Regel R5 im README; G1 in `pnpm check` |

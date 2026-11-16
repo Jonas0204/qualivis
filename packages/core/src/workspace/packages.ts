@@ -10,7 +10,8 @@ export type WorkspacePackage = {
     entries: { source?: string; module?: string; main?: string };
 };
 
-const entryFields = ['source', 'module', 'main'] as const;
+/** Entry fields of a package.json, in the order the import resolution tries them. */
+export const entryFields = ['source', 'module', 'main'] as const;
 
 const toPackage = (path: string, json: Record<string, unknown>): WorkspacePackage => {
     const entries: WorkspacePackage['entries'] = {};

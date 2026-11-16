@@ -10,7 +10,6 @@ const crowd = (count: number): LayoutNode[] =>
     Array.from({ length: count }, (_, index) => ({
         id: `n${index}`,
         width: 20 + (index % 5) * 12,
-        height: 20,
         x: (index % 17) * 9,
         y: Math.floor(index / 17) * 9,
     }));
@@ -51,8 +50,8 @@ describe('forceGridCollide', () => {
 
     it('pushes two circles apart by the same amounts as d3, the larger one less', () => {
         const pair = (): LayoutNode[] => [
-            { id: 'small', width: 20, height: 20, x: 0, y: 0 },
-            { id: 'large', width: 60, height: 60, x: 10, y: 5 },
+            { id: 'small', width: 20, x: 0, y: 0 },
+            { id: 'large', width: 60, x: 10, y: 5 },
         ];
         const tick = (nodes: LayoutNode[], collide: Parameters<typeof settle>[1]) => {
             forceSimulation(nodes).force('collide', collide).stop().tick();
@@ -67,8 +66,8 @@ describe('forceGridCollide', () => {
     it('moves two circles on the same spot apart', () => {
         const nodes = settle(
             [
-                { id: 'a', width: 20, height: 20, x: 5, y: 5 },
-                { id: 'b', width: 20, height: 20, x: 5, y: 5 },
+                { id: 'a', width: 20, x: 5, y: 5 },
+                { id: 'b', width: 20, x: 5, y: 5 },
             ],
             forceGridCollide(radius)
         );
@@ -79,8 +78,8 @@ describe('forceGridCollide', () => {
     it('leaves circles that do not overlap where they are', () => {
         const nodes = settle(
             [
-                { id: 'a', width: 20, height: 20, x: 0, y: 0 },
-                { id: 'b', width: 20, height: 20, x: 500, y: -300 },
+                { id: 'a', width: 20, x: 0, y: 0 },
+                { id: 'b', width: 20, x: 500, y: -300 },
             ],
             forceGridCollide(radius)
         );

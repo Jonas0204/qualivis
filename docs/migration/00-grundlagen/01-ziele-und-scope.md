@@ -24,7 +24,7 @@ Die Angular-9-App „Component Graph“ (Tarner, van den Bongard, Beck, VISSOFT 
 | Darstellungsregeln (Größe, Warnung, Icons, Cluster, Vorschaukreise) | gleich | Golden G2 |
 | Aussehen (Farben, Formen, Texte, Legende, Panels) | gleich, sichtbar vergleichbar | Stil-Referenz + Sichtvergleich (G5) |
 | Interaktionen | gleich (Funktionsinventar), außer bewussten Korrekturen (ADR-011) | Komponenten- und E2E-Tests |
-| Graph-Anordnung | **darf abweichen** (Wunsch des Nutzers), WebCola bleibt aber Standard | – |
+| Graph-Anordnung | **darf abweichen** (Wunsch des Nutzers), das Fluss-Layout bleibt aber Standard | – |
 
 ## 3. Nicht-Ziele
 
@@ -33,7 +33,8 @@ Die Angular-9-App „Component Graph“ (Tarner, van den Bongard, Beck, VISSOFT 
 - Mobile Optimierung über das Altsystem hinaus.
 - Server-Komponente, Login, Datenübertragung: Die App bleibt rein clientseitig und offline-fähig.
 - Babel 8 (eigene Phase nach dem MVP, Frist Juni 2027).
-- Ersatz der alten Analysebibliotheken (escomplex, WebCola, jLouvain) durch Eigenbau (ADR-002).
+- Ersatz der alten Analysebibliotheken (escomplex, jLouvain) durch Eigenbau (ADR-002). WebCola ist
+  seit P08 durch eigene Fluss-Regeln auf d3-force ersetzt (ADR-003).
 
 ## 4. MVP-Prinzip und Meilensteine
 
@@ -45,7 +46,7 @@ Qualität (Tests, Typen, Lint) gilt **ab dem ersten Schritt**, nicht erst in der
 |---|---|---|---|
 | **M0 Fundament** | Repo umgebaut, Workspace, Tooling grün, Goldens erfasst | P01, P02 | `pnpm check` grün; Altsystem lokal startbar |
 | **M1 Erstes Produkt** | Ordner hineinziehen → App-Graph sichtbar (Kreise, Labels, Pfeile, Kraft-Layout); Kern = Altsystem (G1) | P03, P04 | `pnpm dev` zeigt Graph von `mini`/`realworld` |
-| **M2 Graph-Parität** | Größen, Icons, Vorschaukreise, Schraffur, Legende, WebCola, Zoom, Drag, Ausblenden, Labels | P05 | Graph sieht aus wie im Altsystem |
+| **M2 Graph-Parität** | Größen, Icons, Vorschaukreise, Schraffur, Legende, Fluss-Layout, Zoom, Drag, Ausblenden, Labels | P05 | Graph sieht aus wie im Altsystem |
 | **M3 Analyse-UI** | Panels (Dateibaum, Code-Quality, Quelltext), Auswahl, Drill-down, URL | P06 | volle Analyse-Oberfläche |
 | **M4 Funktionsparität** | Einstellungen, Persistenz, Hinweise, Drop auf Graph | P07 | Altsystem vollständig ersetzt |
 | **M5 Härtung** | strikte Typen, Worker, Fehlerbehandlung, A11y, Sicherheit, Performance | P08 | spürbar robuster, schneller |

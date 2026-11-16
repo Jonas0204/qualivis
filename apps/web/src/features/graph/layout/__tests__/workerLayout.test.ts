@@ -6,7 +6,7 @@ import type { LayoutNode } from '../types';
 import { createWorkerLayout, type LayoutWorker } from '../workerLayout';
 
 const graph = (overrides: Partial<ForceLayoutOptions> = {}): ForceLayoutOptions => {
-    const nodes: LayoutNode[] = ['a', 'b', 'c'].map(id => ({ id, width: 48, height: 48 }));
+    const nodes: LayoutNode[] = ['a', 'b', 'c'].map(id => ({ id, width: 48 }));
     const [a, b, c] = nodes as [LayoutNode, LayoutNode, LayoutNode];
     return {
         nodes,
@@ -83,7 +83,6 @@ describe('createWorkerLayout', () => {
                 type: 'start',
                 nodes: options.nodes.map(({ x, y }) => ({
                     width: 48,
-                    height: 48,
                     x,
                     y,
                     fx: undefined,

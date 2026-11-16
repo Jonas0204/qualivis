@@ -97,4 +97,15 @@ describe('scanImports', () => {
             expect.any(SyntaxError)
         );
     });
+
+    it('parses each file object only once', () => {
+        const error = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+        const broken = { path: '/r/Broken.tsx', code: "import { a from './a';" };
+        scanImports(broken);
+        scanImports(broken);
+        expect(error).toHaveBeenCalledTimes(1);
+
+        const file = { path: '/r/App.tsx', code: "import a from './a';" };
+        expect(scanImports(file)).toBe(scanImports(file));
+    });
 });

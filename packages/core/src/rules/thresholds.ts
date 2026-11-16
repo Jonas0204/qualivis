@@ -1,6 +1,6 @@
 import { nestedStringAccess } from '../legacy/nestedStringAccess';
 import type { Node } from '../model/graph';
-import { qualityMetrics } from '../model/qualityMetrics';
+import { qualityMetrics, warningThreshold } from '../model/qualityMetrics';
 import type { MetricReport } from '../model/report';
 
 /**
@@ -15,6 +15,15 @@ export const resolveThreshold = (
     const custom = thresholds[`${node.type}.${node.label || node.id}`];
     return custom !== undefined ? custom : thresholds[`${node.type}`];
 };
+
+export type ThresholdLevel = 'ok' | 'warn' | 'error';
+
+/**
+ * Level of a metric value against its threshold: `error` from the threshold on, `warn` from
+ * `warningThreshold` (80 %) of it. NaN is `ok`, like the comparisons of the legacy code.
+ */
+export const thresholdLevel = (value: number, threshold: number): ThresholdLevel =>
+    value >= threshold ? 'error' : value >= threshold * warningThreshold ? 'warn' : 'ok';
 
 /**
  * Value of a metric such as `sloc.physical` in a report. Like the legacy `nestedStringAccess`, it

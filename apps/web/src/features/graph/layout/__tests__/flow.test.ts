@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { createFlowRules } from '../flow';
 import type { LayoutLink, LayoutNode } from '../types';
 
-const at = (id: string, x: number, y: number): LayoutNode => ({ id, width: 20, height: 20, x, y });
+const at = (id: string, x: number, y: number): LayoutNode => ({ id, width: 20, x, y });
 
 describe('createFlowRules', () => {
     it('puts every target at least the gap below its source, also along a chain', () => {
@@ -50,7 +50,7 @@ describe('createFlowRules', () => {
     it('keeps the React methods in order from left to right', () => {
         const nodes = [at('constructor', 50, 0), at('render', 0, 0), at('helper', 0, 0)];
 
-        createFlowRules(nodes, [], [{ axis: 'x', left: 0, right: 1, gap: 100 }], 100)();
+        createFlowRules(nodes, [], [{ left: 0, right: 1, gap: 100 }], 100)();
 
         // render is 100 to the right of the constructor, and the three stay around the same centre.
         expect(nodes.map(node => node.x)).toEqual([0, 100, -50]);

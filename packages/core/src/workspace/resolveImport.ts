@@ -1,5 +1,5 @@
 import posix from 'path-browserify';
-import { findPackages, type WorkspacePackage } from './packages';
+import { entryFields, findPackages, type WorkspacePackage } from './packages';
 import type { ProjectFiles } from './projectFiles';
 import { type PathMapping, pathMappingFor } from './tsconfig';
 
@@ -10,7 +10,6 @@ type NamedPackage = WorkspacePackage & { name: string };
 
 const fileExtensions = ['.ts', '.tsx', '.js', '.jsx', '.d.ts'];
 const indexExtensions = ['.ts', '.tsx', '.js', '.jsx'];
-const entryFields = ['source', 'module', 'main'] as const;
 
 const isRelative = (specifier: string) =>
     specifier === '.' ||

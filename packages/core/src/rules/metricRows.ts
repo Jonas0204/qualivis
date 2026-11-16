@@ -1,9 +1,7 @@
 import { nestedStringAccess } from '../legacy/nestedStringAccess';
 import type { Node } from '../model/graph';
-import { qualityMetrics, warningThreshold } from '../model/qualityMetrics';
-import { resolveThreshold } from './thresholds';
-
-type MetricLevel = 'ok' | 'warn' | 'error';
+import { qualityMetrics } from '../model/qualityMetrics';
+import { resolveThreshold, type ThresholdLevel, thresholdLevel } from './thresholds';
 
 /** One bar of the code quality panel. */
 export type MetricRow = {
@@ -15,7 +13,7 @@ export type MetricRow = {
     threshold: number;
     /** `value / threshold`, not capped. */
     ratio: number;
-    level: MetricLevel;
+    level: ThresholdLevel;
 };
 
 /**
@@ -39,12 +37,7 @@ export const metricRows = (
         }
         const value = nestedStringAccess(report, id);
         const numeric = Number(value);
-        const level: MetricLevel =
-            numeric >= threshold
-                ? 'error'
-                : numeric >= threshold * warningThreshold
-                  ? 'warn'
-                  : 'ok';
+        const level = thresholdLevel(numeric, threshold);
         const { name, description } = qualityMetrics[id];
         return [{ id, name, description, value, threshold, ratio: numeric / threshold, level }];
     });

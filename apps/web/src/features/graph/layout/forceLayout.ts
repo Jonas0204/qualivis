@@ -1,5 +1,6 @@
 import { recordDuration } from '../../../lib/perfStats';
 import { createForceSolver, type ForceSolverOptions, freedAfterDrag } from './forceSolver';
+import { createLayoutListeners } from './layoutListeners';
 import { createTickClock } from './tickClock';
 import type { LayoutEngine, LayoutRestore } from './types';
 
@@ -23,12 +24,7 @@ const frameBudgetMs = 6;
 export const createForceLayout = (options: ForceLayoutOptions): LayoutEngine => {
     const solver = createForceSolver(options);
     const clock = createTickClock();
-    const listeners = { tick: new Set<() => void>(), end: new Set<() => void>() };
-    const notify = (type: keyof typeof listeners) => {
-        for (const listener of listeners[type]) {
-            listener();
-        }
-    };
+    const { notify, ...listeners } = createLayoutListeners();
     let frame: number | undefined;
     let nextFrameAt = 0;
     let stopped = false;
@@ -88,8 +84,7 @@ export const createForceLayout = (options: ForceLayoutOptions): LayoutEngine => 
         stop: () => {
             stopped = true;
             cancelStep();
-            listeners.tick.clear();
-            listeners.end.clear();
+            listeners.clear();
         },
         // Without a further tick, which would still move the nodes by their velocity.
         halt: () => {
@@ -100,14 +95,8 @@ export const createForceLayout = (options: ForceLayoutOptions): LayoutEngine => 
             solver.freeze();
             notify('end');
         },
-        onTick: listener => {
-            listeners.tick.add(listener);
-            return () => listeners.tick.delete(listener);
-        },
-        onEnd: listener => {
-            listeners.end.add(listener);
-            return () => listeners.end.delete(listener);
-        },
+        onTick: listeners.onTick,
+        onEnd: listeners.onEnd,
         drag: (node, { x, y }) => {
             solver.hold(node, x, y);
             scheduleStep();

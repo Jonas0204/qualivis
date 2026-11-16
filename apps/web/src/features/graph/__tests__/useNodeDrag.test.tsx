@@ -27,7 +27,7 @@ const fakeEngine = () => {
 
 const setup = (options: Partial<NodeDragOptions> = {}) => {
     const { calls, engine } = fakeEngine();
-    const node: LayoutNode = { id: 'a', width: 20, height: 20, x: 5, y: 5 };
+    const node: LayoutNode = { id: 'a', width: 20, x: 5, y: 5 };
     const onDraggingChange = vi.fn();
     const onSvgPointerDown = vi.fn();
     const { container } = render(

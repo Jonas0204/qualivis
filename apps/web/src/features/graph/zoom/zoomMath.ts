@@ -166,7 +166,7 @@ export const interpolateTransform = (
     y: from.y + (to.y - from.y) * t,
 });
 
-/** Duration of the wheel transition (graphSettings.zoomTransition, "0.1s ease-out"). */
+/** Duration of the wheel transition (legacy graph-settings.ts zoomTransition, "0.1s ease-out"). */
 export const wheelTransitionDuration = 100;
 
 /**

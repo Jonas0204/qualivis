@@ -14,7 +14,7 @@ Vollbild-Wechsel → nur „Zoom to fit“).
 
 | Einstellung | Wirkung | Prüfbar durch |
 |---|---|---|
-| `colaLayout` | WebCola (an) / Kraft-Layout (aus) | Komponententest mit Engine-Spion |
+| `colaLayout` | Fluss-Layout: d3-force mit Fluss-Regeln (an) / reines Kraft-Layout (aus) | Komponententest mit Engine-Spion |
 | `hideOverlappingLabels` | Label-Kollision an/aus | Test `useLabelCollision` |
 | `fade` | Ausblenden bei Klick/Strg+Hover an/aus | `useFade.test.tsx` |
 | `highlightIndirectNodes` | Indirekte Knoten bleiben sichtbar + `#fafafa`-Füllung | Test |

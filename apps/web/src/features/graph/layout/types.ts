@@ -3,8 +3,8 @@
 
 export type LayoutNode = {
     id: string;
+    /** Diameter of the circle; the collision keeps nodes this far apart. */
     width: number;
-    height: number;
     x?: number;
     y?: number;
     vx?: number;
