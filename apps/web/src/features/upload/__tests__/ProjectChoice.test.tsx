@@ -1,5 +1,6 @@
 import type { WorkspacePackage } from '@qualivis/core';
 import { describe, expect, it, vi } from 'vitest';
+import { chosenLabel } from '../../../test/nativeSelect';
 import { renderWithState } from '../../../test/renderWithState';
 import { ProjectChoice } from '../ProjectChoice';
 
@@ -23,13 +24,11 @@ describe('ProjectChoice', () => {
 
         expect(getByRole('heading', { name: 'Which folder is the app?' })).toBeTruthy();
         expect(getByText('Only the files the app uses are analysed.')).toBeTruthy();
-        expect(getByRole('combobox', { name: 'App folder' }).textContent).toBe('Whole project');
+        expect(chosenLabel(getByRole('combobox', { name: 'App folder' }))).toBe('Whole project');
     });
 
     it('lists the candidates as name (dir), or the dir without a name', async () => {
-        const { user, getByRole, getAllByRole } = draw();
-
-        await user.click(getByRole('combobox', { name: 'App folder' }));
+        const { getAllByRole } = draw();
 
         expect(getAllByRole('option').map(option => option.textContent)).toEqual([
             'Whole project',
@@ -41,8 +40,10 @@ describe('ProjectChoice', () => {
     it('analyses the chosen folder', async () => {
         const { user, getByRole, onAnalyze } = draw();
 
-        await user.click(getByRole('combobox', { name: 'App folder' }));
-        await user.click(getByRole('option', { name: 'web (/r/apps/web)' }));
+        await user.selectOptions(
+            getByRole('combobox', { name: 'App folder' }),
+            'web (/r/apps/web)'
+        );
         await user.click(getByRole('button', { name: 'Analyze' }));
 
         expect(onAnalyze).toHaveBeenCalledWith('/r/apps/web');

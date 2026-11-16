@@ -64,5 +64,10 @@ Karten oder Grundlagen oder wird gestrichen; Erledigtes steht in der Git-Histori
 - **Basis-UI-Komponenten in `common-components/`** (Nutzer, 14.11.2026): ADR-009 („keine
   UI-Bibliothek, Material-Aussehen“) ist gestrichen. Bausteine wie Button, Select, Schalter, Dialog,
   Snackbar (Toast) und Tooltip kommen aus `common-components/` (reines CSS, keine Abhängigkeiten,
-  Hell- und Dunkelmodus). Betrifft P07-S02 und P07-S04: dort diese Bausteine nutzen. Die App ist
-  noch nicht umgestellt.
+  Hell- und Dunkelmodus). Betrifft P07-S02 und P07-S04: dort diese Bausteine nutzen statt der in
+  den Karten genannten Dateien unter `apps/web/src/ui/`. Die App ist umgestellt (16.11.2026) und
+  folgt dem Dunkelmodus des Systems; Text in der Systemschrift statt Roboto.
+- **Dateibaum und Quelltext-Anzeige entfernt** (Nutzer, 16.11.2026): Sie kommen später neu. Die
+  Graph-Seite zeigt Graph und Code-Quality-Panel (feste Spalte 575 px). Mit entfernt: CodeMirror,
+  `@lezer/highlight`, `@fontsource/roboto`, Code und Zeilen in der Auswahl. `extractFileTree` bleibt
+  im Kern, ohne Export in `index.ts`.

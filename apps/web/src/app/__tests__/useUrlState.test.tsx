@@ -6,6 +6,7 @@ import type { LayoutFactory } from '../../features/graph/layout/createLayout';
 import { analysisAtom, initialAnalysisState } from '../../state/analysisAtoms';
 import { componentIdAtom } from '../../state/viewAtoms';
 import { loadFixture } from '../../test/fixtures';
+import { chooseOption, chosenLabel } from '../../test/nativeSelect';
 import { renderHookWithState, renderWithState } from '../../test/renderWithState';
 import { initial } from '../../test/TestProvider';
 import { useUrlState } from '../useUrlState';
@@ -185,16 +186,15 @@ describe('component view over the URL', () => {
     });
 
     it('resets a component-only size metric when the URL opens a component view (N11)', async () => {
-        const { getByRole, findByRole } = renderWithState(<GraphWithUrl />, {
+        const { getByRole } = renderWithState(<GraphWithUrl />, {
             initialValues: [done],
         });
         const select = () => getByRole('combobox', { name: 'Node size metric' });
-        fireEvent.click(select());
-        fireEvent.click(await findByRole('option', { name: 'Lines of JSX Code' }));
-        expect(select().textContent).toBe('Lines of JSX Code');
+        chooseOption(select(), 'Lines of JSX Code');
+        expect(chosenLabel(select())).toBe('Lines of JSX Code');
 
         goTo(`?id=${encodedApp}`);
 
-        expect(select().textContent).toBe('Lines of Code');
+        expect(chosenLabel(select())).toBe('Lines of Code');
     });
 });

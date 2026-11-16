@@ -72,16 +72,15 @@ Erkenntnisse aus `STATUS.md` (Abweichungen, offene Punkte) einarbeiten, mit dem 
   höchstens 6). Zusammengehörige Props zu Objekten bündeln, ohne das Verhalten zu ändern.
 
 ## S07 – Barrierefreiheit (M)
-- Tastaturbedienung: Toolbar, Aktionsleiste, Dateibaum, Dialog, Select, Split-Trenner vollständig.
+- Tastaturbedienung: Toolbar, Aktionsleiste, Dialog, Select vollständig.
 - Graph: Knoten fokussierbar (`tabIndex`, `role="button"`, `aria-label` „<Typ> <Name>, <Warnungen>“),
   Enter = Auswahl, Shift+Enter = Drill-down; sichtbarer Fokusrand.
-- Kontrast prüfen (z. B. Zeilennummern `#e0e2e5` sind bewusst blass – Altoptik; dokumentieren, ggf.
-  ADR mit dem Nutzer).
+- Kontrast prüfen, im hellen und im dunklen Modus.
 - `prefers-reduced-motion`: Übergänge und Layout-Animation verkürzen.
 
 ## S08 – Sicherheit und Lieferkette (S)
 - `index.html`: Content-Security-Policy per `<meta http-equiv>`: `default-src 'self'; script-src 'self';
-  style-src 'self' 'unsafe-inline'` (CodeMirror setzt Inline-Styles), `img-src 'self' data:`,
+  style-src 'self' 'unsafe-inline'` (React setzt Inline-Styles, z. B. Breite der Metrik-Balken), `img-src 'self' data:`,
   `font-src 'self'`, `worker-src 'self'`, `connect-src 'self'`, `object-src 'none'`, `base-uri 'none'`.
   Prüfen, dass Dev und Build funktionieren.
 - `pnpm audit --prod` dokumentieren; `THIRD_PARTY_LICENSES.md` erzeugen (Lizenzen aller

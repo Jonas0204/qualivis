@@ -152,8 +152,6 @@ dramatisch sind (Nutzerentscheidung), gilt:
 - jsdom berechnet kein Layout: `getBBox`, `getBoundingClientRect` liefern 0 bzw. fehlen.
   Funktionen, die Maße brauchen (`zoomToFit`, Label-Kollision), bekommen die Messfunktion als
   Parameter und werden in Unit-Tests mit festen Werten geprüft.
-- CodeMirror 6 läuft in jsdom nur eingeschränkt (Messungen). `SourceCodeView` wird mit einer
-  dünnen Abstraktion getestet (wird die richtige Zeile ausgewählt?) und im E2E-Test real geprüft.
 - Kein `@testing-library/jest-dom`: Assertions mit Standard-Matchern
   (`expect(button.getAttribute('aria-pressed')).toBe('true')`, `expect(screen.queryByText(..)).toBeNull()`).
 - Animationen: Layout-Engine im Test durch eine Fake-Engine ersetzen (Schnittstelle

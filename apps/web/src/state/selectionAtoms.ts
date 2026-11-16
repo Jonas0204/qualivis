@@ -34,18 +34,14 @@ const appIconsAtom = atom(get => {
 
 /**
  * Selects one node (legacy DataService.selectNode): a node of the graph, or the function of a
- * preview circle with its component as `componentId`.
+ * preview circle.
  */
-export const selectNodeAtom = atom(
-    null,
-    (get, set, node: SelectableNode, componentId: string | undefined) => {
-        const fileMap = get(analysisAtom).result?.fileMap ?? {};
-        const selectedNode = createNodeSelection(fileMap, node, componentId);
-        // biome-ignore lint/suspicious/noConsole: legacy log, kept for debugging (user, 09.11.2026)
-        console.log('Select node: ', selectedNode);
-        set(selectionAtom, [selectedNode]);
-    }
-);
+export const selectNodeAtom = atom(null, (_get, set, node: SelectableNode) => {
+    const selectedNode = createNodeSelection(node);
+    // biome-ignore lint/suspicious/noConsole: legacy log, kept for debugging (user, 09.11.2026)
+    console.log('Select node: ', selectedNode);
+    set(selectionAtom, [selectedNode]);
+});
 
 /** Selects all components of a file (legacy DataService.selectFile). */
 export const selectFileAtom = atom(null, (get, set, fileName: string) => {

@@ -7,8 +7,8 @@
 │ React 19 · Vite 8                                                                 │
 │  features/upload ─┐                                                               │
 │  features/graph ──┼─► state/ (Jotai-Atome)                   ◄── lib/ (storage, …) │
-│  features/file-tree, code-quality, source-code, settings                          │
-│  ui/ (Button, Dialog, SlideToggle, Select, Snackbar, SplitPane, Tooltip, Icon)    │
+│  features/code-quality, settings                                                  │
+│  Bausteine aus common-components/ (Button, Select, Tooltip, Icon, Progress, …)    │
 │  features/graph/layout (d3-force, Fluss-Regeln, Web Worker) – ohne React und DOM  │
 └──────────────────────────────────┬────────────────────────────────────────────────┘
                                    │ importiert nur die öffentliche API
@@ -89,13 +89,9 @@ e2e/ (@qualivis/e2e, Playwright, separat installierbar) · tools/ (Node-Skripte 
 │        │  │                        layout/ (types.ts, createLayout.ts, largeGraph.ts,
 │        │  │                          forceSolver.ts, flow.ts, gridCollide.ts, tickClock.ts,
 │        │  │                          forceLayout.ts, workerLayout.ts, layoutHost.ts, layoutWorker.ts)
-│        │  ├─ file-tree/            FileTree.tsx, useTreeState.ts
 │        │  ├─ code-quality/         CodeQualityPanel.tsx, QualityMetricBar.tsx, IconDescription.tsx,
 │        │  │                        metricExplanations.ts
-│        │  ├─ source-code/          SourceCodeView.tsx, neoTheme.ts, selectionRange.ts
 │        │  └─ settings/             SettingsDialog.tsx
-│        ├─ ui/                      Button.tsx, IconButton.tsx, Icon.tsx, Dialog.tsx, SlideToggle.tsx,
-│        │                           Select.tsx, Snackbar.tsx, SplitPane.tsx, Tooltip.tsx, ProgressBar.tsx
 │        ├─ lib/                     storage.ts, onceFlags.ts, debounce.ts, isColliding.ts
 │        └─ styles/                  tokens.css, global.css, fonts.css
 ├─ e2e/                              (ab P09)
@@ -236,12 +232,14 @@ Speichern werden einmal als Snackbar gemeldet, nie als Absturz.
 
 ## 9. Styling
 
-- Design-Tokens als CSS-Custom-Properties in `styles/tokens.css` (Werte aus der Stil-Referenz).
+- Basis-Tokens (Farben, Schrift, Radien) aus `common-components/theme.css`, Hell- und Dunkelmodus
+  nach Systemeinstellung. App-eigene Farben (Graph, Metrik-Stufen) in `styles/tokens.css`, jeweils
+  als `light-dark(hell, dunkel)`.
 - UI-Bausteine und Panels: **CSS Modules** (`*.module.css`, in Vite eingebaut) → keine globalen
   Kollisionen.
 - Graph: eine globale Datei `features/graph/graph.css`, alle Regeln unter `.qv-graph` geschachtelt,
   Klassennamen wie im Altsystem.
-- Schriften lokal über `@fontsource/roboto` (300/400/500) und `@fontsource/material-icons`.
+- Text in der Systemschrift von `theme.css`; Icons lokal über `@fontsource/material-icons`.
 
 ## 10. Fehlerbehandlung
 

@@ -1,4 +1,5 @@
 import { useSetAtom } from 'jotai';
+import { Button } from '../../../../common-components';
 import { viewModeAtom } from '../state/viewAtoms';
 import styles from './Toolbar.module.css';
 
@@ -8,9 +9,9 @@ export const Toolbar = () => {
 
     return (
         <header className={styles.toolbar}>
-            <button type="button" className={styles.title} onClick={() => setViewMode('upload')}>
+            <Button className={styles.title} onClick={() => setViewMode('upload')}>
                 Qualivis
-            </button>
+            </Button>
         </header>
     );
 };

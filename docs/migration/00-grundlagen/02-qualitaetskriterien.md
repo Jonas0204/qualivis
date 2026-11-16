@@ -38,7 +38,7 @@ Hooks noch relevant ist:
 | Komponenten klein halten (≈ ≤ 120 Zeilen), sonst aufteilen | Large Component |
 | ≤ 6 Props, sonst Objekt-Prop oder Aufteilung | Too Many Props |
 | Geteilter Zustand über Jotai-Atome statt Durchreichen über > 2 Ebenen | Prop Drilling |
-| DOM-Zugriffe nur in klar abgegrenzten Hooks (Zoom, Messen, CodeMirror) | Direct DOM Manipulation |
+| DOM-Zugriffe nur in klar abgegrenzten Hooks (Zoom, Messen) | Direct DOM Manipulation |
 | Kein `dangerouslySetInnerHTML` | Sicherheit |
 | Keine Funktionen, die JSX liefern, außer Komponenten | gleiche Regel, die das Tool selbst prüft |
 | `useEffect` nur zur Synchronisation mit Externem, nicht für abgeleitete Werte | heutige React-Empfehlung |

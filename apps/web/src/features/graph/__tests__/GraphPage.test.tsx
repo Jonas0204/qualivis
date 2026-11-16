@@ -4,40 +4,27 @@ import { fullScreenAtom } from '../../../state/viewAtoms';
 import { renderWithState } from '../../../test/renderWithState';
 import { GraphPage } from '../GraphPage';
 
-const area = (container: HTMLElement, key: string) =>
-    container.querySelector<HTMLElement>(`[data-area="${key}"]`);
-
-const drawPage = () =>
-    renderWithState(<GraphPage fileTree="Files" codeQuality="Code Quality" sourceCode="Source" />);
+const drawPage = () => renderWithState(<GraphPage codeQuality="Code Quality" />);
 
 describe('GraphPage', () => {
-    it('splits the page into 275 px | graph | 575 px, the right column into 363 px | rest', () => {
-        const { container, getAllByRole } = drawPage();
+    it('shows the graph and the code quality panel side by side', () => {
+        const { container, getByRole } = drawPage();
 
-        expect(area(container, 'fileTree')?.style.flexBasis).toBe('275px');
-        expect(area(container, 'side')?.style.flexBasis).toBe('575px');
-        expect(area(container, 'codeQuality')?.style.flexBasis).toBe('363px');
-        expect(area(container, 'graph')?.querySelector('.qv-graph-area')).not.toBeNull();
-        expect(area(container, 'fileTree')?.textContent).toBe('Files');
-        expect(area(container, 'sourceCode')?.textContent).toBe('Source');
-        expect(getAllByRole('separator').map(gutter => gutter.getAttribute('aria-label'))).toEqual([
-            'Resize file tree',
-            'Resize side panels',
-            'Resize code quality',
-        ]);
+        expect(container.querySelector('.qv-graph-area')).not.toBeNull();
+        expect(getByRole('complementary', { name: 'Code quality' }).textContent).toBe(
+            'Code Quality'
+        );
     });
 
-    it('hides the side columns in full screen and keeps their panels mounted', () => {
-        const { container, queryAllByRole, store } = drawPage();
+    it('hides the side column in full screen and keeps its panel mounted', () => {
+        const { getByRole, queryByRole, store } = drawPage();
 
         act(() => store.set(fullScreenAtom, true));
 
-        expect(queryAllByRole('separator')).toHaveLength(0);
-        expect(area(container, 'fileTree')?.style.flexBasis).toBe('');
-        expect(area(container, 'side')?.style.flexBasis).toBe('');
-        expect(area(container, 'fileTree')?.textContent).toBe('Files');
+        expect(queryByRole('complementary')).toBeNull();
+        expect(getByRole('complementary', { hidden: true }).textContent).toBe('Code Quality');
 
         act(() => store.set(fullScreenAtom, false));
-        expect(queryAllByRole('separator')).toHaveLength(3);
+        expect(getByRole('complementary', { name: 'Code quality' })).toBeTruthy();
     });
 });

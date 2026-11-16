@@ -14,17 +14,17 @@
     height: 100%;
     max-width: 640px;
     max-height: 400px;
-    border: 2px dashed var(--qv-upload-border);
-    border-radius: 16px;
-    background-color: var(--qv-surface);
-    color: var(--qv-upload-text);
+    border: 2px dashed var(--colorBorderStrong);
+    border-radius: var(--radiusLarge);
+    background-color: var(--colorSurface);
+    color: var(--colorTextMuted);
     transition: transform 150ms ease-out;
 }
 
 .card:hover,
 .card.dragging {
-    border-color: var(--qv-upload-border-active);
-    color: var(--qv-upload-text-active);
+    border-color: var(--colorPrimary);
+    color: var(--colorText);
     transform: scale(1.05);
 }
 
@@ -67,6 +67,6 @@
 
 .error {
     margin: 16px 0 0;
-    color: var(--qv-error);
+    color: var(--colorDanger);
     text-align: center;
 }

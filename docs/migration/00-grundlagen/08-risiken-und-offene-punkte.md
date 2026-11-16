@@ -25,7 +25,7 @@ Neue offene Fragen bekommen die nächste freie ID (O20 …).
 | RI3 | Feste Versionen + Mindestalter verzögern Sicherheitsupdates | mittel | gering | Version gezielt anheben (≥ 3 Tage alt), Nutzer fragen; später Renovate |
 | RI4 | React-Rendering pro Tick zu langsam bei großen Graphen | mittel | mittel | Positionen pro Frame direkt im DOM, `React.memo` für Knoten und Kanten (umgesetzt); Worker für große Graphen in P08-S09, WebCola in P08 ersetzt |
 | RI5 | Material-Optik ohne Material-Bibliothek weicht sichtbar ab | mittel | gering | Stil-Referenz mit Messwerten, Sichtvergleich G5 |
-| RI6 | jsdom-Grenzen (Layout, CodeMirror) verleiten zu schwachen Tests | mittel | mittel | Messfunktionen injizieren; E2E für Echtes (`06-teststrategie.md` §4) |
+| RI6 | jsdom-Grenzen (Layout) verleiten zu schwachen Tests | mittel | mittel | Messfunktionen injizieren; E2E für Echtes (`06-teststrategie.md` §4) |
 | RI7 | Leichtere Modelle „verbessern“ Altcode und brechen G1 | mittel | hoch | Regel R5 im README; G1 in `pnpm check` |
 | RI8 | TypeScript 7 / Werkzeuge haben Kinderkrankheiten | gering | mittel | im Spike verifiziert; bei Problemen TS 6.0 als Rückfall (ADR) |
 | RI9 | `localStorage`-Limit (≈ 5 MB) bei großen Projekten | mittel | gering | `try/catch`, Meldung; später IndexedDB (eigene ADR) |

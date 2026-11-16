@@ -1,6 +1,7 @@
 import type { View } from '@qualivis/core';
 import { fireEvent, within } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
+import { chooseOption, chosenLabel } from '../../../test/nativeSelect';
 import { renderWithState } from '../../../test/renderWithState';
 import { GraphActions, sizeMetricOptions } from '../GraphActions';
 
@@ -78,11 +79,10 @@ describe('GraphActions', () => {
         const { getByRole, getAllByRole, onSizeMetricChange } = draw('component');
         const select = getByRole('combobox', { name: 'Node size metric' });
 
-        expect(select.textContent).toBe('Lines of Code');
+        expect(chosenLabel(select)).toBe('Lines of Code');
         expect(tooltipOf(select)).toBe('Node size metric');
-        fireEvent.click(select);
         expect(getAllByRole('option')).toHaveLength(5);
-        fireEvent.click(getByRole('option', { name: 'Cyclomatic Complexity' }));
+        chooseOption(select, 'Cyclomatic Complexity');
         expect(onSizeMetricChange).toHaveBeenCalledWith('cyclomatic');
     });
 
@@ -116,7 +116,6 @@ describe('GraphActions', () => {
         const { getByRole, onToggleCluster } = draw('component', { showCluster: true });
 
         const cluster = getByRole('button', { name: 'Toggle cluster' });
-        expect(cluster.className).toMatch(/\bshow-cluster-button on\b/);
         expect(cluster.getAttribute('aria-pressed')).toBe('true');
         fireEvent.click(cluster);
         expect(onToggleCluster).toHaveBeenCalledTimes(1);

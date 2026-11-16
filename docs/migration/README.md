@@ -150,7 +150,6 @@ ist oder nicht zum Code passt: stoppe und frage.
 ```
 Ordner ziehen → @qualivis/core (wie Altsystem) → React-Oberfläche mit gleichem Aussehen
 Laufzeit-Abhängigkeiten: React (react, react-dom, scheduler), Jotai, d3-force (+3),
-CodeMirror 6 (≈ 15, ein Projekt), Babel 7.29, escomplex 0.1 (+Patches),
-path-browserify, jLouvain, zwei Schriftpakete.
+Babel 7.29, escomplex 0.1 (+Patches), path-browserify, jLouvain, ein Icon-Schriftpaket.
 Kein Angular, kein Material, kein RxJS, kein zone.js, kein CDN.
 ```

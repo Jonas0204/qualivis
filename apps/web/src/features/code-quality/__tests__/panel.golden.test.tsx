@@ -104,11 +104,7 @@ const comparePanels = (
         if (!node) {
             throw new Error(`no node ${id}`);
         }
-        const selection = createNodeSelection(
-            result.fileMap,
-            node,
-            view === 'component' ? componentId : undefined
-        );
+        const selection = createNodeSelection(node);
         const { container } = render(<CodeQualityContent selectedNode={selection} />);
         expect(readPanel(container), `${componentId ?? 'app view'}: ${id}`).toEqual(
             expectedPanel(panel, !!node.report)

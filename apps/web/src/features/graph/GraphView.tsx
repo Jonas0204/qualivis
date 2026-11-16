@@ -319,13 +319,12 @@ export const GraphView = ({
                 removeNode(node);
                 return;
             }
-            selectNode(node, viewComponentId);
+            selectNode(node);
         },
-        // G4 (legacy createPreviewCircles, graph.component.ts:825-827): the function with its
-        // component as componentId. The click goes on to the node, which fades to it.
+        // G4 (legacy createPreviewCircles, graph.component.ts:825-827): the function. The click
+        // goes on to the node, which fades to it.
         // Raw graph nodes have no icons, so neither has the selection (Q5).
-        onPreviewClick: ({ id, label, type, report }, parent) =>
-            selectNode({ id, label, type, report }, parent.id),
+        onPreviewClick: ({ id, label, type, report }) => selectNode({ id, label, type, report }),
         onClick: node => fade.fadeTo(node.id),
         // G3 (legacy createNodeGroup, graph.component.ts:693-701): a component of the app graph
         // with inner functions opens its component view (useUrlState adds `?id=`). Components

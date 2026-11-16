@@ -3,7 +3,7 @@
 .qv-graph-area {
     position: relative;
     height: 100%;
-    background: var(--qv-background);
+    background: var(--colorBackground);
 }
 
 /* legacy .action-buttons (graph.component.scss:11-37); two classes, so they win over the modules */
@@ -12,7 +12,8 @@
     top: 8px;
     display: flex;
     align-items: center;
-    color: var(--qv-graph-button);
+    gap: 4px;
+    color: var(--colorTextMuted);
 
     &.left {
         left: 8px;
@@ -22,16 +23,13 @@
         right: 8px;
     }
 
-    > * {
-        height: 40px;
+    .show-cluster-button {
+        margin-right: 12px;
     }
 
-    .show-cluster-button {
-        margin-right: 16px;
-
-        &.on {
-            background: var(--qv-cluster-button-on);
-        }
+    /* The width of the legacy mat-select */
+    .size-metric {
+        width: 180px;
     }
 }
 
@@ -40,10 +38,9 @@
     position: absolute;
     right: 0;
     bottom: 0;
-    border-top: 1px solid;
-    border-left: 1px solid;
-    border-color: var(--qv-legend-border);
-    border-top-left-radius: 8px;
+    border-top: var(--borderWidth) solid var(--colorBorder);
+    border-left: var(--borderWidth) solid var(--colorBorder);
+    border-top-left-radius: var(--radiusLarge);
     background: var(--qv-legend-bg);
     cursor: default;
 
@@ -75,6 +72,11 @@
 
 /* legacy ::ng-deep #d3-root: the node classes style the graph and the legend alike */
 :is(.qv-graph, .qv-legend) {
+    /* SVG text is black by default; in dark mode it takes the text colour */
+    text {
+        fill: var(--colorText);
+    }
+
     /* legacy createNodeGroup: inline style of every node group */
     .node {
         cursor: pointer;

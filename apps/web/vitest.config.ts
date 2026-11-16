@@ -1,8 +1,10 @@
 import react from '@vitejs/plugin-react';
 import { defineProject } from 'vitest/config';
+import { reactAlias } from './reactAlias.ts';
 
 export default defineProject({
     plugins: [react()],
+    resolve: { alias: reactAlias },
     test: {
         name: 'web',
         environment: 'jsdom',

@@ -1,7 +1,6 @@
 import type { WorkspacePackage } from '@qualivis/core';
 import { useState } from 'react';
-import { Button } from '../../ui/Button';
-import { Select } from '../../ui/Select';
+import { Button, Card, Field, Select } from '../../../../../common-components';
 import styles from './ProjectChoice.module.css';
 
 type ProjectChoiceProps = {
@@ -26,28 +25,34 @@ export const ProjectChoice = ({ candidates, onAnalyze, onCancel }: ProjectChoice
     ];
 
     return (
-        <section className={styles.card} aria-labelledby="project-choice-title">
-            <h2 id="project-choice-title" className={styles.title}>
-                Which folder is the app?
-            </h2>
-            <p className={styles.hint}>Only the files the app uses are analysed.</p>
-            <Select
-                aria-label="App folder"
-                className={styles.select}
-                value={appDir}
-                options={options}
-                onChange={setAppDir}
-            />
-            <div className={styles.actions}>
-                <Button onClick={onCancel}>Cancel</Button>
-                <Button
-                    variant="raised"
-                    color="primary"
-                    onClick={() => onAnalyze(appDir === '' ? undefined : appDir)}
-                >
-                    Analyze
-                </Button>
-            </div>
-        </section>
+        <Card
+            className={styles.card}
+            title="Which folder is the app?"
+            description="Only the files the app uses are analysed."
+            footer={
+                <>
+                    <Button variant="outline" onClick={onCancel}>
+                        Cancel
+                    </Button>
+                    <Button
+                        variant="primary"
+                        onClick={() => onAnalyze(appDir === '' ? undefined : appDir)}
+                    >
+                        Analyze
+                    </Button>
+                </>
+            }
+        >
+            <Field label="App folder">
+                {props => (
+                    <Select
+                        {...props}
+                        value={appDir}
+                        options={options}
+                        onChange={event => setAppDir(event.currentTarget.value)}
+                    />
+                )}
+            </Field>
+        </Card>
     );
 };

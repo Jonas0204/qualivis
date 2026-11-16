@@ -1,6 +1,6 @@
 import { findAppCandidates, type ProjectFiles, type WorkspacePackage } from '@qualivis/core';
 import { type ChangeEvent, useState } from 'react';
-import { Icon } from '../../ui/Icon';
+import { Icon } from '../../../../../common-components';
 import { logReadError } from './logReadError';
 import { ProjectChoice } from './ProjectChoice';
 import { readInputFiles } from './readInputFiles';

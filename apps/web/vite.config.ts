@@ -1,13 +1,14 @@
 import { fileURLToPath } from 'node:url';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
+import { reactAlias } from './reactAlias.ts';
 
 export default defineConfig({
     base: './',
     plugins: [react()],
     resolve: {
         // Patched legacy deps still require('path'); give them the same POSIX module (ADR-005).
-        alias: { path: fileURLToPath(import.meta.resolve('path-browserify')) },
+        alias: { path: fileURLToPath(import.meta.resolve('path-browserify')), ...reactAlias },
     },
     optimizeDeps: {
         // Babel reads process.env flags when it loads. The build replaces process.env with {}, but

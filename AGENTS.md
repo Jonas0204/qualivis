@@ -129,8 +129,6 @@ gekürzt. Die Zeilenangaben gelten unverändert, denn die Dateien wurden nur ver
   UI-Bibliothek, kein Tailwind, kein Radix.
 - Er enthält **nicht** jeden Baustein, den es in Bibliotheken wie shadcn/ui gibt. Fehlt einer: dort
   ergänzen (gleiche Bauart, siehe `common-components/README.md`) und im Showcase zeigen.
-- Die App nutzt vorerst noch ihre alten Bausteine in `apps/web/src/ui/`; die Umstellung kommt in
-  einem eigenen Schritt.
 
 ## Skills
 

@@ -34,6 +34,10 @@ export type Import = {
     source: string;
 };
 
+/**
+ * Tree of the uploaded files (legacy extractFileTree). Unused until the file tree comes back.
+ * @public
+ */
 export type FileTree = {
     name: string;
     id?: string;

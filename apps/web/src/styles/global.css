@@ -6,9 +6,9 @@ body {
 
 body {
     margin: 0;
-    font-family: var(--qv-font);
-    background: var(--qv-background);
-    color: var(--qv-text);
+    font-family: var(--fontBody);
+    background: var(--colorBackground);
+    color: var(--colorText);
 }
 
 html {

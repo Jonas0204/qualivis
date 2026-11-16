@@ -26,7 +26,7 @@ describe('selectionAtom', () => {
         expect(createStore().get(selectionAtom)).toBeNull();
     });
 
-    it('selects a graph node with the fields of the legacy selectNode, code and lines, and logs it', () => {
+    it('selects a graph node with the fields of the legacy selectNode and logs it', () => {
         const log = vi.spyOn(console, 'log').mockImplementation(() => {});
         const store = storeWithMini();
         const icons = [
@@ -46,7 +46,7 @@ describe('selectionAtom', () => {
             y: 20,
         };
 
-        store.set(selectNodeAtom, node, undefined);
+        store.set(selectNodeAtom, node);
 
         const selected = {
             id: '/mini/src/App.js#App',
@@ -54,9 +54,6 @@ describe('selectionAtom', () => {
             type: 'component',
             report: { aggregate: {} },
             icons,
-            code: mini.fileMap['/mini/src/App.js']?.code,
-            lineStart: 8,
-            lineEnd: 72,
         };
         expect(store.get(selectionAtom)).toEqual([selected]);
         expect(log).toHaveBeenCalledWith('Select node: ', selected);

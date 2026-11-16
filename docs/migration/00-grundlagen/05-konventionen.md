@@ -66,7 +66,7 @@ Ordner der Altcode-Kopie (`packages/core/src/legacy/`) behalten die **alten Date
 - Atome immer auf Modulebene definieren, nie in der Render-Funktion: `useAtomValue(atom(get => …))`
   erzeugt bei jedem Render ein neues Atom. Code arbeitet immer innerhalb des `StateProvider`, nie mit
   dem globalen Jotai-Default-Store.
-- Effekte (`useEffect`) nur für Synchronisation mit Externem (Layout-Engine, CodeMirror, Events);
+- Effekte (`useEffect`) nur für Synchronisation mit Externem (Layout-Engine, Events);
   jede Effekt-Funktion räumt auf.
 - Keine Berechnung von Fachwerten in Komponenten – dafür `@qualivis/core` oder Hilfsfunktionen.
 - Kein `dangerouslySetInnerHTML`. Links in Texten als Daten (`{ text, link }`) und JSX.

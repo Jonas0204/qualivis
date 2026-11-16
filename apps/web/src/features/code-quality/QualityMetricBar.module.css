@@ -17,8 +17,8 @@
 }
 
 .value {
-    font-weight: 500;
-    color: var(--qv-text);
+    font-weight: 600;
+    color: var(--colorText);
 }
 
 /* The progress bar spans the whole row; its buffer is white. */
@@ -29,8 +29,9 @@
     width: 100%;
     height: 100%;
     overflow: hidden;
-    border: 1px solid var(--qv-metric-border);
-    background-color: white;
+    border: var(--borderWidth) solid var(--colorBorder);
+    border-radius: var(--radiusSmall);
+    background-color: var(--colorSurface);
 }
 
 .fill {
@@ -77,29 +78,29 @@
     font-family: var(--qv-font-icons);
     font-size: 15px;
     line-height: 1;
-    color: var(--qv-text-light-grey);
+    color: var(--colorTextMuted);
     font-feature-settings: "liga";
 }
 
 .toggle[aria-expanded="true"]::after,
 .toggle:hover::after {
-    color: var(--qv-primary);
+    color: var(--colorPrimary);
 }
 
 .toggle:focus-visible {
-    outline: 2px solid var(--qv-primary);
+    outline: var(--focusRing);
     outline-offset: 2px;
 }
 
 .explanation {
     margin-top: 4px;
     padding: 8px 10px;
-    border: 1px solid var(--qv-metric-border);
+    border: var(--borderWidth) solid var(--colorBorder);
     border-top: 0;
-    background-color: var(--qv-surface);
+    background-color: var(--colorSurface);
     font-size: 12px;
     line-height: 1.45;
-    color: var(--qv-text);
+    color: var(--colorText);
     cursor: default;
 }
 
@@ -110,9 +111,9 @@
 .formula {
     margin: 0 0 6px;
     padding: 6px 8px;
-    background-color: var(--qv-background);
-    border-left: 3px solid var(--qv-primary-light);
-    font-family: ui-monospace, Consolas, monospace;
+    background-color: var(--colorSurfaceMuted);
+    border-left: 3px solid var(--colorPrimary);
+    font-family: var(--fontMonospace);
     font-size: 11.5px;
     white-space: pre-wrap;
 }
@@ -123,7 +124,7 @@
 }
 
 .thresholds {
-    color: var(--qv-text-light-grey);
+    color: var(--colorTextMuted);
 }
 
 .explanation .thresholds {

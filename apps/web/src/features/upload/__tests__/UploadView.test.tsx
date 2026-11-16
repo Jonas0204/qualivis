@@ -2,6 +2,7 @@ import { fireEvent, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { fakeDataTransfer, fileWithRelativePath, unreadableFile } from '../../../test/fakeFiles';
 import { loadFixture } from '../../../test/fixtures';
+import { chosenLabel } from '../../../test/nativeSelect';
 import { renderWithState } from '../../../test/renderWithState';
 import { UploadView } from '../UploadView';
 
@@ -100,11 +101,10 @@ describe('UploadView', () => {
         };
 
         it('asks for the app folder instead of analysing at once', async () => {
-            const { user, combobox, getAllByRole, queryByText, onFiles } = await uploadMonorepo();
+            const { combobox, getAllByRole, queryByText, onFiles } = await uploadMonorepo();
 
             expect(queryByText('Drag and drop or browse a folder')).toBeNull();
-            expect(combobox.textContent).toBe('Whole project');
-            await user.click(combobox);
+            expect(chosenLabel(combobox)).toBe('Whole project');
             expect(getAllByRole('option').map(option => option.textContent)).toEqual([
                 'Whole project',
                 'web-a (/monorepo/apps/web-a)',
@@ -118,8 +118,7 @@ describe('UploadView', () => {
         it('passes the upload on with the chosen app folder', async () => {
             const { user, combobox, getByRole, onFiles } = await uploadMonorepo();
 
-            await user.click(combobox);
-            await user.click(getByRole('option', { name: 'web-a (/monorepo/apps/web-a)' }));
+            await user.selectOptions(combobox, 'web-a (/monorepo/apps/web-a)');
             await user.click(getByRole('button', { name: 'Analyze' }));
 
             expect(onFiles).toHaveBeenCalledTimes(1);

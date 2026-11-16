@@ -1,9 +1,12 @@
 import { qualityMetrics, type View } from '@qualivis/core';
-import { Button } from '../../ui/Button';
-import { Icon } from '../../ui/Icon';
-import { IconButton } from '../../ui/IconButton';
-import { Select, type SelectOption } from '../../ui/Select';
-import { Tooltip } from '../../ui/Tooltip';
+import {
+    Button,
+    Icon,
+    Select,
+    type SelectOption,
+    Toggle,
+    Tooltip,
+} from '../../../../../common-components';
 
 /**
  * Size metrics of the select (G14): all in the app view, without the component-only ones in the
@@ -29,9 +32,6 @@ type GraphActionsProps = {
     fullScreen: { on: boolean; onToggle: () => void };
 };
 
-/** Value colour of the select, as the legacy graph sets it (graph.component.scss:157-160). */
-const graphButtonColor = 'var(--qv-graph-button)';
-
 /**
  * Action bars above the graph (legacy graph.component.html:165-218): back and stopping the layout
  * on the left; cluster, size metric, zoom and full screen on the right.
@@ -53,37 +53,37 @@ export const GraphActions = ({
             <div className="qv-graph-actions left">
                 {component && onBack && (
                     <Tooltip text="Back to app graph">
-                        <IconButton aria-label="Back to app graph" onClick={onBack}>
+                        <Button size="icon" aria-label="Back to app graph" onClick={onBack}>
                             <Icon name="arrow_back" />
-                        </IconButton>
+                        </Button>
                     </Tooltip>
                 )}
                 {layout.running && (
                     <Tooltip text="Stop layout">
-                        <IconButton aria-label="Stop layout" onClick={layout.onStop}>
+                        <Button size="icon" aria-label="Stop layout" onClick={layout.onStop}>
                             <Icon name="stop" />
-                        </IconButton>
+                        </Button>
                     </Tooltip>
                 )}
             </div>
             <div className="qv-graph-actions right">
                 {component && cluster.hasCluster && (
-                    <Button
-                        variant="stroked"
-                        className={cluster.show ? 'show-cluster-button on' : 'show-cluster-button'}
-                        aria-pressed={cluster.show}
-                        onClick={cluster.onToggle}
+                    <Toggle
+                        variant="outline"
+                        className="show-cluster-button"
+                        pressed={cluster.show}
+                        onPressedChange={cluster.onToggle}
                     >
                         Toggle cluster
-                    </Button>
+                    </Toggle>
                 )}
                 <Tooltip text="Node size metric">
                     <Select
                         aria-label="Node size metric"
                         value={sizeMetric.value}
+                        className="size-metric"
                         options={sizeMetricOptions(view)}
-                        onChange={sizeMetric.onChange}
-                        color={graphButtonColor}
+                        onChange={event => sizeMetric.onChange(event.currentTarget.value)}
                     />
                 </Tooltip>
                 <Tooltip text="Zoom to 100%">
@@ -92,14 +92,18 @@ export const GraphActions = ({
                     </Button>
                 </Tooltip>
                 <Tooltip text="Zoom to fit">
-                    <IconButton aria-label="Zoom to fit" onClick={zoom.onZoomToFit}>
+                    <Button size="icon" aria-label="Zoom to fit" onClick={zoom.onZoomToFit}>
                         <Icon name="all_out" />
-                    </IconButton>
+                    </Button>
                 </Tooltip>
                 <Tooltip text={fullScreenText}>
-                    <IconButton aria-label="Toggle fullscreen" onClick={fullScreen.onToggle}>
+                    <Button
+                        size="icon"
+                        aria-label="Toggle fullscreen"
+                        onClick={fullScreen.onToggle}
+                    >
                         <Icon name={fullScreen.on ? 'fullscreen_exit' : 'fullscreen'} />
-                    </IconButton>
+                    </Button>
                 </Tooltip>
             </div>
         </>

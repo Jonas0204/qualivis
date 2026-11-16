@@ -1,6 +1,6 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-// Roboto and Material Icons, served locally by the web app's font packages.
+// Material Icons, served locally by the web app's font package.
 import '../../apps/web/src/styles/fonts.css';
 import '../theme.css';
 import './showcase.css';

@@ -6,6 +6,7 @@ import { analysisAtom, initialAnalysisState } from '../../../state/analysisAtoms
 import { selectionAtom } from '../../../state/selectionAtoms';
 import { componentIdAtom, fullScreenAtom } from '../../../state/viewAtoms';
 import { loadFixture } from '../../../test/fixtures';
+import { chooseOption, chosenLabel } from '../../../test/nativeSelect';
 import { renderWithState } from '../../../test/renderWithState';
 import { initial } from '../../../test/TestProvider';
 import { GraphView } from '../GraphView';
@@ -508,7 +509,7 @@ describe('GraphView selection and fading', () => {
         expect(linkOpacities(container)).toEqual(['1', '0.1', '0.1', '0.1', '1', '0.1', '0.1']);
     });
 
-    it('selects the function of a preview circle with the lines in its file (G4)', () => {
+    it('selects the function of a preview circle (G4)', () => {
         const { createLayout } = createFakeLayout();
         const { container, store } = drawView(createLayout);
         const circle = Array.from(
@@ -520,19 +521,15 @@ describe('GraphView selection and fading', () => {
 
         fireEvent.click(circle);
 
-        // const handleClick = useCallback(…) spans lines 11 to 14 of Counter.tsx.
         expect(store.get(selectionAtom)).toEqual([
-            expect.objectContaining({ id: 'handleClick#11', lineStart: 11, lineEnd: 14 }),
+            expect.objectContaining({ id: 'handleClick#11', label: 'handleClick' }),
         ]);
-        expect(store.get(selectionAtom)?.[0]?.code).toBe(
-            mini.fileMap['/mini/src/components/Counter.tsx']?.code
-        );
         // The click goes on to the node, which fades to Counter as in the legacy app.
         expect(nodeOpacities(container).Counter).toBe('1');
         expect(nodeOpacities(container).Header).toBe('0.1');
     });
 
-    it('selects a function of the component view with its lines (componentId of the view)', () => {
+    it('selects a function of the component view', () => {
         const { createLayout } = createFakeLayout();
         const { container, store } = renderWithState(
             <GraphView createLayout={createLayout} measure={measure} />,
@@ -541,9 +538,8 @@ describe('GraphView selection and fading', () => {
 
         fireEvent.click(overlay(container, 'render'));
 
-        // render() { … } spans lines 59 to 71 of App.js.
         expect(store.get(selectionAtom)).toEqual([
-            expect.objectContaining({ id: 'render', lineStart: 59, lineEnd: 71 }),
+            expect.objectContaining({ id: 'render', icons: [] }),
         ]);
     });
 
@@ -885,15 +881,14 @@ describe('GraphView legend and actions', () => {
         const { getByRole } = drawView(createLayout);
         const select = () => getByRole('combobox', { name: 'Node size metric' });
 
-        fireEvent.click(select());
-        fireEvent.click(getByRole('option', { name: 'Cyclomatic Complexity' }));
+        chooseOption(select(), 'Cyclomatic Complexity');
 
         expect(engines).toHaveLength(2);
         expect(engines[0]?.stopped).toBe(true);
         expect(engines[1]?.positions).toEqual(
             engines[0]?.options.nodes.map(({ id, x, y }) => ({ id, x, y }))
         );
-        expect(select().textContent).toBe('Cyclomatic Complexity');
+        expect(chosenLabel(select())).toBe('Cyclomatic Complexity');
     });
 
     it('goes back to "Lines of Code" in the component view and back to the app graph (N11, N13)', () => {
@@ -902,15 +897,14 @@ describe('GraphView legend and actions', () => {
         const select = () => getByRole('combobox', { name: 'Node size metric' });
         expect(queryByRole('button', { name: 'Back to app graph' })).toBeNull();
 
-        fireEvent.click(select());
-        fireEvent.click(getByRole('option', { name: 'Lines of JSX Code' }));
+        chooseOption(select(), 'Lines of JSX Code');
         act(() => store.set(componentIdAtom, app));
-        expect(select().textContent).toBe('Lines of Code');
+        expect(chosenLabel(select())).toBe('Lines of Code');
         expect(container.querySelector('svg.qv-legend')?.getAttribute('height')).toBe('270');
 
         fireEvent.click(getByRole('button', { name: 'Back to app graph' }));
         expect(store.get(componentIdAtom)).toBeUndefined();
-        expect(select().textContent).toBe('Lines of Code');
+        expect(chosenLabel(select())).toBe('Lines of Code');
     });
 
     it('shows the app view again as it was left, without a new layout (ADR-011 A22)', () => {
@@ -952,8 +946,7 @@ describe('GraphView legend and actions', () => {
         expect(engines.at(-1)?.options.restore).toBeUndefined();
 
         act(() => store.set(componentIdAtom, app));
-        fireEvent.click(getByRole('combobox', { name: 'Node size metric' }));
-        fireEvent.click(getByRole('option', { name: 'Cyclomatic Complexity' }));
+        chooseOption(getByRole('combobox', { name: 'Node size metric' }), 'Cyclomatic Complexity');
         act(() => store.set(componentIdAtom, undefined));
         expect(engines.at(-1)?.options.restore).toBeUndefined();
     });

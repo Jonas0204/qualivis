@@ -1,8 +1,3 @@
-/* Served locally instead of the Google CDN used by the legacy index.html. Roboto only
-   ships the latin subset (German and English, Latin-1, general punctuation, €); the weights are the
-   legacy ones, without italic or bold (user decision, see
-   docs/migration/01-referenz-altsystem/04-stil-referenz.md §2). */
-@import "@fontsource/roboto/latin-300.css";
-@import "@fontsource/roboto/latin-400.css";
-@import "@fontsource/roboto/latin-500.css";
+/* Served locally instead of the Google CDN used by the legacy index.html. The text uses the system
+   font of the common components (theme.css); only the icon font is loaded. */
 @import "@fontsource/material-icons";

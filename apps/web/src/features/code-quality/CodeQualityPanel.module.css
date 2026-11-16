@@ -2,7 +2,7 @@
    (style reference §2, §3) */
 .panel {
     display: block;
-    padding: 8px;
+    padding: 12px;
 }
 
 .headerContainer {
@@ -12,12 +12,13 @@
 
 .header {
     margin: 0 0 16px;
-    font: 500 16px / 28px var(--qv-font);
+    font: var(--headingWeight) 16px / 28px var(--fontHeading);
     cursor: default;
 }
 
 .name {
-    font: 400 15px / 24px var(--qv-font);
+    font: 400 15px / 24px var(--fontBody);
+    color: var(--colorTextMuted);
 }
 
 .iconDescriptions {

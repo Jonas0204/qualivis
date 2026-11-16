@@ -3,7 +3,6 @@
 export type { AnalysisResult, AnalyzeAsyncOptions, SourceFile } from './analysis/analyzeProject';
 export { analyzeProject, analyzeProjectAsync } from './analysis/analyzeProject';
 export { hasSingleComponent } from './analysis/hasSingleComponent';
-export { extractFileTree } from './legacy/extractFileTree';
 export { findReport } from './legacy/findReport';
 export { isComponentFile } from './legacy/isComponentFile';
 export * from './model/clusterColors';
