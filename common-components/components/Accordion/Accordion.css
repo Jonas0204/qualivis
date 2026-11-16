@@ -1,0 +1,81 @@
+.cc-accordion {
+    border-top: var(--borderWidth) solid var(--colorBorder);
+    color: var(--colorText);
+    font-family: var(--fontBody);
+}
+
+.cc-accordion__item {
+    border-bottom: var(--borderWidth) solid var(--colorBorder);
+    interpolate-size: allow-keywords;
+}
+
+.cc-accordion__summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 2px;
+    font-size: 14px;
+    font-weight: 500;
+    list-style: none;
+    cursor: pointer;
+}
+
+.cc-accordion__summary::-webkit-details-marker {
+    display: none;
+}
+
+.cc-accordion__summary:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+}
+
+.cc-accordion__summary:focus-visible {
+    outline: var(--focusRing);
+    outline-offset: 2px;
+}
+
+/* Arrow, drawn with two borders; turns when open */
+.cc-accordion__summary::after {
+    content: "";
+    flex-shrink: 0;
+    width: 6px;
+    height: 6px;
+    margin: -4px 6px 0 0;
+    border: solid var(--colorTextMuted);
+    border-width: 0 1.5px 1.5px 0;
+    rotate: 45deg;
+    transition: rotate 150ms ease;
+}
+
+.cc-accordion__item[open] > .cc-accordion__summary::after {
+    margin-top: 4px;
+    rotate: 225deg;
+}
+
+.cc-accordion__content {
+    padding: 0 2px 14px;
+    color: var(--colorTextMuted);
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* Opens smoothly where the browser can animate to "auto" (Chrome 131+). */
+.cc-accordion__item::details-content {
+    height: 0;
+    overflow: clip;
+    transition:
+        height 200ms ease,
+        content-visibility 200ms allow-discrete;
+}
+
+.cc-accordion__item[open]::details-content {
+    height: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cc-accordion__item::details-content,
+    .cc-accordion__summary::after {
+        transition: none;
+    }
+}

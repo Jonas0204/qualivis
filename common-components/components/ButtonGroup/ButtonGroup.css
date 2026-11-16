@@ -1,0 +1,31 @@
+.cc-button-group {
+    display: inline-flex;
+    min-inline-size: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    isolation: isolate;
+}
+
+.cc-button-group > * {
+    border-radius: 0;
+}
+
+.cc-button-group > * + * {
+    margin-left: calc(var(--borderWidth) * -1);
+}
+
+.cc-button-group > :first-child {
+    border-start-start-radius: var(--radiusMedium);
+    border-end-start-radius: var(--radiusMedium);
+}
+
+.cc-button-group > :last-child {
+    border-start-end-radius: var(--radiusMedium);
+    border-end-end-radius: var(--radiusMedium);
+}
+
+.cc-button-group > :hover,
+.cc-button-group > :focus-visible {
+    z-index: 1;
+}

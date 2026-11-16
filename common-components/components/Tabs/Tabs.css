@@ -1,0 +1,75 @@
+.cc-tabs__list {
+    display: flex;
+    gap: 4px;
+    border-bottom: var(--borderWidth) solid var(--colorBorder);
+}
+
+.cc-tabs__tab {
+    position: relative;
+    margin: 0 0 calc(var(--borderWidth) * -1);
+    padding: 9px 12px;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    border-radius: var(--radiusSmall) var(--radiusSmall) 0 0;
+    background: none;
+    color: var(--colorTextMuted);
+    font: 500 14px / 1 var(--fontBody);
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.cc-tabs__tab:hover:not(:disabled) {
+    color: var(--colorText);
+    background: var(--colorHover);
+}
+
+.cc-tabs__tab:focus-visible {
+    outline: var(--focusRing);
+    outline-offset: -2px;
+}
+
+.cc-tabs__tab[aria-selected="true"] {
+    border-bottom-color: var(--colorPrimary);
+    color: var(--colorText);
+}
+
+.cc-tabs__tab:disabled {
+    opacity: var(--disabledOpacity);
+    cursor: not-allowed;
+}
+
+/* Segmented look: the tabs sit in a sunken bar */
+.cc-tabs[data-variant="segmented"] .cc-tabs__list {
+    display: inline-flex;
+    gap: 2px;
+    padding: 3px;
+    border: 0;
+    border-radius: var(--radiusMedium);
+    background: var(--colorSurfaceMuted);
+    box-shadow: inset 0 0 0 var(--borderWidth) var(--colorBorder);
+}
+
+.cc-tabs[data-variant="segmented"] .cc-tabs__tab {
+    margin: 0;
+    padding: 7px 12px;
+    border: 0;
+    border-radius: calc(var(--radiusMedium) - 2px);
+}
+
+.cc-tabs[data-variant="segmented"] .cc-tabs__tab[aria-selected="true"] {
+    background: var(--colorSurface);
+    box-shadow:
+        0 0 0 var(--borderWidth) var(--colorBorder),
+        var(--shadowSmall);
+}
+
+.cc-tabs__panel {
+    padding-top: 14px;
+    color: var(--colorText);
+    font: 400 14px / 1.5 var(--fontBody);
+}
+
+.cc-tabs__panel:focus-visible {
+    outline: var(--focusRing);
+    outline-offset: 2px;
+}

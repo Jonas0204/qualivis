@@ -1,0 +1,22 @@
+.cc-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+    font-family: var(--fontBody);
+}
+
+.cc-field__hint,
+.cc-field__error {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.cc-field__hint {
+    color: var(--colorTextMuted);
+}
+
+.cc-field__error {
+    color: var(--colorDanger);
+}

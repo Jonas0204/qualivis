@@ -29,6 +29,7 @@ müssen gleich bleiben; der Beweis sind Golden-Daten aus dem alten Build.
 | Goldens oder Parität berührt | `06-teststrategie.md` §3, `testdata/golden/README.md` |
 | Ordner, Pakete oder Importe zwischen Paketen anlegt | `00-grundlagen/03-architektur.md` §2–§3 |
 | Zustand (Jotai) anfasst | `03-architektur.md` §5, `06-teststrategie.md` §2 |
+| UI-Bausteine (Button, Feld, Auswahl, Dialog, Tooltip …) braucht oder baut | `common-components/README.md` |
 
 Richtwert: Die Punkte 1–5 sind zusammen etwa 3.000–5.000 Wörter. Mehr zu lesen kostet Kontext und
 Genauigkeit.
@@ -101,6 +102,7 @@ gekürzt. Die Zeilenangaben gelten unverändert, denn die Dateien wurden nur ver
 | `pnpm test:parity` | nur die Golden-Tests von Kern und Web |
 | `pnpm dev`, `pnpm build` | App starten bzw. bauen |
 | `pnpm start` | App bauen und den fertigen Build lokal starten (schneller als `pnpm dev`, z. B. für Vorführungen) |
+| `pnpm showcase` | Showcase der Basis-UI-Komponenten starten (http://127.0.0.1:5174), mit Umschalter für Hell- und Dunkelmodus |
 | `pnpm legacy:extract`, `pnpm legacy:serve` | alten Build entpacken und lokal starten, nur für Golden-Erfassung (`tools/legacy/README.md`) |
 | `node tools/golden/diff-json.mjs <erwartet.json> <ist.json> [n]` | zeigt die ersten n (Standard 60) Pfade, an denen zwei JSON-Dateien abweichen; Exit 0 gleich, 1 verschieden, 2 Aufruffehler |
 
@@ -111,10 +113,24 @@ gekürzt. Die Zeilenangaben gelten unverändert, denn die Dateien wurden nur ver
 | `docs/migration/` | Plan, `STATUS.md`, Entscheidungen (ADRs) |
 | `packages/core/` | Analyse-Kern `@qualivis/core` |
 | `apps/web/` | React-App |
+| `common-components/` | Basis-UI-Komponenten mit Hell-/Dunkelmodus und Showcase (kein Paket, siehe unten) |
 | `tools/` | Hilfsprogramme mit Tests: Node-Versionsprüfung, Legacy-Server, Capture-Skript, JSON-Diff |
 | `testdata/fixtures/`, `testdata/golden/` | Testprojekte und Referenzdaten aus dem alten Build |
 | `legacy/angular/` | Altsystem, nur lesen |
 | `.claude/skills/` | Abläufe als Skills (Claude Code und GitHub Copilot in VS Code lesen diesen Ordner) |
+
+## Basis-UI-Komponenten
+
+- Buttons, Felder, Auswahl, Schalter, Dialoge, Menüs, Tooltips und ähnliche Bausteine kommen aus
+  `common-components/` (Import über `common-components/index.ts`, Tokens in `theme.css`). Kein
+  Baustein wird in `apps/web` neu gebaut oder kopiert.
+- Der Ordner ist bewusst **kein** Workspace-Paket und hat keine eigenen Abhängigkeiten: nur React,
+  natives HTML (`<dialog>`, Popover-API, `<select>`, `<details>`) und reines CSS. Keine
+  UI-Bibliothek, kein Tailwind, kein Radix.
+- Er enthält **nicht** jeden Baustein, den es in Bibliotheken wie shadcn/ui gibt. Fehlt einer: dort
+  ergänzen (gleiche Bauart, siehe `common-components/README.md`) und im Showcase zeigen.
+- Die App nutzt vorerst noch ihre alten Bausteine in `apps/web/src/ui/`; die Umstellung kommt in
+  einem eigenen Schritt.
 
 ## Skills
 

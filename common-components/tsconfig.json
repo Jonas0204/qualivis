@@ -1,0 +1,15 @@
+{
+    "extends": "../tsconfig.base.json",
+    "compilerOptions": {
+        "lib": ["es2023", "dom", "dom.iterable"],
+        "types": ["node"],
+        // The folder is no package and has no node_modules: React's types come from the web app.
+        "paths": {
+            "react": ["../apps/web/node_modules/@types/react"],
+            "react/*": ["../apps/web/node_modules/@types/react/*"],
+            "react-dom": ["../apps/web/node_modules/@types/react-dom"],
+            "react-dom/*": ["../apps/web/node_modules/@types/react-dom/*"]
+        }
+    },
+    "include": ["."]
+}

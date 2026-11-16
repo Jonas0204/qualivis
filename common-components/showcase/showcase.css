@@ -1,0 +1,187 @@
+/* Layout of the showcase page only; the components bring their own CSS. */
+body {
+    margin: 0;
+    background: var(--colorBackground);
+    color: var(--colorText);
+    font-family: var(--fontBody);
+    transition: background-color 200ms ease;
+}
+
+.sc-page {
+    box-sizing: border-box;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 32px 24px 64px;
+}
+
+.sc-header {
+    display: grid;
+    grid-template-columns: minmax(260px, 1fr) minmax(0, 2fr);
+    gap: 32px;
+    align-items: end;
+    margin-bottom: 32px;
+}
+
+@media (max-width: 900px) {
+    .sc-header {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Read by screen readers only */
+.sc-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+.sc-eyebrow {
+    margin: 0 0 6px;
+    color: var(--colorPrimary);
+    font-family: var(--labelFont);
+    font-size: var(--labelFontSize);
+    font-weight: 600;
+    letter-spacing: var(--labelLetterSpacing);
+    text-transform: var(--labelTextTransform);
+}
+
+.sc-title {
+    margin: 0;
+    font-family: var(--fontHeading);
+    font-size: 34px;
+    font-weight: var(--headingWeight);
+    line-height: 1.1;
+}
+
+.sc-lead {
+    margin: 10px 0 0;
+    color: var(--colorTextMuted);
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+.sc-designs {
+    display: grid;
+    min-inline-size: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+}
+
+@media (max-width: 640px) {
+    .sc-designs {
+        grid-template-columns: 1fr;
+    }
+}
+
+.sc-design {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 14px;
+    border: var(--borderWidth) solid var(--colorBorder);
+    border-radius: var(--radiusLarge);
+    background: var(--colorSurface);
+    box-shadow: var(--shadowSmall);
+    color: var(--colorText);
+    font-family: var(--fontBody);
+    text-align: left;
+    cursor: pointer;
+}
+
+.sc-design:hover {
+    border-color: var(--colorBorderStrong);
+}
+
+.sc-design:focus-visible {
+    outline: var(--focusRing);
+    outline-offset: 2px;
+}
+
+.sc-design[aria-pressed="true"] {
+    border-color: var(--colorPrimary);
+    box-shadow:
+        0 0 0 1px var(--colorPrimary),
+        var(--shadowSmall);
+}
+
+.sc-design__swatches {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 4px;
+}
+
+.sc-design__swatches > span {
+    width: 18px;
+    height: 18px;
+    border: 1px solid var(--colorBorder);
+    border-radius: var(--radiusSmall);
+}
+
+.sc-design__name {
+    font-family: var(--fontHeading);
+    font-size: 16px;
+    font-weight: var(--headingWeight);
+}
+
+.sc-design__summary {
+    color: var(--colorTextMuted);
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+/* Columns like a masonry: cards of different heights fill the gaps. */
+.sc-grid {
+    columns: 3 340px;
+    column-gap: 20px;
+}
+
+.sc-grid > * {
+    margin-bottom: 20px;
+    break-inside: avoid;
+}
+
+.sc-wide {
+    column-span: all;
+}
+
+.sc-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.sc-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+
+.sc-caption {
+    margin: 0 0 8px;
+    color: var(--colorTextMuted);
+    font-family: var(--labelFont);
+    font-size: var(--labelFontSize);
+    font-weight: 600;
+    letter-spacing: var(--labelLetterSpacing);
+    text-transform: var(--labelTextTransform);
+}
+
+.sc-popover-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 260px;
+}
+
+.sc-mono {
+    font-family: var(--fontMonospace);
+    font-size: 13px;
+}

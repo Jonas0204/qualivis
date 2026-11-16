@@ -1,0 +1,5 @@
+.cc-popover {
+    width: max-content;
+    max-width: min(340px, calc(100vw - 16px));
+    padding: 14px;
+}

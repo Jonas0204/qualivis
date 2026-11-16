@@ -1,0 +1,51 @@
+.cc-checkbox {
+    position: relative;
+    display: inline-grid;
+    place-content: center;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    border: var(--borderWidth) solid var(--colorBorderStrong);
+    border-radius: min(var(--radiusSmall), 5px);
+    background: var(--colorSurface);
+    cursor: inherit;
+    appearance: none;
+    transition:
+        background-color 120ms ease,
+        border-color 120ms ease;
+}
+
+.cc-checkbox:hover:not(:disabled) {
+    border-color: var(--colorPrimary);
+}
+
+.cc-checkbox:focus-visible {
+    outline: var(--focusRing);
+    outline-offset: 2px;
+}
+
+.cc-checkbox:checked,
+.cc-checkbox:indeterminate {
+    border-color: var(--colorPrimary);
+    background: var(--colorPrimary);
+}
+
+/* Tick: two borders of a turned box */
+.cc-checkbox:checked::after {
+    content: "";
+    width: 4px;
+    height: 9px;
+    margin-top: -2px;
+    border: solid var(--colorOnPrimary);
+    border-width: 0 2px 2px 0;
+    rotate: 45deg;
+}
+
+.cc-checkbox:indeterminate::after {
+    content: "";
+    width: 9px;
+    height: 2px;
+    background: var(--colorOnPrimary);
+}

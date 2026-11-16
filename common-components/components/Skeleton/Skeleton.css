@@ -1,0 +1,38 @@
+.cc-skeleton {
+    display: block;
+    border-radius: var(--radiusMedium);
+    background:
+        linear-gradient(
+            90deg,
+            transparent 0%,
+            color-mix(in oklab, var(--colorSurface) 70%, transparent) 50%,
+            transparent 100%
+        )
+        0 0 / 200% 100% no-repeat,
+        var(--colorPressed);
+    animation: cc-skeleton 1.4s ease-in-out infinite;
+}
+
+.cc-skeleton[data-shape="circle"] {
+    border-radius: 50%;
+}
+
+@keyframes cc-skeleton {
+    from {
+        background-position:
+            150% 0,
+            0 0;
+    }
+
+    to {
+        background-position:
+            -50% 0,
+            0 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cc-skeleton {
+        animation: none;
+    }
+}

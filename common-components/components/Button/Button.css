@@ -1,0 +1,128 @@
+.cc-button {
+    /* Set per variant */
+    --_background: transparent;
+    --_backgroundHover: var(--_background);
+    --_foreground: var(--colorText);
+    --_border: transparent;
+    --_overlay: transparent;
+
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45em;
+    box-sizing: border-box;
+    height: var(--controlHeight);
+    margin: 0;
+    padding: 0 14px;
+    border: var(--borderWidth) solid var(--_border);
+    border-radius: var(--radiusMedium);
+    background-color: var(--_background);
+    background-image: linear-gradient(var(--_overlay), var(--_overlay));
+    color: var(--_foreground);
+    font: 500 14px / 1 var(--fontBody);
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+    transition:
+        background-color 120ms ease,
+        border-color 120ms ease,
+        color 120ms ease;
+}
+
+.cc-button:hover {
+    --_overlay: var(--colorHover);
+    background-color: var(--_backgroundHover);
+}
+
+.cc-button:active {
+    --_overlay: var(--colorPressed);
+    translate: 0 1px;
+}
+
+.cc-button:focus-visible {
+    outline: var(--focusRing);
+    outline-offset: 2px;
+}
+
+.cc-button:disabled {
+    opacity: var(--disabledOpacity);
+    cursor: not-allowed;
+    translate: none;
+}
+
+.cc-button:disabled:hover {
+    --_overlay: transparent;
+    background-color: var(--_background);
+}
+
+.cc-button[data-variant="primary"] {
+    --_background: var(--colorPrimary);
+    --_backgroundHover: var(--colorPrimaryHover);
+    --_foreground: var(--colorOnPrimary);
+    --_border: var(--colorPrimary);
+}
+
+.cc-button[data-variant="primary"]:hover,
+.cc-button[data-variant="danger"]:hover {
+    --_overlay: transparent;
+}
+
+.cc-button[data-variant="secondary"] {
+    --_background: var(--colorPrimarySoft);
+    --_foreground: var(--colorPrimarySoftText);
+}
+
+.cc-button[data-variant="outline"] {
+    --_background: var(--colorSurface);
+    --_border: var(--colorBorderStrong);
+}
+
+.cc-button[data-variant="danger"] {
+    --_background: var(--colorDanger);
+    --_backgroundHover: var(--colorDangerHover);
+    --_foreground: var(--colorOnPrimary);
+    --_border: var(--colorDanger);
+}
+
+.cc-button[data-variant="link"] {
+    --_foreground: var(--colorPrimary);
+    height: auto;
+    padding: 0;
+    border: 0;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+}
+
+.cc-button[data-variant="link"]:hover {
+    --_overlay: transparent;
+    text-decoration-thickness: 2px;
+}
+
+.cc-button[data-size="sm"] {
+    height: calc(var(--controlHeight) - 6px);
+    padding: 0 10px;
+    font-size: 13px;
+}
+
+.cc-button[data-size="lg"] {
+    height: calc(var(--controlHeight) + 6px);
+    padding: 0 20px;
+    font-size: 15px;
+}
+
+.cc-button[data-size="icon"],
+.cc-button[data-size="icon-sm"] {
+    width: var(--controlHeight);
+    padding: 0;
+}
+
+.cc-button[data-size="icon-sm"] {
+    width: calc(var(--controlHeight) - 6px);
+    height: calc(var(--controlHeight) - 6px);
+}
+
+.cc-button .cc-icon {
+    font-size: 18px;
+}

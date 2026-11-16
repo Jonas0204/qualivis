@@ -1,0 +1,46 @@
+.cc-dialog[data-kind="sheet"] {
+    width: min(400px, calc(100vw - 32px));
+    height: 100dvh;
+    max-height: none;
+    margin: 0;
+    border-radius: 0;
+    translate: 0 0;
+    transition:
+        translate 200ms ease,
+        overlay 200ms allow-discrete,
+        display 200ms allow-discrete;
+}
+
+.cc-dialog[data-kind="sheet"][data-side="right"] {
+    margin-left: auto;
+    border-width: 0 0 0 var(--borderWidth);
+}
+
+.cc-dialog[data-kind="sheet"][data-side="left"] {
+    margin-right: auto;
+    border-width: 0 var(--borderWidth) 0 0;
+}
+
+.cc-dialog[data-kind="sheet"][data-side="right"]:not([open]) {
+    translate: 100% 0;
+}
+
+.cc-dialog[data-kind="sheet"][data-side="left"]:not([open]) {
+    translate: -100% 0;
+}
+
+@starting-style {
+    .cc-dialog[data-kind="sheet"][data-side="right"][open] {
+        translate: 100% 0;
+    }
+
+    .cc-dialog[data-kind="sheet"][data-side="left"][open] {
+        translate: -100% 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cc-dialog[data-kind="sheet"] {
+        transition: none;
+    }
+}

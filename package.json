@@ -13,13 +13,14 @@
         "start": "pnpm build && pnpm preview",
         "lint": "biome check .",
         "format": "biome check --write .",
-        "typecheck": "pnpm -r --if-present run typecheck",
+        "typecheck": "pnpm -r --if-present run typecheck && tsc -p common-components",
         "test": "vitest run",
         "test:parity": "vitest run --project core --project web golden",
         "check": "pnpm lint && pnpm typecheck && pnpm test",
         "legacy:extract": "node tools/legacy/extract-legacy-build.mjs",
         "legacy:serve": "node tools/legacy/serve-legacy.mjs",
-        "knip": "knip"
+        "knip": "knip",
+        "showcase": "pnpm --filter @qualivis/web exec vite --config ../../common-components/vite.config.ts"
     },
     "devDependencies": {
         "@biomejs/biome": "catalog:",

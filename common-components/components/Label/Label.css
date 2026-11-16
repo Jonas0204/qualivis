@@ -1,0 +1,10 @@
+.cc-label {
+    display: inline-block;
+    color: var(--colorText);
+    font-family: var(--labelFont);
+    font-size: var(--labelFontSize);
+    font-weight: 600;
+    letter-spacing: var(--labelLetterSpacing);
+    line-height: 1.3;
+    text-transform: var(--labelTextTransform);
+}

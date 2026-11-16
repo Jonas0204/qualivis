@@ -1,0 +1,81 @@
+/*
+ * Design tokens of the common components. Load this file once, globally.
+ *
+ * Only base values are set here (colours, fonts, radii, sizes, shadows). The shades the components
+ * use for hover, soft backgrounds, overlays and so on are derived from these base values further
+ * down, so changing for example --colorPrimary recolours every component.
+ *
+ * Dark mode: every colour is written as light-dark(light value, dark value). The page follows the
+ * setting of the system. data-color-scheme="light" or "dark" on <html> or on any element fixes the
+ * mode for everything inside.
+ */
+
+:root {
+    color-scheme: light dark;
+
+    --fontBody:
+        "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", sans-serif;
+    --fontHeading: var(--fontBody);
+    --fontMonospace: "Cascadia Mono", "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+    --headingWeight: 600;
+    /* Small labels (badges, field labels, table heads, menu groups) */
+    --labelFont: var(--fontMonospace);
+    --labelTextTransform: uppercase;
+    --labelFontSize: 11px;
+    --labelLetterSpacing: 0.06em;
+
+    --radiusSmall: 2px;
+    --radiusMedium: 4px;
+    --radiusLarge: 6px;
+    --borderWidth: 1px;
+    --controlHeight: 34px;
+    --disabledOpacity: 0.45;
+}
+
+[data-color-scheme="light"] {
+    color-scheme: light;
+}
+
+[data-color-scheme="dark"] {
+    color-scheme: dark;
+}
+
+/* Colours. Declared again on every element that fixes the mode, so that the derived values are
+   calculated with the mode that applies there. */
+:root,
+[data-color-scheme] {
+    --colorBackground: light-dark(#f2f4f3, #121617);
+    --colorSurface: light-dark(#ffffff, #1b2123);
+    --colorText: light-dark(#1a2023, #e4eaea);
+    --colorTextMuted: light-dark(#5b666b, #98a5a8);
+    --colorBorder: light-dark(#d5dcdc, #2f393c);
+    --colorBorderStrong: light-dark(#8e9a9d, #5d6b70);
+
+    --colorPrimary: light-dark(#0d6c75, #43b4be);
+    --colorOnPrimary: light-dark(#ffffff, #06262a);
+    --colorDanger: light-dark(#b8352a, #f0796d);
+    --colorSuccess: light-dark(#2f7a3a, #6ec47b);
+    --colorWarning: light-dark(#966100, #e0aa3e);
+    /* Hover on filled buttons mixes the colour towards this one. */
+    --colorHoverShade: light-dark(black, white);
+
+    --shadowSmall: 0 1px 0 light-dark(rgba(26, 32, 35, 0.05), rgba(0, 0, 0, 0.3));
+    --shadowLarge:
+        0 10px 28px -10px light-dark(rgba(16, 32, 36, 0.32), rgba(0, 0, 0, 0.7)),
+        0 0 0 1px light-dark(rgba(16, 32, 36, 0.06), rgba(255, 255, 255, 0.05));
+
+    /* Derived values */
+    --colorPrimaryHover: color-mix(in oklab, var(--colorPrimary), var(--colorHoverShade) 16%);
+    --colorPrimarySoft: color-mix(in oklab, var(--colorPrimary) 11%, var(--colorSurface));
+    --colorPrimarySoftText: color-mix(in oklab, var(--colorPrimary), var(--colorText) 20%);
+    --colorDangerHover: color-mix(in oklab, var(--colorDanger), var(--colorHoverShade) 16%);
+    --colorDangerSoft: color-mix(in oklab, var(--colorDanger) 10%, var(--colorSurface));
+    --colorSuccessSoft: color-mix(in oklab, var(--colorSuccess) 11%, var(--colorSurface));
+    --colorWarningSoft: color-mix(in oklab, var(--colorWarning) 12%, var(--colorSurface));
+
+    --colorSurfaceMuted: color-mix(in oklab, var(--colorText) 4%, var(--colorSurface));
+    --colorHover: color-mix(in oklab, var(--colorText) 6%, transparent);
+    --colorPressed: color-mix(in oklab, var(--colorText) 11%, transparent);
+    --colorOverlay: color-mix(in oklab, black 45%, transparent);
+    --focusRing: 2px solid var(--colorPrimary);
+}

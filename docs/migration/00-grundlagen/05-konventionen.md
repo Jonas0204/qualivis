@@ -72,6 +72,9 @@ Ordner der Altcode-Kopie (`packages/core/src/legacy/`) behalten die **alten Date
 - Kein `dangerouslySetInnerHTML`. Links in Texten als Daten (`{ text, link }`) und JSX.
 - Barrierefreiheit: Buttons sind `<button>`; Icon-Buttons haben `aria-label`; Schalter
   `role="switch"` mit `aria-checked`; Dialog = natives `<dialog>`.
+- Basis-UI-Komponenten (Button, Feld, Auswahl, Schalter, Dialog, Menü, Tooltip …) kommen aus
+  `common-components/` im Repo-Root, nicht aus einer UI-Bibliothek und nicht neu gebaut in
+  `apps/web`. Fehlt ein Baustein, wird er dort ergänzt (Aufbau: `common-components/README.md`).
 
 ## 6. CSS
 
@@ -79,6 +82,11 @@ Ordner der Altcode-Kopie (`packages/core/src/legacy/`) behalten die **alten Date
   Komponenten (Ausnahme: `graph.css`, das die exakten Altwerte über Tokens bezieht).
 - CSS Modules für alles außer dem Graph; `graph.css` global unter `.qv-graph`.
 - Keine CSS-in-JS-Bibliothek, kein Präprozessor (Vite kann CSS-Nesting nativ verarbeiten).
+- Ausnahme `common-components/`: Jede Komponente liegt in einem eigenen Ordner mit einer normalen CSS-Datei gleichen Namens
+  (`Button.tsx` importiert `./Button.css`), mit globalen Klassen `cc-…`. Tokens stehen in
+  `common-components/theme.css`, in camelCase und ausgeschrieben, ohne Präfix (`--colorPrimary`,
+  `--radiusSmall`). Farben stehen dort einmal als `light-dark(hell, dunkel)`; abgeleitete Töne
+  entstehen per `color-mix()`.
 
 ## 7. Kommentare
 

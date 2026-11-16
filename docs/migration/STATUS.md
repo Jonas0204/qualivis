@@ -61,4 +61,8 @@ Hier jede Abweichung vom Plan mit Begründung und Verweis (ADR bzw. Nutzerentsch
 solange sie für kommende Schritte wichtig ist. Vor dem PR der Phase wandert sie in die betroffenen
 Karten oder Grundlagen oder wird gestrichen; Erledigtes steht in der Git-Historie.
 
-Zurzeit keine.
+- **Basis-UI-Komponenten in `common-components/`** (Nutzer, 14.11.2026): ADR-009 („keine
+  UI-Bibliothek, Material-Aussehen“) ist gestrichen. Bausteine wie Button, Select, Schalter, Dialog,
+  Snackbar (Toast) und Tooltip kommen aus `common-components/` (reines CSS, keine Abhängigkeiten,
+  Hell- und Dunkelmodus). Betrifft P07-S02 und P07-S04: dort diese Bausteine nutzen. Die App ist
+  noch nicht umgestellt.

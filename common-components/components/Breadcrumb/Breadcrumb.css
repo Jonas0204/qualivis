@@ -1,0 +1,51 @@
+.cc-breadcrumb ol {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    color: var(--colorTextMuted);
+    font: 400 13px / 1.4 var(--fontBody);
+    list-style: none;
+}
+
+.cc-breadcrumb li {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.cc-breadcrumb li + li::before {
+    content: "/";
+    color: var(--colorBorderStrong);
+}
+
+.cc-breadcrumb a,
+.cc-breadcrumb button {
+    padding: 0;
+    border: 0;
+    border-radius: var(--radiusSmall);
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.cc-breadcrumb a:hover,
+.cc-breadcrumb button:hover {
+    color: var(--colorText);
+    text-decoration: underline;
+}
+
+.cc-breadcrumb a:focus-visible,
+.cc-breadcrumb button:focus-visible {
+    outline: var(--focusRing);
+    outline-offset: 2px;
+}
+
+.cc-breadcrumb [aria-current="page"] {
+    color: var(--colorText);
+    font-weight: 600;
+}

@@ -4,7 +4,13 @@
     "ignoreDependencies": ["@fontsource/roboto", "@fontsource/material-icons"],
     "workspaces": {
         ".": {
-            "entry": ["tools/**/*.mjs"]
+            "entry": [
+                "tools/**/*.mjs",
+                "common-components/index.ts",
+                "common-components/showcase/main.tsx",
+                "common-components/vite.config.ts"
+            ],
+            "ignoreDependencies": ["@types/react", "@types/react-dom"]
         },
         "packages/core": {
             "ignore": ["src/legacy/**"],

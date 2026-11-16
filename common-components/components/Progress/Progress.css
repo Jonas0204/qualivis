@@ -1,0 +1,38 @@
+.cc-progress {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 6px;
+    overflow: hidden;
+    border-radius: calc(var(--radiusMedium) * 99);
+    background: var(--colorPrimarySoft);
+}
+
+.cc-progress__fill {
+    height: 100%;
+    border-radius: inherit;
+    background: var(--colorPrimary);
+    transition: width 250ms ease;
+}
+
+/* Without a value: a bar that runs from left to right */
+.cc-progress:not([aria-valuenow]) .cc-progress__fill {
+    width: 40%;
+    animation: cc-progress 1.2s ease-in-out infinite;
+}
+
+@keyframes cc-progress {
+    from {
+        translate: -100% 0;
+    }
+
+    to {
+        translate: 250% 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cc-progress:not([aria-valuenow]) .cc-progress__fill {
+        animation-duration: 3s;
+    }
+}

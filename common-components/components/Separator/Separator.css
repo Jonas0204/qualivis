@@ -1,0 +1,16 @@
+.cc-separator {
+    flex-shrink: 0;
+    align-self: stretch;
+    margin: 0;
+    border: 0;
+    background: var(--colorBorder);
+}
+
+.cc-separator[aria-orientation="horizontal"] {
+    height: var(--borderWidth);
+}
+
+.cc-separator[aria-orientation="vertical"] {
+    width: var(--borderWidth);
+    height: auto;
+}

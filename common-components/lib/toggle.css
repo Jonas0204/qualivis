@@ -1,0 +1,54 @@
+/* Look of a toggle button; shared by Toggle and ToggleGroup. */
+.cc-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    box-sizing: border-box;
+    min-width: var(--controlHeight);
+    height: var(--controlHeight);
+    margin: 0;
+    padding: 0 10px;
+    border: var(--borderWidth) solid transparent;
+    border-radius: var(--radiusMedium);
+    background: transparent;
+    color: var(--colorTextMuted);
+    font: 500 14px / 1 var(--fontBody);
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+        background-color 120ms ease,
+        color 120ms ease;
+}
+
+.cc-toggle:hover:not(:disabled) {
+    background: var(--colorHover);
+    color: var(--colorText);
+}
+
+.cc-toggle:focus-visible {
+    outline: var(--focusRing);
+    outline-offset: 2px;
+}
+
+.cc-toggle[aria-pressed="true"] {
+    background: var(--colorPrimarySoft);
+    color: var(--colorPrimarySoftText);
+}
+
+.cc-toggle[data-variant="outline"] {
+    border-color: var(--colorBorderStrong);
+}
+
+.cc-toggle[data-variant="outline"][aria-pressed="true"] {
+    border-color: var(--colorPrimary);
+}
+
+.cc-toggle:disabled {
+    opacity: var(--disabledOpacity);
+    cursor: not-allowed;
+}
+
+.cc-toggle .cc-icon {
+    font-size: 18px;
+}

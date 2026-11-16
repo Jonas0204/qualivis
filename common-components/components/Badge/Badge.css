@@ -1,0 +1,53 @@
+.cc-badge {
+    --_background: var(--colorSurfaceMuted);
+    --_foreground: var(--colorTextMuted);
+    --_border: transparent;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    box-sizing: border-box;
+    height: 20px;
+    padding: 0 7px;
+    border: var(--borderWidth) solid var(--_border);
+    border-radius: var(--radiusSmall);
+    background: var(--_background);
+    color: var(--_foreground);
+    font-family: var(--labelFont);
+    font-size: var(--labelFontSize);
+    font-weight: 600;
+    letter-spacing: var(--labelLetterSpacing);
+    line-height: 1;
+    text-transform: var(--labelTextTransform);
+    white-space: nowrap;
+}
+
+.cc-badge[data-variant="primary"] {
+    --_background: var(--colorPrimary);
+    --_foreground: var(--colorOnPrimary);
+}
+
+.cc-badge[data-variant="outline"] {
+    --_background: transparent;
+    --_foreground: var(--colorText);
+    --_border: var(--colorBorderStrong);
+}
+
+.cc-badge[data-variant="success"] {
+    --_background: var(--colorSuccessSoft);
+    --_foreground: var(--colorSuccess);
+}
+
+.cc-badge[data-variant="warning"] {
+    --_background: var(--colorWarningSoft);
+    --_foreground: var(--colorWarning);
+}
+
+.cc-badge[data-variant="danger"] {
+    --_background: var(--colorDangerSoft);
+    --_foreground: var(--colorDanger);
+}
+
+.cc-badge .cc-icon {
+    font-size: 13px;
+}

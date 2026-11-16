@@ -1,0 +1,119 @@
+.cc-select {
+    position: relative;
+    display: inline-flex;
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+}
+
+/* Arrow, drawn with two borders */
+.cc-select::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 13px;
+    width: 6px;
+    height: 6px;
+    margin-top: -5px;
+    border: solid var(--colorTextMuted);
+    border-width: 0 1.5px 1.5px 0;
+    rotate: 45deg;
+    pointer-events: none;
+}
+
+.cc-select__control {
+    box-sizing: border-box;
+    width: 100%;
+    height: var(--controlHeight);
+    margin: 0;
+    padding: 0 34px 0 10px;
+    border: var(--borderWidth) solid var(--colorBorderStrong);
+    border-radius: var(--radiusMedium);
+    outline: none;
+    background: var(--colorSurface);
+    color: var(--colorText);
+    font: 400 14px var(--fontBody);
+    text-overflow: ellipsis;
+    cursor: pointer;
+    appearance: none;
+    transition:
+        border-color 120ms ease,
+        box-shadow 120ms ease;
+}
+
+.cc-select__control:hover {
+    border-color: color-mix(in oklab, var(--colorBorderStrong), var(--colorText) 30%);
+}
+
+.cc-select__control:focus-visible {
+    border-color: var(--colorPrimary);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--colorPrimary) 22%, transparent);
+}
+
+.cc-select__control[aria-invalid="true"] {
+    border-color: var(--colorDanger);
+}
+
+.cc-select__control:disabled {
+    opacity: var(--disabledOpacity);
+    cursor: not-allowed;
+}
+
+/* Browsers with customizable selects (Chrome 135+) also get a list in the same look. */
+@supports (appearance: base-select) {
+    .cc-select__control,
+    .cc-select__control::picker(select) {
+        appearance: base-select;
+    }
+
+    .cc-select__control {
+        display: flex;
+        align-items: center;
+    }
+
+    .cc-select__control::picker-icon {
+        display: none;
+    }
+
+    .cc-select__control::picker(select) {
+        box-sizing: border-box;
+        min-width: anchor-size(width);
+        margin: 4px 0;
+        padding: 4px;
+        border: var(--borderWidth) solid var(--colorBorder);
+        border-radius: var(--radiusMedium);
+        background: var(--colorSurface);
+        box-shadow: var(--shadowLarge);
+    }
+
+    .cc-select__control option {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 7px 10px;
+        border-radius: var(--radiusSmall);
+        color: var(--colorText);
+        font: 400 14px var(--fontBody);
+    }
+
+    .cc-select__control option:hover,
+    .cc-select__control option:focus-visible {
+        outline: none;
+        background: var(--colorHover);
+    }
+
+    .cc-select__control option:disabled {
+        opacity: var(--disabledOpacity);
+    }
+
+    .cc-select__control option:checked {
+        color: var(--colorPrimarySoftText);
+        font-weight: 600;
+    }
+
+    .cc-select__control option::checkmark {
+        order: 1;
+        margin-left: auto;
+        color: var(--colorPrimary);
+    }
+}

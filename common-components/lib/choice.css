@@ -1,0 +1,26 @@
+/* Row of a checkbox, radio button or switch with its label; shared by those components. */
+.cc-choice {
+    display: inline-flex;
+    align-items: flex-start;
+    gap: 9px;
+    color: var(--colorText);
+    font: 400 14px / 1.35 var(--fontBody);
+    cursor: pointer;
+}
+
+.cc-choice:has(input:disabled) {
+    opacity: var(--disabledOpacity);
+    cursor: not-allowed;
+}
+
+.cc-choice__text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding-top: 0.5px;
+}
+
+.cc-choice__description {
+    color: var(--colorTextMuted);
+    font-size: 12px;
+}

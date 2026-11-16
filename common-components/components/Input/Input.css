@@ -1,0 +1,68 @@
+.cc-input {
+    position: relative;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    width: 100%;
+    height: var(--controlHeight);
+    border: var(--borderWidth) solid var(--colorBorderStrong);
+    border-radius: var(--radiusMedium);
+    background: var(--colorSurface);
+    color: var(--colorText);
+    transition:
+        border-color 120ms ease,
+        box-shadow 120ms ease;
+}
+
+.cc-input:hover {
+    border-color: color-mix(in oklab, var(--colorBorderStrong), var(--colorText) 30%);
+}
+
+.cc-input:focus-within {
+    border-color: var(--colorPrimary);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--colorPrimary) 22%, transparent);
+}
+
+.cc-input:has(input[aria-invalid="true"]) {
+    border-color: var(--colorDanger);
+}
+
+.cc-input:has(input[aria-invalid="true"]):focus-within {
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--colorDanger) 22%, transparent);
+}
+
+.cc-input:has(input:disabled) {
+    opacity: var(--disabledOpacity);
+}
+
+.cc-input__control {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    margin: 0;
+    padding: 0 10px;
+    border: 0;
+    outline: none;
+    background: transparent;
+    color: inherit;
+    font: 400 14px var(--fontBody);
+}
+
+.cc-input__control::placeholder {
+    color: var(--colorTextMuted);
+    opacity: 0.8;
+}
+
+.cc-input__control:disabled {
+    cursor: not-allowed;
+}
+
+.cc-input > .cc-icon {
+    margin-left: 9px;
+    color: var(--colorTextMuted);
+    font-size: 18px;
+}
+
+.cc-input > .cc-icon + .cc-input__control {
+    padding-left: 7px;
+}

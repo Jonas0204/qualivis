@@ -1,0 +1,22 @@
+.cc-spinner {
+    display: inline-block;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    border: 2px solid color-mix(in oklab, currentColor 22%, transparent);
+    border-top-color: currentColor;
+    border-radius: 50%;
+    color: var(--colorPrimary);
+    animation: cc-spin 700ms linear infinite;
+}
+
+@keyframes cc-spin {
+    to {
+        rotate: 1turn;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cc-spinner {
+        animation-duration: 2s;
+    }
+}

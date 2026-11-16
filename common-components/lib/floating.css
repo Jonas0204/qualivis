@@ -1,0 +1,37 @@
+/* Panel of a popover or menu in the top layer; shared by Popover and DropdownMenu. */
+.cc-floating {
+    position: fixed;
+    inset: auto;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: var(--borderWidth) solid var(--colorBorder);
+    border-radius: var(--radiusMedium);
+    background: var(--colorSurface);
+    box-shadow: var(--shadowLarge);
+    color: var(--colorText);
+    font: 400 14px / 1.45 var(--fontBody);
+    opacity: 1;
+    translate: 0 0;
+    transition:
+        opacity 120ms ease,
+        translate 120ms ease;
+}
+
+/* Not placed next to its anchor yet (lib/floating.ts) */
+.cc-floating:not([data-side]) {
+    visibility: hidden;
+}
+
+@starting-style {
+    .cc-floating:popover-open {
+        opacity: 0;
+        translate: 0 -4px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cc-floating {
+        transition: none;
+    }
+}

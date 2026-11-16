@@ -1,0 +1,42 @@
+.cc-dialog[data-kind="dialog"] {
+    width: var(--_width);
+    margin: auto;
+    border-radius: var(--radiusLarge);
+    opacity: 1;
+    scale: 1;
+    transition:
+        opacity 150ms ease,
+        scale 150ms ease,
+        overlay 150ms allow-discrete,
+        display 150ms allow-discrete;
+}
+
+.cc-dialog[data-kind="dialog"]:not([open]) {
+    opacity: 0;
+    scale: 0.97;
+}
+
+@starting-style {
+    .cc-dialog[data-kind="dialog"][open] {
+        opacity: 0;
+        scale: 0.97;
+    }
+}
+
+.cc-dialog[data-size="sm"] {
+    --_width: 400px;
+}
+
+.cc-dialog[data-size="md"] {
+    --_width: 520px;
+}
+
+.cc-dialog[data-size="lg"] {
+    --_width: 720px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cc-dialog[data-kind="dialog"] {
+        transition: none;
+    }
+}

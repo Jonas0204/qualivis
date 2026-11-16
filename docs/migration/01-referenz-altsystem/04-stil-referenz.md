@@ -73,7 +73,7 @@ Clusterfarben (`constants/cluster-colors.ts`): `#8321d9 #6ad921 #d92121 #1d5ebf 
 
 - Schrift **Roboto** (300, 400, 500), Fallback `"Helvetica Neue", sans-serif`; Icons **Material
   Icons** (Ligaturen). Beide werden **lokal** ausgeliefert (`@fontsource/roboto`,
-  `@fontsource/material-icons`), nicht vom Google-CDN (ADR-009). Von Roboto nur die Teilmenge
+  `@fontsource/material-icons`), nicht vom Google-CDN. Von Roboto nur die Teilmenge
   `latin` für Deutsch und Englisch (Nutzer, 09.11.2026); das Altsystem lud von Google alle
   Teilmengen. Andere Schriftsysteme erscheinen in der Ersatzschrift; beim Sichtvergleich (P09) ist
   das keine Abweichung. Kursiv und Fett gibt es nicht, wie im Altsystem.

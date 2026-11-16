@@ -1,0 +1,37 @@
+.cc-tooltip {
+    position: fixed;
+    inset: auto;
+    max-width: 260px;
+    margin: 0;
+    padding: 5px 8px;
+    overflow: hidden;
+    border: 0;
+    border-radius: var(--radiusSmall);
+    background: var(--colorText);
+    color: var(--colorSurface);
+    font: 500 12px / 1.35 var(--fontBody);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+.cc-tooltip:not([data-side]) {
+    visibility: hidden;
+}
+
+.cc-tooltip:popover-open {
+    animation: cc-tooltip-in 120ms ease-out;
+}
+
+@keyframes cc-tooltip-in {
+    from {
+        opacity: 0;
+        scale: 0.96;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cc-tooltip:popover-open {
+        animation: none;
+    }
+}

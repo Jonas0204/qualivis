@@ -1,0 +1,16 @@
+.cc-kbd {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 5px;
+    border: var(--borderWidth) solid var(--colorBorder);
+    border-bottom-width: 2px;
+    border-radius: var(--radiusSmall);
+    background: var(--colorSurfaceMuted);
+    color: var(--colorTextMuted);
+    font: 500 11px / 1 var(--fontMonospace);
+    white-space: nowrap;
+}
