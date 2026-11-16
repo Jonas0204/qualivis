@@ -1,17 +1,20 @@
 /* legacy code-quality.component.scss with the Material typography classes mat-h3 and mat-h4
    (style reference §2, §3) */
+/* the side column of the graph page (legacy graph-view.component.scss) */
 .panel {
-    display: block;
+    flex: 0 0 575px;
+    overflow: auto;
     padding: 12px;
+    border-left: var(--borderWidth) solid var(--colorBorder);
+    background: var(--colorSurface);
 }
 
-.headerContainer {
-    display: flex;
-    justify-content: space-between;
+.panel[hidden] {
+    display: none;
 }
 
 .header {
-    margin: 0 0 16px;
+    margin: 0 0 12px;
     font: var(--headingWeight) 16px / 28px var(--fontHeading);
     cursor: default;
 }
@@ -21,6 +24,11 @@
     color: var(--colorTextMuted);
 }
 
-.iconDescriptions {
-    margin-top: 16px;
+.hints {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 16px 0 0;
+    padding: 0;
+    list-style: none;
 }

@@ -8,12 +8,15 @@ import {
     graphSettings,
     type View,
 } from '@qualivis/core';
-import { cleanup, render } from '@testing-library/react';
+import { cleanup } from '@testing-library/react';
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import { createNodeSelection } from '../../../state/selection';
+import { selectionAtom } from '../../../state/selectionAtoms';
 import { selectViewGraph } from '../../../state/selectViewGraph';
 import { goldenFiles, loadFixture, readGolden } from '../../../test/fixtures';
-import { CodeQualityContent } from '../CodeQualityPanel';
+import { renderWithState } from '../../../test/renderWithState';
+import { initial } from '../../../test/TestProvider';
+import { CodeQualityPanel } from '../CodeQualityPanel';
 
 type LegacyPanel = {
     header: string;
@@ -37,19 +40,28 @@ const text = (element: Element | null) => element?.textContent?.replace(/\s+/g, 
 const levelOf = (barClass: string) =>
     /\berror\b/.test(barClass) ? 'error' : /\bwarn\b/.test(barClass) ? 'warn' : 'ok';
 
+/**
+ * The panel in the shape of the legacy golden. A metric is an accordion item: name, value and
+ * meter in its summary; the description, the legacy tooltip of the name, opens the explanation;
+ * value/threshold, the legacy tooltip of the value, is the text of the meter.
+ */
 const readPanel = (container: HTMLElement) => ({
     header: text(container.querySelector('h2')),
-    metrics: Array.from(container.querySelectorAll('[data-level]'), metric => ({
-        name: text(metric.querySelector('span[title]')),
-        description: metric.querySelector('span[title]')?.getAttribute('title'),
-        value: text(metric.querySelectorAll('span')[1] ?? null),
-        valueTitle: metric.querySelectorAll('span')[1]?.getAttribute('title'),
-        level: metric.getAttribute('data-level'),
-    })),
+    metrics: Array.from(container.querySelectorAll('details'), item => {
+        const summary = item.querySelector('[data-level]');
+        const [name, value] = summary?.querySelectorAll('span') ?? [];
+        return {
+            name: text(name ?? null),
+            description: text(item.querySelector('section > p')),
+            value: text(value ?? null),
+            valueTitle: summary?.querySelector('[role="meter"]')?.getAttribute('aria-valuetext'),
+            level: summary?.getAttribute('data-level'),
+        };
+    }),
     icons: Array.from(container.querySelectorAll('[data-class]'), icon => ({
         class: icon.getAttribute('data-class'),
         icon: text(icon.querySelector('[aria-hidden]')),
-        description: text(icon.querySelector('[aria-hidden] + span')),
+        description: text(icon.querySelector('[aria-hidden] + div')),
     })),
 });
 
@@ -105,7 +117,9 @@ const comparePanels = (
             throw new Error(`no node ${id}`);
         }
         const selection = createNodeSelection(node);
-        const { container } = render(<CodeQualityContent selectedNode={selection} />);
+        const { container } = renderWithState(<CodeQualityPanel />, {
+            initialValues: [initial(selectionAtom, [selection])],
+        });
         expect(readPanel(container), `${componentId ?? 'app view'}: ${id}`).toEqual(
             expectedPanel(panel, !!node.report)
         );
@@ -117,7 +131,7 @@ describe.each(fixtures)('G4 code quality panel, fixture %s', fixture => {
     let result: AnalysisResult;
 
     beforeAll(() => {
-        // The panel logs every report; the view model logs nodes without a report (K5).
+        // The view model logs nodes without a report (K5).
         vi.spyOn(console, 'log').mockImplementation(() => {});
         vi.spyOn(console, 'error').mockImplementation(() => {});
         result = analyzeProject(loadFixture(fixture));

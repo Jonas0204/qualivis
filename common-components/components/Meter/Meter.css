@@ -1,0 +1,35 @@
+.cc-meter {
+    --_accent: var(--colorPrimary);
+
+    display: block;
+    width: 100%;
+    height: 6px;
+    overflow: hidden;
+    border-radius: calc(var(--radiusMedium) * 99);
+    background: color-mix(in oklab, var(--_accent) 14%, var(--colorSurface));
+}
+
+.cc-meter[data-variant="success"] {
+    --_accent: var(--colorSuccess);
+}
+
+.cc-meter[data-variant="warning"] {
+    --_accent: var(--colorWarning);
+}
+
+.cc-meter[data-variant="danger"] {
+    --_accent: var(--colorDanger);
+}
+
+.cc-meter__fill {
+    height: 100%;
+    border-radius: inherit;
+    background: var(--_accent);
+    transition: width 250ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cc-meter__fill {
+        transition: none;
+    }
+}

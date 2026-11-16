@@ -1,8 +1,8 @@
-import { Alert, Card, Progress, Skeleton, Spinner } from '../../index';
+import { Alert, Card, Meter, Progress, Skeleton, Spinner } from '../../index';
 
-/** Alert in all variants, Progress, Spinner, Skeleton. */
+/** Alert in all variants and with its own icon, Progress, Meter, Spinner, Skeleton. */
 export const FeedbackSection = () => (
-    <Card title="Feedback" description="Alert, Progress, Spinner, Skeleton">
+    <Card title="Feedback" description="Alert, Progress, Meter, Spinner, Skeleton">
         <div className="sc-stack">
             <Alert title="Monorepo found">Choose the folder of the app before the analysis.</Alert>
             <Alert variant="success" title="Analysis finished">
@@ -14,11 +14,23 @@ export const FeedbackSection = () => (
             <Alert variant="danger" title="File could not be read">
                 src/legacy/parser.js has a syntax error.
             </Alert>
+            <Alert variant="warning" icon="device_hub">
+                Inheritance should be avoided.
+            </Alert>
             <div>
                 <p className="sc-caption">Progress</p>
                 <div className="sc-stack">
                     <Progress label="Analysis" value={64} />
                     <Progress label="Layout" />
+                </div>
+            </div>
+            <div>
+                <p className="sc-caption">Meter</p>
+                <div className="sc-stack">
+                    <Meter label="Disk" value={42} />
+                    <Meter label="Lines of code" value={34} max={60} variant="success" />
+                    <Meter label="Complexity" value={10} max={12} variant="warning" />
+                    <Meter label="Parameters" value={25} max={1} variant="danger" />
                 </div>
             </div>
             <div className="sc-row">

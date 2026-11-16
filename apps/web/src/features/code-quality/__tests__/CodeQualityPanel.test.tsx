@@ -67,7 +67,7 @@ describe('CodeQualityPanel', () => {
         expect(queryAllByRole('meter')).toHaveLength(0);
     });
 
-    it('shows name, metric bars with tooltips and the icon hints of the first selection', () => {
+    it('shows name, metric bars and the icon hints of the first selection', () => {
         const { getByRole, getAllByRole, getByText } = drawPanel([
             renderFunction,
             { ...renderFunction, id: 'other', label: 'other' },
@@ -89,14 +89,14 @@ describe('CodeQualityPanel', () => {
         expect(lines?.getAttribute('aria-valuemax')).toBe('60');
         expect(fillWidth(lines)).toBe(`${(34 / 60) * 100}%`);
         expect(lines?.parentElement?.getAttribute('data-level')).toBe('ok');
-        // The tooltip sits on the name, around the button that opens the explanation.
-        expect(getByText('Lines of Code').closest('span')?.getAttribute('title')).toBe(
-            'The number of lines of code including comments.'
-        );
-        // The value as the report has it, with value/threshold as tooltip.
-        const difficulty = getByText('34.286');
+        // The description of the metric (the legacy tooltip of the name) opens its explanation.
+        expect(
+            getByRole('region', { name: 'About Lines of Code' }).querySelector('p')?.textContent
+        ).toBe('The number of lines of code including comments.');
+        // The value as the report has it; value/threshold (the legacy tooltip) is the meter text.
+        expect(getByText('34.286')).toBeTruthy();
         // render has its own thresholds: difficulty 22.5, so 34.286 is over it.
-        expect(difficulty.getAttribute('title')).toBe('34.286/22.5');
+        expect(meters[2]?.getAttribute('aria-valuetext')).toBe('34.286/22.5');
         expect(meters[2]?.parentElement?.getAttribute('data-level')).toBe('error');
 
         expect(getByText(/almost exceeds/).textContent).toBe(
@@ -111,20 +111,19 @@ describe('CodeQualityPanel', () => {
         expect(link.parentElement?.textContent).toBe(
             'Inheritance should be avoided (see https://reactjs.org/docs/composition-vs-inheritance.html)'
         );
-        expect(console.log).toHaveBeenCalledWith('Report', report);
     });
 
     it('explains a metric with its formula and thresholds on a click on its name (ADR-011 A23)', () => {
-        const { getByRole, queryByRole } = drawPanel([renderFunction]);
-        const toggle = getByRole('button', { name: 'Halstead Difficulty' });
-        expect(toggle.getAttribute('aria-expanded')).toBe('false');
-        expect(queryByRole('region', { name: 'About Halstead Difficulty' })).toBeNull();
+        const { getByRole, getByText } = drawPanel([renderFunction]);
+        const toggle = getByText('Halstead Difficulty').closest('summary');
+        const item = toggle?.closest('details');
+        expect(item?.open).toBe(false);
 
-        fireEvent.click(toggle);
+        fireEvent.click(toggle as HTMLElement);
 
+        expect(item?.open).toBe(true);
         const explanation = getByRole('region', { name: 'About Halstead Difficulty' });
-        expect(toggle.getAttribute('aria-expanded')).toBe('true');
-        expect(toggle.getAttribute('aria-controls')).toBe(explanation.id);
+        expect(item?.contains(explanation)).toBe(true);
         expect(explanation.querySelector('pre')?.textContent).toBe(
             'D = (n1 / 2) × (N2 / n2)\nn1 = distinct operators, n2 = distinct operands\nN2 = all uses of operands'
         );
@@ -134,8 +133,8 @@ describe('CodeQualityPanel', () => {
                 'component 50, inner function 15, render 22.5.'
         );
 
-        fireEvent.click(toggle);
-        expect(queryByRole('region', { name: 'About Halstead Difficulty' })).toBeNull();
+        fireEvent.click(toggle as HTMLElement);
+        expect(item?.open).toBe(false);
     });
 
     it('has an explanation for every metric of the panel', () => {

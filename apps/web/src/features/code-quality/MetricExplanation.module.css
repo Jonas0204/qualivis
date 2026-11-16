@@ -1,0 +1,33 @@
+.explanation {
+    font-size: 12px;
+    line-height: 1.45;
+    color: var(--colorText);
+}
+
+.explanation p {
+    margin: 0 0 6px;
+}
+
+.description {
+    font-weight: 500;
+}
+
+.formula {
+    margin: 0 0 6px;
+    padding: 6px 8px;
+    background-color: var(--colorSurfaceMuted);
+    border-left: 3px solid var(--colorPrimary);
+    font-family: var(--fontMonospace);
+    font-size: 11.5px;
+    white-space: pre-wrap;
+}
+
+.notes {
+    margin: 0 0 6px;
+    padding-left: 18px;
+}
+
+.explanation .thresholds {
+    margin: 0;
+    color: var(--colorTextMuted);
+}

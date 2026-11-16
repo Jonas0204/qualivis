@@ -3,12 +3,9 @@
    written as light-dark(light, dark), so the app follows the dark mode of the system. */
 :root,
 [data-color-scheme] {
-    /* Metric levels and their soft fills (code quality bars) */
+    /* Warning and error icons of the graph */
     --qv-warn: #f2a60d;
     --qv-error: #f20d0d;
-    --qv-success-muted: light-dark(#b4f0a8, #2c5426);
-    --qv-warn-muted: light-dark(#f0d8a8, #5c4718);
-    --qv-error-muted: light-dark(#f0a8a8, #5c2323);
 
     /* Graph (compiled color.scale values, style reference §1 "Graph"): border, fill of the main
        circle, fill when selected, fill of a preview circle and of a JSX preview circle */

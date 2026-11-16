@@ -3,6 +3,9 @@
 .qv-graph-area {
     position: relative;
     height: 100%;
+    /* takes the room next to the code quality panel on the graph page */
+    flex: 1;
+    min-width: 0;
     background: var(--colorBackground);
 }
 

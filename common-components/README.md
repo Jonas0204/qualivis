@@ -61,7 +61,7 @@ small radii, system font. Every colour is written once as
 ## Components
 
 Accordion, Alert, Avatar, Badge, Breadcrumb, Button, ButtonGroup, Card, Checkbox, Dialog (also as
-alert dialog), DropdownMenu, Field, Icon, Input, Kbd, Label, Popover, Progress, RadioGroup, Select,
+alert dialog), DropdownMenu, Field, Icon, Input, Kbd, Label, Meter, Popover, Progress, RadioGroup, Select,
 Separator, Sheet, Skeleton, Slider, Spinner, Switch, Table, Tabs, Textarea, Toast, Toggle,
 ToggleGroup, Tooltip.
 

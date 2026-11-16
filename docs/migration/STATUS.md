@@ -71,3 +71,9 @@ Karten oder Grundlagen oder wird gestrichen; Erledigtes steht in der Git-Histori
   Graph-Seite zeigt Graph und Code-Quality-Panel (feste Spalte 575 px). Mit entfernt: CodeMirror,
   `@lezer/highlight`, `@fontsource/roboto`, Code und Zeilen in der Auswahl. `extractFileTree` bleibt
   im Kern, ohne Export in `index.ts`.
+- **Code-Quality-Panel aus Bausteinen** (Nutzer, 16.11.2026): Metriken als `Accordion` (Klick
+  öffnet die Erklärung), Balken als neuer Baustein `Meter` (dünner Balken unter Name und Wert statt
+  Material-Balken hinter dem Text), Hinweise als `Alert` mit eigenem Icon. Die Beschreibung der
+  Metrik (im Altsystem Tooltip am Namen) steht am Anfang der Erklärung, Wert/Schwelle (Tooltip am
+  Wert) ist der Text des Meters für Screenreader. Die Goldens G4 lesen diese Stellen. Die
+  Konsolen-Logs des Panels (Metrik-Tabelle beim Start, jeder Report) sind entfallen.

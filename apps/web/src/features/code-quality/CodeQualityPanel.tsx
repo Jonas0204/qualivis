@@ -1,71 +1,49 @@
-import { metricRows, qualityMetrics } from '@qualivis/core';
+import { metricRows } from '@qualivis/core';
 import { useAtomValue } from 'jotai';
-import { useEffect, useMemo } from 'react';
-import type { NodeSelection } from '../../state/selection';
+import { useMemo } from 'react';
 import { selectionAtom } from '../../state/selectionAtoms';
+import { fullScreenAtom } from '../../state/viewAtoms';
 import styles from './CodeQualityPanel.module.css';
 import { IconDescription } from './IconDescription';
-import { QualityMetricBar } from './QualityMetricBar';
+import { MetricList } from './MetricList';
 
-type CodeQualityContentProps = { selectedNode: NodeSelection | undefined };
-
-/** The panel for one selection; CodeQualityPanel passes the first selected node. */
-export const CodeQualityContent = ({ selectedNode }: CodeQualityContentProps) => {
+/**
+ * The side column with the metrics and hints of the selected node. Full screen (G13) hides it and
+ * keeps it mounted.
+ */
+export const CodeQualityPanel = () => {
+    const fullScreen = useAtomValue(fullScreenAtom);
+    const selectedNode = useAtomValue(selectionAtom)?.[0];
     const report = selectedNode?.report?.aggregate ?? selectedNode?.report;
     const rows = useMemo(() => (selectedNode ? metricRows(selectedNode) : []), [selectedNode]);
 
-    useEffect(() => {
-        if (report) {
-            // biome-ignore lint/suspicious/noConsole: legacy log, kept for debugging (user, 09.11.2026)
-            console.log('Report', report);
-        }
-    }, [report]);
-
     return (
-        <div className={styles.panel}>
-            <div className={styles.headerContainer}>
-                <h2 className={styles.header}>
-                    Code Quality
-                    {/* Like the legacy template, the name only with a report. */}
-                    {report && selectedNode && (
-                        <span className={styles.name}>
-                            {' '}
-                            {selectedNode.label || selectedNode.id}
-                            {selectedNode.report?.aggregate ? ' (aggregate)' : ''}
-                        </span>
-                    )}
-                </h2>
-            </div>
-            {selectedNode && (
-                <div>
-                    {/* Without a report there are no bars; the legacy template threw there and kept
-                        the bars of the selection before (ADR-011 A20). */}
-                    {rows.map(row => (
-                        <QualityMetricBar key={row.id} row={row} />
+        <aside className={styles.panel} aria-label="Code quality" hidden={fullScreen}>
+            <h2 className={styles.header}>
+                Code Quality
+                {/* Like the legacy template, the name only with a report. */}
+                {report && selectedNode && (
+                    <span className={styles.name}>
+                        {' '}
+                        {selectedNode.label || selectedNode.id}
+                        {selectedNode.report?.aggregate ? ' (aggregate)' : ''}
+                    </span>
+                )}
+            </h2>
+            <MetricList rows={rows} />
+            {selectedNode?.icons?.length ? (
+                <ul className={styles.hints} aria-label="Hints">
+                    {selectedNode.icons.map((icon, index) => (
+                        <li
+                            // Two icons of a node can have the same kind and text.
+                            key={`${index} ${icon.icon} ${icon.description.text}`}
+                            data-class={icon.class}
+                        >
+                            <IconDescription icon={icon} />
+                        </li>
                     ))}
-                    <div className={styles.iconDescriptions}>
-                        {selectedNode.icons?.map((icon, index) => (
-                            <IconDescription
-                                // Two icons of a node can have the same kind and text.
-                                key={`${index} ${icon.icon} ${icon.description.text}`}
-                                icon={icon}
-                            />
-                        ))}
-                    </div>
-                </div>
-            )}
-        </div>
+                </ul>
+            ) : null}
+        </aside>
     );
-};
-
-/** Code quality of the first selected node, top of the right column (Q1-Q5). */
-export const CodeQualityPanel = () => {
-    const selection = useAtomValue(selectionAtom);
-
-    useEffect(() => {
-        // biome-ignore lint/suspicious/noConsole: legacy log of the panel constructor, kept for debugging (user, 09.11.2026)
-        console.log(qualityMetrics);
-    }, []);
-
-    return <CodeQualityContent selectedNode={selection?.[0]} />;
 };

@@ -15,6 +15,7 @@ export * from './components/Icon/Icon';
 export * from './components/Input/Input';
 export * from './components/Kbd/Kbd';
 export * from './components/Label/Label';
+export * from './components/Meter/Meter';
 export * from './components/Popover/Popover';
 export * from './components/Progress/Progress';
 export * from './components/RadioGroup/RadioGroup';

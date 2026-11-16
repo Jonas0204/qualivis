@@ -1,0 +1,24 @@
+/* Fills the summary line of the accordion, next to its arrow. */
+.summary {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.labels {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 13px;
+}
+
+.name {
+    font-weight: 500;
+}
+
+.value {
+    font-family: var(--fontMonospace);
+    font-weight: 600;
+}

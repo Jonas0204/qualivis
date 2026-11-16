@@ -4,19 +4,3 @@
     height: 100%;
     overflow: hidden;
 }
-
-.graph {
-    flex: 1;
-    min-width: 0;
-}
-
-.side {
-    flex: 0 0 575px;
-    overflow: auto;
-    border-left: var(--borderWidth) solid var(--colorBorder);
-    background: var(--colorSurface);
-}
-
-.side[hidden] {
-    display: none;
-}

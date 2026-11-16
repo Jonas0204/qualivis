@@ -89,7 +89,8 @@ e2e/ (@qualivis/e2e, Playwright, separat installierbar) · tools/ (Node-Skripte 
 │        │  │                        layout/ (types.ts, createLayout.ts, largeGraph.ts,
 │        │  │                          forceSolver.ts, flow.ts, gridCollide.ts, tickClock.ts,
 │        │  │                          forceLayout.ts, workerLayout.ts, layoutHost.ts, layoutWorker.ts)
-│        │  ├─ code-quality/         CodeQualityPanel.tsx, QualityMetricBar.tsx, IconDescription.tsx,
+│        │  ├─ code-quality/         CodeQualityPanel.tsx, MetricList.tsx, MetricSummary.tsx,
+│        │  │                        MetricExplanation.tsx, IconDescription.tsx,
 │        │  │                        metricExplanations.ts
 │        │  └─ settings/             SettingsDialog.tsx
 │        ├─ lib/                     storage.ts, onceFlags.ts, debounce.ts, isColliding.ts
