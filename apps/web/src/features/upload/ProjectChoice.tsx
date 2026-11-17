@@ -13,7 +13,7 @@ type ProjectChoiceProps = {
 
 const wholeProject = { value: '', label: 'Whole project' };
 
-/** Asks which folder of a monorepo upload is the app (ADR-019); "Whole project" is preselected. */
+/** Asks which folder of a monorepo upload is the app; "Whole project" is preselected. */
 export const ProjectChoice = ({ candidates, onAnalyze, onCancel }: ProjectChoiceProps) => {
     const [appDir, setAppDir] = useState('');
     const options = [

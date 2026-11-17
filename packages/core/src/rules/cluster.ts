@@ -1,5 +1,4 @@
-// Port of GraphComponent.generateCluster (legacy graph.component.ts:323-368), see
-// docs/migration/01-referenz-altsystem/03-visuelle-regeln.md §4.
+// Port of GraphComponent.generateCluster (legacy graph.component.ts:323-368).
 import { jLouvain } from 'jlouvain';
 import type { Node } from '../model/graph';
 
@@ -35,7 +34,6 @@ export const computeClusters = (
         return { clusters: {}, hasCluster: false };
     }
 
-    // biome-ignore lint/suspicious/noConsole: legacy log, kept for debugging (user, 09.11.2026)
     console.log('Cluster:', communities);
     return {
         // Object.fromEntries defines own properties, so ids like `__proto__` stay plain keys.

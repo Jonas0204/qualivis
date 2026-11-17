@@ -34,7 +34,7 @@ Live: https://jonas0204.github.io/qualivis/ (state of `rewrite/react`)
 | Path | Content |
 |---|---|
 | `docs/migration/` | migration plan, decisions (ADRs), status |
-| `AGENTS.md`, `.claude/skills/` | entry point and workflows for AI agents (Claude Code, GitHub Copilot) |
+| `AGENTS.md` | entry point for AI agents (Claude Code, GitHub Copilot) |
 | `legacy/angular/` | original Angular app, read-only reference |
 | `testdata/` | fixtures and golden reference data ([testdata/README.md](testdata/README.md)) |
 | `tools/` | development tools (legacy server, golden capture, JSON diff) |

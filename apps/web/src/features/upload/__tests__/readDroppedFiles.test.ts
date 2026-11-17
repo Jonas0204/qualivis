@@ -60,7 +60,7 @@ describe('readDroppedFiles', () => {
         });
     });
 
-    it('reads package.json, tsconfig*.json and jsconfig*.json as configs (ADR-019)', async () => {
+    it('reads package.json, tsconfig*.json and jsconfig*.json as configs', async () => {
         const folder = fakeDirectoryEntry('/repo', [
             fakeFileEntry('/repo/package.json', '{"name":"root"}'),
             fakeFileEntry('/repo/tsconfig.base.json', '{}'),
@@ -86,7 +86,7 @@ describe('readDroppedFiles', () => {
         });
     });
 
-    it('does not enter node_modules, build and dist (ADR-019)', async () => {
+    it('does not enter node_modules, build and dist', async () => {
         // Entering one of the unreadable folders would reject the whole result.
         const folder = fakeDirectoryEntry('/my-app', [
             unreadableDirectoryEntry('/my-app/node_modules'),

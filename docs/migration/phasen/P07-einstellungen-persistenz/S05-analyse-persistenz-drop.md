@@ -25,7 +25,7 @@ neuer Ordner gezogen werden („Drop files here“).
    (keine Demo-Daten, A2). Toolbar-Titel → Upload-Ansicht, Analyse bleibt.
 3. `DropOverlay`: Graph-Seite nutzt `useFileDrop`; während des Ziehens Overlay („Drop files here“,
    `rgba(0,0,0,.55)`, 32 px weiß, zentriert, `pointer-events: none`, `z-index 999`). Drop → `runAnalysis`
-   (setzt Auswahl zurück: `deselect()`). Monorepo (P05.5, ADR-019): Hat der Drop mindestens zwei
+   (setzt Auswahl zurück: `deselect()`). Monorepo (P05.5): Hat der Drop mindestens zwei
    App-Kandidaten, braucht es dieselbe App-Auswahl wie in der Upload-Ansicht (`ProjectChoice`),
    hier mit dem `Dialog` aus S02. Der Nutzer wünschte sich die Auswahl als Pop-up; in P05.5 gab es
    noch keinen Dialog, deshalb ist sie dort ein Schritt der Upload-Ansicht. Vorher mit dem Nutzer

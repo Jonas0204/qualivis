@@ -56,7 +56,6 @@ const extendedConfig = (
             return `${path}.json`;
         }
     }
-    // biome-ignore lint/suspicious/noConsole: aliases of that config are missing (ADR-019)
     console.warn('Extended config not found:', specifier, fromConfig);
     return undefined;
 };
@@ -95,7 +94,6 @@ const aliasOptions = (
 ): AliasOptions => {
     const nextChain = [...chain, configPath];
     if (chain.includes(configPath)) {
-        // biome-ignore lint/suspicious/noConsole: TypeScript reports this as an error as well
         console.warn('Circular extends:', nextChain.join(' → '));
         return {};
     }

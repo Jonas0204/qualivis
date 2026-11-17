@@ -1,5 +1,5 @@
 // Zoom and pan as in d3-zoom 1.x, which the legacy app used (d3 5): graph point · k + (x, y) =
-// screen point. Rules: docs/migration/01-referenz-altsystem/03-visuelle-regeln.md §10.
+// screen point.
 import { graphSettings } from '@qualivis/core';
 
 export type ZoomTransform = { k: number; x: number; y: number };
@@ -131,7 +131,7 @@ export type ZoomStyle = { labelFontSize?: number; linkStrokeWidth?: number };
 
 /**
  * Style after a zoom to scale k. Legacy quirk V5: zooming out again does not reset it; the
- * smaller size stays until the graph restarts (see docs/migration/01-referenz-altsystem/03-visuelle-regeln.md §10).
+ * smaller size stays until the graph restarts.
  */
 export const nextZoomStyle = (current: ZoomStyle, k: number): ZoomStyle => {
     const fontSize = labelFontSize(k);

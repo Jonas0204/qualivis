@@ -2,8 +2,7 @@
 
 **Ziel:** `@qualivis/core` ist als Paket baubar (keine npm-Veröffentlichung – O2), und
 `@qualivis/cli` analysiert einen Ordner auf der Kommandozeile – mit denselben Ergebnissen wie die
-App, mit Text- oder JSON-Ausgabe und Exit-Codes (auch für die CI). Das Projekt
-prüft sich selbst damit (G6).
+App, mit Text- oder JSON-Ausgabe und Exit-Codes (auch für die CI).
 
 > Kompakte Karten; vor Beginn zu Einzeldateien verfeinern (S00). Erster Unterschritt jeder Karte ist
 > ein kurzer Machbarkeitstest (Build-Werkzeug), weil diese Teile im Spike nicht geprüft wurden.
@@ -33,14 +32,6 @@ prüft sich selbst damit (G6).
   - Exit-Codes: `0` ok, `1` Grenzwerte gemäß `--fail-on` verletzt, `2` Bedienfehler/IO-Fehler.
 - Tests: CLI gegen `testdata/fixtures/mini` (Snapshot der JSON-Ausgabe; Zahlen müssen zu den Goldens
   passen), Exit-Codes, Fehlermeldungen.
-
-## S03 – Eigenprüfung G6 („Dogfooding“) (S)
-- Root-Skript `quality:self`: `qualivis analyze apps/web/src --fail-on error` (+ `packages/*/src` ohne
-  `legacy/`). Kein Knoten darf `warning/error` haben (Qualitätskriterien §1). Läuft lokal und in der
-  CI: in `.github/workflows/ci.yml` die Zeile `- run: pnpm quality:self` ergänzen (ADR-016, vorher
-  nachfragen).
-- Optional: Legacy-Capture des neuen Web-Quelltexts (G6-Teil 2); scheitert der alte Parser an neuer
-  Syntax, dokumentieren und weglassen.
 
 ## Entfallen (Nutzerentscheidungen 07.11.2026)
 - ~~CI-Vorschlag~~ – die CI gibt es seit P03 (ADR-016).

@@ -1,5 +1,4 @@
-// Port of GraphComponent.generateNodeSizes (legacy graph.component.ts:245-315), see
-// docs/migration/01-referenz-altsystem/03-visuelle-regeln.md §2.
+// Port of GraphComponent.generateNodeSizes (legacy graph.component.ts:245-315).
 import type { Node } from '../model/graph';
 import { graphSettings } from '../model/graphSettings';
 import { sizeConstant } from '../model/qualityMetrics';
@@ -33,11 +32,9 @@ export const computeNodeVisual = (node: Node, options: VisualOptions): NodeVisua
     const report: MetricReport | undefined = node.report?.aggregate || node.report;
 
     if (!report) {
-        // biome-ignore lint/suspicious/noConsole: legacy log, kept for debugging (user, 09.11.2026)
         console.error('Report not found:', node.id);
         // Legacy quirk V2: without a report the node is 20 wide and keeps its own fields, which are
         // undefined on a fresh node copy, so it gets no icons
-        // (see docs/migration/01-referenz-altsystem/03-visuelle-regeln.md §2 and §16).
         // With fixed sizes the legacy app returned 48 before it looked at the report; A8 keeps that.
         const size = options.nodeSizesBasedOnMetrics ? 20 : fixedSize;
         return {

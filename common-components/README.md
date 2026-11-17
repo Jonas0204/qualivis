@@ -18,6 +18,9 @@ import { Button, Dialog, Field, Input } from '../../common-components';
 
 - Each component imports its own CSS file, so the host needs a bundler that loads CSS (Vite does).
 - The host page loads the Material Icons font (the web app does in `apps/web/src/styles/fonts.css`).
+- `Icon` takes a name. Own SVG icons come from an `IconProvider` above it (`icons` maps a name to
+  `{ viewBox, content }`) and take precedence over Material; give them a prefix so they do not
+  cover a Material name (the graph uses `graph_…`).
 - Light or dark mode follows the operating system. `data-color-scheme="light"` or `"dark"` on
   `<html>` or on any element fixes the mode for everything inside.
 - React comes from the web app's install (this folder has no `node_modules`): see `tsconfig.json`

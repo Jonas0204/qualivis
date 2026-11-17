@@ -1,6 +1,4 @@
-import { metricRows } from '@qualivis/core';
 import { useAtomValue } from 'jotai';
-import { useMemo } from 'react';
 import { selectionAtom } from '../../state/selectionAtoms';
 import { fullScreenAtom } from '../../state/viewAtoms';
 import styles from './CodeQualityPanel.module.css';
@@ -15,7 +13,6 @@ export const CodeQualityPanel = () => {
     const fullScreen = useAtomValue(fullScreenAtom);
     const selectedNode = useAtomValue(selectionAtom)?.[0];
     const report = selectedNode?.report?.aggregate ?? selectedNode?.report;
-    const rows = useMemo(() => (selectedNode ? metricRows(selectedNode) : []), [selectedNode]);
 
     return (
         <aside className={styles.panel} aria-label="Code quality" hidden={fullScreen}>
@@ -30,7 +27,7 @@ export const CodeQualityPanel = () => {
                     </span>
                 )}
             </h2>
-            <MetricList rows={rows} />
+            {selectedNode && <MetricList />}
             {selectedNode?.icons?.length ? (
                 <ul className={styles.hints} aria-label="Hints">
                     {selectedNode.icons.map((icon, index) => (

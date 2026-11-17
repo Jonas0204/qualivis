@@ -21,6 +21,3 @@
   ending conversion for `testdata/**`; switch off editor auto-format here. Biome, TypeScript and
   Vitest ignore this folder.
 - Nothing in a fixture is installed or executed.
-- Golden files are **never** edited by hand and never changed to make a test pass
-  (`docs/migration/00-grundlagen/06-teststrategie.md` §3). New captures only with the procedure in
-  [tools/legacy/README.md](../tools/legacy/README.md) and with the owner's approval.

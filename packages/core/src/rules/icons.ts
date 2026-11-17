@@ -1,5 +1,5 @@
 // Port of GraphComponent.getNodeIcons (legacy graph.component.ts:371-470). Order, conditions and
-// texts as in docs/migration/01-referenz-altsystem/03-visuelle-regeln.md §3.
+// texts as in the legacy app.
 import type { Node } from '../model/graph';
 import { qualityMetrics } from '../model/qualityMetrics';
 import type { MetricReport } from '../model/report';

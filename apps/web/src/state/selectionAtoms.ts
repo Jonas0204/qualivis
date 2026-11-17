@@ -38,7 +38,6 @@ const appIconsAtom = atom(get => {
  */
 export const selectNodeAtom = atom(null, (_get, set, node: SelectableNode) => {
     const selectedNode = createNodeSelection(node);
-    // biome-ignore lint/suspicious/noConsole: legacy log, kept for debugging (user, 09.11.2026)
     console.log('Select node: ', selectedNode);
     set(selectionAtom, [selectedNode]);
 });
@@ -49,7 +48,6 @@ export const selectFileAtom = atom(null, (get, set, fileName: string) => {
     const selectedNodes = result
         ? createFileSelection(result.fileMap, result.report, fileName, get(appIconsAtom))
         : [];
-    // biome-ignore lint/suspicious/noConsole: legacy log, kept for debugging (user, 09.11.2026)
     console.log('Select file -> nodes: ', selectedNodes);
     set(selectionAtom, selectedNodes);
 });

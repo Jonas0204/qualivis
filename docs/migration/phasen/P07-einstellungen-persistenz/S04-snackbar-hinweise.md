@@ -7,7 +7,7 @@ Eine Snackbar zeigt Hinweise (8 s, optional mit Aktion). Der Tipp zum Doppelklic
 Browser nur einmal (den Tipp zum Fluss-Layout gibt es nicht mehr, ADR-011 A25); Fehler (Analyse, Speichern) werden ebenfalls als Snackbar gezeigt.
 
 ## Kontext
-- Funktionsinventar G2, G16, P2; ADR-010; Stil-Referenz §1/§3 (Snackbar)
+- Funktionsinventar G2, G16, P2
 - Altcode: `graph.component.ts:145-164, 1036-1046`, `helper/cookie.ts`
 
 ## Dateien

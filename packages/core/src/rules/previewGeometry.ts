@@ -1,6 +1,5 @@
 // Geometry of the main circle and the preview circles of app view nodes (legacy
-// graph.component.ts:811-857, 984-1028, 1130-1156), see
-// docs/migration/01-referenz-altsystem/03-visuelle-regeln.md §5 and §6.
+// graph.component.ts:811-857, 984-1028, 1130-1156).
 import type { Node } from '../model/graph';
 import { graphSettings } from '../model/graphSettings';
 import type { View } from './nodeVisuals';
@@ -37,7 +36,8 @@ export type PreviewCircle = {
 
 const fullCircle = Math.PI * 2;
 
-const previewClassName = (fn: Node): string => {
+/** Class of the preview circle of a function (graph.css); the legend draws its dots with it. */
+export const previewClassName = (fn: Pick<Node, 'type' | 'returnsJSX' | 'special'>): string => {
     let className = `function ${fn.type}`;
     if (fn.returnsJSX) {
         className += ' jsx';
@@ -50,9 +50,8 @@ const previewClassName = (fn: Node): string => {
 
 /**
  * Preview circles of an app view node, one per function in the given order. Legacy quirk V6: the
- * radius comes from the width of the parent node (see
- * docs/migration/01-referenz-altsystem/03-visuelle-regeln.md §16). A circle is hidden when the
- * next but one would pass a full turn.
+ * radius comes from the width of the parent node. A circle is hidden when the next but one would
+ * pass a full turn.
  */
 export const previewCircles = (
     parentWidth: number,

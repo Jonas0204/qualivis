@@ -1,5 +1,5 @@
 /* Graph styles (global, the SVG classes match the legacy app): legacy graph.component.scss
-   (#d3-root). Colours: style reference §1, docs/migration/01-referenz-altsystem/04-stil-referenz.md */
+   (#d3-root). */
 .qv-graph-area {
     position: relative;
     height: 100%;
@@ -33,24 +33,6 @@
     /* The width of the legacy mat-select */
     .size-metric {
         width: 180px;
-    }
-}
-
-/* legacy #legend (graph.component.scss:167-183) */
-.qv-legend {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    border-top: var(--borderWidth) solid var(--colorBorder);
-    border-left: var(--borderWidth) solid var(--colorBorder);
-    border-top-left-radius: var(--radiusLarge);
-    background: var(--qv-legend-bg);
-    cursor: default;
-
-    .description {
-        dominant-baseline: central;
-        font-size: 12px;
-        font-weight: 300;
     }
 }
 

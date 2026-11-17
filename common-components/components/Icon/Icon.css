@@ -16,3 +16,8 @@
     font-feature-settings: "liga";
     -webkit-font-smoothing: antialiased;
 }
+
+/* Own SVG icons may draw past their box, e.g. the arrowhead of a link. */
+svg.cc-icon {
+    overflow: visible;
+}

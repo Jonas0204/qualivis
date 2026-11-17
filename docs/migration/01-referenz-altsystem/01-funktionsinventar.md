@@ -1,8 +1,10 @@
 # Funktionsinventar des Altsystems (Angular-App „Component Graph“)
 
-Dieses Dokument beschreibt **jedes für Nutzer sichtbare Verhalten** der alten App. Es ist die
-Abnahmegrundlage für die Meilensteine M1–M4. Maßstab ist immer das **Verhalten des
-gh-pages-Builds** (Stand Commit `a071f27`, Build-Commit `5f0155e`), nicht das Paper.
+> **Keine feste Maßgabe:** Das Inventar ist eine Referenz und kein Pflichtenheft. Vieles davon ist
+> schon umgesetzt oder bewusst anders gelöst (ADR-011); die neue App muss nicht jeden Punkt erfüllen.
+
+Dieses Dokument beschreibt **jedes für Nutzer sichtbare Verhalten** der alten App. Maßstab ist das
+**Verhalten des gh-pages-Builds** (Stand Commit `a071f27`, Build-Commit `5f0155e`), nicht das Paper.
 
 > Pfadangaben: Der alte Code liegt seit M0 unter `legacy/angular/` (z. B.
 > `legacy/angular/src/app/...`).
@@ -46,7 +48,7 @@ Abkürzungen: **AV** = App-Ansicht (Graph aller Komponenten), **KV** = Komponent
 ## 3. Graph-Ansicht (Mitte)
 
 ### 3.1 Darstellung
-Details siehe `03-visuelle-regeln.md`. Kurzfassung:
+Kurzfassung:
 - Knoten = Kreise. Klassenkomponente: schraffierte Füllung (Muster `diagonalHatch`). Funktionskomponente: flächig.
 - Farben nach Typ: Komponente grün, React-Spezialfunktion (Lifecycle/`render`) hellblau, sonstige Funktion lila.
 - Funktionen, die JSX zurückgeben: zusätzlicher innerer Kreis (doppelter Rand).
@@ -134,7 +136,7 @@ Quelle: `settings-modal.component.*`, `services/settings.service.ts`.
 | # | Verhalten | Quelle |
 |---|---|---|
 | P1 | Beim Verlassen der Seite (`beforeunload`, nur Graph-Ansicht): `localStorage['graph']` (App-Graph), `['components']` (FileMap inkl. Code und Reports), `['report']` (escomplex-Report). Kein Schutz gegen Speicherlimit. | `data.service.ts:162-169`, `graph-view.component.ts:30` |
-| P2 | Hinweis-Toasts werden über Cookies `toastDisableFlowLayout` und `toastDoubleClickComponent` (10 Jahre) nur einmal gezeigt. (Neue App: `localStorage`, ADR-010.) | `helper/cookie.ts` |
+| P2 | Hinweis-Toasts werden über Cookies `toastDisableFlowLayout` und `toastDoubleClickComponent` (10 Jahre) nur einmal gezeigt. (Neue App: `localStorage`.) | `helper/cookie.ts` |
 
 ## 9. Layout der Seite
 

@@ -15,7 +15,6 @@ wird auf **Windows und macOS**; alle Befehle sind auf beiden gleich.
 | Vite 8 (Rolldown) | Dev-Server nur auf `127.0.0.1` (Sicherheitsmeldungen betreffen den Dev-Server) |
 | Vitest 5 | Testrunner; Umgebungen `node` (core) und `jsdom` (web), siehe `06-teststrategie.md` §2 |
 | Biome 2.6 | ersetzt ESLint und Prettier; `linter.rules.preset: "recommended"`; prüft kein Markdown |
-| Playwright (nur `e2e/`, ab P09) | installiertes Microsoft Edge (`msedge`), **kein** Browser-Download (ADR-008, ADR-018) |
 
 ## 2. Pakete und ihr Zweck
 
@@ -27,19 +26,18 @@ wird auf **Windows und macOS**; alle Befehle sind auf beiden gleich.
 | `path-browserify` | core, web | Nodes `path.posix` als Paket, für escomplex in Node **und** Browser (ADR-005) |
 | `d3-force` | web | Kraft- und Fluss-Layout (Fluss-Regeln sind eigener Code) |
 | `react`, `react-dom` | web | UI |
-| `jotai` | web | Zustandsverwaltung (ADR-013) |
+| `jotai` | web | Zustandsverwaltung |
 | `@fontsource/material-icons` | web | Icons lokal statt vom Google-CDN (offline-fähig) |
 
 Die Entwicklungs-Abhängigkeiten (TypeScript, Biome, Vite, Vitest, jsdom, Testing Library, Typen,
 Playwright) stehen ebenfalls im Catalog.
 
 **Bewusst nicht verwendet:** UI-Bibliotheken (MUI: 31 Pakete + Emotion), d3-zoom/-drag/-selection/
--transition/-color (durch eigenen Code ersetzt, ADR-003), Router-Pakete, `@testing-library/jest-dom`
+-transition/-color (durch eigenen Code ersetzt), Router-Pakete, `@testing-library/jest-dom`
 (normale Assertions genügen), happy-dom (8 Sicherheitsmeldungen, 3 kritisch), Vitest-Browser-Modus
 (5 Meldungen, 3 kritisch), `react-test-renderer` (seit React 19 abgekündigt), Jest mit
 `jest-environment-jsdom`/`jest-junit` (zweiter Testrunner, 323 Pakete; Vitest hat einen
 JUnit-Reporter eingebaut), ESLint/Prettier (≈ 100 Pakete), Coverage-Werkzeuge (kein Zusatzpaket).
-Begründung zu den Testwerkzeugen: ADR-015.
 
 ## 3. Regeln für Abhängigkeiten
 

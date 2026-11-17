@@ -9,6 +9,7 @@ import type { EscomplexReport } from '../model/report';
 import { analyzeModules } from './escomplex';
 import { hasSingleComponent } from './hasSingleComponent';
 import { sortFiles } from './sortFiles';
+import { stripTypeWrappers } from './stripTypeWrappers';
 
 export type SourceFile = {
     /** Absolute project path starting with '/', e.g. '/my-app/src/App.js'. */
@@ -66,9 +67,8 @@ const pipeline = function* (files: readonly SourceFile[]): Generator<number, Ana
 
     for (const file of componentFiles) {
         try {
-            asts.push({ ast: parse(file.code, file.path), srcPath: file.path });
+            asts.push({ ast: stripTypeWrappers(parse(file.code, file.path)), srcPath: file.path });
         } catch (error) {
-            // biome-ignore lint/suspicious/noConsole: the parser error does not name the file
             console.error('Parsing failed:', file.path, error);
             throw error;
         }

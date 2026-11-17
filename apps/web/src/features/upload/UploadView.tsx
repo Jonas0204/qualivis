@@ -22,7 +22,7 @@ const folderSelection = { webkitdirectory: '' };
 export const UploadView = ({ onFiles, error }: UploadViewProps) => {
     const [pending, setPending] = useState<PendingChoice>();
 
-    // With at least two app candidates the user chooses first (ADR-019); else as before.
+    // With at least two app candidates the user chooses first; else as before.
     const receive = (project: ProjectFiles) => {
         const candidates = findAppCandidates(project);
         if (candidates.length >= 2) {

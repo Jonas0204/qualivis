@@ -38,7 +38,6 @@
                 "useConsistentTypeDefinitions": { "level": "error", "options": { "style": "type" } }
             },
             "suspicious": {
-                "noConsole": "error",
                 "noExplicitAny": "error",
                 "noDoubleEquals": "error"
             },
@@ -48,6 +47,9 @@
                     "level": "error",
                     "options": { "namedComponents": "arrowFunction" }
                 }
+            },
+            "correctness": {
+                "noUnusedImports": "error"
             }
         }
     },
@@ -70,10 +72,6 @@
             "linter": { "rules": { "style": { "noDefaultExport": "off" } } }
         },
         {
-            "includes": ["tools/**", "**/*.test.ts", "**/*.test.tsx", "**/test/**"],
-            "linter": { "rules": { "suspicious": { "noConsole": "off" } } }
-        },
-        {
             "includes": ["packages/core/src/legacy/**"],
             "formatter": { "enabled": false },
             "linter": {
@@ -93,7 +91,6 @@
                         "noExplicitAny": "off",
                         "noImplicitAnyLet": "off",
                         "useIterableCallbackReturn": "off",
-                        "noConsole": "off",
                         "noTsIgnore": "off",
                         "noDoubleEquals": "off"
                     },

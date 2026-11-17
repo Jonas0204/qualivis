@@ -7,7 +7,7 @@ import { componentIdAtom, viewModeAtom } from '../../state/viewAtoms';
 export type Analyzers = {
     /** The old way: all source files to the legacy core. */
     analyzeProject: typeof analyzeProjectAsync;
-    /** One app of a monorepo and the files it reaches (ADR-019). */
+    /** One app of a monorepo and the files it reaches. */
     analyzeWorkspace: typeof analyzeWorkspaceAsync;
 };
 

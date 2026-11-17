@@ -8,7 +8,7 @@ getestet, barrierearm, sicher konfiguriert und auch für große Projekte flüssi
 > dahin Details aus der Umsetzung ergeben.
 
 ## S00 – Phase verfeinern (S)
-Karten S01–S09 als Einzeldateien im Format aus `00-grundlagen/05-konventionen.md` §9 ausarbeiten,
+Karten S01–S09 als Einzeldateien ausarbeiten,
 Erkenntnisse aus `STATUS.md` (Abweichungen, offene Punkte) einarbeiten, mit dem Nutzer abstimmen.
 
 ## S01 – Kern: `noImplicitAny` und Report-Typen (M)
@@ -23,7 +23,7 @@ Erkenntnisse aus `STATUS.md` (Abweichungen, offene Punkte) einarbeiten, mit dem 
   `useTemplate` nur nach Prüfung, dass nur Strings verkettet werden). **Nicht** aktivieren:
   `useOptionalChain` (macht aus einem Absturz ein `undefined` → Verhaltensänderung).
   Pro Regel: aktivieren → `biome check --write` → G1/G2 → Diff-Review → Commit.
-- Kognitive Komplexität im Altcode bleibt aus (ADR-002/Leitplanke). Ein Refactoring wäre ein eigenes
+- Kognitive Komplexität im Altcode bleibt aus. Ein Refactoring wäre ein eigenes
   Vorhaben mit ADR.
 
 ## S03 – Fixture `features` und Fall-Tests der Erkennung (M)
@@ -68,8 +68,6 @@ Erkenntnisse aus `STATUS.md` (Abweichungen, offene Punkte) einarbeiten, mit dem 
 - Aufräumen (Nutzer, 09.11.2026): Bei unbekannter Komponenten-ID zeigt `selectViewGraph` den
   App-Graph als App-Ansicht (das Altsystem rechnete ihn als Komponentenansicht). Prüfen, ob der
   Fall nach dem Bereinigen der URL (`useUrlState`) noch eintreten kann; sonst vereinfachen.
-- Aufräumen (Review P05, 10.11.2026): `GraphCanvas` hat 12 Props, `GraphNode` 7 (Konventionen §5:
-  höchstens 6). Zusammengehörige Props zu Objekten bündeln, ohne das Verhalten zu ändern.
 
 ## S07 – Barrierefreiheit (M)
 - Tastaturbedienung: Toolbar, Aktionsleiste, Dialog, Select vollständig.

@@ -8,7 +8,6 @@ Vollbild-Wechsel → nur „Zoom to fit“).
 
 ## Kontext
 - Altcode `graph.component.ts:82-96` (Reaktion auf Einstellungen)
-- `01-referenz-altsystem/03-visuelle-regeln.md` §2, §6, §7, §9, §12, §13
 
 ## Wirkungstabelle (Abnahmegrundlage)
 
@@ -20,7 +19,7 @@ Vollbild-Wechsel → nur „Zoom to fit“).
 | `highlightIndirectNodes` | Indirekte Knoten bleiben sichtbar + `#fafafa`-Füllung | Test |
 | `currentSizeMetricErrorHighlighting` | Klassen `warn`/`error` an Overlay/innerem Kreis | Test |
 | `autoZoom` | Einpassen nach erstem Layout-Ende | Test (Fake-Engine) |
-| `nodeSizesBasedOnMetrics` | bei aus: Größe fest 48; Icons und Warnstufen bleiben (Korrektur A8, Altsystem V1 zeigte keine) | Test |
+| `nodeSizesBasedOnMetrics` | bei aus: Größe fest 48; Icons und Warnstufen bleiben (Korrektur A8) | Test |
 | `fullScreen` | Seitenspalten aus, danach Einpassen, **kein** Neustart | Test |
 | `text` | (nicht im Dialog) Labels anzeigen | – |
 
