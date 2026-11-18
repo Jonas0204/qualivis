@@ -27,4 +27,3 @@
 - ~~Deployment~~ – läuft seit P04 nach jedem Merge per GitHub Pages (`.github/workflows/pages.yml`,
   ADR-016). Der Branch
   `gh-pages` enthält den Legacy-Build und ist Quelle der Goldens – nie überschreiben oder löschen.
-- ~~Umbenennung~~ – entschieden: „Qualivis“ (ADR-012).

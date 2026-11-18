@@ -54,8 +54,8 @@ const forceNoDrift = (nodes: readonly LayoutNode[]) => () => {
 };
 
 /**
- * The d3 force simulation with the legacy parameters (graph.component.ts:587-611,
- * docs/migration/01-referenz-altsystem/03-visuelle-regeln.md §9.3). It starts running at once.
+ * The d3 force simulation with the legacy parameters (graph.component.ts:587-611).
+ * It starts running at once.
  */
 export const createForceSimulation = ({
     nodes,

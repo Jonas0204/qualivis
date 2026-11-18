@@ -4,8 +4,6 @@
 
 - Code, Bezeichner, Kommentare, Commit-Messages, Testnamen: **Englisch**.
 - Plan-Dokumente, ADRs, Nutzer-Kommunikation: Deutsch.
-- UI-Texte: **exakt** wie im Altsystem (Englisch), siehe Funktionsinventar. Ausnahme: Produktname
-  „Qualivis“ in Fenstertitel und Toolbar (ADR-012).
 - Keine Klarnamen von Personen in Repo-Dateien (Ausnahme: Autoren des Papers bei der Quellenangabe).
 
 ## 2. Formatierung und Lint (Biome)
@@ -26,7 +24,6 @@
 - Ausnahme bis P08-S01: `packages/core` mit `noImplicitAny: false` (übernommener Altcode).
 - Kein `any` in neuem Code; für unbekannte Daten `unknown` + Typprüfung.
 - `import type` für reine Typimporte (Biome `useImportType`).
-- Öffentliche Funktionen in `core` haben JSDoc (ein Satz Zweck + Besonderheiten).
 - **`type` statt `interface`** für alle Typdefinitionen (`type GraphNodeProps = { … }`; Erweiterung
   mit `&`). Erzwungen durch Biome `useConsistentTypeDefinitions` (Option `style: "type"`, automatisch
   behebbar). Ausnahme: übernommener Altcode in `packages/core/src/legacy/` und Fixtures.
@@ -44,7 +41,7 @@
 
 | Art | Schema | Beispiel |
 |---|---|---|
-| React-Komponente | `PascalCase.tsx`, eine Komponente pro Datei | `GraphNode.tsx` |
+| React-Komponente | `PascalCase.tsx`, eine Komponente pro Datei | `Legend.tsx` |
 | Hook | `useXxx.ts` | `usePanZoom.ts` |
 | Modul/Funktion | `camelCase.ts` | `nodeVisuals.ts` |
 | CSS Module | `Komponente.module.css` | `Toolbar.module.css` |
@@ -59,7 +56,7 @@ Ordner der Altcode-Kopie (`packages/core/src/legacy/`) behalten die **alten Date
 
 - Nur Funktionskomponenten und Hooks. Keine Klassen (Ausnahme: Error-Boundary, die React nur als
   Klasse anbietet – eine einzige, in `app/ErrorBoundary.tsx`).
-- Props typisiert als `type XxxProps = { … }`; ≤ 6 Props.
+- Props typisiert als `type XxxProps = { … }`; Props gering halten (zusammengehörige zu einem Objekt bündeln).
 - Zustand: lokal mit `useState`/`useReducer`; geteilt über Jotai-Atome (`state/`). Kein Prop-Drilling
   über mehr als zwei Ebenen. Abgeleitete Werte als abgeleitete Atome oder `useMemo`, nicht per
   `useEffect` + `setState`.
@@ -81,7 +78,8 @@ Ordner der Altcode-Kopie (`packages/core/src/legacy/`) behalten die **alten Date
 - Tokens aus `styles/tokens.css` verwenden (`var(--qv-primary)`), keine harten Farbwerte in
   Komponenten (Ausnahme: `graph.css`, das die exakten Altwerte über Tokens bezieht).
 - CSS Modules für alles außer dem Graph; `graph.css` global unter `.qv-graph`.
-- Keine CSS-in-JS-Bibliothek, kein Präprozessor (Vite kann CSS-Nesting nativ verarbeiten).
+- Erlaubt sind CSS Modules und normales CSS (Vite kann CSS-Nesting nativ verarbeiten). Keine weiteren
+  CSS-Bibliotheken: keine CSS-in-JS-Bibliothek, kein Tailwind, kein Präprozessor.
 - Ausnahme `common-components/`: Jede Komponente liegt in einem eigenen Ordner mit einer normalen CSS-Datei gleichen Namens
   (`Button.tsx` importiert `./Button.css`), mit globalen Klassen `cc-…`. Tokens stehen in
   `common-components/theme.css`, in camelCase und ausgeschrieben, ohne Präfix (`--colorPrimary`,
@@ -90,8 +88,8 @@ Ordner der Altcode-Kopie (`packages/core/src/legacy/`) behalten die **alten Date
 
 ## 7. Kommentare
 
-- Kommentieren **warum**, nicht was. Jede übernommene Eigenheit (K1–K12, V1–V7) bekommt an der
-  Stelle einen Kommentar `// Legacy quirk K3: ... (see docs/migration/01-referenz-altsystem/...)`.
+- Kommentieren **warum**, nicht was. Jede übernommene Eigenheit des Altcodes (K1–K12) bekommt an der
+  Stelle einen Kommentar `// Legacy quirk K3: ...`.
 - Keine auskommentierten Codeblöcke (Altcode-Kommentare in `legacy/` bleiben, wie sie sind).
 
 ## 8. Commits (nur auf Anweisung des Nutzers)
@@ -111,21 +109,3 @@ Ordner der Altcode-Kopie (`packages/core/src/legacy/`) behalten die **alten Date
   Force-Push.
 - PR-Titel `Pnn: <Phasentitel>`; Beschreibung mit erledigten Schritten, Prüfergebnissen,
   Abweichungen und offenen Punkten; ohne Claude-/KI-Hinweise.
-
-## 9. Schritt-Karten (Aufbau)
-
-Jede Datei in `phasen/Pxx-*/Sxx-*.md` hat diese Abschnitte:
-
-```
-# Pxx-Syy – Titel
-Meilenstein · Abhängig von · Umfang (S ≤ 1 h, M ≤ 3 h, L ≤ 1 Tag)
-## Ziel                       ein bis drei Sätze
-## Kontext                    Verweise auf Referenzdokumente und Altcode (Pfad:Zeile)
-## Dateien                    anzulegen / zu ändern
-## Schritte                   nummeriert, konkret
-## Akzeptanzkriterien         prüfbar, Checkboxen
-## Prüfen                     Befehle
-## Fallstricke                bekannte Probleme
-## Nicht tun                  Abgrenzung
-## Commit-Vorschlag
-```

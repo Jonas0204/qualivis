@@ -53,7 +53,6 @@ const scan = (file: SourceFile): readonly ImportReference[] => {
     try {
         program = parse(file.code, file.path).program;
     } catch (error) {
-        // biome-ignore lint/suspicious/noConsole: the parser error does not name the file
         console.error('Scanning imports failed:', file.path, error);
         return [];
     }

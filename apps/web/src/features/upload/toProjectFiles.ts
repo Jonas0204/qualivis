@@ -12,7 +12,7 @@ import {
 // (ADR-011 A18, A19).
 const isSource = (path: string) => !isExcludedFolder(path) && isComponentFile({ path }) === true;
 
-/** True for a source file for the analysis or a config file (ADR-019). */
+/** True for a source file for the analysis or a config file. */
 const isUploadFile = (path: string): boolean => isSource(path) || isConfigFile(path);
 
 /**

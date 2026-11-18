@@ -7,7 +7,7 @@ Zahnrad rechts in der Toolbar öffnet „Settings“ mit den sieben Schaltern in
 „Cancel“ verwirft, „Save“ übernimmt.
 
 ## Kontext
-- Funktionsinventar §7 (Labels exakt, Reihenfolge, Einrückung, Tooltip); Stil-Referenz §1/§3
+- Funktionsinventar §7 (Labels exakt, Reihenfolge, Einrückung, Tooltip)
   (Dialog, Schalter, Farben)
 - Altcode: `components/settings-modal/*`, `app.component.ts:30-39`
 

@@ -12,6 +12,8 @@ export * from './components/Dialog/Dialog';
 export * from './components/DropdownMenu/DropdownMenu';
 export * from './components/Field/Field';
 export * from './components/Icon/Icon';
+export * from './components/Icon/IconProvider';
+export type { IconSet, SvgIcon } from './components/Icon/iconSet';
 export * from './components/Input/Input';
 export * from './components/Kbd/Kbd';
 export * from './components/Label/Label';

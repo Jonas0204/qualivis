@@ -1,5 +1,4 @@
-// Port of GraphComponent.generateReactConstraints (legacy graph.component.ts:530-561), see
-// docs/migration/01-referenz-altsystem/03-visuelle-regeln.md §9.2.
+// Port of GraphComponent.generateReactConstraints (legacy graph.component.ts:530-561).
 import type { Node } from '../model/graph';
 import { graphSettings } from '../model/graphSettings';
 import { reactMethods } from '../model/specialMethods';
@@ -27,7 +26,6 @@ export const reactConstraints = (
     for (let i = 0; i < nodeIndexes.length; i++) {
         const nextNodeIndex = nodeIndexes[i + 1];
         // Legacy quirk V4: a next index of 0 is falsy, so that pair gets no constraint
-        // (see docs/migration/01-referenz-altsystem/03-visuelle-regeln.md §9.2 and §16).
         if (!nextNodeIndex) {
             continue;
         }

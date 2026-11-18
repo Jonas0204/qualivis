@@ -56,7 +56,7 @@ const readFile = async (file: File, path: string): Promise<SourceFile> => ({
  * Fallback files come first, then the entries in item order; the core sorts them later.
  * Only source and config files are read. Excluded folders (node_modules, build, dist, .venv,
  * __tests__) are not entered; a python folder with a Python project is listed but nothing in it is
- * read (ADR-019, ADR-011 A18, A19).
+ * read (ADR-011 A18, A19).
  */
 export const readDroppedFiles = async (dataTransfer: DataTransfer): Promise<ProjectFiles> => {
     // Items are only readable during the drop event, so collect everything before the first await.

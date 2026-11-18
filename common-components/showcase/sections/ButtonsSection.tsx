@@ -5,11 +5,26 @@ import {
     ButtonGroup,
     Card,
     Icon,
+    IconProvider,
+    type IconSet,
     Kbd,
     Separator,
     Spinner,
     Tooltip,
 } from '../../index';
+
+/** An own SVG icon in the text colour, as a host registers it. */
+const ownIcons: IconSet = {
+    sc_node: {
+        viewBox: '0 0 24 24',
+        content: (
+            <>
+                <circle cx={12} cy={12} r={9} fill="none" stroke="currentColor" strokeWidth={2} />
+                <circle cx={12} cy={12} r={4} fill="currentColor" />
+            </>
+        ),
+    },
+};
 
 /** Button, ButtonGroup, Tooltip on icon buttons, Badge, Kbd, Avatar. */
 export const ButtonsSection = () => (
@@ -77,6 +92,21 @@ export const ButtonsSection = () => (
                         </Button>
                     </ButtonGroup>
                 </div>
+            </div>
+            <div>
+                <p className="sc-caption">Icons: Material and own SVG icons (IconProvider)</p>
+                <IconProvider icons={ownIcons}>
+                    <div className="sc-row">
+                        <Icon name="settings" />
+                        <Icon name="settings" size={32} />
+                        <Icon name="sc_node" />
+                        <Icon name="sc_node" size={32} />
+                        <Button variant="outline">
+                            <Icon name="sc_node" />
+                            Own icon
+                        </Button>
+                    </div>
+                </IconProvider>
             </div>
             <div>
                 <p className="sc-caption">Badges, keys, avatars</p>

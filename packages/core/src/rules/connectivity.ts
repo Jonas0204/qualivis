@@ -1,5 +1,5 @@
 // Port of the fading rules of GraphComponent.createFading (legacy graph.component.ts:733-804) and of
-// removeNode (1050-1056), see docs/migration/01-referenz-altsystem/03-visuelle-regeln.md §12.
+// removeNode (1050-1056).
 import type { Graph } from '../model/graph';
 
 /** The ends of a link; the legacy app compared the node objects, the ids are unique in a graph. */

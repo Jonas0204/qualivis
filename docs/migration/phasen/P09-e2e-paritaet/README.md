@@ -8,21 +8,14 @@ vergleicht. Ein Sichtvergleichsbericht unterstützt die menschliche Abnahme (G5)
 
 ## S00 – Phase verfeinern (S)
 
-## S01 – Paket `e2e` mit Playwright und Microsoft Edge (S)
-- `e2e/package.json` (`@qualivis/e2e`, privat, `devDependencies: { "@playwright/test": "catalog:" }` → 1.64.1),
-  in `pnpm-workspace.yaml` die Zeile `- e2e` aktivieren und im Catalog `"@playwright/test": 1.64.1`
-  eintragen (vorher nicht, sonst meldet Knip den Eintrag als unbenutzt). Vor der Installation dem
-  Nutzer nennen:
-  Paket, Version, 2 Pakete, Meldungshistorie (CVE-2025-59288, behoben 1.55.1), keine
-  Browser-Downloads (ADR-008).
-- Installation nach Nachfrage mit `PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1`: macOS/bash
-  `PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 pnpm install`, Windows/PowerShell
-  `$env:PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1; pnpm install`.
-- Voraussetzung: Microsoft Edge ist installiert.
-- `playwright.config.ts`: `use: { channel: process.env.QV_BROWSER_CHANNEL ?? 'msedge', viewport: { width: 1280, height: 800 } }`,
+## S01 – Paket `e2e` mit Playwright (S)
+- `e2e/package.json` (`@qualivis/e2e`, privat, `devDependencies: { "@playwright/test": "catalog:" }`),
+  in `pnpm-workspace.yaml` die Zeile `- e2e` aktivieren und `@playwright/test` im Catalog eintragen.
+  Vor der Installation dem Nutzer Paket, Version und Zweck nennen und die Zustimmung abwarten.
+- `playwright.config.ts`: Viewport 1280 × 800,
   `webServer: { command: 'pnpm --filter @qualivis/web preview', url: 'http://127.0.0.1:4173' }`,
   zweites `webServer` für `pnpm legacy:serve` (Port 4300) nur für Paritäts-Projekte.
-- Root-Skript `e2e`: `pnpm --filter @qualivis/e2e exec playwright test`. **Nie** `playwright install`.
+- Root-Skript `e2e`: `pnpm --filter @qualivis/e2e exec playwright test`.
 
 ## S02 – Automatisierte Legacy-Erfassung (M)
 - `e2e/capture/capture-legacy.spec.ts` (eigenes Projekt `capture`, nicht im normalen Lauf): öffnet den

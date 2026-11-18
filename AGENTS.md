@@ -26,9 +26,9 @@ müssen gleich bleiben; der Beweis sind Golden-Daten aus dem alten Build.
 |---|---|
 | Code in `packages/` oder `apps/` schreibt | `docs/migration/00-grundlagen/05-konventionen.md` §1–§7 |
 | Tests schreibt | `docs/migration/00-grundlagen/06-teststrategie.md` §1–§2 |
-| Goldens oder Parität berührt | `06-teststrategie.md` §3, `testdata/golden/README.md` |
-| Ordner, Pakete oder Importe zwischen Paketen anlegt | `00-grundlagen/03-architektur.md` §2–§3 |
-| Zustand (Jotai) anfasst | `03-architektur.md` §5, `06-teststrategie.md` §2 |
+| Goldens oder Parität berührt | `testdata/golden/README.md` |
+| Ordner, Pakete oder Importe zwischen Paketen anlegt | `00-grundlagen/03-architektur.md` §2 |
+| Zustand (Jotai) anfasst | `03-architektur.md` §3, `06-teststrategie.md` §2 |
 | UI-Bausteine (Button, Feld, Auswahl, Dialog, Tooltip …) braucht oder baut | `common-components/README.md` |
 
 Richtwert: Die Punkte 1–5 sind zusammen etwa 3.000–5.000 Wörter. Mehr zu lesen kostet Kontext und
@@ -47,8 +47,7 @@ die die Karte nennt.
   nie Force-Push, keine History-Umschreibung, keine Änderung an Git-Config oder Remotes.
 - **Keine** Installation (`pnpm install`/`pnpm add`) ohne Nachfrage: Befehl, Pakete mit Version
   und Zweck nennen, Zustimmung abwarten.
-- `packages/core/src/legacy/`: keine Logikänderung (R5). `testdata/golden/**`: nie von Hand ändern
-  (R6). Tests nie abschwächen, um grün zu werden (R8).
+- `packages/core/src/legacy/`: keine Logikänderung (R5). Tests nie abschwächen, um grün zu werden (R8).
 - Ein Schritt nach dem anderen, nichts auf Vorrat (R1). Bei Widerspruch, Unklarheit oder
   unerklärlichem Fehler: stoppen, Befund melden, fragen (R9).
 - **Das Repository ist öffentlich.** Keine personenbezogenen Daten (Klarnamen, private
@@ -72,12 +71,9 @@ Alle Plan-Dateien liegen unter `docs/migration/`.
 |---|---|
 | Funktionsinventar, IDs `U`, `N`, `G`, `F`, `Q`, `S`, `P` + Zahl | `01-referenz-altsystem/01-funktionsinventar.md` |
 | Analyse-Kern §n, Eigenheiten K1–K12 | `01-referenz-altsystem/02-analyse-kern.md` |
-| `§n` ohne Dateiname (P07-S03), Eigenheiten V1–V7 | `01-referenz-altsystem/03-visuelle-regeln.md` |
-| Stil-Referenz §n | `01-referenz-altsystem/04-stil-referenz.md` |
 | Architektur §n, Konventionen §n, Teststrategie §n | `00-grundlagen/03-architektur.md`, `05-konventionen.md`, `06-teststrategie.md` |
-| G1–G6 (Golden-Stufen) | `00-grundlagen/06-teststrategie.md` §3 |
 | M0–M8 (Meilensteine) | `00-grundlagen/01-ziele-und-scope.md` §4 |
-| ADR-nnn, ADR-011 A1–A24 (Korrekturen) | `00-grundlagen/07-entscheidungen.md` |
+| ADR-nnn, ADR-011 A1–A25 (Korrekturen) | `00-grundlagen/07-entscheidungen.md` |
 | O2, O5, O14, O16–O19 (Nutzerentscheidungen ohne ADR), RI1–RI17 (Risiken) | `00-grundlagen/08-risiken-und-offene-punkte.md` |
 | R1–R10 (Regeln) | `README.md`, Abschnitt „Regeln für die Umsetzung“ |
 | Goldens `legacy-*.json` | `testdata/golden/<fixture>/` (Fixtures `mini`, `realworld`) |
@@ -117,7 +113,6 @@ gekürzt. Die Zeilenangaben gelten unverändert, denn die Dateien wurden nur ver
 | `tools/` | Hilfsprogramme mit Tests: Node-Versionsprüfung, Legacy-Server, Capture-Skript, JSON-Diff |
 | `testdata/fixtures/`, `testdata/golden/` | Testprojekte und Referenzdaten aus dem alten Build |
 | `legacy/angular/` | Altsystem, nur lesen |
-| `.claude/skills/` | Abläufe als Skills (Claude Code und GitHub Copilot in VS Code lesen diesen Ordner) |
 
 ## Basis-UI-Komponenten
 
@@ -130,43 +125,17 @@ gekürzt. Die Zeilenangaben gelten unverändert, denn die Dateien wurden nur ver
 - Er enthält **nicht** jeden Baustein, den es in Bibliotheken wie shadcn/ui gibt. Fehlt einer: dort
   ergänzen (gleiche Bauart, siehe `common-components/README.md`) und im Showcase zeigen.
 
-## Skills
-
-- `schritt-umsetzen`: den nächsten oder einen genannten Schritt umsetzen.
-- `phase-abschliessen`: Phase prüfen und reviewen lassen, Doku aufräumen, Pull Request vorbereiten,
-  nach Nachfrage pushen und anlegen.
-  Nur auf ausdrücklichen Wunsch des Nutzers.
-
-Ohne Skill-Unterstützung die jeweilige `.claude/skills/<name>/SKILL.md` lesen und befolgen.
-
 ## Subagenten
 
-Gilt für Werkzeuge, die Subagenten starten können (z. B. Claude Code). Grundsatz: Der Hauptagent
-arbeitet selbst, Subagenten gibt es nur für die drei Fälle in der Tabelle.
-
-- **Immer selbst:**
-  - Code schreiben, mit dem stärksten verfügbaren Modell (bei Claude: Opus).
-  - Den Kontext eines Schritts lesen. Eine Zusammenfassung verliert die genauen Zeilen, auf die es
-    beim 1:1-Verhalten ankommt.
-  - Tests und `pnpm check` ausführen, bei Bedarf im Hintergrund.
-
-| Fall | Modell | Auftrag |
-|---|---|---|
-| Unabhängiges Review am Phasenende oder nach einem großen Schritt | stärkstes (Opus) | Diff gegen Karten, Altcode und Konventionen prüfen und Befunde melden |
-| Breite Suche über viele Dateien (Altcode, Doku) | mittleres (Sonnet) | Fundstellen mit Datei und Zeile liefern; lesen tut sie dann der Hauptagent |
-| Recherche nebenbei (Versionen, Changelogs, SHAs von Actions) | mittleres (Sonnet) | Ergebnis mit Quelle |
-
-- Für Suchen nie das kleinste Modell nehmen: Eine übersehene Stelle kostet mehr als die gesparten
-  Tokens.
-- Subagenten nur lesen lassen. Im Auftrag ausdrücklich verbieten: Dateien ändern oder löschen,
-  installieren, committen, pushen.
-- Vorher dem Nutzer in einem Satz sagen, was der Subagent tut und mit welchem Modell.
-- Ergebnisse sind Hinweise, kein Beweis. Jeden Befund selbst prüfen, bevor er an den Nutzer geht.
+Gilt für Werkzeuge, die Subagenten starten können (z. B. Claude Code). Subagenten dürfen nach
+Sinnhaftigkeit verwendet werden, etwa für breite Suchen, Recherche oder ein unabhängiges Review.
+Sie sollen nur lesen (nichts ändern, löschen, installieren, committen oder pushen); ihre Ergebnisse
+sind Hinweise und werden vor der Weitergabe selbst geprüft.
 
 ## Pflege der Doku
 
 - Regeln ändern: README R1–R10 und die Kurzfassung oben gemeinsam anpassen.
 - Neue Kurzverweise in Karten nur, wenn sie in der Abkürzungstabelle stehen.
 - Umgesetztes (Karten, ADRs, Vorlagen, Code-Snippets) wird vor dem PR der Phase entfernt, nach
-  Zustimmung des Nutzers (Skill `phase-abschliessen`). Es bleibt in der Git-Historie; IDs werden
+  Zustimmung des Nutzers. Es bleibt in der Git-Historie; IDs werden
   nicht neu vergeben. Am Ende bleiben die Grundlagen und `STATUS.md`.

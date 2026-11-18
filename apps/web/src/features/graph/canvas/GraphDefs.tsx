@@ -7,8 +7,8 @@ import { arrowMarker } from './linkPaths';
 const hatchStrokeWidth = Math.max(graphSettings.circleStrokeWidth * 2, 1);
 
 /**
- * Arrow marker of the links and hatch pattern of class components (legacy graph.component.html:7-26,
- * docs/migration/01-referenz-altsystem/03-visuelle-regeln.md §8). The ids come from GraphDefsContext.
+ * Arrow marker of the links and hatch pattern of class components (legacy graph.component.html:7-26).
+ * The ids come from GraphDefsContext.
  */
 export const GraphDefs = () => {
     const ids = useContext(GraphDefsContext);

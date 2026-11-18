@@ -1,7 +1,7 @@
 # Analyse-Kern des Altsystems
 
-Der Analyse-Kern wird **1:1 übernommen** (ADR-002). Dieses Dokument beschreibt, was er tut, wo
-er liegt und welche Eigenheiten erhalten bleiben müssen. Abnahme ist der Golden-Test G1
+Der Analyse-Kern wird **1:1 übernommen**. Dieses Dokument beschreibt, was er tut, wo
+er liegt und welche Eigenheiten er hat. Abnahme ist der Golden-Test G1
 (`00-grundlagen/06-teststrategie.md`), der im Spike für zwei Testprojekte **0 Abweichungen**
 ergab.
 
@@ -107,9 +107,9 @@ Zahlen sind von escomplex bereits auf **3 Nachkommastellen** gerundet (z. B. `34
 Die UI nutzt nur: die 7 Metriken aus `qualityMetrics`, `sloc.logical` (Icon „leere Funktion“),
 `aggregate`, `name`, `lineStart`. Projektweite Felder (`adjacencyList` …) sind ungenutzt.
 
-## 6. Eigenheiten, die erhalten bleiben (bug-kompatibel)
+## 6. Eigenheiten des Altcodes
 
-Diese Punkte sind **gewollt unverändert**. Wer sie ändern will, braucht eine ADR und neue Goldens.
+Diese Eigenheiten stehen im übernommenen Altcode in `packages/core/src/legacy/` (nicht ändern, siehe R5).
 
 | ID | Eigenheit | Ort |
 |---|---|---|
@@ -124,7 +124,7 @@ Diese Punkte sind **gewollt unverändert**. Wer sie ändern will, braucht eine A
 | K9 | Innere `function x() {}`-Deklarationen in Funktionskomponenten werden **nicht** als Knoten erfasst. | `traverseFunctionComponent.ts:44-84` |
 | K10 | Getter/Setter von Klassen werden ignoriert. | `traverseClassComponent.ts:43-46` |
 | K11 | Die Knotenreihenfolge folgt der **Eingabereihenfolge** der Dateien. Neu: Der Kern sortiert die Eingabe kanonisch (JS-Standardsortierung der Pfade), siehe ADR-006. Die Goldens werden mit derselben Sortierung erzeugt. | `data.service.ts:31` |
-| K12 | Importe ohne Endung werden per **Präfix** aufgelöst (`<pfad>.` bzw. `<pfad>/index.`): Liegt `Header.styles.ts` neben `Header.tsx`, gewinnt die erste passende Datei in Sortierreihenfolge (`Header.styles.ts`), und die Kante zu `Header` fehlt. Gefunden am 09.11.2026; der Monorepo-Weg (P05.5, ADR-019) umgeht es mit Endungen. | `traverseHelper.ts:541-565`, `generateAppGraph.ts:129-145` |
+| K12 | Importe ohne Endung werden per **Präfix** aufgelöst (`<pfad>.` bzw. `<pfad>/index.`): Liegt `Header.styles.ts` neben `Header.tsx`, gewinnt die erste passende Datei in Sortierreihenfolge (`Header.styles.ts`), und die Kante zu `Header` fehlt. Gefunden am 09.11.2026; der Monorepo-Weg (P05.5) umgeht es mit Endungen. | `traverseHelper.ts:541-565`, `generateAppGraph.ts:129-145` |
 
 ## 7. Plugin-Liste des Parsers (unverändert übernehmen)
 

@@ -1,6 +1,5 @@
 // Prepares a graph for drawing the way GraphComponent does (legacy graph.component.ts:166-171 and
-// createSimulation, 563-569), see docs/migration/01-referenz-altsystem/03-visuelle-regeln.md §2,
-// §4 and §9.2.
+// createSimulation, 563-569).
 import type { Graph, Link, Node } from '../model/graph';
 import { graphSettings } from '../model/graphSettings';
 import { computeClusters } from './cluster';
@@ -45,11 +44,9 @@ const resolveLinks = (links: readonly Link[], nodes: readonly VisualNode[]): Vis
         const target = byId.get(link.target);
 
         if (!source) {
-            // biome-ignore lint/suspicious/noConsole: legacy log, kept for debugging (user, 09.11.2026)
             console.error('Did not find link source in nodes:', link.source);
         }
         if (!target) {
-            // biome-ignore lint/suspicious/noConsole: legacy log, kept for debugging (user, 09.11.2026)
             console.error('Did not find link target in nodes:', link.target);
         }
 

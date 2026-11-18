@@ -1,5 +1,5 @@
 /* App colours on top of the tokens of the common components (common-components/theme.css). Light
-   values: legacy build, docs/migration/01-referenz-altsystem/04-stil-referenz.md §1; every colour is
+   values: legacy build; every colour is
    written as light-dark(light, dark), so the app follows the dark mode of the system. */
 :root,
 [data-color-scheme] {

@@ -1,0 +1,21 @@
+/* the container is styled inline in Legend.tsx; the node classes come from graph.css (.qv-legend) */
+.entries {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.entry {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 300;
+}
+
+.symbol {
+    flex: none;
+}

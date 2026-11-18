@@ -7,7 +7,7 @@ Einstellungen liegen in einem Atom, starten mit den Altsystem-Standardwerten, we
 `qualivis.settings` gespeichert und beim Start validiert wiederhergestellt.
 
 ## Kontext
-- Funktionsinventar §7; Altcode `services/settings.service.ts`; ADR-010, ADR-013; Architektur §5, §8
+- Funktionsinventar §7; Altcode `services/settings.service.ts`; Architektur §3–§5, §8
 
 ## Dateien
 `apps/web/src/lib/storage.ts` (+ Test), `apps/web/src/state/settingsAtoms.ts` (+ Test),

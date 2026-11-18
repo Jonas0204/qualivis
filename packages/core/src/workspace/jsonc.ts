@@ -81,7 +81,6 @@ export const readConfigFile = (file: SourceFile): Record<string, unknown> | unde
     try {
         return parseObject(file.code);
     } catch (error) {
-        // biome-ignore lint/suspicious/noConsole: says which config the analysis skips (ADR-019)
         console.warn('Invalid config file:', file.path, error);
         return undefined;
     }

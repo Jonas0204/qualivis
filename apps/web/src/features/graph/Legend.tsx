@@ -1,161 +1,90 @@
-import { graphSettings, type View } from '@qualivis/core';
-import { useContext, useId } from 'react';
-import { GraphDefsContext } from './canvas/graphDefsContext';
+import type { View } from '@qualivis/core';
+import type { CSSProperties } from 'react';
+import { Icon, IconProvider } from '../../../../../common-components';
+import { type GraphIconName, graphIcons } from './icons/graphIcons';
 
 type LegendProps = { view: View };
+/** `appIcon`: the symbol of the app view, if it differs (inner functions as preview circles). */
+type LegendEntry = { label: string; icon: GraphIconName; appIcon?: GraphIconName };
 
-/** Height and y of the entries per view (legacy `id ? … : …`). */
-const layout = {
-    app: {
-        height: 246,
-        reactFunction: 92,
-        reactJsxFunction: 112,
-        innerFunction: 136,
-        jsxFunction: 156,
-        link: 180,
+const nodeEntries: LegendEntry[] = [
+    { label: 'Function Component', icon: 'graph_function_component' },
+    { label: 'Class Component', icon: 'graph_class_component' },
+    {
+        label: 'Inner React Function',
+        icon: 'graph_inner_react_function',
+        appIcon: 'graph_inner_react_function_preview',
     },
-    component: {
-        height: 270,
-        reactFunction: 96,
-        reactJsxFunction: 128,
-        innerFunction: 160,
-        jsxFunction: 192,
-        link: 224,
+    {
+        label: 'Inner React JSX Function',
+        icon: 'graph_inner_react_jsx_function',
+        appIcon: 'graph_inner_react_jsx_function_preview',
     },
+    {
+        label: 'Inner Function',
+        icon: 'graph_inner_function',
+        appIcon: 'graph_inner_function_preview',
+    },
+    {
+        label: 'Inner JSX Function',
+        icon: 'graph_inner_jsx_function',
+        appIcon: 'graph_inner_jsx_function_preview',
+    },
+];
+
+const linkEntries = (view: View): LegendEntry[] =>
+    view === 'component'
+        ? [{ label: 'Function Use', icon: 'graph_link' }]
+        : [
+              { label: 'Composition', icon: 'graph_link' },
+              { label: 'Inheritance', icon: 'graph_link_dashed' },
+          ];
+
+const legendStyle: CSSProperties = {
+    position: 'absolute',
+    right: 0,
+    bottom: 0,
+    width: 196,
+    padding: '14px 16px',
+    borderTop: 'var(--borderWidth) solid var(--colorBorder)',
+    borderLeft: 'var(--borderWidth) solid var(--colorBorder)',
+    borderTopLeftRadius: 'var(--radiusLarge)',
+    background: 'var(--qv-legend-bg)',
+    color: 'var(--colorText)',
+    cursor: 'default',
 };
 
-const entry = (y: number) => ({
-    className: 'legend-entry',
-    style: { transform: `translateY(${y}px)` },
-});
+const entriesStyle: CSSProperties = {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 6,
+    margin: 0,
+    padding: 0,
+    listStyle: 'none',
+};
 
-const Description = ({ text }: { text: string }) => (
-    <text x={33} y={12} className="description">
-        {text}
-    </text>
-);
+const entryStyle: CSSProperties = {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 8,
+    fontSize: 12,
+    fontWeight: 300,
+};
 
-/**
- * Legend of the graph (§15, legacy graph.component.html:31-163), with the node classes of the
- * graph: the app view draws inner functions as preview circles, the component view as nodes. Hatch
- * and arrow are the defs of the graph (GraphDefsContext).
- */
 export const Legend = ({ view }: LegendProps) => {
-    const ids = useContext(GraphDefsContext);
-    const headerId = useId();
-    const component = view === 'component';
-    const at = layout[view];
-    const r = component ? 12 : 5;
-    const opacity = component ? 1 : 0.5;
-    const link = (dashed: boolean) => (
-        <line
-            strokeWidth={graphSettings.linkStrokeWidth}
-            stroke={graphSettings.linkColor}
-            strokeOpacity={graphSettings.linkOpacity}
-            markerEnd={`url(#${ids.arrowhead})`}
-            x1={1}
-            y1={12}
-            x2={25}
-            y2={12}
-            strokeDasharray={dashed ? '4 2' : undefined}
-        />
-    );
-
     return (
-        // biome-ignore lint/a11y/noSvgWithoutTitle: named by its header (aria-labelledby); a title would add a tooltip the legacy legend has not
-        <svg
-            className="qv-legend"
-            width={196}
-            height={at.height}
-            viewBox={`-16 -14 196 ${at.height}`}
-            aria-labelledby={headerId}
-        >
-            <text id={headerId} className="legend-header" y={16}>
-                Legend
-            </text>
-            <g {...entry(32)}>
-                <circle className="circle-node circle-overlay component" r={12} cx={13} cy={12} />
-                <Description text="Function Component" />
-            </g>
-            <g {...entry(64)}>
-                <circle className="circle-node component" r={12} cx={13} cy={12} />
-                <circle
-                    className="circle-overlay component"
-                    r={12}
-                    cx={13}
-                    cy={12}
-                    fill={`url(#${ids.hatch})`}
-                />
-                <Description text="Class Component" />
-            </g>
-            <g {...entry(at.reactFunction)}>
-                <circle
-                    className="function innerFunction special"
-                    r={r}
-                    cx={13}
-                    cy={12}
-                    opacity={opacity}
-                />
-                <Description text="Inner React Function" />
-            </g>
-            <g {...entry(at.reactJsxFunction)}>
-                <circle
-                    className={`circle-node circle-overlay innerFunction special jsx${component ? '' : ' function'}`}
-                    r={r}
-                    cx={13}
-                    cy={12}
-                    opacity={opacity}
-                />
-                {component && (
-                    <circle
-                        className="inner-circle innerFunction special"
-                        r={9}
-                        cx={13}
-                        cy={12}
-                        fill="none"
-                    />
-                )}
-                <Description text="Inner React JSX Function" />
-            </g>
-            <g {...entry(at.innerFunction)}>
-                <circle
-                    className="function innerFunction"
-                    r={r}
-                    cx={13}
-                    cy={12}
-                    opacity={opacity}
-                />
-                <Description text="Inner Function" />
-            </g>
-            <g {...entry(at.jsxFunction)}>
-                <circle
-                    className={`circle-node circle-overlay innerFunction jsx${component ? '' : ' function'}`}
-                    r={r}
-                    cx={13}
-                    cy={12}
-                    opacity={opacity}
-                />
-                {component && (
-                    <circle
-                        className="inner-circle innerFunction"
-                        r={9}
-                        cx={13}
-                        cy={12}
-                        fill="none"
-                    />
-                )}
-                <Description text="Inner JSX Function" />
-            </g>
-            <g {...entry(at.link)}>
-                {link(false)}
-                <Description text={component ? 'Function Use' : 'Composition'} />
-            </g>
-            {!component && (
-                <g {...entry(200)}>
-                    {link(true)}
-                    <Description text="Inheritance" />
-                </g>
-            )}
-        </svg>
+        <div className="qv-legend" style={legendStyle}>
+            <h3 style={{ margin: '0 0 8px', fontSize: 16, fontWeight: 400 }}>Legend</h3>
+            <IconProvider icons={graphIcons}>
+                <ul style={entriesStyle}>
+                    {[...nodeEntries, ...linkEntries(view)].map(({ label, icon, appIcon }) => (
+                        <li key={label} style={entryStyle}>
+                            <Icon name={view === 'app' ? (appIcon ?? icon) : icon} size={26} />
+                            {label}
+                        </li>
+                    ))}
+                </ul>
+            </IconProvider>
+        </div>
     );
 };

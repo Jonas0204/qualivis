@@ -1,5 +1,5 @@
-// Layout interface from docs/migration/00-grundlagen/03-architektur.md §6. Engines mutate x/y of
-// the nodes they get and report ticks; React only reads the positions.
+// Layout interface of the graph. Engines mutate x/y of the nodes they get and report ticks; React
+// only reads the positions.
 
 export type LayoutNode = {
     id: string;

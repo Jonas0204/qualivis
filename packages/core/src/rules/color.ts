@@ -1,7 +1,7 @@
-// Cluster colours (legacy helper/clusterColorScale.ts, graph.component.ts:317-321), see
-// docs/migration/01-referenz-altsystem/03-visuelle-regeln.md §4. The colour maths repeats
+// Cluster colours (legacy helper/clusterColorScale.ts, graph.component.ts:317-321).
+// The colour maths repeats
 // d3.hsl(color), `l += (1 - l) * amount` and toString() of d3-color 1.4 (ISC license), because the
-// core does not depend on d3 (ADR-003).
+// core does not depend on d3.
 import { clusterColors } from '../model/clusterColors';
 import type { View } from './nodeVisuals';
 

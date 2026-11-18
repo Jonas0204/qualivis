@@ -43,8 +43,6 @@ of `App`, switches the cluster colours on and writes only `legacy-cluster-colors
 result: 9 nodes with clusters 0–6. Do not run `qvCapture` for it: that rewrites all goldens, and
 their positions depend on the window size.
 
-Golden files are never edited by hand; see [testdata/README.md](../../testdata/README.md).
-
 ## Known limits
 
 - Keep the browser window visible: hidden tabs throttle timers (`realworld` then takes minutes).

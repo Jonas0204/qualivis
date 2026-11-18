@@ -24,7 +24,12 @@ export { linkEnd } from './rules/linkGeometry';
 export type { MetricRow } from './rules/metricRows';
 export { metricRows } from './rules/metricRows';
 export type { View } from './rules/nodeVisuals';
-export { mainRadius, previewCircles, previewDots } from './rules/previewGeometry';
+export {
+    mainRadius,
+    previewCircles,
+    previewClassName,
+    previewDots,
+} from './rules/previewGeometry';
 export type { ReactConstraint } from './rules/reactConstraints';
 export { reactConstraints } from './rules/reactConstraints';
 export type { ViewModel, VisualLink, VisualNode } from './rules/viewModel';

@@ -1,7 +1,7 @@
 # Notes on the `monorepo` fixture
 
 Own test project (no external source, no license file). It recreates the patterns of a pnpm
-monorepo in which one app uses components of a shared library (ADR-019, phase P05.5). The legacy
+monorepo in which one app uses components of a shared library (phase P05.5). The legacy
 app cannot analyse monorepos, so there are no goldens; the expected results below were derived by
 hand from the files.
 

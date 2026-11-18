@@ -9,7 +9,6 @@
 │  features/graph ──┼─► state/ (Jotai-Atome)                   ◄── lib/ (storage, …) │
 │  features/code-quality, settings                                                  │
 │  Bausteine aus common-components/ (Button, Select, Tooltip, Icon, Progress, …)    │
-│  features/graph/layout (d3-force, Fluss-Regeln, Web Worker) – ohne React und DOM  │
 └──────────────────────────────────┬────────────────────────────────────────────────┘
                                    │ importiert nur die öffentliche API
 ┌──────────────────────── packages/core (@qualivis/core) ──────────────────────────┐
@@ -26,91 +25,7 @@
 e2e/ (@qualivis/e2e, Playwright, separat installierbar) · tools/ (Node-Skripte ohne Abhängigkeiten)
 ```
 
-## 2. Repository-Struktur (Ziel nach M4)
-
-```
-/
-├─ package.json              privat; Skripte; packageManager pnpm@12.16.1; engines node >=24
-├─ pnpm-workspace.yaml       Pakete, Catalog, Lieferketten-Härtung, patchedDependencies
-├─ pnpm-lock.yaml
-├─ biome.json                Lint + Format (ein Werkzeug)
-├─ tsconfig.base.json        gemeinsame Compiler-Optionen
-├─ vitest.config.ts          test.projects: packages/*, apps/*
-├─ .editorconfig  .gitattributes  .gitignore  .node-version
-├─ patches/                  pnpm-Patches (escomplex-commons, plugin-manager)
-├─ packages/
-│  ├─ core/
-│  │  ├─ package.json  vitest.config.ts  README.md
-│  │  ├─ tsconfig.json            nur Verweise auf tsconfig.src.json (src ohne Tests, ohne Node/DOM;
-│  │  │                           `composite`, schreibt nur `.d.ts` nach `dist/types`) und
-│  │  │                           tsconfig.test.json (Tests, mit Node-Typen)
-│  │  ├─ src/
-│  │  │  ├─ index.ts                 öffentliche API (nur hier wird exportiert)
-│  │  │  ├─ analysis/                analyzeProject.ts, escomplex.ts (mit path-browserify), interop.ts,
-│  │  │  │                           sortFiles.ts, hasSingleComponent.ts
-│  │  │  ├─ legacy/                  parser.ts, traverse*.ts, findReport.ts, generateAppGraph.ts,
-│  │  │  │                           extractFileTree.ts, isComponentFile.ts, nestedStringAccess.ts
-│  │  │  ├─ rules/                   nodeVisuals.ts, icons.ts, cluster.ts, reactConstraints.ts,
-│  │  │  │                           previewGeometry.ts, linkGeometry.ts, color.ts, thresholds.ts,
-│  │  │  │                           connectivity.ts, viewModel.ts
-│  │  │  ├─ workspace/               (ADR-019) projectFiles.ts, jsonc.ts, packages.ts,
-│  │  │  │                           tsconfig.ts, resolveImport.ts, scanImports.ts, selectFiles.ts,
-│  │  │  │                           rewriteImports.ts, analyzeWorkspace.ts, appCandidates.ts
-│  │  │  ├─ model/                   graph.ts, report.ts, settings.ts, qualityMetrics.ts,
-│  │  │  │                           specialMethods.ts, files.ts, graphSettings.ts, clusterColors.ts
-│  │  │  └─ types/                   globals.d.ts, escomplex.d.ts, path-browserify.d.ts
-│  │  └─ test/golden/                analysis.golden.test.ts, rules.golden.test.ts
-│  └─ cli/                           (ab P10)
-├─ apps/
-│  └─ web/
-│     ├─ index.html  vite.config.ts  vitest.config.ts
-│     ├─ tsconfig.json               Verweis auf core/tsconfig.src.json; `typecheck` ist `tsc -b`,
-│     │                              damit der Kern mit seinen eigenen Optionen geprüft wird
-│     ├─ public/favicon.png
-│     └─ src/
-│        ├─ main.tsx                 Einstieg, Provider
-│        ├─ app/                     App.tsx, AppShell.tsx, Toolbar.tsx, useUrlState.ts
-│        ├─ state/                   analysisAtoms.ts, viewAtoms.ts, selectionAtoms.ts,
-│        │                           settingsAtoms.ts, snackbarAtoms.ts, selection.ts, selectViewGraph.ts,
-│        │                           StateProvider.tsx
-│        ├─ features/
-│        │  ├─ upload/               UploadView.tsx, ProjectChoice.tsx, readDroppedFiles.ts, readInputFiles.ts,
-│        │  │                        toProjectFiles.ts, logReadError.ts, useFileDrop.ts, DropOverlay.tsx
-│        │  ├─ analysis/             runAnalysis.ts (später worker/)
-│        │  ├─ graph/                GraphPage.tsx, GraphView.tsx, GraphActions.tsx, Legend.tsx,
-│        │  │                        useLayout.ts, useNodeDrag.ts, useElementSize.ts, savedViews.ts,
-│        │  │                        graph.css,
-│        │  │                        canvas/ (Zeichnen: GraphCanvas.tsx, GraphNode.tsx, GraphLink.tsx,
-│        │  │                          GraphLinkBundles.tsx, PreviewCircles.tsx, GraphDefs.tsx,
-│        │  │                          graphDefsContext.ts, linkPaths.ts, writePositions.ts, useFade.ts),
-│        │  │                        zoom/ (usePanZoom.ts, useZoomTransition.ts, zoomMath.ts,
-│        │  │                          pointerGesture.ts),
-│        │  │                        labels/ (useLabelCollision.ts, labelCollision.ts),
-│        │  │                        layout/ (types.ts, createLayout.ts, largeGraph.ts,
-│        │  │                          forceSolver.ts, flow.ts, gridCollide.ts, tickClock.ts,
-│        │  │                          forceLayout.ts, workerLayout.ts, layoutHost.ts, layoutWorker.ts)
-│        │  ├─ code-quality/         CodeQualityPanel.tsx, MetricList.tsx, MetricSummary.tsx,
-│        │  │                        MetricExplanation.tsx, IconDescription.tsx,
-│        │  │                        metricExplanations.ts
-│        │  └─ settings/             SettingsDialog.tsx
-│        ├─ lib/                     storage.ts, onceFlags.ts, debounce.ts, isColliding.ts
-│        └─ styles/                  tokens.css, global.css, fonts.css
-├─ e2e/                              (ab P09)
-├─ tools/
-│  ├─ legacy/                        extract-legacy-build.mjs, serve-legacy.mjs, capture.browser.js,
-│  │                                 capture-cluster-colors.browser.js
-│  └─ golden/                        diff-json.mjs
-├─ testdata/
-│  ├─ README.md
-│  ├─ fixtures/{mini,realworld,monorepo}/   monorepo ohne Goldens (ADR-019)
-│  └─ golden/{mini,realworld}/
-├─ legacy/angular/                   altes Projekt (nur Referenz, wird nicht gebaut)
-└─ docs/
-   ├─ migration/                     dieser Plan
-   └─ (später) architecture.md
-```
-
-## 3. Abhängigkeitsregeln
+## 2. Abhängigkeitsregeln
 
 1. `packages/core` importiert **nie** aus `apps/*`, nie React, nie DOM-APIs (`window`,
    `document`, `localStorage`). Die TS-Konfiguration von `core` hat `lib: ["es2023"]` **ohne** `dom`
@@ -124,106 +39,24 @@ e2e/ (@qualivis/e2e, Playwright, separat installierbar) · tools/ (Node-Skripte 
    Zyklen** (A importiert B und B importiert A ist verboten). Was mehrere Features ohne fachliche
    Zuordnung brauchen, gehört nach `lib/` oder `ui/`. (Die Bachelorarbeit fordert keine strengere
    Trennung; Ziel ist Modularität ohne Übertreibung.)
-4. `features/graph/layout/` ist frei von React (reine Funktionen + DOM-freie Mathematik), damit es
-   testbar ist und in einem Web Worker laufen kann (große Graphen, `largeGraph.ts`).
-5. Regel 1 und 2 erzwingen TypeScript und pnpm: `core` hat `lib` ohne `dom` und kein React als
+4. Regel 1 und 2 erzwingen TypeScript und pnpm: `core` hat `lib` ohne `dom` und kein React als
    Abhängigkeit (pnpm legt nur deklarierte Pakete in `node_modules`), und `exports` in
    `packages/core/package.json` gibt nur den Paket-Einstieg frei – tiefe Importe lösen nicht auf.
 
-## 4. Datenfluss
-
-```
-Upload/Drop ─► readDroppedFiles() ─► ProjectFiles {sources, configs}
-          ─► ab 2 Paketen: Auswahl des App-Ordners (ADR-019)
-          ─► runAnalysis() ─► core.analyzeProjectAsync(sources, {onProgress})
-                             bzw. core.analyzeWorkspaceAsync(project, {appDir}, {onProgress})
-          ─► analysisAtom = { status, progress, result, error }
-GraphView ─► viewGraphAtom (abgeleitet aus analysisAtom + componentIdAtom) ─► Graph der Ansicht + view
-          ─► core.buildViewModel(graph, {view, sizeMetric, …}) ─► VisualNode[] (Größen, Icons, Cluster, …)
-          ─► layout.start(VisualNode[], links, size, constraints) ─► Positionen (Tick-Ereignisse)
-          ─► <GraphCanvas> rendert SVG; Interaktionen ─► selectionAtom / componentIdAtom
-Panels    ─► lesen selectionAtom + analysisAtom
-Settings  ─► settingsAtom (persistiert) ─► GraphView startet Layout neu
-```
-
-## 5. Zustand (State) mit Jotai (ADR-013)
+## 3. Zustand (State) mit Jotai
 
 - Geteilter Zustand liegt in **Jotai-Atomen** (`jotai` 3.0.1, keine Abhängigkeiten). Ein Atom ist
   ein kleiner, typisierter Zustandsbaustein; Komponenten lesen/schreiben ihn mit `useAtomValue` /
   `useSetAtom` / `useAtom`. Abgeleiteter Zustand ist ein Atom mit `get`-Funktion – das hält
   Berechnungen aus den Komponenten heraus.
-- Atome (je Datei in `state/`):
-  - `analysisAtom` – `{ status: 'idle' | 'running' | 'done' | 'error'; progress?; result?; error? }`
-  - `viewModeAtom` (`'upload' | 'graph'`), `componentIdAtom` (`string | undefined`, synchron mit URL)
-  - `viewGraphAtom` – abgeleitet: Graph der aktuellen Ansicht (AV/KV) aus Analyse + `componentIdAtom`,
-    keine Kopie. Das Ansichtsmodell (`buildViewModel`, eine Kopie) baut `GraphView` per `useMemo`,
-    weil das Layout Positionen in Knoten und Kanten schreibt; der Wert eines Atoms bliebe sonst
-    nicht unverändert.
-  - `selectionAtom` – `NodeSelection[] | null` (wie im Altsystem)
-  - `settingsAtom` – `atomWithStorage('qualivis.settings', defaultSettings, validierender Storage)`
-  - `snackbarAtom` – aktuelle Meldung
 - `StateProvider` stellt einen Jotai-`Provider` mit eigenem `store` bereit. Komponenten- und
   Hook-Tests rendern über den `TestProvider` (eigener Store, Startwerte per `useHydrateAtoms`,
   `06-teststrategie.md` §2); reine Atom-Tests nutzen `createStore()` + `store.set(...)`
   → keine globalen Singletons im Test.
 - Aktionen mit mehreren Schritten (z. B. Analyse starten) sind normale Funktionen, die den `store`
   bekommen (`runAnalysis(files, store)`), oder Schreib-Atome – beides testbar ohne React.
-- Graph-Laufzeitzustand (Positionen, Zoom, Ausblenden) lebt **lokal** in `GraphView`
-  (Refs/State), nicht in Atomen.
 
-## 6. Graph-Rendering
-
-- React rendert die SVG-Struktur deklarativ: `<svg>` → `<defs>` (Pfeil, Schraffur) → `<g transform>`
-  (Zoom) → Kanten → Knoten. Klassen und Struktur wie im Altsystem (`circle-node`, `circle-overlay`,
-  `inner-circle`, `function`, `dots`, `node-label`, `label-text`, `icon`) – das hält CSS und
-  Paritätstests einfach.
-- Layout läuft **außerhalb** von React: Engines mutieren `x/y` der Knoten und melden Ticks.
-  `useLayout` schreibt die Positionen höchstens einmal pro Animation-Frame direkt ins SVG
-  (`writePositions.ts`); React rendert nur, wenn das nicht geht, und am Ende.
-- Zwei Ebenen (`features/graph/layout/types.ts`):
-  - **`LayoutSolver`**: ein Layout-Verfahren ohne Timer und ohne DOM (`forceSolver.ts`: d3-force
-    mit den Fluss-Regeln aus `flow.ts`). Ein neues Verfahren ist ein neuer Löser.
-  - **`LayoutEngine`**: treibt einen Löser nach der gemeinsamen Uhr (`tickClock.ts`, 240 Ticks/s)
-    an: `forceLayout.ts` in den Animation-Frames des Hauptthreads, `workerLayout.ts` +
-    `layoutHost.ts` in einem Web Worker ab `largeGraph.workerNodes` Knoten. `createLayout.ts`
-    wählt.
-
-```ts
-export type LayoutSolver = {
-  tick(): void;
-  atRest(): boolean;
-  hold(node: LayoutNode, x: number, y: number): void;  // Ziehen; weckt das Layout auf
-  release(node: LayoutNode, free: boolean): void;      // Ziehen endet; free = nicht angepinnt
-  freeze(): void;                                      // sofort in Ruhe, ohne weiteren Tick
-};
-export type LayoutEngine = {
-  start(): void;                                  // startet/animiert
-  stop(): void;                                   // endgültig, gibt Ressourcen frei
-  halt(): void;                                   // beendet die Animation, wo die Knoten sind
-  onTick(listener: () => void): () => void;       // Abmelde-Funktion
-  onEnd(listener: () => void): () => void;
-  drag(node: LayoutNode, position: { x: number; y: number }): void;
-  dragEnd(node: LayoutNode, options: { pin: boolean }): void;
-};
-// Wiederherstellen einer Ansicht (ADR-011 A22): LayoutRestore = { running: boolean }
-```
-
-- Zoom/Pan: eigener Hook `usePanZoom` (Wheel, Pointer, Übergänge, `zoomToFit`). Keine
-  d3-zoom-Abhängigkeit.
-- Farben im Graph über CSS-Klassen und `tokens.css`; Clusterfarben per Inline-Style (aus
-  `core/rules/color.ts`).
-
-## 7. URL und Navigation
-
-- Kein Router-Paket. `useUrlState` liest/schreibt `?id=` per `history.pushState`/`popstate`.
-  `view` = `upload` ohne Analyse, sonst `graph`. Zurück-Button des Browsers funktioniert.
-- Basis-Pfad: Vite `base: './'` → läuft unter beliebigem Unterpfad, z. B. auf GitHub Pages unter
-  `/qualivis/` (`.github/workflows/pages.yml`). Der Pfad ändert sich nie (nur `?id=`), deshalb
-  braucht Pages keinen 404-Fallback.
-- Deep-Link `?id=` funktioniert auch nach Neuladen (Korrektur von N4, ADR-011), sofern die
-  Analyse aus dem Speicher wiederhergestellt werden kann.
-
-## 8. Persistenz
+## 4. Persistenz
 
 Schlüssel mit Präfix `qualivis.`: `settings` (über Jotai `atomWithStorage` mit validierendem
 Storage), `analysis` (FileMap + App-Graph + Report, explizit gespeichert über `lib/storage.ts`),
@@ -231,7 +64,7 @@ Storage), `analysis` (FileMap + App-Graph + Report, explizit gespeichert über `
 Die Analyse wird nach jeder Analyse und beim Verlassen (`pagehide`) gespeichert; Fehler beim
 Speichern werden einmal als Snackbar gemeldet, nie als Absturz.
 
-## 9. Styling
+## 5. Styling
 
 - Basis-Tokens (Farben, Schrift, Radien) aus `common-components/theme.css`, Hell- und Dunkelmodus
   nach Systemeinstellung. App-eigene Farben (Graph, Metrik-Stufen) in `styles/tokens.css`, jeweils
@@ -240,16 +73,4 @@ Speichern werden einmal als Snackbar gemeldet, nie als Absturz.
   Kollisionen.
 - Graph: eine globale Datei `features/graph/graph.css`, alle Regeln unter `.qv-graph` geschachtelt,
   Klassennamen wie im Altsystem.
-- Text in der Systemschrift von `theme.css`; Icons lokal über `@fontsource/material-icons`.
-
-## 10. Fehlerbehandlung
-
-- Kern: wirft wie das Altsystem (z. B. Syntaxfehler beim Parsen) und loggt dabei den Pfad der
-  Datei (`Parsing failed:`). Ab P08-S05 zusätzlich
-  `analyzeProject` mit `onFileError`-Option (Datei überspringen statt Abbruch) – Standard bleibt
-  das alte Verhalten, damit Goldens stabil bleiben.
-- Web: `runAnalysis` fängt alle Fehler und setzt `analysisAtom` auf `status: 'error'` mit Meldung;
-  die UI zeigt eine Snackbar und bleibt bedienbar. Eine React-Error-Boundary um `GraphView`
-  verhindert weiße Seiten.
-- Keine `console.log` im Produktivcode. Debug-Ausgaben nur über `lib/debug.ts`, die mit
-  `localStorage['qualivis.debug'] = '1'` eingeschaltet wird.
+- Text in der Systemschrift von `theme.css`.

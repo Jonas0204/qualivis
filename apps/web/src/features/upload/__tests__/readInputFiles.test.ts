@@ -37,7 +37,7 @@ describe('readInputFiles', () => {
         });
     });
 
-    it('reads config files outside the excluded folders as configs (ADR-019)', async () => {
+    it('reads config files outside the excluded folders as configs', async () => {
         const files = [
             fileWithRelativePath('repo/package.json', '{"name":"root"}'),
             fileWithRelativePath('repo/app/tsconfig.app.json', '{}'),
